@@ -64,6 +64,7 @@ export const Burger = styled.div`
 
 export const Aside = styled.aside`
   position: fixed;
+  z-index: 100;
   top: 0;
   right: 0;
   height: 100vh;

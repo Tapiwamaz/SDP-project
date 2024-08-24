@@ -2,6 +2,8 @@ import React from 'react'
 import Header from '../Header/Header'
 import { Body,SearchContainer,SearchInput,StyledSearchIcon,Tags } from './HomePage.styles'
 
+import EventSlider from '../EventsSlider/EventSlider'
+
 const HomePage = () => {
 
 
@@ -36,6 +38,9 @@ const HomePage = () => {
 
         </div>
       </Tags>
+
+      <h3>Trending Events</h3>
+      <EventSlider></EventSlider>
 
      </Body>
 
