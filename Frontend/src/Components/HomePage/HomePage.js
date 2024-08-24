@@ -24,7 +24,6 @@ const HomePage = () => {
           Tags
         </h3>
         <div>
-
           <button className='education'>Educational</button>
           <button className='Sports'>Sports</button>
           <button className='Entertainment'>Entertainment</button>
@@ -37,7 +36,7 @@ const HomePage = () => {
 
         </div>
       </Tags>
-      
+
      </Body>
 
     </>
