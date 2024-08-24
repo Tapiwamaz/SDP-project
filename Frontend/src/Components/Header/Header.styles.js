@@ -7,8 +7,8 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #333;
-  color: white;
+  border-bottom: black 2px solid;
+  color: black;
   
   @media (max-width: 768px) {
     font-size: smaller;
@@ -35,7 +35,7 @@ export const Nav = styled.nav`
 `;
 
 export const NavItem = styled.a`
-  color: white;
+  color: black;
   text-decoration: none;
   font-size: 1rem;
 
@@ -52,7 +52,7 @@ export const Burger = styled.div`
   span {
     height: 3px;
     width: 25px;
-    background-color: white;
+    background-color: black;
     margin-bottom: 5px;
     border-radius: 5px;
   }
@@ -97,7 +97,7 @@ export const Profile=styled.div`
   } */
     /* border-radius: 100px; */
     width: fit-content;
-    color: white;
+    color: black;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -108,11 +108,11 @@ export const Profile=styled.div`
 `;
 
 export const ProfileIcon = styled(UserIcon)`
-border: white 2px solid;
+border: black 2px solid;
  border-radius: 10px;
   width: 40px;
   height: 30px;
-  color: white;
+  color: black;
   cursor: pointer;
 
 
