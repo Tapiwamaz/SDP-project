@@ -4,6 +4,7 @@ import { Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './H
 
 import EventSlider from '../EventsSlider/EventSlider'
 import Tags from '../Tags/Tags'
+import { Events } from '../MockData/EventsMock'
 
 const HomePage = () => {
 
@@ -52,7 +53,7 @@ const HomePage = () => {
 
       <h3>Trending Events</h3>
       
-      <EventSlider></EventSlider>
+      <EventSlider events={Events}></EventSlider>
 
      </Body>
 

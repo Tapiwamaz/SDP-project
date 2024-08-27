@@ -5,12 +5,12 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 
 import { Card ,CustomCarousel,Container} from './EventSlider.styles';
 
-const EventSlider = () => {
+const EventSlider = ({events}) => {
     const [slidePercentage, setSlidePercentage] = useState(60);
   
     useEffect(() => {
       const updateSlidePercentage = () => {
-        const screenWidth = window.innerWidth;
+        const screenWidth = window.innerWidth;// need to adjust the slide percentage based on screen size
          if (screenWidth <= 768) {
           setSlidePercentage(60); // Closer to full width on small screens
         } else {
@@ -31,16 +31,19 @@ const EventSlider = () => {
             <CustomCarousel
                 showThumbs={false}
                 showStatus={false}
-                infiniteLoop={true}
+                // infiniteLoop={true}
                 emulateTouch={true}
                 centerMode={true}
                 centerSlidePercentage={slidePercentage}
                 showArrows={true} // Optional: Hide arrows for a cleaner look
             >
+             {events.map((event) => (
+                <Card key={event.id}>{event.name}</Card>
+             ))}
+                {/* <Card>Hello</Card>
                 <Card>Hello</Card>
                 <Card>Hello</Card>
-                <Card>Hello</Card>
-                <Card>Hello</Card>
+                <Card>Hello</Card> */}
       </CustomCarousel>
 
         </Container>
