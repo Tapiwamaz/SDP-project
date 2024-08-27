@@ -39,7 +39,7 @@ export const Body=styled.body`
     
 
 `
-export const Tags=styled.div`
+export const TagsStyle=styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;

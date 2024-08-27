@@ -1,14 +1,21 @@
 import React from 'react'
 import Header from '../Header/Header'
-import { Body,SearchContainer,SearchInput,StyledSearchIcon,Tags } from './HomePage.styles'
+import { Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
 
 import EventSlider from '../EventsSlider/EventSlider'
+import Tags from '../Tags/Tags'
 
 const HomePage = () => {
 
 
   const search=(e)=>{//function for searching for event name
     console.log(e.target.value);
+  }
+
+  const print=()=>{
+    console.log("printitng");
+    
+
   }
 
 
@@ -21,25 +28,30 @@ const HomePage = () => {
           <SearchInput placeholder="Search" onChange={(e) => search(e)} />
       </SearchContainer>
 
-      <Tags>
+
+      <TagsStyle>
         <h3>
           Tags
         </h3>
         <div>
-          <button className='education'>Educational</button>
-          <button className='Sports'>Sports</button>
-          <button className='Entertainment'>Entertainment</button>
-          <button className='Political'>Political</button>
-          <button className='Religious'>Religious</button>
-          <button className='Gaming'>Gaming</button>
-          <button className='IT'>IT</button>
-          <button className='Other'>Other</button>
+        <Tags name={"Education"} print={print}></Tags>
+        <Tags name={"Sports"} print={print}></Tags>
+        <Tags name={"Political"} print={print}></Tags>
+        <Tags name={"Entertainment"} print={print}></Tags>
+        <Tags name={"Gaming"} print={print}></Tags>
+        <Tags name={"IT"} print={print}></Tags>
+        <Tags name={"Religious"} print={print}></Tags>
+        <Tags name={"Other"} print={print}></Tags>
+
+
+       
 
 
         </div>
-      </Tags>
+      </TagsStyle>
 
       <h3>Trending Events</h3>
+      
       <EventSlider></EventSlider>
 
      </Body>
