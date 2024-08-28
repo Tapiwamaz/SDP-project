@@ -5,13 +5,105 @@
   margin: auto 30px;
   display: flex;
   flex-direction: column;
-  padding: 0 6px;
+  padding: 15px 10px;
 }
 
 .navBarCreateEvents {
   display: flex;
   width: 100%;
-  border: 2px solid black;
+  flex: 0.1;
   gap: 16px;
   align-items: center;
+}
+
+.backButtonCreateEvent {
+    cursor: pointer;
+    transition: all 200ms ease-in-out;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px;
+
+}
+.backButtonCreateEvent:hover {
+    transform: scale(1.1);
+}
+
+.formCreateEvent {
+    flex: 1;
+    display: flex;;
+    flex-direction: column;
+}
+
+.form-section {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.active {
+    opacity: 1;
+    visibility: visible;;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.input {
+    height: 55px;
+    border-radius: var(--btn-border-radius);
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px;
+    transition: all 200ms ease-in;
+}
+
+.createEventButtonNext {
+    align-self: center;
+}
+
+.timesContainer {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+}
+
+.timeInput {
+    flex: 1;
+}
+.descriptionInput {
+    height: 200px;
+    resize: none;
+}
+
+
+.uploadMediaLabel {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    height: 300px;
+    font-size: 16px;
+    border: 1px dashed black;
+}
+
+
+
+#file-upload {
+    display: none; 
+}
+
+.iconsMediaUpload {
+    display: flex;
+    gap: 5px;
+}
+
+#dividerLine {
+    border: 2px dashed gray;
 }

@@ -10,5 +10,22 @@ body {
 :root {
   --primary: #191970;
   --background: #ffffff;
+
+  --btn-border-radius: 8px;
   
+}
+
+.btn {
+  background-color: var(--primary);
+  color: var(--background);
+  border-radius: var(--btn-border-radius);
+  height: 48px;
+  width: 180px;
+  cursor: pointer;
+  transition: all 250ms ease-in-out;
+}
+
+.btn:hover {
+  transform: scale(1.1);
+  outline: #195770 1px solid;
 }
