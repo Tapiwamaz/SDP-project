@@ -13,12 +13,12 @@ const Header = () => {
     return (
       <HeaderContainer>
         <Logo>MySite</Logo>
-        <Nav>
+        {/* <Nav>
           <NavItem href="#home">Home</NavItem>
           <NavItem href="#about">About</NavItem>
           <NavItem href="#services">Services</NavItem>
           <NavItem href="#contact">Contact</NavItem>
-        </Nav>
+        </Nav> */}
         <Burger onClick={toggleMenu}>
           <span></span>
           <span></span>

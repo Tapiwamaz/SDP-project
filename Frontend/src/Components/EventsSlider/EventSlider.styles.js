@@ -10,19 +10,41 @@ export const Container = styled.div`
 `;
 
 export const Card = styled.div`
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
+  background-color: var(--primary);
+  border-radius: 20px;
+  padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
-  /* max-width: 300px; */
-  width: 200px;
-  height: 150px;
+  width: 250px;
+  height: 300px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  position: relative;
+  
+  display: flex;
+  flex-direction: column;
+  color: white;
+  img{
+    height: 100px;
+    width: 180px;
+    border-radius:inherit;
+  }
+  p{
+    margin: 0;
+    font-size: small;
+  }
+  h3{
+    margin: 2;
+  white-space: nowrap; /* Prevents the text from wrapping to the next line */
+  overflow: hidden;    /* Hides the overflow text */
+  text-overflow: ellipsis; /* Adds "..." at the end of the truncated text */
+  max-width: 100%;     /* Optional: Set a max width as needed */
+
+  }
+  div{
+    display: flex;
+    flex-direction: column;
+    
+  }
+
 `;
 
 export const CustomCarousel = styled(Carousel)`

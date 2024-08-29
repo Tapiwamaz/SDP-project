@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/solid';
+import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
 
 export const SearchContainer = styled.div`
     margin-top: 20px;
@@ -32,7 +32,7 @@ export const SearchInput = styled.input`
 
 `;
 
-export const Body=styled.body`
+export const Body=styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,31 +55,31 @@ export const TagsStyle=styled.div`
     margin: 2px;
   }
 
-  .education{
-    background-color: yellow;
-  }
-  .Political{
-    background-color: red;
-  }
-  .Gaming{
-    background-color: blue;
-  }
-  .Sports{
-    background-color: pink;
-  }
-  .IT{
-    background-color: rebeccapurple;
-  }
-  .Other{
-    background-color: grey;
-  }
-  .Entertainment{
-    background-color:green;
-  }
-  .Religious{
-    background-color: brown;
-  }
 
 
+
+`;
+export const SearchBack = styled.div`
+  height: 400px;
+  width: 100%;
+  background: linear-gradient(to bottom, white, var(--primary));
+  border-radius: 20px;
+
+`;
+
+export const Aside = styled.aside`
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 190px;
+  background-color: #333;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
+  transition: transform 0.3s ease-in-out;
 
 `;
