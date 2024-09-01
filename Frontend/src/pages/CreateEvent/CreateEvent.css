@@ -1,6 +1,5 @@
 .wrapperCreateEvent {
   min-height: 100vh;
-  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 15px;
@@ -24,17 +23,33 @@
   transform: scale(1.1);
 }
 
+.createEventsContainer {
+  display: flex;
+  flex: 1;
+  border-radius: 1rem;
+  margin: 0 2rem;
+  padding:  1rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 10px;
+}
+.desktopAside {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .inputs {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
+  flex: 1;
 }
 
 .input {
   height: 55px;
+  width: 100%;
   border-radius: 0.75rem;
   border: none;
-  padding-left: 0.5rem;
+  padding: 0 0.5rem;
   font-family: inherit;
   font-size: inherit;
   font-weight: 600;
@@ -54,6 +69,7 @@
 
 .createEventButtonNext {
   align-self: center;
+  width: 50%;
 }
 
 .doubleInputContainer {
@@ -78,7 +94,6 @@
   display: flex;
   flex-direction: column;
   outline: 2px dashed white;
-  width: 98vw;
   height: 500px;
   align-items: center;
   justify-content: center;
@@ -103,8 +118,8 @@
 }
 
 #file-upload {
-  width: 98vw;
-  height: 200px;
+  width: 50%;
+  height: 500px;
   position: absolute;
   z-index: 1;
   opacity: 0;
@@ -137,5 +152,25 @@
   .imageHolder {
     width: 100%;
     height: 300px;
+  }
+
+  .desktopAside {
+    display: none;
+  }
+
+  #file-upload{
+    width: 100%;
+    height: 300px;
+  }
+  .createEventsContainer {
+    width: 100%;
+    box-shadow: none;
+    margin: 0 ;
+  }
+  .label,.input{
+    font-size: 1rem;
+  }
+  .createEventButtonNext {
+    width: 100%;;
   }
 }
