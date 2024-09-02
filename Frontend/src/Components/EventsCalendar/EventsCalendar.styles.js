@@ -55,6 +55,7 @@ export const EventStyle = styled.div`
   padding: 2px;
   font-size: 14px;
   text-align: center;
+  //background-color: red;
   /* Remove event shadows */
 `;
 
@@ -156,4 +157,30 @@ export const EventDescription = styled.div`
   font-size: 11px;
   margin-top: 3px;
   color: #999; /* Optional: Description text color */
+`;
+
+export const TagsStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  button {
+    border: none;
+    border-radius: 20px;
+    height: 25px;
+    margin: 2px;
+  }
+`;
+
+export const Body = styled.div`
+  width: 85%;
+`;
+
+export const Page = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
