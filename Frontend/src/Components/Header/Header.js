@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { HeaderContainer,Xicon,Profile,ProfileIcon,NavItem,Nav,Burger,Aside,AsideNavItem,Logo } from './Header.styles';
+import logo from '../../Images/Logo.svg.svg'
 
 
 const Header = () => {
@@ -12,7 +13,7 @@ const Header = () => {
   
     return (
       <HeaderContainer>
-        <Logo>MySite</Logo>
+        <Logo src={logo}/>
         {/* <Nav>
           <NavItem href="#home">Home</NavItem>
           <NavItem href="#about">About</NavItem>

@@ -3,12 +3,21 @@ import { useEffect,useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import  Tags from '../Tags/Tags'
 
-import { Card ,CustomCarousel,Container} from './EventSlider.styles';
+import {LoadingCard, Card ,CustomCarousel,Container} from './EventSlider.styles';
 
 const EventSlider = ({events}) => {
     const [slidePercentage, setSlidePercentage] = useState(60);
+    const [noEvents, setNoEvents] = useState([
+      {events:"no"},
+      {events:"no"},
+      {events:"no"},
+      {events:"no"},
+      {events:"no"}
+
+    ]);
+
   
-    useEffect(() => {
+  useEffect(() => {
       const updateSlidePercentage = () => {
         const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
          if (screenWidth <= 768) {
@@ -53,41 +62,62 @@ const formatTime=(time)=>{
   });
   return formattedTime
 }
+
+const goToEvent=(event)=>{
+  console.log(event);
+  
+}
   
     return (
         <Container>
             <CustomCarousel
                 showThumbs={false}
                 showStatus={false}
-                // infiniteLoop={true}
                 emulateTouch={true}
                 centerMode={true}
                 centerSlidePercentage={slidePercentage}
                 showArrows={true} // Optional: Hide arrows for a cleaner look
             >
-             {events.filter(e=>e.approved===true).map((event) => (
-               <Card key={event.id}>
-                  <img src='https://images.hdqwalls.com/wallpapers/water-through-rocks-4k-kl.jpg' alt='eventImage'/>
-                  <h3>{event.name}</h3>
-                  <div>
-                    <p>{formatDate(event.date.split("T")[0])}</p>
-                    <p>{formatTime(event.start_time)}</p>
-                    <p>{event.location}</p>
-
-
-                  </div>
-                  <Tags name={event.type}></Tags>
+              {events?//to check if the events are loaded
+              events.filter(e=>e.approved===true).map((event) => (
 
                 
+                <Card key={event.id} onClick={()=>goToEvent(event)}>
+                    <img src='https://images.hdqwalls.com/wallpapers/water-through-rocks-4k-kl.jpg' alt='eventImage'/>
+                    <h3>{event.name}</h3>
+                    <div>
+                      <p>{formatDate(event.date.split("T")[0])}</p>
+                      <p>{formatTime(event.start_time)}</p>
+                      <p>{event.location}</p>
+
+
+                    </div>
+                    <Tags name={event.type}></Tags>
+
+                  
 
 
 
-                </Card>
-               
-               
-             ))}
+                  </Card>
                 
-      </CustomCarousel>
+                
+              ))
+             :
+             noEvents.map((events)=>(
+              <LoadingCard></LoadingCard>
+
+             ))
+             
+            
+
+
+
+             
+             
+             
+             }
+                
+          </CustomCarousel>
 
         </Container>
       

@@ -36,6 +36,9 @@ export const Body=styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (min-width: 769px) {
+    max-width: 85%;
+  }
     
 
 `
@@ -67,37 +70,16 @@ export const SearchBack = styled.div`
 
 `;
 
-export const Aside = styled.div`
-  /* position: absolute; */
-  z-index: 100;
-  top: 0;
-  right: 0;
-  height: 100vh;
-  width: 190px;
-  background-color: #333;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  /* transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')}; */
-  transition: transform 0.3s ease-in-out;
 
-`;
-
-export const AsideNavItem = styled.a`
-  color: white;
-  text-decoration: none;
-  font-size: 1.25rem;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
 
 export const Page=styled.div`
 display: flex;
-flex-direction: column;
+flex-direction: row;
+@media (max-width: 769px) {
+    flex-direction: column;
+  }
 
 
 
 `
+

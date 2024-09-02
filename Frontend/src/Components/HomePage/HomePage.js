@@ -3,18 +3,25 @@ import Header from '../Header/Header'
 import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
 
 import EventSlider from '../EventsSlider/EventSlider'
+import AsideDesktop from '../AsideDesktop/AsideDesktop'
 import Tags from '../Tags/Tags'
 import { Events } from '../MockData/EventsMock'
+
+import noResultsImage from '../../Images/noResults.svg';
+
+
+
 
 const HomePage = () => {
 
   const [searchValue,setSearchValue]=useState(null);
   const [filteredEvents,SetFilteredEvents]=useState(Events);
+  const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
+
 
   const [activeTag, setActiveTag] = useState(null); // State to track the active tag
 
 
-  // const newEvents=Events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
 
 
@@ -23,9 +30,9 @@ const HomePage = () => {
     setSearchValue(e.target.value);
   }
 
-  useEffect(()=>{
+  // useEffect(()=>{
 
-  },[filteredEvents])
+  // },[filteredEvents])
 
   const filter=(type)=>{
     // console.log("filteritng")
@@ -43,30 +50,30 @@ const HomePage = () => {
     <>
      <Header></Header>
      <Page>
-      {/* <Aside >
-            <AsideNavItem href="#home" >Home</AsideNavItem>
-            <AsideNavItem href="#about" >About</AsideNavItem>
-            <AsideNavItem href="#services" >Services</AsideNavItem>
-            <AsideNavItem href="#contact" >Contact</AsideNavItem>
-
-      </Aside> */}
+      <AsideDesktop></AsideDesktop>{/*Global aside called */}
       <Body>
         <SearchContainer>
             <StyledSearchIcon />
-            <SearchInput placeholder="Search" onChange={ (e) => search(e) } />
+            <SearchInput placeholder="Search" onChange={ (e) => search(e) } maxLength={50}/> {/*max lenght of input */}
         </SearchContainer>
 
 
 
-        {searchValue &&
+        {searchValue && (
             <>
-            <h3>Results for {`"${searchValue}"`}</h3>
-            <EventSlider events={Events.filter(e=>e.name.includes(searchValue))}></EventSlider>
-
+              <h3>Results for {`"${searchValue}"`}</h3>
+              {Events.filter(e => e.name.includes(searchValue)).length > 0 ? (//if the array is empty display no results svg
+                <EventSlider events={Events.filter(e => e.name.includes(searchValue))} />
+              ) : (
+                <>
+                <img src={noResultsImage} alt="No Results" />
+                <h3>No Results found</h3>
+                </>
+                
+              )}
             </>
-            
-            
-        }
+          )}
+
 
         <TagsStyle>
           <h3>
@@ -93,12 +100,12 @@ const HomePage = () => {
         <h3>Latest Events</h3>
 
         
-        <EventSlider events={Events}></EventSlider>
+        <EventSlider events={filteredDateEvents}></EventSlider>
 
 
 
       </Body>
-     </Page>
+    </Page>
 
     </>
    
