@@ -17,9 +17,10 @@ export const HeaderContainer = styled.header`
   }
 `;
 
-export const Logo = styled.h1`
+export const Logo = styled.img`
   font-size: 1.5rem;
   margin: 0;
+  height: 80px;
   @media (max-width: 768px) {
     display: none;
   }
@@ -69,7 +70,8 @@ export const Aside = styled.aside`
   right: 0;
   height: 100vh;
   width: 190px;
-  background-color: #333;
+  background-color: var(--primaryGrey);
+
   padding: 2rem;
   display: flex;
   flex-direction: column;
