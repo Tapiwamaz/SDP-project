@@ -13,7 +13,10 @@ const EventSlider = ({events}) => {
         const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
          if (screenWidth <= 768) {
           setSlidePercentage(70); // Closer to full width on small screens
-        } else {
+        }
+       
+
+         else {
           setSlidePercentage(20); // Default for larger screens
         }
       };
