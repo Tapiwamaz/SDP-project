@@ -11,6 +11,7 @@ import {
   EventDescription,
   EventTitle,
   EventLocation,
+  CalendarWrapper,
 } from "./EventsCalendar.styles";
 const localizer = momentLocalizer(moment);
 
@@ -28,47 +29,48 @@ const EventComponent = ({ event }) => (
 
 const MyCalendar = () => {
   return (
-    // <CalendarContainer>
-    <div style={{ height: 500 }}>
-      <Calendar
-        localizer={localizer}
-        events={Events}
-        titleAccessor="name"
-        views={["month", "week", "day"]}
-        components={{
-          event: ({ event }) => (
-            <EventStyle>
-              <strong>{event.title}</strong>
-              {event.location && ` - ${event.location}`}
-            </EventStyle>
-          ),
-          month: {
-            dateCellWrapper: ({ children }) => (
-              <DateCellWrapper>{children}</DateCellWrapper>
-            ),
-          },
-          day: {
+    <CalendarWrapper>
+      <div style={{ height: 500 }}>
+        <Calendar
+          localizer={localizer}
+          events={Events}
+          titleAccessor="name"
+          views={["month", "week", "day"]}
+          components={{
             event: ({ event }) => (
-              <DaySlot>
-                <EventStyle>
-                  <EventTitle>{event.name}</EventTitle>
-                  {event.location && (
-                    <EventLocation>{event.location}</EventLocation>
-                  )}
-                  {event.description && (
-                    <EventDescription>{event.description}</EventDescription>
-                  )}
-                </EventStyle>
-              </DaySlot>
+              <EventStyle>
+                <strong>{event.title}</strong>
+                {event.location && ` - ${event.location}`}
+              </EventStyle>
             ),
-          },
-        }}
-        style={{ height: 500 }}
-        startAccessor={(event) => new Date(event["start-time"])} // Custom start accessor
-        endAccessor={(event) => new Date(event["end-time"])} // Custom end accessor
-      />
-    </div>
-    // </CalendarContainer>
+            month: {
+              dateCellWrapper: ({ children }) => (
+                <DateCellWrapper>{children}</DateCellWrapper>
+              ),
+            },
+            day: {
+              event: ({ event }) => (
+                <DaySlot>
+                  <EventStyle>
+                    <EventTitle>{event.name}</EventTitle>
+                    {event.location && (
+                      <EventLocation>{event.location}</EventLocation>
+                    )}
+                    {event.description && (
+                      <EventDescription>{event.description}</EventDescription>
+                    )}
+                  </EventStyle>
+                </DaySlot>
+              ),
+            },
+          }}
+          style={{ height: 600 }}
+          startAccessor={(event) => new Date(event["start-time"])} // Custom start accessor
+          endAccessor={(event) => new Date(event["end-time"])} // Custom end accessor
+        />
+      </div>
+      {/* //{" "} */}
+    </CalendarWrapper>
   );
 };
 

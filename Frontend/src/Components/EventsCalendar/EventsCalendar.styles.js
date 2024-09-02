@@ -60,16 +60,20 @@ export const EventStyle = styled.div`
 
 // Remove grid cell borders for month view
 export const DateCellWrapper = styled.div`
+  //this is the view of each cell when your on month view, this has the hover effect
   border: none;
   text-align: left;
+
   padding-left: 1vh;
   padding-top: 0.5vh;
   border-radius: 10px;
   cursor: pointer;
   height: 100vh;
+  width: 100vw;
   transition: background-color 0.5s ease;
   &:hover {
-    background-color: #159eb7; /* Light blue background on hover */
+    background-color: rgba(82, 81, 81, 0.17);
+    /* Light blue background on hover */
   }
 
   /* Remove borders around date cells */
@@ -80,6 +84,9 @@ export const DaySlot = styled.div`
   border: none;
   border: none; /* Remove event borders */
   box-shadow: none;
+  overflow: hidden;
+  padding: 0.3vh;
+
   /* Default event background */
 
   border: none;
@@ -87,15 +94,49 @@ export const DaySlot = styled.div`
   padding: 2px;
   font-size: 14px;
   text-align: center;
-  &:hover {
+
+  //this is the actual event within the block of time in the day view
+  /* &:hover {
     background-color: #159eb7; /* Light blue background on hover */
-  } /* Remove borders from day slots */
+  /* } Remove borders from day slots */
 `;
 
 // Calendar Wrapper (if needed for specific layout control)
 export const CalendarWrapper = styled.div`
+  padding: 2vh;
   height: 100vh;
-  border: none; /* Remove outer calendar border */
+  border: none;
+  font-family: "Khula";
+  .rbc-header {
+    background-color: transparent;
+    text-align: right;
+    border: none;
+    padding-left: 1vh;
+  }
+
+  .rbc-toolbar-label {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .rbc-month-row {
+    border: none;
+  }
+
+  .rbc-month-view {
+    border: none;
+  } /* Remove outer calendar border */
+
+  .rbc-event {
+    height: 1.5vh;
+    color: white;
+    font-size: small;
+    //background-color: var(--);
+  }
+
+  .rbc-row-segment {
+    padding-top: 0.2vh;
+  }
 `;
 
 export const EventTitle = styled.strong`
