@@ -1,10 +1,11 @@
 // icons
 import {
   ArrowLeftCircleIcon,
-  ArrowPathIcon,
   CameraIcon,
+  TrashIcon,
   VideoCameraIcon,
 } from "@heroicons/react/24/outline";
+
 //css
 import "./CreateEvent.css";
 // react
@@ -20,13 +21,14 @@ const CreateEvent = () => {
 
   //preview image src
   const [imgSrc, setImgSrc] = useState(null);
-
   const [imageError, setImageError] = useState(null);
 
   // new event details
   const [image, setImage] = useState(null);
   const [eventDetails, setEventDetails] = useState({});
   const [filterVenueType, setFilterVenueType] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   // get DOM elements to dynamically change input fields
   const eventNameRef = useRef(null);
@@ -96,8 +98,13 @@ const CreateEvent = () => {
     }
   };
 
-  const handleNextButtonClick = (eventDetailsT, eventRefsT) => {
-    console.log(eventRefsT);
+  const handleNextButtonClick = async (eventDetailsT, eventRefsT) => {
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    setLoader(true);
+    await delay(5000);
+    setLoader(false);
+    setSubmitted(true);
+    return;
 
     if (!eventDetailsT.eventName) {
       // Handle missing event name
@@ -206,6 +213,9 @@ const CreateEvent = () => {
       toast("Please upload a picture");
       return;
     }
+
+    // if everything is done and added then submited
+    // setSubmitted(true)
   };
 
   const handleChangeEventDetails = (detail, detailType, setEventDetailsT) => {
@@ -216,14 +226,27 @@ const CreateEvent = () => {
     });
   };
 
+  if (submitted) {
+    return (
+      <section className="wrapperCreateEvent">
+        <section className="createEventsContainer"></section>
+      </section>
+    );
+  }
   return (
     <section className="wrapperCreateEvent">
+      {loader && (
+        <div className="loader">
+          <div className="centerLoader" />
+        </div>
+      )}
       <nav className="navBarCreateEvents">
         <ArrowLeftCircleIcon width={40} className="backButtonCreateEvent" />
       </nav>
 
       <section className="createEventsContainer">
         <section className="desktopAside"></section>
+
         <section className="inputs">
           {/* Image  */}
           {imgSrc && <img className="imageHolder" src={imgSrc} alt="Preview" />}
@@ -268,7 +291,7 @@ const CreateEvent = () => {
                 setImgSrc(null);
               }}
             >
-              <ArrowPathIcon width={50} />
+              <TrashIcon width={35} />
               {/* Reset Image */}
             </button>
           )}
@@ -325,7 +348,9 @@ const CreateEvent = () => {
               <input
                 className="input"
                 type="time"
-                min="07:00:00"
+                min="07:00"
+                placeholder="08:00"
+                step={108000}
                 name="eventStartTime"
                 ref={eventStartTimeRef}
                 onFocus={(e) => {
@@ -351,7 +376,8 @@ const CreateEvent = () => {
               <input
                 className="input"
                 type="time"
-                min="07:00:00"
+                min="08:00"
+                placeholder="08:00"
                 ref={eventEndTimeRef}
                 name="eventEndTime"
                 onFocus={(e) => {
@@ -441,6 +467,7 @@ const CreateEvent = () => {
           <label className="label" htmlFor="eventType">
             Type
           </label>
+
           <input
             className="input"
             name="eventType"
@@ -457,14 +484,17 @@ const CreateEvent = () => {
             }
           ></input>
 
-          {/* Ticket Price */}
+          {/* Ticket Price  Label*/}
           <label className="label" htmlFor="eventTicketPrice">
             Ticket Price
           </label>
+          {/* Ticket Price  input*/}
           <input
             className="input"
             type="number"
             ref={eventTicketPriceRef}
+            placeholder={"R 50"}
+            step={10}
             onFocus={() =>
               eventTicketPriceRef.current.classList.remove("unfilled-input")
             }
@@ -479,9 +509,11 @@ const CreateEvent = () => {
             }
           ></input>
 
+          {/* Event description  Label*/}
           <label className="label" htmlFor="eventDescription">
             Description
           </label>
+          {/* Event description input*/}
           <textarea
             className="input descriptionInput"
             placeholder="Give a short description of your event to attract more attendees! ☺"
