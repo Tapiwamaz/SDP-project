@@ -108,6 +108,14 @@ export const StyledBoldText = styled.div`
 `;
 
 
+export const StyledText = styled.div`
+  width: 75vw;               /* Same width as input and button */
+  font-size: ${(props) => props.size || '20px'};
+  text-align: center;        /* Center text */
+  margin: 10px 0;            /* Margin to separate from other elements */
+`;
+
+
 export const ClickableText = styled.div`
   width: 85vw;               /* Same width as input */
   margin: 20px 0;            /* Vertical margins */
