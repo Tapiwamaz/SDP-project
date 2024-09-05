@@ -49,7 +49,7 @@ export const Login = () => {
                 <StyledText size="16px">Login with</StyledText>
             </ImageContainer>
             <ImageContainer>
-            <ImageButton >
+            <ImageButton onClick={loginWithGoogle}>
                 <img src={googleLogo} alt="Google" />
             </ImageButton>
             </ImageContainer>

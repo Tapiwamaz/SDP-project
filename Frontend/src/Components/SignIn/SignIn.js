@@ -10,7 +10,7 @@ export const SignIn = () => {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("User with this email already exists");
 
-    const SignIn = async () => {
+    const signin = async () => {
         setErrorMessage("");
         try {
             await createUserWithEmailAndPassword(auth, email, password);
@@ -45,7 +45,7 @@ export const SignIn = () => {
                 <CheckboxText>I agree to the <StyledLink>Terms and Conditions</StyledLink></CheckboxText>
             </CheckboxContainer>
             <ErrorMessage>{errorMessage}</ErrorMessage>
-            <StyledButton onClick={SignIn}>Sign in</StyledButton>
+            <StyledButton onClick={signin}>Sign in</StyledButton>
             
             <ImageContainer>
                 <StyledText>__________OR__________</StyledText>
