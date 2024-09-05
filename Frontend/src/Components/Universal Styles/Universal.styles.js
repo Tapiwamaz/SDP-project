@@ -1,5 +1,34 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import background from '../../Images/background.webp';
+
+
+export const ResponsiveBackground = styled.div`
+  width: 100%;
+  height: 100vh; /* Full viewport height for demonstration */
+  
+
+  /* Media query for screens larger than 600px */
+  @media (min-width: 768px) {
+    background-image: url(${background}); /* Set your background image */
+    background-size: cover; /* Ensure the background image covers the entire container */
+    background-position: center; /* Center the background image */
+    justify-content: center;
+  }
+`;
+
+
+export const ResponsiveDiv = styled.div`
+  width: 100%; /* Full width */
+  height: 100vh; /* Full viewport height */
+  background-color: white; /* White background color */
+
+  @media (min-width: 768px) {
+    width: 30vw;           /* 30% of the viewport width */
+    height: 80vh;          /* 80% of the viewport height */
+    
+  }
+`;
 
 
 export const ImageContainer = styled.div`

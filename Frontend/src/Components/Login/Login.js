@@ -1,7 +1,7 @@
 import { auth, googleProvider } from "../../config/firebase.js"
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
-import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText } from "../Universal Styles/Universal.styles.js";
+import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText, ResponsiveBackground, ResponsiveDiv } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
 
@@ -30,7 +30,8 @@ export const Login = () => {
     };
 
     return (
-        <div>
+        <ResponsiveBackground>
+            <ResponsiveDiv>
             <ImageContainer>
                 <StyledImage src={logo} alt="Logo" />
             </ImageContainer>
@@ -57,6 +58,8 @@ export const Login = () => {
                 <StyledText size="16px">Don't have an account? <StyledLink href="../SignIn/SignIn.js">Sign in</StyledLink></StyledText>
             </ImageContainer>
             
-        </div>
+        </ResponsiveDiv>
+        </ResponsiveBackground>
+        
     )
 };
