@@ -28,8 +28,6 @@ const HomePage = () => {
           <StyledSearchIcon />
           <SearchInput placeholder="Search" onChange={(e) => search(e)} />
       </SearchContainer>
-
-
       <TagsStyle>
         <h3>
           Tags
