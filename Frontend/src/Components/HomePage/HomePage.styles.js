@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/solid';
+import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
 
 export const SearchContainer = styled.div`
     margin-top: 20px;
@@ -32,10 +32,13 @@ export const SearchInput = styled.input`
 
 `;
 
-export const Body=styled.body`
+export const Body=styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    @media (min-width: 769px) {
+    max-width: 85%;
+  }
     
 
 `
@@ -51,35 +54,41 @@ export const TagsStyle=styled.div`
   button{
     border: none;
     border-radius: 20px;
-    height: 25px;
+    height: fit;
     margin: 2px;
   }
 
-  .education{
-    background-color: yellow;
-  }
-  .Political{
-    background-color: red;
-  }
-  .Gaming{
-    background-color: blue;
-  }
-  .Sports{
-    background-color: pink;
-  }
-  .IT{
-    background-color: rebeccapurple;
-  }
-  .Other{
-    background-color: grey;
-  }
-  .Entertainment{
-    background-color:green;
-  }
-  .Religious{
-    background-color: brown;
-  }
 
 
 
 `;
+
+export const EventsStyle=styled.div`
+  
+  /* margin-right: 20px; */
+
+
+
+
+`;
+export const SearchBack = styled.div`
+  height: 400px;
+  width: 100%;
+  background: linear-gradient(to bottom, white, var(--primary));
+  border-radius: 20px;
+
+`;
+
+
+
+export const Page=styled.div`
+display: flex;
+flex-direction: row;
+@media (max-width: 769px) {
+    flex-direction: column;
+  }
+
+
+
+`
+
