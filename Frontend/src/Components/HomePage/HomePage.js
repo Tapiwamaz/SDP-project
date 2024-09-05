@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../Header/Header'
-import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
+import {Page, EventsStyle, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
 
 import EventSlider from '../EventsSlider/EventSlider'
 import AsideDesktop from '../AsideDesktop/AsideDesktop'
@@ -35,7 +35,6 @@ const HomePage = () => {
   // },[filteredEvents])
 
   const filter=(type)=>{
-    // console.log("filteritng")
     setActiveTag(type);
 
     SetFilteredEvents(Events.filter(e=>e.type.match(type)));
@@ -52,6 +51,12 @@ const HomePage = () => {
      <Page>
       <AsideDesktop></AsideDesktop>{/*Global aside called */}
       <Body>
+      {/* <img src='https://images.hdqwalls.com/wallpapers/water-through-rocks-4k-kl.jpg' alt='eventImage' style={{
+
+        height:"100%",
+        width:"100%"
+      }}/> */}
+
         <SearchContainer>
             <StyledSearchIcon />
             <SearchInput placeholder="Search" onChange={ (e) => search(e) } maxLength={50}/> {/*max lenght of input */}
@@ -83,7 +88,7 @@ const HomePage = () => {
           <Tags name={"Education"} filter={activeTag === "Education" ? null : () => filter("Education")} isActive={activeTag === "Education"}></Tags>
           <Tags name={"Sports"} filter={activeTag === "Sports" ? null : () => filter("Sports")} isActive={activeTag === "Sports"} ></Tags>
           <Tags name={"Political"} filter={activeTag === "Political" ? null : () => filter("Political")} isActive={activeTag === "Political"}></Tags>
-          <Tags name={"Entertainment"} filter={activeTag === "Entertainment" ? null : () => filter("Entertainment")} isActive={activeTag === "Entertainment"}></Tags>
+        <Tags name={"Entertainment"} filter={activeTag === "Entertainment" ? null : () => filter("Entertainment")} isActive={activeTag === "Entertainment"}></Tags>
           <Tags name={"Gaming"} filter={activeTag === "Gaming" ? null : () => filter("Gaming")} isActive={activeTag === "Gaming"}></Tags>
           <Tags name={"IT"} filter={activeTag === "IT" ? null : () => filter("IT")} isActive={activeTag === "IT"}></Tags>
           <Tags name={"Religious"} filter={activeTag === "Religious" ? null : () => filter("Religious")} isActive={activeTag === "Religious"}></Tags>
@@ -92,16 +97,29 @@ const HomePage = () => {
         </TagsStyle>
         
 
+      <div style={{
+        width:"90%"
+      }}>
 
         <h3>Trending Events</h3>
-        
+
+      </div>
+
         <EventSlider events={filteredEvents}></EventSlider>
-
-        <h3>Latest Events</h3>
+        <div style={{
+        width:"90%"
+      }}>
+      <h3>Latest Events</h3>
+      </div>
 
         
-        <EventSlider events={filteredDateEvents}></EventSlider>
+    <EventSlider events={filteredDateEvents}></EventSlider>
 
+
+
+       
+
+      
 
 
       </Body>

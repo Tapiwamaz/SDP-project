@@ -5,7 +5,7 @@ export const Aside = styled.div`
   z-index: 100;
   top: 0;
   right: 0;
-  height: 100vh;
+  height: 10;
   width: 15%;
   background-color: var(--primaryGrey);
   padding: 2rem;

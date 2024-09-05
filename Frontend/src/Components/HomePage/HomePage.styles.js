@@ -54,9 +54,18 @@ export const TagsStyle=styled.div`
   button{
     border: none;
     border-radius: 20px;
-    height: 25px;
+    height: fit;
     margin: 2px;
   }
+
+
+
+
+`;
+
+export const EventsStyle=styled.div`
+  
+  /* margin-right: 20px; */
 
 
 

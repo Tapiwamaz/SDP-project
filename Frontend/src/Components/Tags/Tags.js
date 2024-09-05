@@ -20,7 +20,7 @@ const Button = styled.button`
   margin: 2px;
   padding: 10px;
   min-width: 100px;
-  height: 40px;
+  height: 10px;
   display: flex;
   flex-direction: row;
   justify-content: center;

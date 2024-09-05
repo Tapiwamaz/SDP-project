@@ -5,10 +5,10 @@ const AsideDesktop = () => {
   return (
   <>
       <Aside >
-            <AsideNavItem href="#home" >Home</AsideNavItem>
-            <AsideNavItem href="#about" >About</AsideNavItem>
-            <AsideNavItem href="#services" >Services</AsideNavItem>
-            <AsideNavItem href="#contact" >Contact</AsideNavItem>
+            <AsideNavItem href="#home" >My Events </AsideNavItem>
+            <AsideNavItem href="#about" >My Bookings</AsideNavItem>
+            <AsideNavItem href="#services" >Calander</AsideNavItem>
+            <AsideNavItem href="#contact" >Notifications</AsideNavItem>
 
       </Aside>
   </>
