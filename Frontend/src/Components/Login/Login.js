@@ -1,5 +1,5 @@
-import { auth } from "../../config/firebase.js"
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, googleProvider } from "../../config/firebase.js"
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
@@ -13,14 +13,20 @@ export const Login = () => {
     const login = async () => {
         setErrorMessage("");
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(auth, email, password);
         }
         catch (error) {
             console.error(error);
         }
     };
 
-    const signInWithGoogle = async () => {
+    const loginWithGoogle = async () => {
+        try {
+            await signInWithPopup(auth, googleProvider);
+        }
+        catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -37,7 +43,7 @@ export const Login = () => {
             <ErrorMessage>{errorMessage}</ErrorMessage>
             <StyledButton onClick={login}>Login</StyledButton>
             <ImageContainer>
-                <StyledText>_______OR_______</StyledText>
+                <StyledText>__________OR__________</StyledText>
             </ImageContainer>
             <ImageContainer>
                 <StyledText size="16px">Login with</StyledText>
@@ -48,7 +54,7 @@ export const Login = () => {
             </ImageButton>
             </ImageContainer>
             <ImageContainer>
-                <StyledText size="16px">Don't have an account? <StyledLink>Sign in</StyledLink></StyledText>
+                <StyledText size="16px">Don't have an account? <StyledLink href="../SignIn/SignIn.js">Sign in</StyledLink></StyledText>
             </ImageContainer>
             
         </div>

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 
 export const ImageContainer = styled.div`
@@ -121,7 +122,7 @@ export const ClickableText = styled.div`
   margin: 20px 0;            /* Vertical margins */
   padding: 20px;             /* Padding for visual spacing */
   text-align: right;          /* Align text to the left */
-  color: #18336C;
+  color: black;
   font-size: 16px;           /* Same font size as input */
 `;
 
@@ -139,4 +140,26 @@ export const ErrorMessage = styled.div`
   font-size: 14px;           /* Slightly smaller font size for the text */
   color: red; 
   text-align: left;
+`;
+
+
+export const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center; /* Align checkbox and text vertically */
+  width: 75vw;        /* Same width as the input */
+  margin: 15px auto;  /* Center horizontally with vertical margin */
+`;
+
+// Styled checkbox
+export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
+  ali
+  margin-right: 10px; /* Space between checkbox and text */
+  width: 20px;        /* Size of the checkbox */
+  height: 20px;       /* Size of the checkbox */
+`;
+
+// Styled text
+export const CheckboxText = styled.label`
+  font-size: 16px;    /* Same font size as input */
+  color: #333;        /* Text color */
 `;
