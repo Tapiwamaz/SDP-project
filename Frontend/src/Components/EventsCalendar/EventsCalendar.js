@@ -22,13 +22,13 @@ import Header from "../Header/Header";
 import AsideDesktop from "../AsideDesktop/AsideDesktop";
 const localizer = momentLocalizer(moment);
 const eventColors = {
-  Sport: "pink",
-  Entertainment: "cyan",
-  Education: "yellow",
-  Political: "red",
-  Religious: "brown",
-  Gaming: "lime",
-  IT: "purple",
+  Sports: "#EB8497",
+  Entertainment: "#6688c3",
+  Education: "#eaaf41",
+  Political: "#ce4a4a",
+  Religious: "#6A4739",
+  Gaming: "#48a56a",
+  IT: "#b25da6",
   Other: "grey",
 };
 
@@ -76,7 +76,7 @@ const MyCalendar = () => {
         <AsideDesktop></AsideDesktop>
         <Body>
           <TagsStyle>
-            <h3>Tags</h3>
+            <h3>Filter by</h3>
             <div>
               <Tags
                 name={"Education"}

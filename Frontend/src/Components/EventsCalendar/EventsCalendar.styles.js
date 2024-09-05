@@ -94,6 +94,7 @@ export const DaySlot = styled.div`
   border-radius: 4px;
   padding: 2px;
   font-size: 14px;
+  gap: 3vh;
   text-align: center;
 
   //this is the actual event within the block of time in the day view
@@ -120,6 +121,21 @@ export const CalendarWrapper = styled.div`
     font-weight: 700;
   }
 
+  .rbc-btn-group {
+    background-color: var(--primary);
+    color: white;
+    border-radius: 10px;
+
+    button {
+      color: white;
+      border-color: transparent;
+
+      .rbc-active {
+        background-color: var(--primaryGrey);
+      }
+    }
+  }
+
   .rbc-month-row {
     border: none;
   }
@@ -132,6 +148,7 @@ export const CalendarWrapper = styled.div`
     height: 1.5vh;
     color: white;
     font-size: small;
+
     //background-color: var(--);
   }
 
@@ -143,7 +160,8 @@ export const CalendarWrapper = styled.div`
 export const EventTitle = styled.strong`
   display: block;
   font-weight: bold;
-  color: #333; /* Customize title color */
+  color: "black";
+  text-align: left; /* Customize title color */
 `;
 
 // Location Style
@@ -156,13 +174,17 @@ export const EventLocation = styled.div`
 export const EventDescription = styled.div`
   font-size: 11px;
   margin-top: 3px;
-  color: #999; /* Optional: Description text color */
+  text-align: left;
+
+  /* Optional: Description text color */
 `;
 
 export const TagsStyle = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
+  font-family: "Khula";
+  padding: 2vh;
   div {
     display: flex;
     flex-wrap: wrap;
