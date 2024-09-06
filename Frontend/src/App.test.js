@@ -5,6 +5,6 @@ describe(App,  () =>{
     it("Basic app testings", () =>{
         const {getByTestId} = render(<App />);
         const textValue = getByTestId("title").textContent;
-        expect(textValue).toBe("We're currnetly working on a few things :(")
+        expect(textValue).toBe("We're currently working on a few things :(")
     })
 })
