@@ -13,6 +13,9 @@ jobs:
   test_job:
     runs-on: ubuntu-latest
     name: Test Job
+    defaults:
+      run:
+        working-directory: Frontend
     steps:
       - uses: actions/checkout@v3
         with:
