@@ -1,4 +1,4 @@
-name: Azure Static Web Apps CI/CD
+name: Univents testing, building and deployement
 
 on:
   push:
@@ -10,6 +10,33 @@ on:
       - main
 
 jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    name: Test Job
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm run test -- --coverage
+
+      - name: Check coverage
+        run: |
+          COVERAGE=$(npx coverage-summary-istanbul < coverage/coverage-summary.json | grep 'Lines' | awk '{print $4}' | sed 's/%//')
+          if (( $(echo "$COVERAGE < 5" | bc -l) )); then
+            echo "Code coverage is less than 5%"
+            exit 1
+          fi
+
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
