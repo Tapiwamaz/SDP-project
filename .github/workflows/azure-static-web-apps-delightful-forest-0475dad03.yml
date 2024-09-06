@@ -45,6 +45,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: test_job
     name: Build and Deploy Job
+
+    env:
+      REACT_APP_FIRESTORE_API_KEY: ${{ secrets.REACT_APP_FIRESTORE_API_KEY }}
+      REACT_APP_FIRESTORE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIRESTORE_AUTH_DOMAIN }}
+      REACT_APP_FIRESTORE_APP_ID: ${{ secrets.REACT_APP_FIRESTORE_APP_ID }}
+      REACT_APP_FIRESTORE_MEASUREMENT_ID: ${{ secrets.REACT_APP_FIRESTORE_MEASUREMENT_ID }}
+      REACT_APP_FIRESTORE_PROJECT_ID: ${{ secrets.REACT_APP_FIRESTORE_PROJECT_ID }}
+      REACT_APP_FIRESTORE_STORAGE_BUCKET: ${{ secrets.REACT_APP_FIRESTORE_STORAGE_BUCKET }}
+      REACT_APP_FIRESTORE_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_FIRESTORE_MESSAGING_SENDER_ID }}
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -69,7 +79,18 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
-    needs: test_job 
+
+    # setting the environmet varibles to access apis
+    env:
+      REACT_APP_FIRESTORE_API_KEY: ${{ secrets.REACT_APP_FIRESTORE_API_KEY }}
+      REACT_APP_FIRESTORE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIRESTORE_AUTH_DOMAIN }}
+      REACT_APP_FIRESTORE_APP_ID: ${{ secrets.REACT_APP_FIRESTORE_APP_ID }}
+      REACT_APP_FIRESTORE_MEASUREMENT_ID: ${{ secrets.REACT_APP_FIRESTORE_MEASUREMENT_ID }}
+      REACT_APP_FIRESTORE_PROJECT_ID: ${{ secrets.REACT_APP_FIRESTORE_PROJECT_ID }}
+      REACT_APP_FIRESTORE_STORAGE_BUCKET: ${{ secrets.REACT_APP_FIRESTORE_STORAGE_BUCKET }}
+      REACT_APP_FIRESTORE_MESSAGING_SENDER_ID: ${{ secrets.REACT_APP_FIRESTORE_MESSAGING_SENDER_ID }}
+
+    needs: test_job
     steps:
       - name: Close Pull Request
         id: closepullrequest
