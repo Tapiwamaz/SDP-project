@@ -8,7 +8,10 @@ const EventCard = ({ event, onApprove, onReject }) => (
     <p>{event.time}</p>
     <p>{event.location}</p>
     <p>{event.organizer}</p>
-    {onApprove && onReject && (
+    {event.status !== 'pending' && (
+      <p>Status: {event.status === 'approved' ? 'Approved' : 'Rejected'}</p>
+    )}
+    {onApprove && onReject && event.status === 'pending' && (
       <div className="actions">
         <button onClick={() => onApprove(event.id)}>Approve</button>
         <button onClick={() => onReject(event.id)}>Reject</button>

@@ -93,3 +93,19 @@ body {
   color: #333;
 }
 
+.event-status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.event-status.approved {
+  background-color: #4caf50; /* Green for approved */
+  color: white;
+}
+
+.event-status.rejected {
+  background-color: #f44336; /* Red for rejected */
+  color: white;
+}
