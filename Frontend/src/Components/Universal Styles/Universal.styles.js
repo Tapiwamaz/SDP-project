@@ -109,6 +109,7 @@ export const ImageButton = styled.button`
   justify-content: center;
   cursor: pointer;           /* Pointer cursor on hover */
   transition: box-shadow 0.3s ease; /* Transition for smooth shadow effect */
+  margin-bottom: 15px;       /* Margin at the bottom to separate from other elements */
   
   /* Add a hover effect */
   &:hover {

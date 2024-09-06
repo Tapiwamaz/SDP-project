@@ -7,7 +7,7 @@ import { Welcome } from './Components/Welcome/Welcome.js';
 function App() {
   return (
     <div className="App">
-      <Login />
+      <Welcome />
     </div>
   );
 }

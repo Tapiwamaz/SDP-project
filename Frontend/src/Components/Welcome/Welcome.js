@@ -19,6 +19,7 @@ export const Welcome = () => {
                     <StyledText>__________OR__________</StyledText>
                 </ImageContainer>
                 <StyledButton>Login</StyledButton>
+                <ImageContainer></ImageContainer>
             </ResponsiveDiv>
         </ResponsiveBackground>
     )
