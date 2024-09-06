@@ -21,6 +21,10 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { mockLocations } from "../../MockData/MockData";
 
+
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../firebase_config";
+
 const CreateEvent = () => {
   // todays date to start date picker
   const todayDate = new Date().toISOString().split("T")[0];
@@ -64,13 +68,19 @@ const CreateEvent = () => {
   });
 
   const [availableLocations, setAvailableLocations] = useState([]);
+  
+
+  // db variables
+  const eventsCollectionRef = collection(db, "Events");
+  const createEvent = async (newEvent, eventCollection) => {
+    await addDoc(eventCollection,newEvent)
+  };
+  const loadLocations = (setALocations, locations) => {
+    setALocations(locations);
+  };
 
   useEffect(() => {
-    // imitate doing a fetch to get mock locations
-
-    const loadLocations = (setALocations, locations) => {
-      setALocations(locations);
-    };
+    
     loadLocations(setAvailableLocations, mockLocations);
   }, []);
 
@@ -104,8 +114,7 @@ const CreateEvent = () => {
     }
   };
 
-  const handleNextButtonClick = async (eventDetailsT, eventRefsT) => {
-
+  const handleNextButtonClick = async (eventDetailsT, eventRefsT,eventCollection) => {
     if (!eventDetailsT.eventName) {
       // Handle missing event name
       eventRefsT.eventName.current.classList.add("unfilled-input");
@@ -210,15 +219,18 @@ const CreateEvent = () => {
         behavior: "smooth",
         block: "center",
       });
-      toast("Please upload a picture");
+      toast.warn("Please upload a picture");
       return;
     }
 
     const delay = (ms) => new Promise((res) => setTimeout(res, ms));
     setLoader(true);
+
+    createEvent(eventDetailsT,eventCollection);
+
     await delay(5000);
     setLoader(false);
-    setSubmitted(true)
+    setSubmitted(true);
   };
 
   const handleChangeEventDetails = (detail, detailType, setEventDetailsT) => {
@@ -264,8 +276,8 @@ const CreateEvent = () => {
       <section className="createEventsContainer">
         <section className="desktopAside">
           <div className="formInfoContainer">
-          <h4>Create your event</h4>
-          <p>Please fill in the all the fileds in the form. </p>
+            <h4 data-testid="title">Create your event</h4>
+            <p>Please fill in the all the fileds in the form. </p>
           </div>
           <img className="createEventsSvg" src={PendingSvg}></img>
 
@@ -562,7 +574,7 @@ const CreateEvent = () => {
             className="btn createEventButtonNext"
             type="button"
             onClick={() => {
-              handleNextButtonClick(eventDetails, eventRefs);
+              handleNextButtonClick(eventDetails, eventRefs,eventsCollectionRef);
             }}
           >
             Submit
