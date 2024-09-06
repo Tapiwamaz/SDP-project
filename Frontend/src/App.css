@@ -43,11 +43,13 @@ body {
   padding: 15px;
   display: flex;
   flex-direction: column;
+  border: 1px solid black; 
 }
 
 .event-image {
   width: 100%;
-  height: 150px;
+  height: 300px;
+
   background-color: #ccc;
   border-radius: 8px;
   margin-bottom: 10px;
@@ -60,7 +62,7 @@ body {
 
 .event-card p {
   margin: 3px 0;
-  color: #777;
+  color: #000000;
 }
 
 .actions {
@@ -100,6 +102,7 @@ body {
   text-align: center;
 }
 
+/*status classes not needed, just keeping in case :p*/
 .event-status.approved {
   background-color: #4caf50; /* Green for approved */
   color: white;
@@ -108,4 +111,49 @@ body {
 .event-status.rejected {
   background-color: #f44336; /* Red for rejected */
   color: white;
+}
+
+
+
+/* Container for the event details */
+.event-details {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ensures the whole card width is used */
+}
+
+/* Flex container for date and Free/Paid */
+.event-row {
+  display: flex;
+  justify-content: space-between; /* Space between date and Free/Paid */
+  align-items: center;
+  margin-bottom: 5px; /* Reduce space between this row and the next */
+}
+
+/* Flex column for other details (time, location, organizer) */
+.event-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 0; /* Remove any extra top margin */
+}
+
+/* Align Free/Paid to the far right */
+.event-payment-status {
+  font-weight: bold;
+  color: #003366;
+  text-align: right;
+  flex-shrink: 0; /* Prevents shrinking */
+  margin-left: 20px; /* Adds spacing between date and Free/Paid */
+}
+
+/* Reduce the spacing between the rows */
+.event-info p, .event-row p {
+  margin: 2px 0; /* Minimize space between the lines of text */
+}
+
+
+.spacer {
+  height: 20px;
 }
