@@ -105,12 +105,6 @@ const CreateEvent = () => {
   };
 
   const handleNextButtonClick = async (eventDetailsT, eventRefsT) => {
-    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-    setLoader(true);
-    await delay(5000);
-    setLoader(false);
-    setSubmitted(true);
-    return;
 
     if (!eventDetailsT.eventName) {
       // Handle missing event name
@@ -220,8 +214,11 @@ const CreateEvent = () => {
       return;
     }
 
-    // if everything is done and added then submited
-    // setSubmitted(true)
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    setLoader(true);
+    await delay(5000);
+    setLoader(false);
+    setSubmitted(true)
   };
 
   const handleChangeEventDetails = (detail, detailType, setEventDetailsT) => {
