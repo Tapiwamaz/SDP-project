@@ -8,7 +8,38 @@
 }
 
 .pendingPage {
-  border: 5px solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.textAlign {
+  text-align: center;
+  font-size: 1.5rem;
+}
+.subText {
+  font-size: 1rem;
+}
+
+.goHomeBtn {
+  width: 15vw;
+}
+
+.createEventsSvg {
+  width:35vw;
+}
+
+.formInfoContainer{
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  padding: 1rem 0 0 5.5rem ;
+}
+.formInfoContainer h4 {
+  font-size: 2.5rem;
 }
 
 @keyframes fade-in {
@@ -18,6 +49,16 @@
   }
   100% {
     transform: translate(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-up {
+  0% {
+    transform: translateY(200%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(60%);
     opacity: 1;
   }
 }
@@ -46,11 +87,13 @@
   margin: 0 2rem;
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 10px;
+  animation: fade-in 300ms forwards;
 }
 .desktopAside {
   display: flex;
   flex-direction: column;
   flex: 1;
+  align-items: center;
 }
 
 .inputs {
@@ -118,6 +161,11 @@
   border-radius: 10px;
 }
 
+.pending {
+  width: 100%;
+  border: 10px solid black;
+}
+
 .imageHolder {
   border-radius: 10px;
   width: 100%;
@@ -174,7 +222,7 @@
   left: 0;
   bottom: 0; 
   width: 100%;
-  background-color: rgba(25, 25, 112, 0.7);
+  background-color: rgba(230, 230, 230, 0.7);
   backdrop-filter: blur(2px);
   display: flex;
   flex-direction: column;
@@ -186,7 +234,7 @@
   left: 50%;
   top: 50%;
   aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side,#000 90%,#0000);
+  --_g: no-repeat radial-gradient(circle closest-side,var(--primary) 90%,#0000);
   background: 
     var(--_g) 0%   50%,
     var(--_g) 50%  50%,
@@ -212,6 +260,8 @@
     display: none;
   }
 
+ 
+
   #file-upload {
     width: 100%;
     height: 300px;
@@ -220,6 +270,7 @@
     width: 100%;
     box-shadow: none;
     margin: 0;
+
   }
   .label,
   .input {
@@ -227,5 +278,17 @@
   }
   .createEventButtonNext {
     width: 100%;
+  }
+  .goHomeBtn {
+    width: 50vw;
+  }
+  .pendingPage {
+    gap: 2rem;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px;
+    animation: fade-up 500ms ease-in-out;
+
+  }
+  #pendingPageImg{
+    width: 80vw;
   }
 }

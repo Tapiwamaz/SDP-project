@@ -6,6 +6,12 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/24/outline";
 
+// svgs
+import PendingSvg from "../../Images/Pending.svg";
+import WomenSvg from "../../Images/WomenHighFive.svg";
+
+// import {NavLink} from "react-router-dom"
+
 //css
 import "./CreateEvent.css";
 // react
@@ -229,7 +235,21 @@ const CreateEvent = () => {
   if (submitted) {
     return (
       <section className="wrapperCreateEvent">
-        <section className="createEventsContainer"></section>
+        <section className="createEventsContainer pendingPage">
+          <h3 className="textAlign">
+            Your are now officialy on the waitlist - stay tuned!
+          </h3>
+          <p className="textAlign subText">
+            You will be notified as soon your event is approved.
+          </p>
+          {/* <NavLink to={"/"} className="btn"> Go back to home</NavLink> */}
+          <button type="button" className="btn goHomeBtn">
+            {" "}
+            Go back to home
+          </button>
+          {/* <div> */}
+          <img id="pendingPageImg" src={WomenSvg}></img>
+        </section>
       </section>
     );
   }
@@ -245,7 +265,16 @@ const CreateEvent = () => {
       </nav>
 
       <section className="createEventsContainer">
-        <section className="desktopAside"></section>
+        <section className="desktopAside">
+          <div className="formInfoContainer">
+          <h4>Create your event</h4>
+          <p>Please fill in the all the fileds in the form. </p>
+          </div>
+          <img className="createEventsSvg" src={PendingSvg}></img>
+
+          {/* <div style={{background: `url: "../../Images/Pending.svg"`}}></div> */}
+          {/* {console.log(PendingSvg)} */}
+        </section>
 
         <section className="inputs">
           {/* Image  */}
