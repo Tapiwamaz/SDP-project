@@ -1,20 +1,19 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import background from '../../Images/background.webp';
+import background from '../../Images/background.jpg';
 
 
 export const ResponsiveBackground = styled.div`
   width: 100%;
-  height: 100vh; /* Full viewport height for demonstration */
-  
+  height: 100vh;
+  background-image: url(${background});
+  background-position: center;
+  background-size: cover;   /* Ensures the background image covers the entire area */
+  background-repeat: no-repeat;
 
-  /* Media query for screens larger than 600px */
-  @media (min-width: 768px) {
-    background-image: url(${background}); /* Set your background image */
-    background-size: cover; /* Ensure the background image covers the entire container */
-    background-position: center; /* Center the background image */
-    justify-content: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;      /* Center the card both horizontally and vertically */
 `;
 
 
@@ -24,9 +23,10 @@ export const ResponsiveDiv = styled.div`
   background-color: white; /* White background color */
 
   @media (min-width: 768px) {
-    width: 30vw;           /* 30% of the viewport width */
-    height: 80vh;          /* 80% of the viewport height */
-    
+    width: 30%;           /* 30% of the viewport width */
+    height: auto;          /* 80% of the viewport height */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add some shadow for the card */
+    border-radius: 15px;  /* Add rounded corners */
   }
 `;
 
@@ -42,14 +42,14 @@ export const ImageContainer = styled.div`
 
 
 export const StyledImage = styled.img`
-  width: 75vw;  /* 75% of the viewport width */
+  width: 75%;  /* 75% of the viewport width */
   height: auto; /* height scales automatically */
   margin-top: 0; /* no margin at the top */
 `;
 
 
 export const StyledInput = styled.input`
-  width: 75vw;              /* 75% of the viewport width */
+  width: 75%;              /* 75% of the viewport width */
   height: auto;              /* Auto-adjust height */
   padding: 10px;             /* Add some padding inside the input */
   margin: 15px 0;
@@ -74,7 +74,7 @@ export const StyledInput = styled.input`
 
 
 export const StyledButton = styled.button`
-  width: 75vw;              /* 75% of the viewport width */
+  width: 75%;              /* 75% of the viewport width */
   height: auto;              /* Auto-adjust height */
   padding: 10px;             /* Padding inside the button */
   margin: 15px 0;
@@ -130,7 +130,7 @@ export const ImageButton = styled.button`
 
 
 export const StyledBoldText = styled.div`
-  width: 75vw;               /* Same width as input and button */
+  width: 75%;               /* Same width as input and button */
   font-size: 25px;           /* Match font size */
   font-weight: bold;         /* Bold text */
   text-align: center;        /* Center text */
@@ -139,7 +139,7 @@ export const StyledBoldText = styled.div`
 
 
 export const StyledText = styled.div`
-  width: 75vw;               /* Same width as input and button */
+  width: 75%;               /* Same width as input and button */
   font-size: ${(props) => props.size || '20px'};
   text-align: center;        /* Center text */
   margin: 10px 0;            /* Margin to separate from other elements */
@@ -147,7 +147,7 @@ export const StyledText = styled.div`
 
 
 export const ClickableText = styled.div`
-  width: 85vw;               /* Same width as input */
+  width: 85%;               /* Same width as input */
   margin: 20px 0;            /* Vertical margins */
   padding: 20px;             /* Padding for visual spacing */
   text-align: right;          /* Align text to the left */
@@ -162,7 +162,7 @@ export const StyledLink = styled.a`
 `;
 
 export const ErrorMessage = styled.div`
-  width: 75vw;              /* Same width as input */
+  width: 75%;              /* Same width as input */
   margin-left: auto;         /* Align to the input's left */
   margin-right: auto;        /* Center horizontally */
   margin-top: -10px;         /* Slightly move up to reduce the gap */
@@ -175,7 +175,7 @@ export const ErrorMessage = styled.div`
 export const CheckboxContainer = styled.div`
   display: flex;
   align-items: center; /* Align checkbox and text vertically */
-  width: 75vw;        /* Same width as the input */
+  width: 75%;        /* Same width as the input */
   margin: 15px auto;  /* Center horizontally with vertical margin */
 `;
 

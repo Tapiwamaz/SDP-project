@@ -1,7 +1,7 @@
 import { auth, googleProvider } from "../../config/firebase.js"
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
-import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText } from "../Universal Styles/Universal.styles.js";
+import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
 
@@ -30,34 +30,36 @@ export const SignIn = () => {
     };
 
     return (
-        <div>
-            <ImageContainer>
-                <StyledImage src={logo} alt="Logo" />
-            </ImageContainer>
-            <ImageContainer>
-                <StyledBoldText>Welcome Back!</StyledBoldText>
-            </ImageContainer>
-            <StyledInput type="email" placeholder="Name" onChange={(e) => setEmail(e.target.value)} />
-            <StyledInput type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-            <StyledInput type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-            <CheckboxContainer>
-                <StyledCheckbox />
-                <CheckboxText>I agree to the <StyledLink>Terms and Conditions</StyledLink></CheckboxText>
-            </CheckboxContainer>
-            <ErrorMessage>{errorMessage}</ErrorMessage>
-            <StyledButton onClick={signin}>Sign in</StyledButton>
-            
-            <ImageContainer>
-                <StyledText>__________OR__________</StyledText>
-            </ImageContainer>
-            <ImageContainer>
-                <StyledText size="16px">Sign in with</StyledText>
-            </ImageContainer>
-            <ImageContainer>
-            <ImageButton onClick={signInWithGoogle}>
-                <img src={googleLogo} alt="Google" />
-            </ImageButton>
-            </ImageContainer>
-        </div>
+        <ResponsiveBackground>
+            <ResponsiveDiv>
+                <ImageContainer>
+                    <StyledImage src={logo} alt="Logo" />
+                </ImageContainer>
+                <ImageContainer>
+                    <StyledBoldText>Welcome Back!</StyledBoldText>
+                </ImageContainer>
+                <StyledInput type="email" placeholder="Name" onChange={(e) => setEmail(e.target.value)} />
+                <StyledInput type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                <StyledInput type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                <CheckboxContainer>
+                    <StyledCheckbox />
+                    <CheckboxText>I agree to the <StyledLink>Terms and Conditions</StyledLink></CheckboxText>
+                </CheckboxContainer>
+                <ErrorMessage>{errorMessage}</ErrorMessage>
+                <StyledButton onClick={signin}>Sign in</StyledButton>
+                
+                <ImageContainer>
+                    <StyledText>__________OR__________</StyledText>
+                </ImageContainer>
+                <ImageContainer>
+                    <StyledText size="16px">Sign in with</StyledText>
+                </ImageContainer>
+                <ImageContainer>
+                <ImageButton onClick={signInWithGoogle}>
+                    <img src={googleLogo} alt="Google" />
+                </ImageButton>
+                </ImageContainer>
+            </ResponsiveDiv>
+        </ResponsiveBackground>
     )
 };
