@@ -25,7 +25,7 @@ app.http('Basic', {  // this defines the function name e.g localhost:4280/api/Ba
             context.log(events)
             if (events.length === 0) {
                 context.log("The collection is empty");
-                return { status: 404, body: ['No events found', events, data] };
+                return { status: 404, body: ['No events found',db,eventsRef, request, events, JSON.stringify(data),JSON.stringify(data.docs)] };
             }
 
             return {
