@@ -20,12 +20,12 @@ app.http('Basic', {  // this defines the function name e.g localhost:4280/api/Ba
         try {
             const eventsRef = collection(db,"Events"); //this is to get a reference to the collection you want to work on 
             const data = await getDocs(eventsRef); //since this function is to get documents from events collection
-            console.log(data)
+            context.log(data)
             let events = data.docs.map((doc) => ({...doc.data(), eventID: doc.id})); // formatting the output to a usable format string
-            console.log(events)
+            context.log(events)
             if (events.length === 0) {
                 context.log("The collection is empty");
-                return { status: 404, body: 'No events found' };
+                return { status: 404, body: ['No events found', events, data] };
             }
 
             return {
