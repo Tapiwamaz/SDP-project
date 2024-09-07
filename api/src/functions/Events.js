@@ -9,16 +9,18 @@ const { db } = require('../firebase_config'); // Import the db instance from the
 // standard functions are getDocs, getDoc , addDoc... check firebase functions to see which you might need
 const {collection, getDocs} = require("firebase/firestore")
  
-app.http('Basic', {  // this defines the function name e.g localhost:4280/api/Basic (This can be different from the name of the file)
+app.http('events', { 
+    // this defines the function name e.g localhost:4280/api/Basic 
+    // (This can be different from the name of the file but no other function may have the same name)
     methods: ['GET'], // this of request methods
     authLevel: 'anonymous', // define the auth level
 
     handler: async (request, context) => { //actual function operation
 
         context.log(`Http function processed request for url "${request.url}"`);
-
+        const collectionName = "Events" //change this varaible to be the name of the collection you're working on
         try {
-            const eventsRef = collection(db,"Events"); //this is to get a reference to the collection you want to work on 
+            const eventsRef = collection(db,collectionName); //this is to get a reference to the collection you want to work on 
             const data = await getDocs(eventsRef); //since this function is to get documents from events collection
 
             let events = data.docs.map((doc) => ({...doc.data(), eventID: doc.id})); // formatting the output to a usable format string
