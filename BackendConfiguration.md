@@ -30,7 +30,7 @@ If an error occurs with the swa command make sure your swa emulator is updated
 You can make a fetch function to your function and call it.
 Below is a function template
 
-<!-- const fetchEvents = (arguments) {
+<!-- const fetchEvents = async (arguments) =>{
     try {
         // Using relative URL
         const response = await fetch('/api/Basic', {
@@ -51,6 +51,7 @@ Below is a function template
         console.error('Error fetching data:', error);
         return null;
     }
-} -->
+} 
+-->
 
 <!--  -->
