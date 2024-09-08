@@ -2,184 +2,37 @@
   text-align: center;
 }
 
-/* General styling */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
 
-/* Tab styling */
-.tabs {
-  display: flex; 
-  justify-content: space-around; 
-  background-color: #e0e0e0;
-  padding: 10px; 
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
-/* made buttons wider */
-.tabs button {
-  padding: 15px 20px;
-  border: none;
-  background-color: transparent; 
-  cursor: pointer; 
-  font-size: 16px; 
-  font-weight: bold; 
-  color: #000000; 
-  border-radius: 5px; 
-  flex: 1; 
-  text-align: center; 
-  margin: 0; 
-}
-
-
-.tabs button:last-child {
-  margin-right: 2px;
-}
-
-
-.tabs .active {
-  background-color: #003366; 
-  color: #fff; 
-}
-
-/* Event card styling */
-
-.parent-container {
-  display: flex;
-  justify-content: center; /*to center event cards*/
-  padding: 10px; 
-}
-
-
-.event-card {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 10px;
-  padding: 15px;
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  border: 1px solid black; 
-  width: 310px; 
-  height: 400px; 
-  overflow: hidden; 
-}
-
-.event-image {
-  width: 100%;
-  height: auto;
-  max-height: 200px; 
-  object-fit: cover; 
-  background-color: #ccc;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.event-card h2 {
-  font-size: 18px;
-  margin: 0 0 5px;
-}
-
-.event-card p {
-  margin: 3px 0;
-  color: #000000;
-}
-
-
-/*Styling for approve or reject buttons*/
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.actions button {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  flex: 1;
-  margin-right: 5px;
-  font-size: 14px;
-}
-
-.actions button:last-child {
-  margin-right: 0;
-}
-
-.actions button:first-child {
-  background-color: #003366;
-  color: #fff;
-}
-
-.actions button:last-child {
-  background-color: #ccc;
-  color: #333;
-}
-/****************************/
-
-
-.event-status {
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-weight: bold;
-  text-align: center;
-}
-
-/*status classes not needed, just keeping in case :p*/
-.event-status.approved {
-  background-color: #4caf50; /* Green for approved */
-  color: white;
-}
-
-.event-status.rejected {
-  background-color: #f44336; /* Red for rejected */
-  color: white;
-}
-
-
-
-/*Container for the event details */
-.event-details {
-  display: flex;
-  flex-direction: column;
-  width: 100%; 
-}
-
-/* Flex container for date and Free/Paid */
-.event-row {
-  display: flex;
-  justify-content: space-between; 
   align-items: center;
-  margin-bottom: 5px; 
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-/* Flex column for other details (time, location, organizer) */
-.event-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-top: 0; 
+.App-link {
+  color: #61dafb;
 }
 
-/* Align Free/Paid to the far right */
-.event-payment-status {
-  font-weight: bold;
-  color: #003366;
-  text-align: right;
-  flex-shrink: 0; 
-  margin-left: 20px; 
-}
-
-/* Reduce the spacing between the rows */
-.event-info p, .event-row p {
-  margin: 2px 0; 
-}
-
-
-.spacer {
-  height: 20px;
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

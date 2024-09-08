@@ -1,20 +1,14 @@
 import React from 'react';
-import Tabs from './Components/Tabs';
-import Header from './Components/Header/Header';
-import AsideDesktop from './Components/AsideDesktop/AsideDesktop';
-import './App.css';
+import Tabs from './Components/Tabs/Tabs';
+
 
 function App() {
   return (
-    <div className="App">
-      <Header/>
+  
 
         <Tabs/>
-     
-      
-      
-      
-    </div>
+ 
+
   );
 }
 

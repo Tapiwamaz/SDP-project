@@ -1,5 +1,6 @@
 import React from 'react';
-import EventCard from './EventCard';
+import EventCard from '../EventCard/EventCard';
+import './PendingEvents.css';
 
 const PendingEvents = ({ events, onApprove, onReject }) => (
   <div className="pending-events">
