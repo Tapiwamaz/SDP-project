@@ -14,6 +14,7 @@ export const Login = () => {
         setErrorMessage("");
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            console.log("Success");
         }
         catch (error) {
             console.error(error);

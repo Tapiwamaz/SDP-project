@@ -19,7 +19,7 @@ export const ResponsiveBackground = styled.div`
 
 export const ResponsiveDiv = styled.div`
   width: 100%; /* Full width */
-  height: 100vh; /* Full viewport height */
+  height: 100%; /* Full viewport height */
   background-color: white; /* White background color */
 
   @media (min-width: 768px) {
