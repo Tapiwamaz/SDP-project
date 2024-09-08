@@ -4,10 +4,10 @@ import HistoryEvents from './HistoryEvents';
 
 const Tabs = () => {
   const [events, setEvents] = useState([
-    { id: 1, title: 'Event 1', date: '2024-09-10', time: '10:00 AM', location: 'Location 1', organizer: 'Organizer 1', image: 'url-to-image', isFree: true, status: 'pending' },
-    { id: 2, title: 'Event 2', date: '2024-09-12', time: '2:00 PM', location: 'Location 2', organizer: 'Organizer 2', image: 'url-to-image', isFree: false, status: 'pending' },
-    { id: 3, title: 'Event 3', date: '2024-08-20', time: '12:00 PM', location: 'Location 3', organizer: 'Organizer 3', image: 'url-to-image', isFree: true, status: 'approved' },
-    { id: 4, title: 'Event 4', date: '2024-08-25', time: '4:00 PM', location: 'Location 4', organizer: 'Organizer 4', image: 'url-to-image', isFree: false, status: 'rejected' },
+    { id: 1, title: 'Tech Summit', date: '2024-09-10', time: '10:00 AM', location: 'WSS 5', organizer: 'AWS Club', image: 'https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', isFree: true, status: 'pending' },
+    { id: 2, title: 'Basketball Match', date: '2024-09-12', time: '2:00 PM', location: 'Hall 29', organizer: 'Wits SRC', image: 'https://images.pexels.com/photos/3755448/pexels-photo-3755448.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', isFree: false, status: 'pending' },
+    { id: 3, title: 'Notes & Melodies', date: '2024-10-20', time: '8:00 PM', location: 'Origins Centre', organizer: 'Wits Choir', image: 'https://images.pexels.com/photos/2372945/pexels-photo-2372945.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', isFree: true, status: 'pending' },
+    { id: 4, title: 'Music Festival', date: '2024-11-25', time: '4:00 PM', location: 'Sturrock Park', organizer: 'Wits SRC', image: 'https://images.pexels.com/photos/6398745/pexels-photo-6398745.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', isFree: false, status: 'pending' },
   ]);
 
   const handleApprove = (id) => {

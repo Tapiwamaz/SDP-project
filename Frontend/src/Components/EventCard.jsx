@@ -26,12 +26,13 @@
 import React from 'react';
 
 const EventCard = ({ event, onApprove, onReject }) => (
+   <div className='parent-container'>
     <div className="event-card">
     <img src={event.image} alt={event.title} className="event-image" />
     <h2>{event.title}</h2>
     <div className="event-details">
         <div className="event-row">
-            <p>{event.date}</p>
+            <p>Day - {event.date}</p>
             <span className="event-payment-status">{event.isFree ? 'Free' : 'Paid'}</span>
         </div>
 
@@ -41,8 +42,10 @@ const EventCard = ({ event, onApprove, onReject }) => (
             <div className="spacer"></div>
             <p>{event.organizer}</p>
         </div>
-        
+
     </div>
+
+    
 
         {event.status !== 'pending' && (
         <p>Status: {event.status === 'approved' ? 'Approved' : 'Rejected'}</p>
@@ -55,6 +58,8 @@ const EventCard = ({ event, onApprove, onReject }) => (
         </div>
         )}
   </div>
+  </div>
+ 
 );
 
 export default EventCard;
