@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PendingEvents from '../PendingEvents/PendingEvents';
 import HistoryEvents from '../HistoryEvents/HistoryEvents';
-import './Tabs.css'
+import './Tabs.css';
+import Header from '../Header/Header';
+import AsideDesktop from '../AsideDesktop/AsideDesktop';
 
 const Tabs = () => {
   const [events, setEvents] = useState([
@@ -23,6 +25,8 @@ const Tabs = () => {
 
   return (
     <div>
+      <Header></Header>
+      <AsideDesktop></AsideDesktop>
       <div className="tabs">
         <button onClick={() => setActiveTab('pending')} className={activeTab === 'pending' ? 'active' : ''}>
           Pending

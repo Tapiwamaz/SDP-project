@@ -1,5 +1,7 @@
 import React from 'react';
 import './EventCard.css';
+import Tags from '../Tags/Tags';
+
 
 const EventCard = ({ event, onApprove, onReject }) => (
 
@@ -23,7 +25,7 @@ const EventCard = ({ event, onApprove, onReject }) => (
             </div>   
 
             <button>Description</button>
-
+            <Tags name={event.category}></Tags>
 
             {event.status !== 'pending' && (
             <p>Status: {event.status === 'approved' ? 'Approved' : 'Rejected'}</p>
