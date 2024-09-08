@@ -1,6 +1,7 @@
 import "./App.css";
 import { Header } from "./Components/Header/Header.js"
 import { Navbar } from "./Components/Navbar/Navbar.js";
+import { Ticket } from "./Components/Ticket/Ticket.js";
 
 function App() {
   
@@ -8,6 +9,7 @@ function App() {
     <>
     <Header/>
     <Navbar/>
+    <Ticket/>
     </>
   );
 }

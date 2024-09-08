@@ -67,3 +67,19 @@ export const Title = styled.h1`
     font-size: 20px;
   }
 `;
+
+
+export const SearchInput = styled.input`
+  width: 200px; /* Default width of search input */
+  height: 35px;
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  outline: none;
+  transition: width 0.3s ease;
+
+  &:focus {
+    width: 250px; /* Expands when focused */
+  }
+`;
