@@ -1,44 +1,47 @@
 import React, { useEffect,useState } from 'react';
-import eventImage from "../../images/ds.jpeg";
+import eventImage from "../../Images/ds.jpeg";
 import { PlusCircleIcon, MinusCircleIcon } from '@heroicons/react/24/outline';
-
-import { EventDate,Location,Price,DateIcon,EventPages,LocationIcon,PriceIcon,BookButton,EventImage, NumberofTickets} from './EventPage.style';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { EventDate,Location,Price,DateIcon,EventPages,LocationIcon,PriceIcon,BookButton,EventImage, NumberofTickets, Time,TimeIcon,EveOCard} from './EventPage.style';
+import Header from '../../Components/Header/Header';
+import { Page } from '../../Components/HomePage/HomePage.styles';
+import AsideDesktop from '../../Components/AsideDesktop/AsideDesktop';
+import Tags from '../../Components/Tags/Tags';
 
 const EventPage = () => {
-  const event ={
-    "eventID": "1b6d1a8a-fb3f-4d0e-8f7a-7e733ff99e4f",
-    "name": "Tech Innovations 2024",
-    "type": "IT",
-    "date": "2024-09-15T10:00:00.000Z",
-    "description": "A conference showcasing the latest in technology and IT innovations.",
-    "start-time": "2024-09-15T10:00:00.000Z",
-    "end-time": "2024-09-15T16:00:00.000Z",
-    "userID": "b23e47cb-784f-4851-b7a9-0a7a6df5a2e8",
-    "active": true,
-    "imageURL": "techconference2024.com/image",
-    "price": 50,
-    "location": "1234 Tech Street, Silicon Valley",
-    "approved": true
-  }
-
+  const navigate = useNavigate();
+  const event = useLocation().state.event;
+  const book = useLocation().state.booked;
+  console.log(event);
   useEffect(() => {
 
 
   }, []);
+
+  const EventOrg = {
+    name: "Event Organiser",
+    email: "eventorg@gmail.com",
+    description: "This is a description of the event organiser",
+    profilepicture: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F717761877898013%2F&psig=AOvVaw3Q6Z"
+  }
 
 function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.toLocaleString('en-US', { day: 'numeric' });
     const month = date.toLocaleString('en-US', { month: 'long' });
     const year = date.toLocaleString('en-US', { year: 'numeric' });
-    const time = date.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
 
-    return `${day} ${month} ${year}, ${time}`; // change this line to change the order
+    return `${day} ${month} ${year}`; // change this line to change the order
 }
 
-const dateString = "2024-09-15T10:00:00.000Z";
-console.log(formatDate(dateString)); // Outputs: 15 September 2024, 10:00 AM
- const [count, setCount] = useState(0);
+
+function formatTime(dateString) {
+  const date = new Date(dateString);
+  const hours = date.getUTCHours().toString().padStart(2, '0');
+  const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+ const [count, setCount] = useState(1);
 
  const incrementCount = () => {
    setCount(count + 1);
@@ -51,49 +54,136 @@ console.log(formatDate(dateString)); // Outputs: 15 September 2024, 10:00 AM
  };
   return (
     <>
-      <EventPages>
-        <EventImage src={eventImage} alt="Event Image" />
-        <h1>{event.name}</h1>
-        <EventDate>
-          <DateIcon />
-          <p>{formatDate(event.date)}</p>
-        </EventDate>
-        <Location>
-          <LocationIcon />
-          <p>{event.location}</p>
-        </Location>
-        <Price>
-          <PriceIcon />
-          <p>{event.price}</p>
-        </Price>
-
-        <h2>About Event :</h2>
-        <p
-          style={{
-            width: "70%",
-          }}
-        >
-          {event.description}
-        </p>
-        <p>Number of Tickets</p>
-        <NumberofTickets>
-          <MinusCircleIcon
-            onClick={decrementCount}
-            style={{
-              width: "10%",
-            }}
+      <Header />
+      <Page
+        style={{
+          width: "100%",
+        }}
+      >
+        <AsideDesktop />
+        <EventPages>
+          <EventImage
+            src={eventImage}
+            className="EventImage"
+            alt="Event Image"
           />
-          <p>Current count: {count}</p>
-          <PlusCircleIcon
-            onClick={incrementCount}
-            style={{
-              width: "10%",
-            }}
-          />
-        </NumberofTickets>
+          <h1>{event.name}</h1>
+          <EventDate>
+            <DateIcon />
+            <p>{formatDate(event.date)}</p>
+          </EventDate>
+          <Time>
+            <TimeIcon />
+            <p>
+              Start: {formatTime(event.start_time)} - End:{" "}
+              {formatTime(event.end_time)}
+            </p>
+          </Time>
+          <Location>
+            <LocationIcon />
+            <p>{event.location}</p>
+          </Location>
+          <Price>
+            <PriceIcon />
+            <p>R{event.price}</p>
+          </Price>
 
-        <BookButton>Book Now</BookButton>
-      </EventPages>
+          <h2
+            style={{
+              marginBottom: "0",
+            }}
+          >
+            About Event :
+          </h2>
+          <p
+            style={{
+              width: "70%",
+              paddingBottom: ".5em",
+            }}
+          >
+            {event.description}
+          </p>
+          {/* <h3
+            style={{
+              marginBottom: "0",
+            }}
+          >
+            Tag
+          </h3>
+          <Tags name={event.type}  isActive ={false} filter={null} style={{
+            color: "black",
+            margin: "2px",
+            }}></Tags> */}
+
+          <EveOCard>
+            <img
+              src={eventImage}
+              style={{
+                width: "70px",
+                height: "70px",
+                borderRadius: "50%",
+                gridColumn: "span 1",
+                justifySelf: "center",
+                alignSelf: "center",
+              }}
+              alt=""
+            ></img>
+            <div className="top-right">
+              <h3
+                style={{
+                  margin: "0",
+                }}
+              >
+                {EventOrg.name}
+              </h3>
+              <p
+                style={{
+                  fontWeight: "lighter", // Add this line
+                  marginTop: "-2px",
+                }}
+              >
+                {EventOrg.email}
+              </p>
+            </div>
+            <p style={{ gridColumn: "span 2" }}>{EventOrg.description}</p>
+          </EveOCard>
+          {book ? (
+            <>
+              <p>Number of Tickets</p>
+              <NumberofTickets>
+                <MinusCircleIcon
+                  onClick={decrementCount}
+                  style={{
+                    width: "10%",
+                  }}
+                />
+                <p>Current count: {count}</p>
+                <PlusCircleIcon
+                  onClick={incrementCount}
+                  style={{
+                    width: "10%",
+                  }}
+                />
+              </NumberofTickets>
+              <BookButton
+                onClick={() =>
+                  navigate("/summary", { state: { amount: count, event } })
+                }
+              >
+                Book Now
+              </BookButton>
+            </>
+          ) : (
+            <BookButton
+              style={{
+                background: "red",
+              }}
+            >
+              Alert
+            </BookButton>
+          )}
+        </EventPages>
+      </Page>
     </>
   );
 };

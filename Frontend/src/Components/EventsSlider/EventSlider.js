@@ -2,10 +2,12 @@ import React from 'react'
 import { useEffect,useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import  Tags from '../Tags/Tags'
+import { useNavigate } from 'react-router-dom';
 
 import {LoadingCard, Card ,CustomCarousel,Container} from './EventSlider.styles';
 
 const EventSlider = ({events}) => {
+  const navigate = useNavigate();
     const [slidePercentage, setSlidePercentage] = useState(60);
     const [noEvents, setNoEvents] = useState([
       {events:"no"},
@@ -65,7 +67,7 @@ const formatTime=(time)=>{
 
 const goToEvent=(event)=>{
   console.log(event);
-  
+navigate('/event' , {state: {event,booked:true}}); 
 }
   
     return (

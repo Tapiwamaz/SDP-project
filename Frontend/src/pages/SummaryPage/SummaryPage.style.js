@@ -6,7 +6,7 @@ export const SummaryPages = styled.div`
   width: 387px;
   padding-bottom: 5em;
   border: 3px solid #d9d9d9;
-  margin-top: -20px;
+  /* margin-top: -20px; */
   position: relative;
   background-color: #fff;
   z-index: 0;

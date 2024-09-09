@@ -1,14 +1,24 @@
 import React from "react";
 import { CostSummary, PayButton,  SummaryPages } from "./SummaryPage.style";
+import { useLocation } from "react-router";
+import { Page } from "../../Components/HomePage/HomePage.styles";
 
+import EventSlider from "../../Components/EventsSlider/EventSlider";
+import AsideDesktop from "../../Components/AsideDesktop/AsideDesktop";
+import Header from "../../Components/Header/Header";
 export default function SummaryPage() {
-  const event = {
-    number: 2,
-    price: "500",
-  };
+  const event = useLocation().state.event;
+  const amount = useLocation().state.amount;
+  console.log(event);
+  console.log(amount);
   return (
-    <SummaryPages>
-      <h1>Nathan's Card</h1>
+    <>
+    <Header />
+    <Page style={{
+      // height: "100%",
+    }}>
+      <AsideDesktop />
+      <SummaryPages>
       <CostSummary>
         <h3
           style={{
@@ -29,7 +39,7 @@ export default function SummaryPage() {
             width: "50%",
           }}
         >
-          {event.number}
+          {amount}
         </p>
 
         <p
@@ -59,10 +69,14 @@ export default function SummaryPage() {
             width: "25%",
           }}
         >
-          <strong>R{event.price * event.number}</strong>
+          <strong>R{event.price * amount}</strong>
         </p>
       </CostSummary>
       <PayButton>Pay Now</PayButton>
     </SummaryPages>
+    </Page>
+    
+    </>
+    
   );
 }
