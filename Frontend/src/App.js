@@ -10,6 +10,9 @@ import ProfilePage from "./Components/Profile/ProfilePage";
 
 import CreateEvent from "./pages/CreateEvent/CreateEvent";
 import { ToastContainer } from "react-toastify";
+import { Login }  from './Components/Login/Login.js';
+import { SignIn } from './Components/SignIn/SignIn.js';
+import { Welcome } from './Components/Welcome/Welcome.js';
 
 function App() {
 
