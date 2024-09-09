@@ -1,0 +1,313 @@
+.btn {
+  background-color: var(--primary);
+  color: var(--background);
+  border-radius: 2.5rem;
+  font-family: inherit;
+  font-size: inherit;
+  height: 48px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 250ms ease-in-out;
+}
+
+.btn:hover {
+  transform: scale(1.01);
+  background-color: white;
+  border: black solid 3px;
+  color: black;
+}
+
+.wrapperCreateEvent {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  margin: 0 auto;
+  animation: fade-in 300ms forwards;
+}
+
+.pendingPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.textAlign {
+  text-align: center;
+  font-size: 1.5rem;
+}
+.subText {
+  font-size: 1rem;
+}
+
+.goHomeBtn {
+  width: 15vw;
+}
+
+.createEventsSvg {
+  width:35vw;
+}
+
+.formInfoContainer{
+  width: 100%;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  padding: 1rem 0 0 5.5rem ;
+}
+.formInfoContainer h4 {
+  font-size: 2.5rem;
+}
+
+@keyframes fade-in {
+  0% {
+    transform: translate(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-up {
+  0% {
+    transform: translateY(200%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(60%);
+    opacity: 1;
+  }
+}
+
+.navBarCreateEvents {
+  display: flex;
+  flex: 0.1;
+  gap: 16px;
+  align-items: center;
+}
+
+.backButtonCreateEvent {
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px;
+}
+.backButtonCreateEvent:hover {
+  transform: scale(1.1);
+}
+
+.createEventsContainer {
+  display: flex;
+  flex: 1;
+  border-radius: 1rem;
+  margin: 0 2rem;
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 10px;
+  animation: fade-in 300ms forwards;
+}
+.desktopAside {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  flex: 1;
+}
+
+.input {
+  height: 55px;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: none;
+  padding: 0 0.5rem;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: rgba(240, 250, 250, 0.5);
+}
+
+.input:focus,
+.input:active {
+  outline: 2px solid var(--primary);
+}
+
+.label {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.createEventButtonNext {
+  align-self: center;
+  width: 50%;
+}
+
+.doubleInputContainer {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+
+.doubleInput {
+  flex: 1;
+}
+.descriptionInput {
+  height: 200px;
+  resize: none;
+}
+
+.unfilled-input {
+  border: 2px solid red;
+}
+
+.drop-file-container {
+  display: flex;
+  flex-direction: column;
+  outline: 2px dashed white;
+  height: 500px;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 10px;
+}
+
+.pending {
+  width: 100%;
+  border: 10px solid black;
+}
+
+.imageHolder {
+  border-radius: 10px;
+  width: 100%;
+  height: 500px;
+}
+
+.uploadMediaLabel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#file-upload {
+  width: 50%;
+  height: 500px;
+  position: absolute;
+  z-index: 1;
+  opacity: 0;
+}
+
+.iconsMediaUpload {
+  display: flex;
+  gap: 5px;
+}
+
+#dividerLine {
+  border: 2px dashed white;
+}
+
+.clearButton {
+  background-color: var(--primary);
+  color: red;
+  border: none;
+  border-radius: 20%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  outline: none;
+  display: flex;
+  position: absolute;
+  transition: all 150ms ease-in-out;
+}
+
+.loader {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  bottom: 0; 
+  width: 100%;
+  background-color: rgba(230, 230, 230, 0.7);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+}
+
+.centerLoader {
+  width: 60px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side,var(--primary) 90%,#0000);
+  background: 
+    var(--_g) 0%   50%,
+    var(--_g) 50%  50%,
+    var(--_g) 100% 50%;
+  background-size: calc(100%/3) 50%;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+    20%{background-position:0%   0%, 50%  50%,100%  50%}
+    40%{background-position:0% 100%, 50%   0%,100%  50%}
+    60%{background-position:0%  50%, 50% 100%,100%   0%}
+    80%{background-position:0%  50%, 50%  50%,100% 100%}
+}
+
+@media screen and (max-width: 450px) {
+  .drop-file-container,
+  .imageHolder {
+    width: 100%;
+    height: 300px;
+  }
+
+  .desktopAside {
+    display: none;
+  }
+
+ 
+
+  #file-upload {
+    width: 100%;
+    height: 300px;
+  }
+  .createEventsContainer {
+    width: 100%;
+    box-shadow: none;
+    margin: 0;
+
+  }
+  .label,
+  .input {
+    font-size: 1rem;
+  }
+  .createEventButtonNext {
+    width: 100%;
+  }
+  .goHomeBtn {
+    width: 50vw;
+  }
+  .pendingPage {
+    gap: 2rem;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px;
+    animation: fade-up 500ms ease-in-out;
+
+  }
+  #pendingPageImg{
+    width: 80vw;
+  }
+}
