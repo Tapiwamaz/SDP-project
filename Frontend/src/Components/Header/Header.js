@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import { HeaderContainer,Xicon,Profile,ProfileIcon,NavItem,Nav,Burger,Aside,AsideNavItem,Logo } from './Header.styles';
+import { HeaderContainer,Xicon,Profile,ProfileIcon,Burger,Aside,AsideNavItem,Logo } from './Header.styles';
 import logo from '../../Images/Logo.svg.svg'
 
 

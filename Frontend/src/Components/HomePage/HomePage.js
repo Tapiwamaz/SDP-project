@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import Header from '../Header/Header'
-import {Page, EventsStyle, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
+import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
 
 import EventSlider from '../EventsSlider/EventSlider'
 import AsideDesktop from '../AsideDesktop/AsideDesktop'
@@ -15,8 +15,8 @@ const HomePage = () => {
 
   const [searchValue,setSearchValue]=useState(null);
   const [filteredEvents,SetFilteredEvents]=useState(Events);
-  const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
-
+  // const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
+  const filteredDateEvents= Events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const [activeTag, setActiveTag] = useState(null); // State to track the active tag
 
@@ -37,7 +37,7 @@ const HomePage = () => {
 
     SetFilteredEvents(Events.filter(e=>e.type.match(type)));
 
-       
+    
   }
 
 

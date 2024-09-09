@@ -9,14 +9,13 @@ import {LoadingCard, Card ,CustomCarousel,Container} from './EventSlider.styles'
 const EventSlider = ({events}) => {
   const navigate = useNavigate();
     const [slidePercentage, setSlidePercentage] = useState(60);
-    const [noEvents, setNoEvents] = useState([
-      {events:"no"},
-      {events:"no"},
-      {events:"no"},
-      {events:"no"},
-      {events:"no"}
-
-    ]);
+    const noEvents = [
+      { events: "no" },
+      { events: "no" },
+      { events: "no" },
+      { events: "no" },
+      { events: "no" },
+    ];
 
   
   useEffect(() => {

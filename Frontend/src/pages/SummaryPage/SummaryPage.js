@@ -3,7 +3,7 @@ import { CostSummary, PayButton,  SummaryPages } from "./SummaryPage.style";
 import { useLocation } from "react-router";
 import { Page } from "../../Components/HomePage/HomePage.styles";
 
-import EventSlider from "../../Components/EventsSlider/EventSlider";
+// import EventSlider from "../../Components/EventsSlider/EventSlider";
 import AsideDesktop from "../../Components/AsideDesktop/AsideDesktop";
 import Header from "../../Components/Header/Header";
 export default function SummaryPage() {
