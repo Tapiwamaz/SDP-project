@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 import Header from '../Header/Header'
-import {Page, EventsStyle, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
+import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
 
 import EventSlider from '../EventsSlider/EventSlider'
 import AsideDesktop from '../AsideDesktop/AsideDesktop'
@@ -11,16 +11,14 @@ import noResultsImage from '../../Images/noResults.svg';
 
 
 
-
 const HomePage = () => {
 
   const [searchValue,setSearchValue]=useState(null);
   const [filteredEvents,SetFilteredEvents]=useState(Events);
-  const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
-
+  // const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
+  const filteredDateEvents= Events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const [activeTag, setActiveTag] = useState(null); // State to track the active tag
-
 
 
 
@@ -39,7 +37,7 @@ const HomePage = () => {
 
     SetFilteredEvents(Events.filter(e=>e.type.match(type)));
 
-       
+    
   }
 
 
@@ -47,88 +45,125 @@ const HomePage = () => {
 
   return (
     <>
-     <Header></Header>
-     <Page>
-      <AsideDesktop></AsideDesktop>{/*Global aside called */}
-      <Body>
-      {/* <img src='https://images.hdqwalls.com/wallpapers/water-through-rocks-4k-kl.jpg' alt='eventImage' style={{
+      <Header></Header>
+      <Page>
+        <AsideDesktop></AsideDesktop>
+        {/*Global aside called */}
+        <Body>
+          {/* <img src='https://images.hdqwalls.com/wallpapers/water-through-rocks-4k-kl.jpg' alt='eventImage' style={{
 
         height:"100%",
         width:"100%"
       }}/> */}
 
-        <SearchContainer>
+          <SearchContainer>
             <StyledSearchIcon />
-            <SearchInput placeholder="Search" onChange={ (e) => search(e) } maxLength={50}/> {/*max lenght of input */}
-        </SearchContainer>
+            <SearchInput
+              placeholder="Search"
+              onChange={(e) => search(e)}
+              maxLength={50}
+            />{" "}
+            {/*max lenght of input */}
+          </SearchContainer>
 
-
-
-        {searchValue && (
+          {searchValue && (
             <>
               <h3>Results for {`"${searchValue}"`}</h3>
-              {Events.filter(e => e.name.includes(searchValue)).length > 0 ? (//if the array is empty display no results svg
-                <EventSlider events={Events.filter(e => e.name.includes(searchValue))} />
+              {Events.filter((e) => e.name.includes(searchValue)).length > 0 ? ( //if the array is empty display no results svg
+                <EventSlider
+                  events={Events.filter((e) => e.name.includes(searchValue))}
+                />
               ) : (
                 <>
-                <img src={noResultsImage} alt="No Results" />
-                <h3>No Results found</h3>
+                  <img src={noResultsImage} alt="No Results" />
+                  <h3>No Results found</h3>
                 </>
-                
               )}
             </>
           )}
 
+          <TagsStyle>
+            <h3>Tags</h3>
+            <div>
+              <Tags
+                name={"Education"}
+                filter={
+                  activeTag === "Education" ? null : () => filter("Education")
+                }
+                isActive={activeTag === "Education"}
+              ></Tags>
+              <Tags
+                name={"Sports"}
+                filter={activeTag === "Sports" ? null : () => filter("Sports")}
+                isActive={activeTag === "Sports"}
+              ></Tags>
+              <Tags
+                name={"Political"}
+                filter={
+                  activeTag === "Political" ? null : () => filter("Political")
+                }
+                isActive={activeTag === "Political"}
+              ></Tags>
+              <Tags
+                name={"Entertainment"}
+                filter={
+                  activeTag === "Entertainment"
+                    ? null
+                    : () => filter("Entertainment")
+                }
+                isActive={activeTag === "Entertainment"}
+              ></Tags>
+              <Tags
+                name={"Gaming"}
+                filter={activeTag === "Gaming" ? null : () => filter("Gaming")}
+                isActive={activeTag === "Gaming"}
+              ></Tags>
+              <Tags
+                name={"IT"}
+                filter={activeTag === "IT" ? null : () => filter("IT")}
+                isActive={activeTag === "IT"}
+              ></Tags>
+              <Tags
+                name={"Religious"}
+                filter={
+                  activeTag === "Religious" ? null : () => filter("Religious")
+                }
+                isActive={activeTag === "Religious"}
+              ></Tags>
+              <Tags
+                name={"Other"}
+                filter={activeTag === "Other" ? null : () => filter("Other")}
+                isActive={activeTag === "Other"}
+              ></Tags>
+            </div>
+          </TagsStyle>
 
-        <TagsStyle>
-          <h3>
-            Tags
-          </h3>
-          <div>
-          <Tags name={"Education"} filter={activeTag === "Education" ? null : () => filter("Education")} isActive={activeTag === "Education"}></Tags>
-          <Tags name={"Sports"} filter={activeTag === "Sports" ? null : () => filter("Sports")} isActive={activeTag === "Sports"} ></Tags>
-          <Tags name={"Political"} filter={activeTag === "Political" ? null : () => filter("Political")} isActive={activeTag === "Political"}></Tags>
-        <Tags name={"Entertainment"} filter={activeTag === "Entertainment" ? null : () => filter("Entertainment")} isActive={activeTag === "Entertainment"}></Tags>
-          <Tags name={"Gaming"} filter={activeTag === "Gaming" ? null : () => filter("Gaming")} isActive={activeTag === "Gaming"}></Tags>
-          <Tags name={"IT"} filter={activeTag === "IT" ? null : () => filter("IT")} isActive={activeTag === "IT"}></Tags>
-          <Tags name={"Religious"} filter={activeTag === "Religious" ? null : () => filter("Religious")} isActive={activeTag === "Religious"}></Tags>
-          <Tags name={"Other"} filter={activeTag === "Other" ? null : () => filter("Other")} isActive={activeTag === "Other"}></Tags>
+          <div
+            style={{
+              width: "90%",
+            }}
+          >
+            <h3>Trending Events</h3>
           </div>
-        </TagsStyle>
-        
 
-      <div style={{
-        width:"90%"
-      }}>
+          <EventSlider
+            events={filteredEvents}
+          ></EventSlider>
+          <div
+            style={{
+              width: "90%",
+            }}
+          >
+            <h3>Latest Events</h3>
+          </div>
 
-        <h3>Trending Events</h3>
-
-      </div>
-
-        <EventSlider events={filteredEvents}></EventSlider>
-        <div style={{
-        width:"90%"
-      }}>
-      <h3>Latest Events</h3>
-      </div>
-
-        
-    <EventSlider events={filteredDateEvents}></EventSlider>
-
-
-
-       
-
-      
-
-
-      </Body>
-    </Page>
-
+          <EventSlider
+            events={filteredDateEvents}
+          ></EventSlider>
+        </Body>
+      </Page>
     </>
-   
-   
-  )
+  );
 }
 
 export default HomePage
