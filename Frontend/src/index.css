@@ -21,22 +21,3 @@ body {
 
   
 }
-
-.btn {
-  background-color: var(--primary);
-  color: var(--background);
-  border-radius: 2.5rem;
-  font-family: inherit;
-  font-size: inherit;
-  height: 48px;
-  width: 100%;
-  cursor: pointer;
-  transition: all 250ms ease-in-out;
-}
-
-.btn:hover {
-  transform: scale(1.01);
-  background-color: white;
-  border: black solid 3px;
-  color: black;
-}
