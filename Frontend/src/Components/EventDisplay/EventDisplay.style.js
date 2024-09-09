@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled ,{keyframes} from "styled-components";
 import {
   MapPinIcon,
   BanknotesIcon,
@@ -9,7 +9,9 @@ import {
 export const EventDate = styled.section`
   display: flex;
   width: 100%;
+  height: 2.25rem;
   align-items: center;
+  padding-bottom: 1em;
   gap: 1em;
 `;
 
@@ -17,80 +19,80 @@ export const Price = styled.section`
   display: flex;
   align-items: center;
   width: 100%;
+  height: 2.25rem;
   gap: 1em;
 `;
 
 export const PriceIcon = styled(BanknotesIcon)`
-  width: 7%;
+  height: 100%;
 `;
 
 export const DateIcon = styled(CalendarIcon)`
-  width: 5%;
-  /* height: 20%; */
+  height: 100%;
 `;
 
 export const Location = styled.section`
   display: flex;
   width: 100%;
+  height: 2.25rem;
   align-items: center;
   gap: 1em;
-  /* padding-left: 7em; */
+  padding-bottom: 1em;
 `;
 
 export const LocationIcon = styled(MapPinIcon)`
-  width: 7%;
+  height: 100%;
   /* height: 20%;/ */
 `;
 export const Time = styled.section`
   display: flex;
   width: 100%;
+  height: 2.25rem;
   align-items: center;
   gap: 1em;
   /* padding-left: 7em; */
+  padding-bottom: 1em;
 `;
 
 export const TimeIcon = styled(ClockIcon)`
-  width: 7%;
+  height: 100%;
   /* height: 20%;/ */
 `;
 
 export const EventPages = styled.div`
   border: 1px solid #d9d9d9;
-  
   display: flex;
-  width: 100%;
+  width: 91%;
   flex-direction: column;
   padding-bottom: 5em;
+  font-size: 1em;
   z-index: 0;
   padding: 1em;
   > *:not(.EventImage) {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    /* padding-left: 1rem; */
+    /* padding-right: 1rem; */
   }
 
   @media (min-width: 768px) {
-    width: 620px;
+    width: 450px;
     font-size: 1.25em;
   }
-`;
-export const BookButton = styled.button`
+`;export const BookButton = styled.button`
   color: #fff;
   font-size: 1em;
   font-weight: 600;
   height: 3.25em;
   gap: 0.625em;
   border-radius: 0.625em;
-  background: #18336c;
+  background: ${props => props.full ? 'gray' : '#18336c'};
   border: none;
-  margin-right: 1em;
-  margin-left: 1em;
   margin-top: 1em;
   padding: 1em 1.25em 1em 1em;
-  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out; /* Add this for a smooth transition */
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+  /* cursor: ${props => props.full ? 'not-allowed' : 'pointer'}; */
 
   &:hover {
-    filter: brightness(200%);
-    /* transform: scale(1.1); Increase this to make the text bigger on hover */
+    filter: ${props => props.full ? 'brightness(80%)' : 'brightness(200%)'};
   }
 `;
 
@@ -133,8 +135,6 @@ export const EveOCard = styled.div`
   border: 1px solid #d9d9d9;
   border-radius: 25px;
   background-color: #fff;
-  margin-right:1em;
-  margin-left: 1em;
   .top-right {
     display: grid;
     grid-template-rows: 1fr 1fr;
@@ -145,25 +145,69 @@ export const RatingStars = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  gap: 10%;
+  gap: 7%;
   margin-top: -1em;
+  padding-bottom: 1em;
+
   /* padding-bottom: 1em; */
   @media (max-width: 400px) {
-    column-gap: 10%;
+    column-gap: 8%;
   }
 `;
 
 export const Star = styled.span`
   cursor: pointer;
   display: inline-block;
-  font-size: 5rem;
-  @media (max-width: 400px) {
-    font-size: 3rem;
+  font-size: 225%;
+  @media (min-width: 400px) {
+    font-size: 300%;
   }
   color: ${(props) =>
     props.hover ? "#997300" : props.selected ? "gold" : "gray"};
 
   &:hover {
-    /* color: "#997300"; */
+    color: "#997300";
+  }
+`;
+
+const loading = keyframes`
+  0% { background-position: 125% 50%; }
+  100% { background-position: -25 50%; }
+`;
+
+export const TitlePlaceHolder = styled.h1`
+  background: linear-gradient(90deg, #ccc 25%, #ddd 50%, #ccc 75%);
+  background-size: 200% 100%;
+  animation: ${loading} 0.8s ease-in-out infinite;
+  height: 40px;
+  width: 100%;
+  border-radius: 50px;
+`;
+
+export const EventImagePlaceholder = styled.img`
+  background: linear-gradient(90deg, #ccc 25%, #ddd 50%, #ccc 75%);
+  background-size: 200% 100%;
+  animation: ${loading} 0.8s ease-in-out infinite;
+  width: 100%;
+  height: 300px;
+  border-radius: 50px;
+`;
+
+export const PlaceHolderText = styled.p`
+  background: linear-gradient(90deg, #ccc 25%, #ddd 50%, #ccc 75%);
+  background-size: 200% 100%;
+  animation: ${loading} 0.8s ease-in-out infinite;
+  height: 20px;
+  width: 50%;
+  border-radius: 50px;
+  margin: 10px 0;
+`;
+
+export const Email = styled.p`
+  font-weight: lighter;
+  margin-top: -2px;
+
+  @media (max-width: 400px) {
+    margin-top:-.7em;
   }
 `;
