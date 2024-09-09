@@ -17,8 +17,9 @@ body {
 }
 
 :root {
-  --primary: #191970;
+  --primary: #18336C;
   --background: #ffffff;
+  --primaryGrey: #36454F;
 
   
 }

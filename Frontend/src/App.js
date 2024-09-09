@@ -7,38 +7,22 @@ import SummaryPage from "./pages/SummaryPage/SummaryPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProfilePage from "./Components/Profile/ProfilePage";
 
+
+import CreateEvent from "./pages/CreateEvent/CreateEvent";
+import { ToastContainer } from "react-toastify";
+
 function App() {
-  // const fetchEvents = async () => {
-  //   try {
-  //     // Using relative URL
-  //     const response = await fetch("/api/Basic", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-      // });
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     console.log("Data received from Azure Function:", data);
-  //     return data;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     return null;
-  //   }
-  // };
   return (
-    <Router>
-      <Routes>
-        <Route path="/" index element={<HomePage />} />
-        <Route path="/event" element={<EventPage />} />
-        <Route path="/book" element={<BookTicket />} />
-        <Route path="/summary" element={<SummaryPage />} />
-      </Routes>
-    </Router>
+    // <Router>
+    //   <Routes>
+    //     <Route path="/" index element={<HomePage />} />
+    //     <Route path="/event" element={<EventPage />} />
+    //     <Route path="/book" element={<BookTicket />} />
+    //     <Route path="/summary" element={<SummaryPage />} />
+    //   </Routes>
+    // </Router>
+    <CreateEvent></CreateEvent>
   );
 }
 
