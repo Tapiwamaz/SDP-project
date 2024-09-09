@@ -21,6 +21,10 @@ export const ResponsiveDiv = styled.div`
   width: 100%; /* Full width */
   height: 100%; /* Full viewport height */
   background-color: white; /* White background color */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding:10px;
 
   @media (min-width: 768px) {
     width: 30%;           /* 30% of the viewport width */
@@ -37,7 +41,7 @@ export const ImageContainer = styled.div`
   align-items: flex-start;
   width: 100%;
   height: auto;
-  margin: 15px 0;
+  margin: 0px 0;
 `;
 
 
@@ -45,6 +49,7 @@ export const StyledImage = styled.img`
   width: 75%;  /* 75% of the viewport width */
   height: auto; /* height scales automatically */
   margin-top: 0; /* no margin at the top */
+  
 `;
 
 

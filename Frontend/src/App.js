@@ -14,18 +14,31 @@ import { Login }  from './Components/Login/Login.js';
 import { SignIn } from './Components/SignIn/SignIn.js';
 import { Welcome } from './Components/Welcome/Welcome.js';
 
+import { CreateProfile } from "./Components/CreateProfile/CreateProfile.js";
+
 function App() {
 
   return (
-    // <Router>
-    //   <Routes>
-    //     <Route path="/" index element={<HomePage />} />
-    //     <Route path="/event" element={<EventPage />} />
-    //     <Route path="/book" element={<BookTicket />} />
-    //     <Route path="/summary" element={<SummaryPage />} />
-    //   </Routes>
-    // </Router>
-    <CreateEvent></CreateEvent>
+    <Router>
+      <Routes>
+        <Route path="/" index element={<Welcome />} />
+        <Route path="/signIn"  element={<SignIn />} />
+        <Route path="/logIn"  element={<Login />} />
+        <Route path="/createProfile"  element={<CreateProfile />} />
+
+
+        <Route path="/event" element={<EventPage />} />
+        <Route path="/book" element={<BookTicket />} />
+        <Route path="/summary" element={<SummaryPage />} />
+      </Routes>
+    </Router>
+    // <CreateEvent></CreateEvent>
+    // <Login></Login>
+    // <SignIn></SignIn>
+    // <Welcome></Welcome>
+    // <ProfilePage></ProfilePage>
+    // <CreateProfile></CreateProfile>
+
   );
 }
 

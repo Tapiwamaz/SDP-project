@@ -1,19 +1,23 @@
-import { auth, googleProvider } from "../../config/firebase.js"
+import { auth,googleProvider } from "../../firebase_config.js";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
 
+import { useNavigate } from "react-router";
+
 export const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("User with this email already exists");
+    const navigate=useNavigate();
 
     const signin = async () => {
         setErrorMessage("");
         try {
             await createUserWithEmailAndPassword(auth, email, password);
+            navigate('/createProfile');
         }
         catch (error) {
             console.error(error);
@@ -23,6 +27,8 @@ export const SignIn = () => {
     const signInWithGoogle = async () => {
         try {
             await signInWithPopup(auth, googleProvider);
+            navigate('/createProfile');
+
         }
         catch (error) {
             console.error(error);
@@ -36,7 +42,7 @@ export const SignIn = () => {
                     <StyledImage src={logo} alt="Logo" />
                 </ImageContainer>
                 <ImageContainer>
-                    <StyledBoldText>Welcome Back!</StyledBoldText>
+                    <StyledBoldText>Get started!</StyledBoldText>
                 </ImageContainer>
                 <StyledInput type="email" placeholder="Name" onChange={(e) => setEmail(e.target.value)} />
                 <StyledInput type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
