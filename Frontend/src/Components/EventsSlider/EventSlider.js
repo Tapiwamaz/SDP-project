@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 import {LoadingCard, Card ,CustomCarousel,Container} from './EventSlider.styles';
 
+import { auth } from '../../firebase_config';
+
+
 const EventSlider = ({events}) => {
-  const navigate = useNavigate();
     const [slidePercentage, setSlidePercentage] = useState(60);
     const noEvents = [
       { events: "no" },
@@ -16,6 +18,8 @@ const EventSlider = ({events}) => {
       { events: "no" },
       { events: "no" },
     ];
+    const navigate = useNavigate();
+
 
   
   useEffect(() => {
@@ -66,7 +70,17 @@ const formatTime=(time)=>{
 
 const goToEvent=(event)=>{
   console.log(event);
-navigate('/event' , {state: {event,booked:true}}); 
+  console.log(auth?.currentUser?.email);
+  if(auth?.currentUser?.email){
+    navigate('/event' , {state: {event,booked:true}}); 
+
+
+  }
+  else{
+    navigate('/welcome')
+  }
+  
+// navigate('/event' , {state: {event,booked:true}}); 
 }
   
     return (

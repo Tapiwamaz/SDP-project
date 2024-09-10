@@ -21,10 +21,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" index element={<Welcome />} />
+        <Route path="/" index element={<HomePage />} />
+        <Route path="/welcome"  element={<Welcome />} />
+
         <Route path="/signIn"  element={<SignIn />} />
         <Route path="/logIn"  element={<Login />} />
         <Route path="/createProfile"  element={<CreateProfile />} />
+        <Route path="/profile"  element={<ProfilePage />} />
+
 
 
         <Route path="/event" element={<EventPage />} />

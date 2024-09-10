@@ -6,6 +6,8 @@ import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
 
 import { useNavigate } from "react-router";
+import { collection,query,where,getDocs } from "firebase/firestore";
+import { db } from "../../firebase_config.js";
 
 export const SignIn = () => {
     const [email, setEmail] = useState("");
@@ -17,7 +19,30 @@ export const SignIn = () => {
         setErrorMessage("");
         try {
             await createUserWithEmailAndPassword(auth, email, password);
-            navigate('/createProfile');
+            // navigate('/createProfile');
+            const user = auth.currentUser;
+            if (user) {
+                const userCollectionRef = collection(db, "Users"); // Replace with your collection name
+                const q = query(userCollectionRef, where("userID", "==", user.uid));
+                const querySnapshot = await getDocs(q);
+              
+                if (!querySnapshot.empty) {//user is already there
+                    querySnapshot.forEach((doc) => {
+                        const userData = doc.data();
+                        
+                        localStorage.setItem("userData", JSON.stringify(userData));
+                        
+                        console.log("User data stored in local storage:", userData);
+                      }); 
+                    navigate('/')
+
+                }
+                else{
+                    navigate('/createProfile')
+
+                }
+
+            }
         }
         catch (error) {
             console.error(error);
@@ -27,7 +52,32 @@ export const SignIn = () => {
     const signInWithGoogle = async () => {
         try {
             await signInWithPopup(auth, googleProvider);
-            navigate('/createProfile');
+            // navigate('/createProfile');
+            const user = auth.currentUser;
+            if (user) {
+                const userCollectionRef = collection(db, "Users"); // Replace with your collection name
+                const q = query(userCollectionRef, where("userID", "==", user.uid));
+                const querySnapshot = await getDocs(q);
+                           
+              
+                if (!querySnapshot.empty) {//user is already there
+                    querySnapshot.forEach((doc) => {
+                        const userData = doc.data();
+                        
+                        localStorage.setItem("userData", JSON.stringify(userData));
+                        
+                        console.log("User data stored in local storage:", userData);
+                      });   
+                    navigate('/')
+
+
+                }
+                else{
+                    navigate('/createProfile')
+
+                }
+
+            }
 
         }
         catch (error) {

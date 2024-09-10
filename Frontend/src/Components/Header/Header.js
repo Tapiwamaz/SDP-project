@@ -3,9 +3,17 @@ import { useState } from 'react';
 import { HeaderContainer,Xicon,Profile,ProfileIcon,Burger,Aside,AsideNavItem,Logo } from './Header.styles';
 import logo from '../../Images/Logo.svg.svg'
 
+import { auth } from '../../firebase_config';
+import { useNavigate } from 'react-router';
+
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const storedUserData = localStorage.getItem("userData");//
+    const userData = JSON.parse(storedUserData);
+    const navigate=useNavigate();
+
+
   
     const toggleMenu = () => {
       setIsOpen(!isOpen);
@@ -13,6 +21,7 @@ const Header = () => {
   
     return (
       <HeaderContainer>
+        
         <Logo src={logo}/>
         {/* <Nav>
           <NavItem href="#home">Home</NavItem>
@@ -25,11 +34,21 @@ const Header = () => {
           <span></span>
           <span></span>
         </Burger>
-        <Profile>
-            <ProfileIcon></ProfileIcon>
-            <p>Hello</p>
+        {(auth?.currentuser?.email && storedUserData)?   
+          <Profile>
+            <img src={`${userData.imageURL}`} style={{height:"40px"}} alt='profileImg' onClick={()=>navigate('/profile')}/>
+            <p>Hello {userData.name}</p>
 
-        </Profile>
+           </Profile>
+            :
+            <Profile>
+              <ProfileIcon></ProfileIcon>
+              <p>Hello User</p>
+
+            </Profile>
+        
+        }
+        
         <Aside open={isOpen}>
             <Xicon onClick={toggleMenu}></Xicon>
           <AsideNavItem href="#home" onClick={toggleMenu}>Home</AsideNavItem>

@@ -46,6 +46,11 @@ export const CreateProfile = () => {
   const handleClick = () => {
     fileInputRef.current.click();
   };
+  const newAvatar=()=>{
+    const IDRand=Math.random()*101;
+    setProfileImage(`https://avatar.iran.liara.run/public/${IDRand}`);
+
+  }
 
   return (
     <ResponsiveBackground>
@@ -80,6 +85,7 @@ export const CreateProfile = () => {
             onChange={handleImageChange} // Handle file selection
           />
         </div>
+        <button onClick={newAvatar}>Generate avatar</button>
         <p>Click profile image to change it</p>
 
 
