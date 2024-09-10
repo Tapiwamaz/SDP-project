@@ -154,8 +154,7 @@ export const RatingStars = styled.div`
     column-gap: 8%;
   }
 `;
-
-export const Star = styled.span`
+export const Star = styled.span.attrs(({ hover, selected, ...props }) => props)`
   cursor: pointer;
   display: inline-block;
   font-size: 225%;
@@ -169,7 +168,6 @@ export const Star = styled.span`
     color: "#997300";
   }
 `;
-
 const loading = keyframes`
   0% { background-position: 125% 50%; }
   100% { background-position: -25 50%; }

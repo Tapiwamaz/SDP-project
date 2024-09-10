@@ -26,7 +26,7 @@ import {
 } from "./EventDisplay.style";
 
 // Main component for the Event Page
-const EventPage = () => {
+const EventDisplay = () => {
   // Use the useNavigate hook for navigation
   const navigate = useNavigate();
   // Get the event and booking status from the location state
@@ -38,15 +38,15 @@ const EventPage = () => {
   const [loading, setLoading] = useState(true);
   const [Full, SetFull] = useState(false);
   const [count, setCount] = useState(1);
-  const [hover, setHover] = useState(null);
+  const [hover, setHover] = useState(-1);
   const [rating, setRating] = useState(0);
 
   // Log the event for debugging
-  console.log(event);
+  // console.log(event);
 
   // Use the useEffect hook to set the event organizer after a delay
   useEffect(() => {
-    SetFull(true);
+    SetFull(false);
     setTimeout(() => {
       setEventOrg({
         name: "John Doe",
@@ -81,7 +81,7 @@ const EventPage = () => {
   // Function to handle the rating
   const handleRating = (value) => {
     setRating(value);
-    setHover(null);
+    setHover(-1);
   };
 
   // Function to increment the count
@@ -228,7 +228,7 @@ const EventPage = () => {
             </div>
             <p style={{ gridColumn: "span 2" }}>{EventOrg.description}</p>
           </EveOCard>
-          {book ? (
+          {!book ? (
             <>
               {!Full ? (
                 <>
@@ -289,9 +289,9 @@ const EventPage = () => {
                       key={i}
                       hover={i < hover}
                       selected={i < rating}
-                      onMouseLeave={() => setHover(null)}
+                      onMouseLeave={() => setHover(-1)}
                       onMouseEnter={() => setHover(i + 1)}
-                      onTouchMove={() => setHover(null)}
+                      onTouchMove={() => setHover(-1)}
                       onClick={() => handleRating(i + 1)}
                     >
                       ★
@@ -314,4 +314,4 @@ const EventPage = () => {
   );
 };
 
-export default EventPage;
+export default EventDisplay;
