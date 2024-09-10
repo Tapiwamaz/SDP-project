@@ -46,6 +46,7 @@ const EventPage = () => {
 
   // Use the useEffect hook to set the event organizer after a delay
   useEffect(() => {
+    SetFull(true);
     setTimeout(() => {
       setEventOrg({
         name: "John Doe",
@@ -80,6 +81,7 @@ const EventPage = () => {
   // Function to handle the rating
   const handleRating = (value) => {
     setRating(value);
+    setHover(null);
   };
 
   // Function to increment the count
@@ -287,8 +289,9 @@ const EventPage = () => {
                       key={i}
                       hover={i < hover}
                       selected={i < rating}
-                      onMouseEnter={() => setHover(i + 1)}
                       onMouseLeave={() => setHover(null)}
+                      onMouseEnter={() => setHover(i + 1)}
+                      onTouchMove={() => setHover(null)}
                       onClick={() => handleRating(i + 1)}
                     >
                       ★
