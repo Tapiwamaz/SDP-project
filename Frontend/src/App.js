@@ -25,19 +25,12 @@ function App() {
         <Route path="/signIn"  element={<SignIn />} />
         <Route path="/logIn"  element={<Login />} />
         <Route path="/createProfile"  element={<CreateProfile />} />
-
-
+        <Route path="/eventcreate" element={<CreateEvent/>}/>
         <Route path="/event" element={<EventPage />} />
         <Route path="/book" element={<BookTicket />} />
         <Route path="/summary" element={<SummaryPage />} />
       </Routes>
     </Router>
-    // <CreateEvent></CreateEvent>
-    // <Login></Login>
-    // <SignIn></SignIn>
-    // <Welcome></Welcome>
-    // <ProfilePage></ProfilePage>
-    // <CreateProfile></CreateProfile>
 
   );
 }

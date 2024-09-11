@@ -19,19 +19,28 @@ import { useEffect, useRef, useState } from "react";
 // toast
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+//rrd
+import { NavLink, useNavigate } from "react-router-dom";
+//mockdate
 import { mockLocations } from "../../MockData/MockData";
-
-
+//firebase work
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../firebase_config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, storage } from "../../firebase_config";
+//components
+import Header from "../../Components/Header/Header";
+// uuid
+import { v4 } from "uuid";
 
 const CreateEvent = () => {
+  const navigate = useNavigate();
   // todays date to start date picker
   const todayDate = new Date().toISOString().split("T")[0];
 
-  //preview image src
+  //preview image
   const [imgSrc, setImgSrc] = useState(null);
   const [imageError, setImageError] = useState(null);
+  const [hovered, setHovered] = useState(false);
 
   // new event details
   const [image, setImage] = useState(null);
@@ -48,7 +57,6 @@ const CreateEvent = () => {
   const eventVenueTypeRef = useRef(null);
   const eventTypeRef = useRef(null);
   const eventLocationRef = useRef(null);
-  const eventVenueRef = useRef(null);
   const eventDescriptionRef = useRef(null);
   const eventTicketPriceRef = useRef(null);
   const eventPictureRef = useRef(null);
@@ -61,26 +69,32 @@ const CreateEvent = () => {
     eventDescription: eventDescriptionRef,
     eventDate: eventDateRef,
     eventTicketPrice: eventTicketPriceRef,
-    eventVenue: eventVenueRef,
     eventLocation: eventLocationRef,
     eventType: eventTypeRef,
     eventPicture: eventPictureRef,
   });
 
   const [availableLocations, setAvailableLocations] = useState([]);
-  
 
   // db variables
   const eventsCollectionRef = collection(db, "Events");
-  const createEvent = async (newEvent, eventCollection) => {
-    await addDoc(eventCollection,newEvent)
+
+  /*-----------------------------------------------------------------------------------------------------------------*/
+  // Functions
+  const createEvent = async (newEvent, eventCollection, imageT) => {
+    const imageRef = ref(storage, `eventsImages/${imageT.name + v4()}`);
+    const snapshot = await uploadBytes(imageRef, imageT)
+    const downloadURL = await getDownloadURL(snapshot.ref)
+    newEvent.imageURL = downloadURL
+    delete newEvent.eventPicture
+    //add image to bucket
+    await addDoc(eventCollection, newEvent);
   };
   const loadLocations = (setALocations, locations) => {
     setALocations(locations);
   };
 
   useEffect(() => {
-    
     loadLocations(setAvailableLocations, mockLocations);
   }, []);
 
@@ -89,7 +103,11 @@ const CreateEvent = () => {
   ------------------------------------------------------------------------------------------------------------------------------------
   */
 
-  const handleImageChange = (event) => {
+  const handleImageChange = (
+    event,
+    setImage,
+    setImageError,
+  ) => {
     const file = event.target.files[0];
 
     if (file) {
@@ -114,8 +132,15 @@ const CreateEvent = () => {
     }
   };
 
-  const handleNextButtonClick = async (eventDetailsT, eventRefsT,eventCollection) => {
-    if (!eventDetailsT.eventName) {
+  const handleNextButtonClick = async (
+    eventDetailsT,
+    eventRefsT,
+    imageT,
+    eventCollection
+  ) => {
+    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    console.log(eventRefsT)
+    if (!eventDetailsT.name) {
       // Handle missing event name
       eventRefsT.eventName.current.classList.add("unfilled-input");
       eventRefsT.eventName.current.scrollIntoView({
@@ -126,7 +151,7 @@ const CreateEvent = () => {
       return;
     }
 
-    if (!eventDetailsT.eventDate) {
+    if (!eventDetailsT.date) {
       // Handle missing event date
       eventRefsT.eventDate.current.classList.add("unfilled-input");
       eventRefsT.eventDate.current.scrollIntoView({
@@ -137,7 +162,20 @@ const CreateEvent = () => {
       return;
     }
 
-    if (!eventDetailsT.eventStartTime) {
+    let date = new Date(eventDetailsT.date);
+    if (date === NaN) {
+      eventRefsT.eventDate.current.classList.add("unfilled-input");
+      eventRefsT.eventDate.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      toast.warn("Please a vaild date");
+      return;
+    }
+
+    eventDetailsT.date = date.toLocaleDateString();
+
+    if (!eventDetailsT.start_time) {
       // Handle missing event start time
       eventRefsT.eventStartTime.current.classList.add("unfilled-input");
       eventRefsT.eventStartTime.current.scrollIntoView({
@@ -147,8 +185,14 @@ const CreateEvent = () => {
       toast.warn("Please enter your events start time");
       return;
     }
+    let time = new Date();
+    let startTime = eventDetailsT.start_time.split(":");
+    time.setHours(startTime[0]);
+    time.setMinutes(startTime[1]);
+    time.setMilliseconds("0");
+    eventDetailsT.start_time = time.toLocaleTimeString();
 
-    if (!eventDetailsT.eventEndTime) {
+    if (!eventDetailsT.end_time) {
       // Handle missing event end time
       eventRefsT.eventEndTime.current.classList.add("unfilled-input");
       eventRefsT.eventEndTime.current.scrollIntoView({
@@ -159,8 +203,16 @@ const CreateEvent = () => {
       return;
     }
 
+    time = new Date();
+    console.log(eventDetailsT.end_time);
+    let endTime = eventDetailsT.end_time.split(":");
+    time.setHours(endTime[0]);
+    time.setMinutes(endTime[1]);
+    time.setMilliseconds("0");
+    eventDetailsT.end_time = time.toLocaleTimeString();
+
     // check type , venue type , location and descrption
-    if (!eventDetailsT.eventType) {
+    if (!eventDetailsT.type) {
       // Handle missing event type
       eventRefsT.eventType.current.classList.add("unfilled-input");
       eventRefsT.eventType.current.scrollIntoView({
@@ -171,17 +223,17 @@ const CreateEvent = () => {
       return;
     }
 
-    if (!eventDetailsT.eventVenueType) {
+    if (!eventDetailsT.venue_type) {
       // Handle missing event venue type
       eventRefsT.eventVenueType.current.classList.add("unfilled-input");
       eventRefsT.eventVenueType.current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-      toast.warn("Please selcet the event venue type");
+      toast.warn("Please select the event venue type");
       return;
     }
-    if (!eventDetailsT.eventLocation) {
+    if (!eventDetailsT.location) {
       // Handle missing event location
       eventRefsT.eventLocation.current.classList.add("unfilled-input");
       eventRefsT.eventLocation.current.scrollIntoView({
@@ -192,7 +244,7 @@ const CreateEvent = () => {
       return;
     }
 
-    if (!eventDetailsT.eventDescription) {
+    if (!eventDetailsT.description) {
       // Handle missing event description
       eventRefsT.eventDescription.current.classList.add("unfilled-input");
       eventRefsT.eventDescription.current.scrollIntoView({
@@ -204,7 +256,7 @@ const CreateEvent = () => {
     }
 
     // check image and price
-    if (!eventDetailsT.eventTicketPrice) {
+    if (!eventDetailsT.price) {
       eventRefsT.eventTicketPrice.current.classList.add("unfilled-input");
       eventRefsT.eventTicketPrice.current.scrollIntoView({
         behavior: "smooth",
@@ -213,6 +265,9 @@ const CreateEvent = () => {
       toast.warn("Please enter your events ticket price");
       return;
     }
+    let price = parseFloat(eventDetailsT.price);
+    eventDetailsT.price = price;
+
     if (!eventDetailsT.eventPicture) {
       // eventRefsT.event.current.classList.add("unfilled-input");
       eventRefsT.eventPicture.current.scrollIntoView({
@@ -223,10 +278,12 @@ const CreateEvent = () => {
       return;
     }
 
-    const delay = (ms) => new Promise((res) => setTimeout(res, ms));
     setLoader(true);
+    eventDetailsT.active = true;
+    eventDetailsT.approved = false;
+    eventDetailsT.userID = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
 
-    createEvent(eventDetailsT,eventCollection);
+    createEvent(eventDetailsT, eventCollection, imageT);
 
     await delay(5000);
     setLoader(false);
@@ -244,6 +301,7 @@ const CreateEvent = () => {
   if (submitted) {
     return (
       <section className="wrapperCreateEvent">
+        <Header />
         <section className="createEventsContainer pendingPage">
           <h3 className="textAlign">
             Your are now officialy on the waitlist - stay tuned!
@@ -252,10 +310,10 @@ const CreateEvent = () => {
             You will be notified as soon your event is approved.
           </p>
           {/* <NavLink to={"/"} className="btn"> Go back to home</NavLink> */}
-          <button type="button" className="btn goHomeBtn">
+          <NavLink to={"/"} className="btn goHomeBtn">
             {" "}
             Go back to home
-          </button>
+          </NavLink>
           {/* <div> */}
           <img id="pendingPageImg" src={WomenSvg}></img>
         </section>
@@ -269,13 +327,17 @@ const CreateEvent = () => {
           <div className="centerLoader" />
         </div>
       )}
-      <nav className="navBarCreateEvents">
-        <ArrowLeftCircleIcon width={40} className="backButtonCreateEvent" />
-      </nav>
+      <Header />
 
       <section className="createEventsContainer">
         <section className="desktopAside">
           <div className="formInfoContainer">
+            <nav className="navBarCreateEvents" onClick={() => navigate(-1)}>
+              <ArrowLeftCircleIcon
+                width={40}
+                className="backButtonCreateEvent"
+              />
+            </nav>
             <h4 data-testid="title">Create your event</h4>
             <p>Please fill in the all the fileds in the form. </p>
           </div>
@@ -287,53 +349,57 @@ const CreateEvent = () => {
 
         <section className="inputs">
           {/* Image  */}
-          {imgSrc && <img className="imageHolder" src={imgSrc} alt="Preview" />}
-          {!imgSrc && (
-            <div className="drop-file-container">
-              <input
-                id="file-upload"
-                className="input"
-                type="file"
-                accept="image/*"
-                name="eventPicture"
-                ref={eventPictureRef}
-                onChange={(e) => {
-                  handleImageChange(e);
-                  handleChangeEventDetails(
-                    e.target.value,
-                    "eventPicture",
-                    setEventDetails
-                  );
-                }}
-              ></input>
-              <label htmlFor="file-upload" className="uploadMediaLabel">
-                <div className="iconsMediaUpload">
-                  <CameraIcon width={30} />
-                  <div id="dividerLine"></div>
-                  <VideoCameraIcon width={30} />
-                </div>
-                <strong>Drag and drop media here</strong>
-                {imageError && (
-                  <strong style={{ color: "red" }}>{imageError}</strong>
-                )}
-              </label>
-            </div>
-          )}
-
           {imgSrc && (
-            <button
-              className="clearButton"
-              type="button"
-              onClick={() => {
-                console.log(image);
-                setImgSrc(null);
-              }}
-            >
-              <TrashIcon width={35} />
-              {/* Reset Image */}
-            </button>
+            // <>
+            <img className="imageHolder" src={imgSrc} alt="Preview" />
           )}
+          {/* {!imgSrc && ( */}
+          <div
+            className="drop-file-container"
+            style={{
+              position: imgSrc ? "absolute" : "static",
+              background: !imgSrc
+                ? "var(--primary)"
+                : hovered
+                ? "rgba(54, 69, 79,0.4)"
+                : "transparent",
+              color: !imgSrc ? "white" : hovered ? "white" : "transparent",
+            }}
+            onMouseEnter={() => {
+              setHovered(true);
+            }}
+            onMouseLeave={() => setHovered(false)}
+          >
+            <input
+              id="file-upload"
+              className="input"
+              type="file"
+              accept="image/*"
+              name="eventPicture"
+              ref={eventPictureRef}
+              onChange={(e) => {
+                handleImageChange(e, setImage, setImageError);
+                handleChangeEventDetails(
+                  e.target.value,
+                  "eventPicture",
+                  setEventDetails
+                );
+              }}
+            ></input>
+            <label htmlFor="file-upload" className="uploadMediaLabel">
+              <div className="iconsMediaUpload">
+                <CameraIcon width={30} />
+                <div id="dividerLine" />
+                <VideoCameraIcon width={30} />
+              </div>
+              <strong>Drag and drop media here</strong>
+              {imageError && (
+                <strong style={{ color: "red" }}>{imageError}</strong>
+              )}
+            </label>
+          </div>
 
+          {/* event name */}
           <label className="label" htmlFor="eventName">
             Event Name
           </label>
@@ -345,11 +411,7 @@ const CreateEvent = () => {
               eventNameRef.current.classList.remove("unfilled-input")
             }
             onChange={(e) =>
-              handleChangeEventDetails(
-                e.target.value,
-                "eventName",
-                setEventDetails
-              )
+              handleChangeEventDetails(e.target.value, "name", setEventDetails)
             }
           ></input>
 
@@ -366,11 +428,7 @@ const CreateEvent = () => {
               eventDateRef.current.classList.remove("unfilled-input");
             }}
             onChange={(e) =>
-              handleChangeEventDetails(
-                e.target.value,
-                "eventDate",
-                setEventDetails
-              )
+              handleChangeEventDetails(e.target.value, "date", setEventDetails)
             }
           ></input>
 
@@ -397,7 +455,7 @@ const CreateEvent = () => {
                 onChange={(e) =>
                   handleChangeEventDetails(
                     e.target.value,
-                    "eventStartTime",
+                    "start_time",
                     setEventDetails
                   )
                 }
@@ -424,7 +482,7 @@ const CreateEvent = () => {
                 onChange={(e) =>
                   handleChangeEventDetails(
                     e.target.value,
-                    "eventEndTime",
+                    "end_time",
                     setEventDetails
                   )
                 }
@@ -448,11 +506,11 @@ const CreateEvent = () => {
                 onFocus={() =>
                   eventVenueTypeRef.current.classList.remove("unfilled-input")
                 }
-                name="eventVenue"
+                name="eventVenueType"
                 onChange={(e) => {
                   handleChangeEventDetails(
                     e.target.value,
-                    "eventVenueType",
+                    "venue_type",
                     setEventDetails
                   );
                   setFilterVenueType(e.target.value);
@@ -485,7 +543,7 @@ const CreateEvent = () => {
                 onChange={(e) =>
                   handleChangeEventDetails(
                     e.target.value,
-                    "eventLocation",
+                    "location",
                     setEventDetails
                   )
                 }
@@ -514,11 +572,7 @@ const CreateEvent = () => {
               eventTypeRef.current.classList.remove("unfilled-input")
             }
             onChange={(e) =>
-              handleChangeEventDetails(
-                e.target.value,
-                "eventType",
-                setEventDetails
-              )
+              handleChangeEventDetails(e.target.value, "type", setEventDetails)
             }
           ></input>
 
@@ -539,11 +593,7 @@ const CreateEvent = () => {
             min={0}
             name="eventTicketPrice"
             onChange={(e) =>
-              handleChangeEventDetails(
-                e.target.value,
-                "eventTicketPrice",
-                setEventDetails
-              )
+              handleChangeEventDetails(e.target.value, "price", setEventDetails)
             }
           ></input>
 
@@ -564,7 +614,7 @@ const CreateEvent = () => {
             onChange={(e) =>
               handleChangeEventDetails(
                 e.target.value,
-                "eventDescription",
+                "description",
                 setEventDetails
               )
             }
@@ -574,7 +624,12 @@ const CreateEvent = () => {
             className="btn createEventButtonNext"
             type="button"
             onClick={() => {
-              handleNextButtonClick(eventDetails, eventRefs,eventsCollectionRef);
+              handleNextButtonClick(
+                eventDetails,
+                eventRefs,
+                image,
+                eventsCollectionRef
+              );
             }}
           >
             Submit

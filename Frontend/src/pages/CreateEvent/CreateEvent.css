@@ -43,19 +43,24 @@
 
 .goHomeBtn {
   width: 15vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .createEventsSvg {
-  width:35vw;
+  width: 35vw;
 }
 
-.formInfoContainer{
+.formInfoContainer {
   width: 100%;
   height: 300px;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  padding: 1rem 0 0 5.5rem ;
+  padding: 1rem 0 0 5.5rem;
+  /* border: 1px solid rgba(0, 0, 0, 1); */
+
 }
 .formInfoContainer h4 {
   font-size: 2.5rem;
@@ -84,7 +89,11 @@
 
 .navBarCreateEvents {
   display: flex;
-  flex: 0.1;
+  /* flex: 0.1; */
+  position: absolute;
+  left: 1rem;
+  top: 2.5rem;
+
   gap: 16px;
   align-items: center;
 }
@@ -105,7 +114,6 @@
   border-radius: 1rem;
   margin: 0 2rem;
   padding: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.3) 0px 5px 10px;
   animation: fade-in 300ms forwards;
 }
 .desktopAside {
@@ -113,6 +121,7 @@
   flex-direction: column;
   flex: 1;
   align-items: center;
+
 }
 
 .inputs {
@@ -132,7 +141,8 @@
   font-size: inherit;
   font-weight: 600;
   cursor: pointer;
-  background-color: rgba(240, 250, 250, 0.5);
+  background-color: rgba(54, 69, 79,0.1);
+ 
 }
 
 .input:focus,
@@ -171,13 +181,15 @@
 .drop-file-container {
   display: flex;
   flex-direction: column;
-  outline: 2px dashed white;
   height: 500px;
+  width: 45.5vw;
   align-items: center;
   justify-content: center;
   background-color: var(--primary);
   color: white;
   border-radius: 10px;
+  transition: color 300ms ease-in-out;
+  transition: background 300ms ease-in-out;
 }
 
 .pending {
@@ -191,6 +203,7 @@
   height: 500px;
 }
 
+
 .uploadMediaLabel {
   display: flex;
   flex-direction: column;
@@ -201,11 +214,12 @@
 }
 
 #file-upload {
-  width: 50%;
+  width: 45.4vw;
   height: 500px;
   position: absolute;
   z-index: 1;
   opacity: 0;
+  /* border: 1px solid black; */
 }
 
 .iconsMediaUpload {
@@ -214,7 +228,8 @@
 }
 
 #dividerLine {
-  border: 2px dashed white;
+  border-width: 2px;
+  border-style: dashed;
 }
 
 .clearButton {
@@ -239,7 +254,7 @@
   z-index: 1;
   top: 0;
   left: 0;
-  bottom: 0; 
+  bottom: 0;
   width: 100%;
   background-color: rgba(230, 230, 230, 0.7);
   backdrop-filter: blur(2px);
@@ -253,19 +268,25 @@
   left: 50%;
   top: 50%;
   aspect-ratio: 2;
-  --_g: no-repeat radial-gradient(circle closest-side,var(--primary) 90%,#0000);
-  background: 
-    var(--_g) 0%   50%,
-    var(--_g) 50%  50%,
-    var(--_g) 100% 50%;
-  background-size: calc(100%/3) 50%;
+  --_g: no-repeat
+    radial-gradient(circle closest-side, var(--primary) 90%, #0000);
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 50%;
   animation: l3 1s infinite linear;
 }
 @keyframes l3 {
-    20%{background-position:0%   0%, 50%  50%,100%  50%}
-    40%{background-position:0% 100%, 50%   0%,100%  50%}
-    60%{background-position:0%  50%, 50% 100%,100%   0%}
-    80%{background-position:0%  50%, 50%  50%,100% 100%}
+  20% {
+    background-position: 0% 0%, 50% 50%, 100% 50%;
+  }
+  40% {
+    background-position: 0% 100%, 50% 0%, 100% 50%;
+  }
+  60% {
+    background-position: 0% 50%, 50% 100%, 100% 0%;
+  }
+  80% {
+    background-position: 0% 50%, 50% 50%, 100% 100%;
+  }
 }
 
 @media screen and (max-width: 450px) {
@@ -279,17 +300,18 @@
     display: none;
   }
 
- 
-
   #file-upload {
     width: 100%;
     height: 300px;
+  }
+
+  .drop-file-container {
+    width: 85vw;
   }
   .createEventsContainer {
     width: 100%;
     box-shadow: none;
     margin: 0;
-
   }
   .label,
   .input {
@@ -303,11 +325,10 @@
   }
   .pendingPage {
     gap: 2rem;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px;
+    /* box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px; */
     animation: fade-up 500ms ease-in-out;
-
   }
-  #pendingPageImg{
+  #pendingPageImg {
     width: 80vw;
   }
 }
