@@ -108,7 +108,7 @@ export const Profile = styled.div`
 
 export const ProfileIcon = styled(UserIcon)`
   border: black 2px solid;
-  border-radius: 10px;
+  border-radius: 100%;
   width: 40px;
   height: 30px;
   color: black;

@@ -34,7 +34,7 @@ const Header = () => {
           <span></span>
           <span></span>
         </Burger>
-        {(auth?.currentuser?.email && storedUserData)?   
+        {(auth?.currentUser && storedUserData)?   
           <Profile>
             <img src={`${userData.imageURL}`} style={{height:"40px"}} alt='profileImg' onClick={()=>navigate('/profile')}/>
             <p>Hello {userData.name}</p>

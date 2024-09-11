@@ -58,8 +58,14 @@ return formattedDate;
 
 }
 const formatTime=(time)=>{
+  // console.log(time);
+  
 
   const eventStartTime = new Date(time);
+  // console.log(eventStartTime);
+  // console.log("hey");
+  
+  
   const formattedTime = eventStartTime.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
@@ -102,7 +108,7 @@ const goToEvent=(event)=>{
                     <h3>{event.name}</h3>
                     <div>
                       <p>{formatDate(event.date.split("T")[0])}</p>
-                      <p>{formatTime(event.start_time)}</p>
+                      <p>{`${event.start_time.split("T")[1].split(":")[0]}:${event.start_time.split("T")[1].split(":")[1]}`}</p>
                       <p>{event.location}</p>
 
 

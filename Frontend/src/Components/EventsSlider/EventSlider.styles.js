@@ -27,7 +27,7 @@ export const Card = styled.button`
   &:hover {
     color: black;
     background-color: white;
-    /* transform: scale(1.05); */
+    transform: scale(1.05);
   }
 
 
