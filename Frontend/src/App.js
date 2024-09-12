@@ -1,5 +1,6 @@
 import React from 'react';
 import Tabs from './Components/Tabs/Tabs';
+import MyEvents from './Components/ViewEvents/MyEvents/MyEvents';
 
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
     <>
     
       <Tabs></Tabs>
+      {/* <MyEvents/> */}
 
 
     </>
