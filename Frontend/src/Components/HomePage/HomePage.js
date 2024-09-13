@@ -9,6 +9,9 @@ import { Events } from '../MockData/EventsMock'
 
 import noResultsImage from '../../Images/noResults.svg';
 
+import MyCalendar from '../EventsCalendar/EventsCalendar'
+
+
 
 
 const HomePage = () => {
@@ -160,6 +163,7 @@ const HomePage = () => {
           <EventSlider
             events={filteredDateEvents}
           ></EventSlider>
+          <MyCalendar></MyCalendar>
         </Body>
       </Page>
     </>

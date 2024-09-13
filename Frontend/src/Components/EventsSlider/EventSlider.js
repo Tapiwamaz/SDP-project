@@ -2,15 +2,22 @@ import React from 'react'
 import { useEffect,useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import  Tags from '../Tags/Tags'
+import EventPage from '../../pages/EventPage/EventPage';
 import { useNavigate } from 'react-router-dom';
 
-import {LoadingCard, Card ,CustomCarousel,Container} from './EventSlider.styles';
+import {LoadingCard, Card ,CustomCarousel,Container,Aside} from './EventSlider.styles';
 
 import { auth } from '../../firebase_config';
 
 
 const EventSlider = ({events}) => {
     const [slidePercentage, setSlidePercentage] = useState(60);
+    const[screen,setScreen]=useState(null);
+    const [isOpen, setIsOpen] = useState(true);
+    const toggleMenu = () => {
+      setIsOpen(!isOpen);
+    };
+
     const noEvents = [
       { events: "no" },
       { events: "no" },
@@ -27,11 +34,13 @@ const EventSlider = ({events}) => {
         const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
          if (screenWidth <= 768) {
           setSlidePercentage(70); // Closer to full width on small screens
+          setScreen("phone");
         }
        
 
          else {
           setSlidePercentage(20); // Default for larger screens
+          setScreen("desktop");
         }
       };
   
@@ -75,8 +84,9 @@ const formatTime=(time)=>{
 }
 
 const goToEvent=(event)=>{
-  console.log(event);
-  console.log(auth?.currentUser?.email);
+  console.log(screen);
+  
+ 
   if(auth?.currentUser?.email){
     navigate('/event' , {state: {event,booked:true}}); 
 
@@ -128,17 +138,14 @@ const goToEvent=(event)=>{
               <LoadingCard></LoadingCard>
 
              ))
-             
-            
 
-
-
-             
-             
-             
              }
                 
           </CustomCarousel>
+          {/* {screen==="desktop"?
+          <EventPage></EventPage>
+          :<p>bruh</p>} */}
+
 
         </Container>
       

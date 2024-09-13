@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
 export const Aside = styled.div`
-  /* position: absolute; */
+  /* position: fixed; */
   z-index: 100;
   top: 0;
   right: 0;
-  height: 10;
+  height: 100;
   width: 15%;
   background-color: var(--primaryGrey);
   padding: 2rem;
@@ -30,4 +30,13 @@ export const AsideNavItem = styled.a`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+export const navContainer=styled.div`
+
+  /* position: fixed;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem; */
+
 `;

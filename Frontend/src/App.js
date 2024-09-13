@@ -1,5 +1,4 @@
 import MyCalendar from "./Components/EventsCalendar/EventsCalendar";
-import Header from "./Components/Header/Header";
 import HomePage from "./Components/HomePage/HomePage";
 import EventPage from "./pages/EventPage/EventPage";
 import BookTicket from "./Components/BookTicket/BookTicket";
@@ -35,6 +34,9 @@ function App() {
         <Route path="/book" element={<BookTicket />} />
         <Route path="/summary" element={<SummaryPage />} />
         <Route path="/calendar" element={<MyCalendar />} />
+        <Route path="/createEvent" element={<CreateEvent />} />
+
+
 
       </Routes>
     </Router>

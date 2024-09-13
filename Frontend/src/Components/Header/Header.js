@@ -1,17 +1,64 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { HeaderContainer,Xicon,Profile,ProfileIcon,Burger,Aside,AsideNavItem,Logo } from './Header.styles';
 import logo from '../../Images/Logo.svg.svg'
 
 import { auth } from '../../firebase_config';
 import { useNavigate } from 'react-router';
 
+import ProfilePage from '../Profile/ProfilePage'
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const[screen,setScreen]=useState(null);
+    const [profileCllicked,setProfileClicked]=useState(false);
+
+    useEffect(() => {
+      const updateSlidePercentage = () => {
+        const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
+         if (screenWidth <= 768) {
+          // setSlidePercentage(70); // Closer to full width on small screens
+          setScreen("phone");
+        }
+       
+
+         else {
+          // setSlidePercentage(20); // Default for larger screens
+          setScreen("desktop");
+        }
+      };
+  
+      window.addEventListener('resize', updateSlidePercentage);
+      updateSlidePercentage(); // Initial check
+  
+      return () => {
+        window.removeEventListener('resize', updateSlidePercentage);
+      };
+
+
+      
+    }, []);
+
+
+
     const storedUserData = localStorage.getItem("userData");//
     const userData = JSON.parse(storedUserData);
     const navigate=useNavigate();
+
+    const openProfile=()=>{
+      if(screen==='desktop'){
+        setProfileClicked(!profileCllicked)
+
+
+      }
+      else{
+        navigate('/profile');
+
+
+      }
+
+    }
+
 
 
   
@@ -20,23 +67,19 @@ const Header = () => {
     };
   
     return (
+      <>
       <HeaderContainer>
         
         <Logo src={logo}/>
-        {/* <Nav>
-          <NavItem href="#home">Home</NavItem>
-          <NavItem href="#about">About</NavItem>
-          <NavItem href="#services">Services</NavItem>
-          <NavItem href="#contact">Contact</NavItem>
-        </Nav> */}
-        <Burger onClick={toggleMenu}>
+
+        <Burger onClick={toggleMenu} data-testid="burger">
           <span></span>
           <span></span>
           <span></span>
         </Burger>
         {(auth?.currentUser && storedUserData)?   
           <Profile>
-            <img src={`${userData.imageURL}`} style={{height:"40px"}} alt='profileImg' onClick={()=>navigate('/profile')}/>
+            <img src={`${userData.imageURL}`} style={{height:"40px"}} alt='profileImg' onClick={openProfile} data-testid="profileImg"/>
             <p>Hello {userData.name}</p>
 
            </Profile>
@@ -50,13 +93,15 @@ const Header = () => {
         }
         
         <Aside open={isOpen}>
-            <Xicon onClick={toggleMenu}></Xicon>
+            <Xicon onClick={toggleMenu} data-testid="close-icon"></Xicon>
           <AsideNavItem href="#home" onClick={toggleMenu}>Home</AsideNavItem>
           <AsideNavItem href="#about" onClick={toggleMenu}>About</AsideNavItem>
           <AsideNavItem href="#services" onClick={toggleMenu}>Services</AsideNavItem>
           <AsideNavItem href="#contact" onClick={toggleMenu}>Contact</AsideNavItem>
         </Aside>
+
       </HeaderContainer>
+      {profileCllicked? <ProfilePage/>:null}</>
     );
   };
 

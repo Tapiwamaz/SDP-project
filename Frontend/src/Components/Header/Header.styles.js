@@ -2,12 +2,16 @@ import styled from "styled-components";
 import { UserIcon, XMarkIcon } from "@heroicons/react/24/solid"; // or '@heroicons/react/outline' for an outlined version
 
 export const HeaderContainer = styled.header`
+/* position: static; */
+/* width: 100%; */
+background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   border-bottom: black 2px solid;
   color: black;
+  overflow-y: hidden;
 
   @media (max-width: 768px) {
     font-size: smaller;
@@ -104,6 +108,16 @@ export const Profile = styled.div`
   justify-content: space-between;
   gap: 1.5rem;
   align-items: center;
+  img{
+    &:hover {
+    transform: scale(1.2);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+  }
+
+
+  }
+ 
 `;
 
 export const ProfileIcon = styled(UserIcon)`
