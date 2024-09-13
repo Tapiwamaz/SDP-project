@@ -12,7 +12,7 @@ import { db } from "../../firebase_config.js";
 export const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState("User with this email already exists");
+    const [errorMessage, setErrorMessage] = useState("");
     const navigate=useNavigate();
 
     const signin = async () => {

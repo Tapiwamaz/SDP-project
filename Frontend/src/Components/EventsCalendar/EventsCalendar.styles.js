@@ -200,6 +200,7 @@ export const TagsStyle = styled.div`
 
 export const Body = styled.div`
   width: 100%;
+  
 `;
 
 export const Page = styled.div`

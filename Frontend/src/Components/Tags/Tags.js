@@ -14,6 +14,7 @@ import styled from 'styled-components';
 
 const Button = styled.button`
   background-color: ${({ isActive }) => (!isActive ? 'var(--primary)' : 'white')}; // Grey out inactive buttons
+  /* opacity: 10%; */
   color: ${({ isActive }) => (!isActive ? 'white' : 'var(--primary)')};
   border: ${({ isActive }) => (!isActive ? 'transparent 2px solid' : 'black 2px solid')};
   border-radius: 20px;
@@ -44,19 +45,19 @@ const Tags = ({ name, filter, isActive }) => {
   const getIconAndColor = (name) => {
     switch (name) {
       case 'Education':
-        return { icon: AcademicCapIcon, color: 'yellow' };
+        return { icon: AcademicCapIcon, color: '#eaaf41' };
       case 'Sports':
-        return { icon: GlobeAltIcon, color: 'pink' };
+        return { icon: GlobeAltIcon, color: '#EB8479' };
       case 'Entertainment':
-        return { icon: MusicalNoteIcon, color: 'cyan' };
+        return { icon: MusicalNoteIcon, color: '#6688c3' };
       case 'Political':
-        return { icon: ScaleIcon, color: 'red' };
+        return { icon: ScaleIcon, color: '#ce4a4a' };
       case 'Religious':
-        return { icon: BookOpenIcon, color: 'brown' };
+        return { icon: BookOpenIcon, color: '#6A4739' };
       case 'Gaming':
-        return { icon: ComputerDesktopIcon, color: 'lime' };
+        return { icon: ComputerDesktopIcon, color: '#48a56a' };
       case 'IT':
-        return { icon: CpuChipIcon, color: 'purple' };
+        return { icon: CpuChipIcon, color: '#b25da6' };
       case 'Other':
         return { icon: PlusCircleIcon, color: 'grey' };
       default:
