@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import eventImage from "../../Images/ds.jpeg";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
-import { useLocation, useNavigate } from "react-router-dom";
+import { json, useLocation, useNavigate } from "react-router-dom";
 import {
   EventDate,
   Location,
@@ -31,7 +31,7 @@ const EventDisplay = () => {
   const navigate = useNavigate();
   // Get the event and booking status from the location state
   const event = useLocation().state.event;
-  const book = useLocation().state.booked && false;
+  const book = useLocation().state.booked;
 
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
@@ -40,27 +40,52 @@ const EventDisplay = () => {
   const [count, setCount] = useState(1);
   const [hover, setHover] = useState(-1);
   const [rating, setRating] = useState(0);
+  const [rated, setRated] = useState(true);
 
   // Log the event for debugging
   // console.log(event);
+  const fetchEventOrganizer = async (UserID) => {
+    try {
+      const response = await fetch(`api/GetUser?userID=${UserID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("Data received from Azure Function:", data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return null;
+    }
+  };
 
   // Use the useEffect hook to set the event organizer after a delay
-  useEffect(() => {
-    SetFull(false);
-    setTimeout(() => {
-      setEventOrg({
-        name: "John Doe",
-        email: "john.doe@example.com",
-        description:
-          "John Doe is an experienced event organizer who has been in the industry for over 10 years. He has organized a wide range of events, from small community gatherings to large corporate functions. John is known for his attention to detail, creativity, and ability to deliver memorable events.",
-        profilepicture:
-          "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F717761877898013%2F&psig=AOvVaw3Q6Z",
-      });
-      setLoading(false);
-    }, 1500); // Wait for 15 seconds before executing the code
-  }, []);
+  const [reload, setReload] = useState(false);
 
-  // Function to format the date
+useEffect(() => {
+  const fetchData = async () => {
+    if (Object.keys(EventOrg).length === 0) {
+      const eventOrgData = await fetchEventOrganizer(
+        "IwEjDT5sS1O3JVwzNc06tm2pIBw2"
+      );
+      setEventOrg(eventOrgData);
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, [EventOrg]);
+  // useEffect(() => {
+  //   setEventOrg({ name: "kabelo", email: "dfa", description: "dfsadfdfa" });
+  //   setLoading(false);
+  // }, []);
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.toLocaleString("en-US", { day: "numeric" });
@@ -95,14 +120,31 @@ const EventDisplay = () => {
       setCount(count - 1);
     }
   };
-
+ const submitRating = () =>
+  fetch(`api/Rating`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+  ge: "dsa",
+  rating: `${rating}s`,
+  userID: `${EventOrg.userID}`,
+  rates: `${EventOrg.rates}s`,
+  EventOrgRating: `${EventOrg.rating}s`,
+}),
+  }).then();
   // Render the component
   return (
     <EventPages>
       {loading ? (
         <EventImagePlaceholder className="EventImage" />
       ) : (
-        <EventImage src={eventImage} className="EventImage" alt="Event Image" />
+        <EventImage
+          src={event.imageURL}
+          className="EventImage"
+          alt="Event Image"
+        />
       )}
       {loading ? <TitlePlaceHolder /> : <h1>{event.name}</h1>}
       {loading ? (
@@ -205,7 +247,7 @@ const EventDisplay = () => {
           </p>
           <EveOCard>
             <img
-              src={eventImage}
+              src={EventOrg.imageURL}
               style={{
                 width: "70px",
                 height: "70px",
@@ -271,33 +313,45 @@ const EventDisplay = () => {
                   marginTop: "1em",
                   border: "1px solid #d9d9d9",
                   borderRadius: "25px",
-                  padding: "1em 0 0 1em",
+                  padding: "1em",
                 }}
               >
-                <h3
-                  style={{
-                    marginTop: "1em",
-                    marginBottom: "-.5em",
-                  }}
-                >
-                  Are you enjoying The event:
-                </h3>
-                <p>Please consider leaving us a Rating</p>
-                <RatingStars>
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      hover={i < hover}
-                      selected={i < rating}
-                      onMouseLeave={() => setHover(-1)}
-                      onMouseEnter={() => setHover(i + 1)}
-                      onTouchMove={() => setHover(-1)}
-                      onClick={() => handleRating(i + 1)}
+                {rated ? (
+                  <>
+                    <h3
+                      style={{
+                        marginTop: "1em",
+                        marginBottom: "-.5em",
+                      }}
                     >
-                      ★
-                    </Star>
-                  ))}
-                </RatingStars>
+                      Are you enjoying The event:
+                    </h3>
+                    <p>Please consider leaving us a Rating</p>
+                    <RatingStars>
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          hover={i < hover}
+                          selected={i < rating}
+                          onMouseLeave={() => setHover(-1)}
+                          onMouseEnter={() => setHover(i + 1)}
+                          onTouchMove={() => setHover(-1)}
+                          onClick={() => handleRating(i + 1)}
+                        >
+                          ★
+                        </Star>
+                      ))}
+                    </RatingStars>
+                    <BookButton
+                      style={{
+                        fontSize: "0.8em",
+                      }}
+                      onClick={submitRating}
+                    >
+                      Submit
+                    </BookButton>
+                  </>
+                ) : null}
               </div>
               <BookButton
                 style={{

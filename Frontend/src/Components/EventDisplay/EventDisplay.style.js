@@ -87,7 +87,7 @@ export const EventPages = styled.div`
   background: ${props => props.full ? 'gray' : '#18336c'};
   border: none;
   margin-top: 1em;
-  padding: 1em 1.25em 1em 1em;
+  padding: 1em;
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
   /* cursor: ${props => props.full ? 'not-allowed' : 'pointer'}; */
 

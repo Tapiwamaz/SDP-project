@@ -27,6 +27,7 @@ export default function SummaryPage() {
 
     return `${day} ${month} ${year}, ${time}`; // change this line to change the order
   }
+
   return (
     <>
       <Header />
@@ -103,6 +104,7 @@ export default function SummaryPage() {
             </p>
           </CostSummary>
           <PayButton>Pay Now</PayButton>
+          <div id = "payment"></div>
         </SummaryPages>
       </Page>
     </>
