@@ -56,7 +56,11 @@ const EventDisplay = () => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
+      let data = await response.json();
+      console.log(data);
+      if(!data.Rates){
+      data.Rates = 0;
+      }
       console.log("Data received from Azure Function:", data);
       return data;
     } catch (error) {
@@ -68,23 +72,31 @@ const EventDisplay = () => {
   // Use the useEffect hook to set the event organizer after a delay
   const [reload, setReload] = useState(false);
 
-useEffect(() => {
-  const fetchData = async () => {
-    if (Object.keys(EventOrg).length === 0) {
-      const eventOrgData = await fetchEventOrganizer(
-        "IwEjDT5sS1O3JVwzNc06tm2pIBw2"
-      );
-      setEventOrg(eventOrgData);
-      setLoading(false);
-    }
-  };
+// useEffect(() => {
+  //  if (event.TicketCount >= event.capacity) {
+  //    SetFull(true);
+  //  }
+//   const fetchData = async () => {
+//     SetFull(false);
+//     if (Object.keys(EventOrg).length === 0) {
+//       const eventOrgData = await fetchEventOrganizer(
+//         "fMgS0KN8UBXu9uW63wAfzfxPfXy1"
+//       );
 
-  fetchData();
-}, [EventOrg]);
-  // useEffect(() => {
-  //   setEventOrg({ name: "kabelo", email: "dfa", description: "dfsadfdfa" });
-  //   setLoading(false);
-  // }, []);
+//       setEventOrg(eventOrgData);
+//       setLoading(false);
+//     }
+//   };
+
+//   fetchData();
+// }, [EventOrg]);
+  useEffect(() => {
+    if(event.TicketCount >= event.capacity){
+      SetFull(true);
+    }
+    setEventOrg({ name: "kabelo", email: "dfa", description: "dfsadfdfa" });
+    setLoading(false);
+  }, []);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -122,16 +134,15 @@ useEffect(() => {
   };
  const submitRating = () =>
   fetch(`api/Rating`, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-  ge: "dsa",
-  rating: `${rating}s`,
+  rating: `${rating}`,
   userID: `${EventOrg.userID}`,
-  rates: `${EventOrg.rates}s`,
-  EventOrgRating: `${EventOrg.rating}s`,
+  rates: `${EventOrg.Rates}`,
+  EventOrgRating: `${EventOrg.rating}`,
 }),
   }).then();
   // Render the component
@@ -270,7 +281,7 @@ useEffect(() => {
             </div>
             <p style={{ gridColumn: "span 2" }}>{EventOrg.description}</p>
           </EveOCard>
-          {!book ? (
+          {book ? (
             <>
               {!Full ? (
                 <>

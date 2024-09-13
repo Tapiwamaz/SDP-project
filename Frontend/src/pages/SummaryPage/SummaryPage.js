@@ -28,6 +28,9 @@ export default function SummaryPage() {
     return `${day} ${month} ${year}, ${time}`; // change this line to change the order
   }
 
+  function Pay() {
+  }
+
   return (
     <>
       <Header />
@@ -103,7 +106,7 @@ export default function SummaryPage() {
               <strong>R{event.price * amount}</strong>
             </p>
           </CostSummary>
-          <PayButton>Pay Now</PayButton>
+          <PayButton onClick={Pay}>Pay Now</PayButton>
           <div id = "payment"></div>
         </SummaryPages>
       </Page>

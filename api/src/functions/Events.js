@@ -43,3 +43,38 @@ app.http('events', {
         }
     }
 });
+
+app.http('Ticket',{
+    methods:['POST'],
+    authLevel:'anonymous',
+
+    handler: async (request, context) => {
+        context.log(`Http function processed request for url "${request.url}"`);
+        const collectionName = "Tickets"; // change this variable to be the name of the collection you're working on
+        const eventID = request.query.eventID; // get the eventID from the query parameters
+
+        try {
+            const ticketsRef = collection(db, collectionName); // get a reference to the tickets collection
+            const querySnapshot = await getDocs(ticketsRef); // get all the documents in the tickets collection
+
+            let ticketCount = 0;
+            querySnapshot.forEach((doc) => {
+                const ticketData = doc.data();
+                if (ticketData.eventID === eventID) {
+                    ticketCount++;
+                }
+            });
+
+            return {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ticketCount })
+            };
+
+        } catch (error) {
+            context.log('Error getting documents:', error);
+            return { status: 500, body: 'Internal Server Error' };
+        }
+    }
+
+})

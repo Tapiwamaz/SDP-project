@@ -4,7 +4,8 @@ export const SummaryPages = styled.div`
   display: flex;
   flex-direction: column;
   width: 387px;
-  padding-bottom: 5em;
+  padding: 1em;
+  /* padding-bottom: 5em; */
   /* border: 3px solid #d9d9d9; */
   /* margin-top: -20px; */
   position: relative;
