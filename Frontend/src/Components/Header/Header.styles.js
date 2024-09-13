@@ -90,6 +90,8 @@ export const AsideNavItem = styled.a`
   color: white;
   text-decoration: none;
   font-size: 1.25rem;
+  /* height: 50px; */
+  margin: 10px;
 
   &:hover {
     text-decoration: underline;
