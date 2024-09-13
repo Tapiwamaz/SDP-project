@@ -7,9 +7,9 @@ import ProfilePage from "./Components/Profile/ProfilePage";
 function App() {
   return (
     <>
-      <Header></Header>
-      <ProfilePage></ProfilePage>
-      {/* <MyCalendar></MyCalendar>; */}
+      {/* <Header></Header> */}
+      {/* <ProfilePage></ProfilePage> */}
+      <MyCalendar></MyCalendar>;
     </>
   );
 }

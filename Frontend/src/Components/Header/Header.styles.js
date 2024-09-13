@@ -8,6 +8,7 @@ export const HeaderContainer = styled.header`
   padding: 1rem 2rem;
   border-bottom: black 2px solid;
   color: black;
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
     font-size: smaller;

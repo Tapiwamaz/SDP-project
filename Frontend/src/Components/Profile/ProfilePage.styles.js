@@ -7,9 +7,10 @@ export const Wrapper = styled.div`
   height: 100vh;
   align-items: center;
   padding-top: 3vw;
+  overflow-x: hidden;
 
   @media (max-width: 480px) {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     padding-top: 3vh;
   }
@@ -29,13 +30,15 @@ export const Summary = styled.div`
     font-size: 2rem; /* Desktop size */
     font-weight: 300; /* Lighter font weight */
     @media (max-width: 480px) {
-      font-size: 1.5rem; /* Smaller size for iPhone */
+      font-size: 1.5rem;
+      align-items: center; /* Smaller size for iPhone */
     }
   }
 
   @media (max-width: 480px) {
     padding-top: 4vh;
-    gap: 2vh; /* Increase gap for better spacing on smaller screens */
+    gap: 2vh;
+    align-items: center; /* Increase gap for better spacing on smaller screens */
   }
 `;
 
@@ -58,12 +61,13 @@ export const EventsGrp = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5vh;
-  background-color: var(--primary);
-  opacity: 80%;
-  color: white;
+  gap: 10px;
+  /* background-color: var(--primary);
+  opacity: 80%; */
+  color: black;
   border-radius: 15px;
   align-items: center;
+  padding-top: 10px;
   h3 {
     margin: 0;
     padding: 5px;
@@ -79,7 +83,8 @@ export const EventsGrp = styled.div`
   }
 
   @media (max-width: 480px) {
-    gap: 1vh; /* Reduce gap for smaller screens */
+    gap: 10px;
+    /* Reduce gap for smaller screens */
   }
 `;
 
@@ -88,20 +93,26 @@ export const Count = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5vh;
+  gap: 30px;
 
   @media (max-width: 480px) {
-    gap: 5vw;
+    gap: 10px;
+    width: 350px;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
   }
 `;
 
 export const Rating = styled.div`
-  width: fit-content;
+  width: 250px;
   display: flex;
-  padding-top: 4vh;
+  padding-top: 10px;
+  padding-bottom: 40px;
   flex-direction: row;
   align-items: center;
-  height: 18vh;
+  height: 60px;
+  gap: 10px;
 
   h4 {
     font-size: 1.1rem; /* Desktop size */
@@ -112,8 +123,9 @@ export const Rating = styled.div`
   }
 
   @media (max-width: 480px) {
+    width: 200px;
     height: auto;
-    padding-top: 2vh;
+    padding-top: 20px;
   }
 `;
 
@@ -124,11 +136,12 @@ export const Details = styled.div`
   padding: 0;
   width: 30vw;
   align-items: flex-start;
-  padding-left: 10vh;
+  padding-left: 80px;
+  gap: 20px;
 
   @media (max-width: 480px) {
-    width: 90vw;
-    padding-left: 5vw;
+    width: 90%;
+    padding-left: 3px;
   }
 `;
 
@@ -137,7 +150,11 @@ export const Email = styled.div`
   flex-direction: column;
   margin: 0;
   padding-top: 2vh;
-
+  width: 25vw;
+  /* border: 1px solid var(--primary);
+  border-radius: 8px; 
+  background-color: var(--primary);
+  opacity: 80%; */
   h4 {
     margin: 0;
     padding-top: 1vh;
@@ -163,7 +180,11 @@ export const About = styled.div`
   margin: 0;
   padding-top: 2vh;
   margin-bottom: 2vh;
-
+  /* border: 1px solid var(--primary); /* Adds a thin grey border */
+  /* border-radius: 8px;
+  background-color: var(--primary);
+  opacity: 80%;  */
+  color: black;
   h4 {
     margin: 0;
     padding-top: 1vh;
@@ -186,7 +207,7 @@ export const About = styled.div`
 export const ButtonGrp = styled.div`
   display: flex;
   flex-direction: column;
-  width: 30vw;
+  width: 400px;
   justify-content: space-between;
   align-items: flex-start;
 
@@ -248,4 +269,12 @@ export const Icon = styled.div`
     height: 28px; /* Increased size for mobile */
     width: 28px; /* Increased size for mobile */
   }
+`;
+
+export const Bottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: fit-content;
+  height: fit-content;
 `;

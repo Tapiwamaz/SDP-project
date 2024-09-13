@@ -154,9 +154,9 @@ const MyCalendar = () => {
                       <DaySlot>
                         <EventStyle>
                           <EventTitle>{event.name}</EventTitle>
-                          {event.location && (
+                          {/* {event.location && (
                             <EventLocation>{event.location}</EventLocation>
-                          )}
+                          )} */}
                           {event.description && (
                             <EventDescription>
                               {event.description}
