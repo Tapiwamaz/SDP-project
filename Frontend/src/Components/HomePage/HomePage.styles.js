@@ -36,6 +36,10 @@ export const Body=styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    animation: fade-in 300ms forwards;
+
+
+
     @media (min-width: 769px) {
     max-width: 85%;
   }
@@ -84,6 +88,7 @@ export const SearchBack = styled.div`
 export const Page=styled.div`
 display: flex;
 flex-direction: row;
+overflow: hidden;
 @media (max-width: 769px) {
     flex-direction: column;
   }

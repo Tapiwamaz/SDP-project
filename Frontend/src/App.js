@@ -1,40 +1,52 @@
+import MyCalendar from "./Components/EventsCalendar/EventsCalendar";
 import HomePage from "./Components/HomePage/HomePage";
 import EventPage from "./pages/EventPage/EventPage";
 import BookTicket from "./Components/BookTicket/BookTicket";
 import SummaryPage from "./pages/SummaryPage/SummaryPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProfilePage from "./Components/Profile/ProfilePage";
+
+
+import CreateEvent from "./pages/CreateEvent/CreateEvent";
+import { ToastContainer } from "react-toastify";
+import { Login }  from './Components/Login/Login.js';
+import { SignIn } from './Components/SignIn/SignIn.js';
+import { Welcome } from './Components/Welcome/Welcome.js';
+
+import { CreateProfile } from "./Components/CreateProfile/CreateProfile.js";
+
 function App() {
-  // const fetchEvents = async () => {
-  //   try {
-  //     // Using relative URL
-  //     const response = await fetch("/api/Basic", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-      // });
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const data = await response.json();
-  //     console.log("Data received from Azure Function:", data);
-  //     return data;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     return null;
-  //   }
-  // };
   return (
     <Router>
       <Routes>
         <Route path="/" index element={<HomePage />} />
+        <Route path="/welcome"  element={<Welcome />} />
+
+        <Route path="/signIn"  element={<SignIn />} />
+        <Route path="/logIn"  element={<Login />} />
+        <Route path="/createProfile"  element={<CreateProfile />} />
+        <Route path="/profile"  element={<ProfilePage />} />
+
+
+
         <Route path="/event" element={<EventPage />} />
         <Route path="/book" element={<BookTicket />} />
         <Route path="/summary" element={<SummaryPage />} />
+        <Route path="/calendar" element={<MyCalendar />} />
+        <Route path="/createEvent" element={<CreateEvent />} />
+
+
+
       </Routes>
     </Router>
+    // <CreateEvent></CreateEvent>
+    // <Login></Login>
+    // <SignIn></SignIn>
+    // <Welcome></Welcome>
+    // <ProfilePage></ProfilePage>
+    // <CreateProfile></CreateProfile>
+
   );
 }
 

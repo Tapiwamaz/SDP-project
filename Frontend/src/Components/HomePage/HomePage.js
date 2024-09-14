@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import Header from '../Header/Header'
 import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
 
@@ -9,10 +9,39 @@ import { Events } from '../MockData/EventsMock'
 
 import noResultsImage from '../../Images/noResults.svg';
 
+import MyCalendar from '../EventsCalendar/EventsCalendar'
+
+
 
 
 const HomePage = () => {
+  useEffect(() => {
+    const fetchEvents = async () =>{
+      try {
+          // Using relative URL
+          const response = await fetch('/api/Basic', {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          });
+  
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+  
+          const data = await response.json();
+          console.log('Data received from Azure Function:', data);
+          return data;
+      } catch (error) {
+          console.error('Error fetching data:', error);
+          return null;
+      }
+  }
+  fetchEvents();
 
+  },[])
+ 
   const [searchValue,setSearchValue]=useState(null);
   const [filteredEvents,SetFilteredEvents]=useState(Events);
   // const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
@@ -160,6 +189,14 @@ const HomePage = () => {
           <EventSlider
             events={filteredDateEvents}
           ></EventSlider>
+              <div
+            style={{
+              width: "90%",
+            }}
+          >
+            <h3>Calander</h3>
+          </div>
+          <MyCalendar filter={filteredEvents}></MyCalendar>
         </Body>
       </Page>
     </>

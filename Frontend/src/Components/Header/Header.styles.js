@@ -1,19 +1,21 @@
-import styled from "styled-components"
-import { UserIcon,XMarkIcon } from '@heroicons/react/24/solid'; // or '@heroicons/react/outline' for an outlined version
-
+import styled from "styled-components";
+import { UserIcon, XMarkIcon } from "@heroicons/react/24/solid"; // or '@heroicons/react/outline' for an outlined version
 
 export const HeaderContainer = styled.header`
+/* position: static; */
+/* width: 100%; */
+background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   border-bottom: black 2px solid;
   color: black;
-  
+  overflow-y: hidden;
+
   @media (max-width: 768px) {
     font-size: smaller;
     flex-direction: row-reverse;
-    
   }
 `;
 
@@ -76,7 +78,7 @@ export const Aside = styled.aside`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(100%)')};
+  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
   transition: transform 0.3s ease-in-out;
 
   @media (min-width: 769px) {
@@ -88,42 +90,49 @@ export const AsideNavItem = styled.a`
   color: white;
   text-decoration: none;
   font-size: 1.25rem;
+  /* height: 50px; */
+  margin: 10px;
 
   &:hover {
     text-decoration: underline;
   }
 `;
 
-export const Profile=styled.div`
+export const Profile = styled.div`
   /* @media (min-width: 769px) {
     display: none;
   } */
-    /* border-radius: 100px; */
-    width: fit-content;
-    color: black;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap:1.5rem;
-    align-items: center;
-    
+  /* border-radius: 100px; */
+  width: fit-content;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  img{
+    &:hover {
+    transform: scale(1.2);
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+  }
 
+
+  }
+ 
 `;
 
 export const ProfileIcon = styled(UserIcon)`
-border: black 2px solid;
- border-radius: 10px;
+  border: black 2px solid;
+  border-radius: 100%;
   width: 40px;
   height: 30px;
   color: black;
   cursor: pointer;
-
-
 `;
 
-export const Xicon=styled(XMarkIcon)`
-color: white;
-width: 40px;
+export const Xicon = styled(XMarkIcon)`
+  color: white;
+  width: 40px;
   height: 30px;
-
-`
+`;
