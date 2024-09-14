@@ -19,7 +19,7 @@ export const Events = [
     location: "wits hall29",
   },
   {
-    booked:false,
+    booked:true,
     eventID: "a53fd6b3-21f8-4e9e-9ad6-c8c4fd2a4b29",
     name: "Local Soccer Championship",
     type: "Sports",

@@ -1,8 +1,7 @@
 // Import necessary modules and components
 import React, { useEffect, useState } from "react";
-import eventImage from "../../Images/ds.jpeg";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
-import { json, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import {
   EventDate,
   Location,
@@ -23,6 +22,8 @@ import {
   TitlePlaceHolder,
   PlaceHolderText,
   Email,
+  SubmitedRating,
+  SubmitedRatingTick,
 } from "./EventDisplay.style";
 
 // Main component for the Event Page
@@ -32,6 +33,7 @@ const EventDisplay = () => {
   // Get the event and booking status from the location state
   const event = useLocation().state.event;
   const book = useLocation().state.booked;
+  console.log(book);
 
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
@@ -40,7 +42,7 @@ const EventDisplay = () => {
   const [count, setCount] = useState(1);
   const [hover, setHover] = useState(-1);
   const [rating, setRating] = useState(0);
-  const [rated, setRated] = useState(true);
+  const [rated, setRated] = useState(false);
 
   // Log the event for debugging
   // console.log(event);
@@ -68,14 +70,10 @@ const EventDisplay = () => {
       return null;
     }
   };
-
-  // Use the useEffect hook to set the event organizer after a delay
-  const [reload, setReload] = useState(false);
-
 // useEffect(() => {
-  //  if (event.TicketCount >= event.capacity) {
-  //    SetFull(true);
-  //  }
+//    if (event.TicketCount >= event.capacity) {
+//      SetFull(true);
+//    }
 //   const fetchData = async () => {
 //     SetFull(false);
 //     if (Object.keys(EventOrg).length === 0) {
@@ -90,11 +88,12 @@ const EventDisplay = () => {
 
 //   fetchData();
 // }, [EventOrg]);
+
   useEffect(() => {
     if(event.TicketCount >= event.capacity){
       SetFull(true);
     }
-    setEventOrg({ name: "kabelo", email: "dfa", description: "dfsadfdfa" });
+    setEventOrg({ name: "kabelo", email: "dfa", description: "dfsadfdfa", imageURL: "https://avatar.iran.liara.run/public/92.92988318897864" });
     setLoading(false);
   }, []);
 
@@ -139,12 +138,26 @@ const EventDisplay = () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-  rating: `${rating}`,
-  userID: `${EventOrg.userID}`,
-  rates: `${EventOrg.Rates}`,
-  EventOrgRating: `${EventOrg.rating}`,
-}),
-  }).then();
+      rating: `${rating}`,
+      userID: `${EventOrg.userID}`,
+      rates: `${EventOrg.Rates}`,
+      EventOrgRating: `${EventOrg.rating}`,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Server responded with status ${res.status}`);
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      setRated(false);
+      
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   // Render the component
   return (
     <EventPages>
@@ -281,7 +294,7 @@ const EventDisplay = () => {
             </div>
             <p style={{ gridColumn: "span 2" }}>{EventOrg.description}</p>
           </EveOCard>
-          {book ? (
+          {!book ? (
             <>
               {!Full ? (
                 <>
@@ -362,7 +375,13 @@ const EventDisplay = () => {
                       Submit
                     </BookButton>
                   </>
-                ) : null}
+                ) : (
+                  <SubmitedRating>
+                    <h3>Thank you for your Rating</h3>
+                    <SubmitedRatingTick />
+                    <p>We appreciate your feedback</p>
+                  </SubmitedRating>
+                )}
               </div>
               <BookButton
                 style={{

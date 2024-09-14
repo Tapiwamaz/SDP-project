@@ -8,9 +8,10 @@ import {
 import { useLocation } from "react-router";
 import { Page } from "../../Components/HomePage/HomePage.styles";
 import eventImage from "../../Images/ds.jpeg";
-// import EventSlider from "../../Components/EventsSlider/EventSlider";
 import AsideDesktop from "../../Components/AsideDesktop/AsideDesktop";
 import Header from "../../Components/Header/Header";
+import PayPalButton from "../../Components/PayPalButton/PaypalButton";
+
 export default function SummaryPage() {
   const event = useLocation().state.event;
   const amount = useLocation().state.amount;
@@ -106,8 +107,12 @@ export default function SummaryPage() {
               <strong>R{event.price * amount}</strong>
             </p>
           </CostSummary>
-          <PayButton onClick={Pay}>Pay Now</PayButton>
-          <div id = "payment"></div>
+          <PayPalButton
+            event={event}
+            count={amount}
+            user_ID={"fMgS0KN8UBXu9uW63wAfzfxPfXy1"}
+          >
+          </PayPalButton>
         </SummaryPages>
       </Page>
     </>

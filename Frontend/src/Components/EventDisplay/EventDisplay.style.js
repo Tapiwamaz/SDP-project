@@ -6,6 +6,8 @@ import {
   ClockIcon,
 } from "@heroicons/react/24/outline";
 
+import { CheckBadgeIcon } from "@heroicons/react/24/solid";
+
 export const EventDate = styled.section`
   display: flex;
   width: 100%;
@@ -209,3 +211,16 @@ export const Email = styled.p`
     margin-top:-.7em;
   }
 `;
+
+export const SubmitedRating = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  align-content: center;
+  flex-direction: column;
+`;
+
+export const SubmitedRatingTick = styled(CheckBadgeIcon)`
+width: 2.5em;
+color: green;
+`
