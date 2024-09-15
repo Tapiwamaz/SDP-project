@@ -3,6 +3,8 @@ import axios from 'axios'; // for API calls
 import './MyEvents.css'; // Add appropriate CSS styles
 import ViewCards from '../ViewCards/ViewCards'; // Assuming ViewCards is a separate component
 import { Events } from '../../Mocky/Mocky';
+import Header from '../../Header/Header';
+import AsideDesktop from '../../AsideDesktop/AsideDesktop';
 
 const MyEvents = () => {
   // const [activeTab, setActiveTab] = useState('upcoming');
@@ -33,11 +35,15 @@ const MyEvents = () => {
   );
 
   return (
-    <div className="my-events-page">
-      <h1>My Events</h1>
+    <div>
+      <Header />
+      <AsideDesktop />
+      <div > {/*className="my-events-page"*/}
+        <h1>My Events</h1>
 
-      <div className="myevents-list">
-        {events.map(renderViewCards)}
+        <div className="myevents-list">
+          {events.map(renderViewCards)}
+        </div>
       </div>
     </div>
   );

@@ -25,9 +25,9 @@
     transition: transform 0.2s ease-in-out;
   } */
   
-  .myevent-card:hover {
+  /* .myevent-card:hover {
     transform: scale(1.02);
-  }
+  } */
   
   /* .myevent-image {
     width: 100%;
