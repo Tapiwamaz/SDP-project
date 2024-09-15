@@ -1,5 +1,6 @@
 export const Events = [
   {
+    booked: false,
     eventID: "1b6d1a8a-fb3f-4d0e-8f7a-7e733ff99e4f",
     name: "Tech Innovations 2024",
     type: "IT",

@@ -105,24 +105,98 @@ app.post("complete_order", async (req, res) => {
           Authorization: `Bearer ${token}`,
         },
       }
-    ).then((res) => res.json())
-    .then((data) => data);
+    )
+      .then((res) => res.json())
+      .then((data) => data);
 
-    
-      const data = await response;
-      return {
-        status: 200,
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-   
+    const data = await response;
+    return {
+      status: 200,
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
   } catch (error) {
     console.error(error);
     return {
       status: 500,
       body: JSON.stringify({ error: error.toString() }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  }
+});
+
+app.post("create_payout", async (req, res) => {
+  try {
+    // let body = "";
+    // for await (const chunk of req.body) {
+    //   body += chunk;
+    // }
+    // const charCodes = body.split(",").map(Number);
+    // const jsonString = String.fromCharCode(...charCodes);
+    // const json = JSON.parse(jsonString); // Parse the JSON string into an object
+
+    const token = await getAccessToken();
+
+    let create_payout_json = {
+      sender_batch_header: {
+        sender_batch_id: generateUUID(),
+        email_subject: "You have a payout!",
+        email_message:
+          "You have received a payout! Thanks for using our service!",
+      },
+      items: [
+        {
+          recipient_type: "EMAIL",
+          amount: {
+            value: "10.00",
+            currency: "USD",
+          },
+          note: "Thanks for your patronage!",
+          sender_item_id: "201403140001",
+          receiver: "Merchant3771@gmail.com",
+          notification_language: "en-US",
+        },
+        {
+          recipient_type: "PAYPAL_ID",
+          amount: {
+            value: "30.00",
+            currency: "USD",
+          },
+          note: "Thanks for your patronage!",
+          sender_item_id: "201403140003",
+          receiver: "C8C3W37EJQ4H4",
+        },
+      ],
+    };
+
+    const response = await fetch(`${paypalBaseUrl}/v1/payments/payouts`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(create_payout_json),
+    });
+
+    // const responseData = await response.json();
+    // console.log(responseData);
+    const data = await response;
+    return {
+      status: 200,
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      status: 500,
+      body: JSON.stringify(error),
       headers: {
         "Content-Type": "application/json",
       },

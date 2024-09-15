@@ -32,7 +32,8 @@ const EventDisplay = () => {
   const navigate = useNavigate();
   // Get the event and booking status from the location state
   const event = useLocation().state.event;
-  const book = useLocation().state.booked;
+  // const book = useLocation().state.booked;
+  const book = event.booked;
   console.log(book);
 
   // State variables for the event organizer, loading status, full status, count, hover and rating
