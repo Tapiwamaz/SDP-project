@@ -24,48 +24,139 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/outline";
 import Header from "../Header/Header";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  list,
+} from "firebase/storage";
+import {
+  doc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { db, auth, storage } from "../../firebase_config.js";
+import { v4 } from "uuid";
 
 const Profile = () => {
   const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : {};
+  const UsersCollectionRef = collection(db, "Users");
 
-  // State to store the selected image or fallback to user's current image
   const [profileImage, setProfileImage] = useState(userData.imageURL || null);
-  const fileInputRef = useRef(null); // Reference to hidden file input
-  const [name, setName] = useState(userData.name || ""); // Store name
+  const fileInputRef = useRef(null);
+  const [name, setName] = useState(userData.name || "");
+  const [imageFile, setImageFile] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [description, setDescription] = useState(userData.description);
 
-  // Handle file input change to update profile image
+  // file input change to update profile image
   const editImage = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Create a temporary URL for the selected image
       const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
-      console.log(imageUrl); // Set the new image in state
+      setProfileImage(imageUrl); // Update preview
+      setImageFile(file); // Save the file for uploading
+      console.log(imageUrl);
     }
   };
 
-  // Trigger the hidden file input when the image is clicked
-
   const handleFileInputClick = () => {
-    fileInputRef.current.click(); // Programmatically click the file input
+    fileInputRef.current.click();
   };
-
-  const [isEditing, setIsEditing] = useState(false); // To toggle between view and edit mode
-  const [description, setDescription] = useState(userData.description); // To store the updated description
 
   const handleEditClick = () => {
-    setIsEditing(true); // Enable editing mode
+    setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    setIsEditing(false); // Disable editing mode and save changes
-    // You can also add logic here to save the updated description (e.g., send it to an API)
+  const onSaveProfile = async () => {
+    let updatedImageURL = profileImage;
+
+    if (imageFile) {
+      try {
+        // Upload the new profile image to storage
+        const imageRef = ref(
+          storage,
+          `profileImages/${userData.userID + v4()}`
+        );
+        await uploadBytes(imageRef, imageFile);
+        updatedImageURL = await getDownloadURL(imageRef); // Get the new image URL after upload
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        return;
+      }
+    }
+    updateDocumentByUserID(auth?.currentUser?.uid, {
+      name: name,
+      description: description,
+      imageURL: updatedImageURL,
+    });
+
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        name: name,
+        description: description,
+        imageURL: updatedImageURL,
+        email: userData.email,
+        userID: auth?.currentUser?.uid,
+        rating: 0,
+      })
+    );
+    setIsEditing(false);
   };
 
-  const handleDescriptionChange = (event) => {
-    setDescription(event.target.value); // Update description state on change
-  };
+  async function updateDocumentByUserID(userID, updateData) {
+    // Reference to the collection
+    const usersCollectionRef = collection(db, "Users");
+
+    // Query for the document with the specific userID
+    const q = query(
+      usersCollectionRef,
+      where("userID", "==", auth?.currentUser?.uid)
+    );
+
+    try {
+      // Execute the query
+      const querySnapshot = await getDocs(q);
+
+      // Check if a document exists
+      if (querySnapshot.empty) {
+        console.log("No matching documents.");
+        return;
+      }
+
+      // Assuming userID is unique and there's only one document
+      const docRef = querySnapshot.docs[0].ref;
+
+      // Update the document
+      await updateDoc(docRef, updateData);
+
+      console.log("Document successfully updated!");
+    } catch (error) {
+      console.error("Error updating document: ", error);
+    }
+  }
+
+  // const handleImageChange = (event, setImageSrc, setImage, setImageError) => {
+  //   const file = event.target.files[0];
+
+  //   if (file) {
+  //     const img = new Image();
+  //     img.src = URL.createObjectURL(file);
+  //     img.onload = () => {
+  //       URL.revokeObjectURL(img.src); // Clean up memory
+  //     };
+  //   } else {
+  //     setImageError("Something went wrong uploading your picture");
+  //   }
+  // };
+
+  //
 
   return (
     <>
@@ -149,7 +240,10 @@ const Profile = () => {
                     marginBottom: "10px",
                   }}
                 />
-                <button onClick={handleSaveClick} style={{ marginTop: "10px" }}>
+                <button
+                  onClick={() => onSaveProfile(auth?.currentUser?.uid)}
+                  style={{ marginTop: "10px" }}
+                >
                   Save
                 </button>
               </div>
