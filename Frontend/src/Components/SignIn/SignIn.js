@@ -1,5 +1,6 @@
-import { auth, googleProvider } from "../../config/firebase.js"
+import { auth, googleProvider, db } from "../../config/firebase.js"
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { docRef, doc, collection, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
@@ -23,7 +24,19 @@ export const SignIn = () => {
             return;
         }
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            try {
+                const docRef = doc(db, "Users", user.uid);
+                await setDoc(docRef, {
+                    name: name,
+                    email: email
+                  });
+            }
+            catch (error) {
+                console.error(error);
+            }
         }
         catch (error) {
             var errorCode = error.code;
@@ -47,7 +60,19 @@ export const SignIn = () => {
     const signInWithGoogle = async () => {
         setErrorMessage("");
         try {
-            await signInWithPopup(auth, googleProvider);
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+
+            try {
+                const docRef = doc(db, "Users", user.uid);
+                await setDoc(docRef, {
+                    name: user.displayName,
+                    email: user.email
+                  });
+            }
+            catch (error) {
+                console.error(error);
+            }
         }
         catch (error) {
             setErrorMessage(error.message);

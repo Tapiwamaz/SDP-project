@@ -6,7 +6,7 @@ import { Welcome } from './Components/Welcome/Welcome.js';
 function App() {
   return (
     <div className="App">
-      <Welcome />
+      <SignIn />
     </div>
   );
 }
