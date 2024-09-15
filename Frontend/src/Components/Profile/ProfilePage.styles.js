@@ -66,6 +66,11 @@ export const ProfileImage = styled.img`
   object-fit: cover;
   border: 2px solid #ddd;
 
+  input:hover {
+    border-color: red;
+    border: 3px solid;
+  }
+
   @media (max-width: 768px) {
     width: 15vw; /* Adjust size for tablets */
     height: 15vw;
@@ -131,6 +136,12 @@ export const Numbers = styled.div`
   width: 300px;
   align-items: left;
   justify-content: center;
+
+  input {
+    width: 90%;
+    border-radius: 12px;
+    padding: 2%;
+  }
   @media (max-width: 480px) {
     align-items: center;
     font-size: 1.2rem;
@@ -202,7 +213,20 @@ export const About = styled.div`
   flex-direction: column;
   width: 25vw;
   padding-top: 2vh;
+  textarea {
+    width: 90%;
+    border-radius: 12px;
+    border: 2px solid;
+    padding: 2%;
+  }
 
+  button {
+    background-color: var(--primary);
+    color: white;
+    width: fit-content;
+    border-radius: 5px;
+    font-size: 0.85rem;
+  }
   h4 {
     margin: 0;
     padding-top: 1vh;
@@ -214,6 +238,21 @@ export const About = styled.div`
       width: 90vw;
       padding-top: 1.5vh;
       font-size: 1.2rem; /* Smaller font for mobile */
+    }
+  }
+
+  @media (max-width: 480px) {
+    width: 90vw;
+    padding-top: 1.5vh;
+    font-size: 1.2rem; /* Smaller font for mobile */
+    textarea {
+      width: 90%;
+      border-radius: 20px;
+    }
+    button {
+      background-color: var(--primary);
+      color: white;
+      width: 100%;
     }
   }
 `;
