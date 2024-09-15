@@ -1,14 +1,14 @@
 import { Ticket } from "../Ticket/Ticket";
 import { auth, db } from "../../config/firebase";
 import QRCode from "qrcode.react";
-import { collection } from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc } from "firebase/firestore";
 
 export const TicketContainer = () => {
 
     const getTickets = async () => {
         const user = auth.currentUser;
         const collectionRef = collection(db, "Tickets");
-        const q = query(collectionRef, where("userID", "==", user.uid));
+        const q = query(collectionRef, where("userID", "==", 'fMgS0KN8UBXu9uW63wAfzfxPfXy1'));
 
         const querySnapshot = await getDocs(q);
         const events = [];

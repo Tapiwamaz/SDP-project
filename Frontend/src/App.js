@@ -1,7 +1,7 @@
 import "./App.css";
 import { Header } from "./Components/Header/Header.js"
 import { Navbar } from "./Components/Navbar/Navbar.js";
-import { Ticket } from "./Components/Ticket/Ticket.js";
+import { TicketContainer } from "./Components/Ticket Container/TicketContainer.js";
 
 function App() {
   
@@ -9,8 +9,7 @@ function App() {
     <>
     <Header/>
     <Navbar/>
-    <Ticket/>
-    <Ticket/>
+    <TicketContainer/>
     </>
   );
 }
