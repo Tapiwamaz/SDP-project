@@ -3,13 +3,15 @@ import styled from 'styled-components';
 // Navbar container
 export const NavbarContainer = styled.nav`
   display: flex;
-  justify-content: space-around;  /* Evenly distribute the items */
+  justify-content: center; /* Center items horizontally */
   align-items: center;
-  padding: 10px 0;
-  width: 100%;  /* Full viewport width */
-  
+  padding: 10px 20px; /* Adequate padding on left and right */
+  width: 90%;  /* Full viewport width */
+  max-width: 1200px; /* Optional: Set a max width to prevent stretching on large screens */
+  margin: 0 auto; /* Center the navbar within its container */
+
   @media (max-width: 768px) {
-    justify-content: space-between; /* Make sure items are spaced evenly */
+    padding: 10px 15px; /* Adjust padding for smaller screens */
   }
 `;
 
@@ -20,20 +22,20 @@ export const NavItem = styled.button`
   font-size: 18px;
   padding: 10px 20px;
   cursor: pointer;
-  color: ${({ isActive }) => (isActive ? 'black' : 'gray')};  /* Darker color if active, otherwise normal blue */
+  color: ${({ isActive }) => (isActive ? 'black' : 'gray')};  /* Darker color if active, otherwise normal gray */
   font-weight: bold;
   border-bottom: ${({ isActive }) => (isActive ? '2px solid' : 'none')};  /* Underline if active */
   transition: color 0.3s, border-bottom 0.3s;  /* Smooth transition for color and underline */
 
   &:hover {
-    color: black;  /* Darker blue on hover */
+    color: black;  /* Darker color on hover */
   }
 
   &:focus {
     outline: none;  /* Remove default focus outline */
   }
 
-    /* Medium screens (tablets, smaller laptops) */
+  /* Medium screens (tablets, smaller laptops) */
   @media (max-width: 1024px) {
     font-size: 16px;
     padding: 8px 15px;

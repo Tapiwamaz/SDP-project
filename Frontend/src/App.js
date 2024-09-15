@@ -10,6 +10,7 @@ function App() {
     <Header/>
     <Navbar/>
     <Ticket/>
+    <Ticket/>
     </>
   );
 }

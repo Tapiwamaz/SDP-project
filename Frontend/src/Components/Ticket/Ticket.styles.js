@@ -1,103 +1,136 @@
 import styled from 'styled-components';
-import ticket from '../../Images/ticket.webp';
 
-
+// Ticket container with responsive design
 export const TicketContainer = styled.div`
   width: 80vw;
   border-radius: 15px;
   padding: 20px;
   display: flex;
-  margin-left: 175px;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
+  margin: 20px auto;
   position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  justify-content: space-between;
 
-  @media (min-width: 768px) {
+  @media (min-width: 868px) {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center; /* Align items in the center for larger screens */
+  }
+
+  @media (max-width: 450px) {
+    padding: 10px; /* Further reduce padding for very small screens */
   }
 `;
 
-// Image on the left for mobile, below title for larger screens
+// Ticket image, adjusts size and placement depending on screen size
 export const TicketImage = styled.img`
-  width: 100px;
-  height: auto;
+  width: 35vw;
+  height: 20vw;
+  margin-right: 10px;
   border-radius: 15px;
-  margin-bottom: 10px;
+  
 
-  @media (min-width: 768px) {
+  @media (min-width: 868px) {
     width: 150px;
+    height: auto;
     margin-right: 20px;
   }
 `;
 
-// Text container for ticket details
+// Text container that holds title, details, and total
 export const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin-right: 20px;
+  margin-bottom: 20px;
 
-  @media (min-width: 768px) {
+  @media (min-width: 868px) {
     flex-direction: row;
-    align-items: flex-start;
+    margin-top: 10px;
   }
 `;
 
-// Ticket title (larger font size)
-export const TicketTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-
-  @media (min-width: 768px) {
-    font-size: 2rem;
-    margin-bottom: 0;
-    text-align: left;
-  }
-`;
-
-// Text details (Date, Venue, Quantity)
-export const DetailItem = styled.div`
-  font-size: 1rem;
-  margin-bottom: 5px;
-
-  @media (min-width: 768px) {
-    margin-right: 30px;
-    margin-bottom: 0;
-  }
-`;
-
-// Bold total amount
-export const Total = styled.div`
+// Title at the top
+export const TicketTitle = styled.div`
   font-size: 1.25rem;
   font-weight: bold;
-  margin-top: 10px;
 
-  @media (min-width: 768px) {
-    margin-top: 0;
-    margin-left: auto;
+  @media (min-width: 868px) {
+    font-size: 1.5rem;
+    margin-right: 80px; /* Add some spacing between title and details */
+  }
+
+  @media (max-width: 450px) {
+    font-size: 1rem; /* Further reduce font size */
+    margin-right: 0; /* Remove margin */
   }
 `;
 
-// QR code and Download button on the right
+// Detail items like date, venue, and quantity
+export const DetailItem = styled.div`
+  font-size: 0.75rem;
+  margin-top: 10px;
+
+  @media (min-width: 868px) {
+    font-size: 1rem;
+    margin-right: 30px; /* Details next to each other */
+    margin-bottom: 0;
+  }
+
+  
+
+  @media (max-width: 450px) {
+    font-size: 0.65rem; /* Further reduce font size */
+    margin-top: 5px; /* Adjust margin for smaller screens */
+  }
+`;
+
+// Total price bold and at the bottom for smaller screens, inline on larger screens
+export const Total = styled.div`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 20px;
+
+  @media (min-width: 868px) {
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 450px) {
+    font-size: 0.75rem; /* Further reduce font size */
+    margin-top: 5px; /* Further reduce margin */
+  }
+`;
+
 export const RightContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center; /* Center content vertically and horizontally */
+  
+
+  @media (min-width: 868px) {
+    margin-left: 0; /* Remove margin for larger screens */
+  }
 `;
 
+// QR code styling
 export const QRCode = styled.img`
   width: 70px;
   height: 70px;
   margin-bottom: 10px;
+
+  @media (max-width: 450px) {
+    width: 40px; /* Further reduce QR code size */
+    height: 40px; /* Maintain aspect ratio */
+  }
 `;
 
+// Download link styling with icon on the left
 export const DownloadLink = styled.a`
   display: flex;
-  align-items: center;
-  font-size: 1rem;
+  align-items: center; /* Align icon and text vertically */
+  
+  font-size: 0.75rem;
   color: #007bff;
   text-decoration: none;
   cursor: pointer;
@@ -105,9 +138,21 @@ export const DownloadLink = styled.a`
   &:hover {
     text-decoration: underline;
   }
+  
+  img {
+    width: 1em;
+    height: 1em;
+    margin-right: 5px;
+  }
 
   svg {
-    margin-left: 5px;
+    width: 1em; /* Icon will have the same height as the text */
+    height: 1em;
+    margin-right: 5px; /* Adjust margin to place icon to the left of text */
+  }
+
+  @media (max-width: 450px) {
+    font-size: 0.6rem; /* Further reduce font size */
   }
 `;
 

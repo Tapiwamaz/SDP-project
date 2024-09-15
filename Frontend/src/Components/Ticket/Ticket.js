@@ -1,39 +1,37 @@
 import { TicketContainer, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, QRCode, DownloadLink } from "./Ticket.styles";
-import ticket from '../../Images/ticket.webp';
 import download from '../../Images/download.svg';
-import qrcode from '../../Images/QR_code.svg';
-import sample from '../../Images/images.jfif';
 
-
-export const Ticket = () => {
+export const Ticket = ({ title, date, time, venue, total, url, qrcode, id })  => {
     return (
       <TicketContainer>
         {/* Mobile: Image on the left, Larger screens: Image below title */}
-        <TicketImage src={sample} alt="Event Image" />
+        <TicketImage src={url} alt="Event Image" />
   
         <TextContainer>
-          <TicketTitle>Event Title</TicketTitle>
+          <TicketTitle>{title}</TicketTitle>
   
           {/* Mobile: Text in column, Larger screens: Inline next to the image */}
           <DetailItem>
-            <strong>Date:</strong> Sept 8, 2024
+            <strong>Date:</strong> <br/> {date}
           </DetailItem>
           <DetailItem>
-            <strong>Venue:</strong> WITS
+            <strong>Time:</strong> <br/> {time}
           </DetailItem>
           <DetailItem>
-            <strong>Quantity:</strong> 2
+            <strong>Venue:</strong> <br/> {venue}
           </DetailItem>
+          
   
           {/* Bold total amount */}
-          <Total>Total: R150</Total>
+          <Total>Total: R{total}</Total>
         </TextContainer>
   
         {/* QR code and Download link, same placement for all screen sizes */}
         <RightContainer>
           <QRCode src={qrcode} alt="QR Code" />
+          <strong>{id}</strong>
           <DownloadLink href="#">
-            Download PDF 
+            <img src={download}/>Download PDF 
           </DownloadLink>
         </RightContainer>
       </TicketContainer>
