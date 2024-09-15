@@ -71,9 +71,9 @@ const MyCalendar = () => {
 
   return (
     <>
-      <Header></Header>
-      <Page>
-        <AsideDesktop></AsideDesktop>
+      {/* <Header></Header> */}
+      {/* <Page> */}
+        {/* <AsideDesktop></AsideDesktop> */}
         <Body>
           <TagsStyle>
             <h3>Filter by</h3>
@@ -140,8 +140,8 @@ const MyCalendar = () => {
                 components={{
                   event: ({ event }) => (
                     <EventStyle>
-                      <strong>{event.title}</strong>
-                      {event.location && ` - ${event.location}`}
+                      {/* <strong>{event.name}</strong> */}
+                      {/* {event.location && ` - ${event.location}`} */}
                     </EventStyle>
                   ),
                   month: {
@@ -168,15 +168,15 @@ const MyCalendar = () => {
                   },
                 }}
                 style={{ height: 600 }}
-                startAccessor={(event) => new Date(event["start-time"])} // Custom start accessor
-                endAccessor={(event) => new Date(event["end-time"])} // Custom end accessor
+                startAccessor={(event) => new Date(event["start_time"])} // Custom start accessor
+                endAccessor={(event) => new Date(event["end_time"])} // Custom end accessor
                 eventPropGetter={eventStyleGetter} // Apply styles dynamically
               />
             </div>
             {/* //{" "} */}
           </CalendarWrapper>
         </Body>
-      </Page>
+      {/* </Page> */}
     </>
   );
 };

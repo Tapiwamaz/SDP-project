@@ -27,7 +27,7 @@ export const Card = styled.button`
   &:hover {
     color: black;
     background-color: white;
-    /* transform: scale(1.05); */
+    transform: scale(1.05);
   }
 
 
@@ -97,5 +97,27 @@ export const CustomCarousel = styled(Carousel)`
 
   .carousel .slide .card {
     margin: 0;
+  }
+`;
+
+
+export const Aside = styled.aside`
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 190px;
+  background-color: var(--primaryGrey);
+
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
+  transition: transform 0.3s ease-in-out;
+
+  @media (min-width: 769px) {
+    display: none;
   }
 `;

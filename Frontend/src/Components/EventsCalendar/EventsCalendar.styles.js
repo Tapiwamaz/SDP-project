@@ -199,7 +199,7 @@ export const TagsStyle = styled.div`
 `;
 
 export const Body = styled.div`
-  width: 85%;
+  width: 100%;
 `;
 
 export const Page = styled.div`

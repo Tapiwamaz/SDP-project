@@ -36,6 +36,10 @@ export const Body=styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    animation: fade-in 300ms forwards;
+
+
+
     @media (min-width: 769px) {
     max-width: 85%;
   }
@@ -54,9 +58,18 @@ export const TagsStyle=styled.div`
   button{
     border: none;
     border-radius: 20px;
-    height: 25px;
+    height: fit;
     margin: 2px;
   }
+
+
+
+
+`;
+
+export const EventsStyle=styled.div`
+  
+  /* margin-right: 20px; */
 
 
 
@@ -75,6 +88,7 @@ export const SearchBack = styled.div`
 export const Page=styled.div`
 display: flex;
 flex-direction: row;
+overflow: hidden;
 @media (max-width: 769px) {
     flex-direction: column;
   }
