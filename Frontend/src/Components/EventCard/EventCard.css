@@ -29,8 +29,8 @@
   
   .event-image {
     width: 100%;
-    height: auto;
-    max-height: 200px; 
+    /* height: auto; */
+    height: 190px; 
     object-fit: cover; 
     background-color: #ccc;
     border-radius: 8px;
