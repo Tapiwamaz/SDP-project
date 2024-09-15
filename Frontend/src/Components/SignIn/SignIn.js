@@ -1,14 +1,12 @@
 import { auth, googleProvider, db } from "../../firebase_config.js"
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { docRef, doc, collection, setDoc } from "firebase/firestore";
+import { docRef, doc, collection, setDoc,query,where,getDocs } from "firebase/firestore";
 import { useState } from "react";
 import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
 
 import { useNavigate } from "react-router";
-import { collection,query,where,getDocs } from "firebase/firestore";
-import { db } from "../../firebase_config.js";
 
 export const SignIn = () => {
     const [name, setName] = useState("");
