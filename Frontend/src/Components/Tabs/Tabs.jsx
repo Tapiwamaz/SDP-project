@@ -7,6 +7,10 @@ import AsideDesktop from '../AsideDesktop/AsideDesktop';
 //import { Events } from "../Mocky/Mocky"; 
 // import { db } from "../../firebase_config.js";
 // import {collection, getDocs, updateDoc, doc} from "firebase/Firestore"
+import { db } from "../../firebase_config"; // Adjust the path based on your structure
+import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
+
+
 
 const fetchUsername = async (user_id) => {
   console.log(`Fetching username for user_id: ${user_id}`);
@@ -72,6 +76,26 @@ const fetchEvents = async (setEvents) =>{
 };
 
 
+// Function to update event in Firestore
+const updateEventDB = async (updatedEvent) => {
+  try {
+    const eventCollection = collection(db, 'Events'); // Reference to your Firestore collection
+    const q = query(eventCollection, where("event_id", "==", updatedEvent.event_id));
+    
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (docSnapshot) => {
+      const docRef = docSnapshot.ref;
+      await updateDoc(docRef, updatedEvent);
+    });
+
+    console.log("Event updated successfully.");
+  } catch (error) {
+    console.error("Error updating event:", error);
+    throw new Error("Failed to update event. Please try again.");
+  }
+};
+
+
 const Tabs = () => {
   const [events, setEvents] = useState([]);
 
@@ -82,12 +106,40 @@ const Tabs = () => {
 
   
 
-  const handleApprove = (id) => {
-    setEvents(events.map(event => event.event_id === id ? { ...event, status: 'approved' } : event));
+  // const handleApprove = (id) => {
+  //   setEvents(events.map(event => event.event_id === id ? { ...event, status: 'approved' } : event));
+  // };
+
+  // const handleReject = (id) => {
+  //   setEvents(events.map(event => event.event_id === id ? { ...event, status: 'rejected' } : event));
+  // };
+
+  // Handle event approval
+  const handleApprove = async (id) => {
+    const updatedEvent = events.find(event => event.event_id === id);
+    if (updatedEvent) {
+      updatedEvent.approved = true; // Set approved to true
+      updatedEvent.status = 'approved';
+
+      await updateEventDB(updatedEvent); // Call the function to update Firestore
+
+      // Update UI after event approval
+      setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
+    }
   };
 
-  const handleReject = (id) => {
-    setEvents(events.map(event => event.event_id === id ? { ...event, status: 'rejected' } : event));
+  // Handle event rejection
+  const handleReject = async (id) => {
+    const updatedEvent = events.find(event => event.event_id === id);
+    if (updatedEvent) {
+      updatedEvent.approved = false; // Set approved to false
+      updatedEvent.status = 'rejected';
+
+      await updateEventDB(updatedEvent); // Call the function to update Firestore
+
+      // Update UI after event rejection
+      setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
+    }
   };
 
   const [activeTab, setActiveTab] = useState('pending');
