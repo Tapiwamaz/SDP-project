@@ -16,6 +16,8 @@ export const SignIn = () => {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     var checkbox = document.getElementById("checkbox");
+    const navigate=useNavigate();
+
 
     const signin = async () => {
         setErrorMessage("");
