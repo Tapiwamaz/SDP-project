@@ -1,0 +1,54 @@
+.my-events-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #003366;
+  }
+  
+  
+  .myevents-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  /* .myevent-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+  } */
+  
+  /* .myevent-card:hover {
+    transform: scale(1.02);
+  } */
+  
+  /* .myevent-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .myevent-details {
+    padding: 20px;
+  } */
+  
+  .myevent-details h2 {
+    margin: 10px 0;
+    font-size: 1.5em;
+    color: #003366;
+  }
+  
+  .myevent-details p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+
+  
