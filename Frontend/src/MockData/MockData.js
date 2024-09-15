@@ -40,7 +40,7 @@ const mockEventData = [
     eventType: "Pitch Event",
     eventVenueType: "Indoor",
     eventDescription:
-      "A networking event where startups pitch their ideas to a panel of investors and get feedback.",
+      "A networking event where startups pitch their venue_ideas to a panel of investors and get feedback.",
     eventLocation: "Innovation Hub, Austin, TX",
   },
   {
@@ -63,44 +63,83 @@ const mockEventTypes = [
   "Entertainment",
   "Gaming",
   "IT",
+  "Online"
 ];
 
 const mockLocations = [
   {
-    id: "1",
+    venue_id: "1",
     name: "Central Park",
     location: "New York, NY",
     capacity: 5000,
     type: "Park",
   },
   {
-    id: "2",
+    venue_id: "2",
     name: "Madison Square Garden",
     location: "New York, NY",
     capacity: 20000,
     type: "Arena",
   },
   {
-    id: "3",
+    venue_id: "3",
     name: "Staples Center",
     location: "Los Angeles, CA",
     capacity: 18000,
     type: "Arena",
   },
   {
-    id: "4",
+    venue_id: "4",
     name: "Wembley Stadium",
     location: "London, UK",
     capacity: 90000,
     type: "Stadium",
   },
   {
-    id: "5",
+    venue_id: "5",
     name: "Sydney Opera House",
     location: "Sydney, Australia",
     capacity: 2700,
     type: "Concert Hall",
   },
 ];
+const mockVirtualLocations = [
+  {
+    venue_id: "1",
+    location: "Zoom",
+    name: "Online",
+    capacity: 1000,
+    type: "Video Conferencing",
+  },
+  {
+    venue_id: "2",
+    location: "Microsoft Teams",
+    name: "Online",
+    capacity: 300,
+    type: "Collaboration",
+  },
+  {
+    venue_id: "3",
+    location: "Google Meet",
+    name: "Online",
+    capacity: 250,
+    type: "Video Conferencing",
+  },
+  {
+    venue_id: "4",
+    location: "Skype",
+    name: "Online",
+    capacity: 250,
+    type: "Video Conferencing",
+  },
+  {
+    venue_id: "5",
+    location: "Webex",
+    name: "Online",
+    capacity: 1000,
+    type: "Video Conferencing",
+  },
+];
 
-export { mockEventData, mockLocations,mockEventTypes };
+
+export { mockEventData, mockLocations,mockEventTypes, mockVirtualLocations };

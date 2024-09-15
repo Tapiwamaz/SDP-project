@@ -19,7 +19,11 @@ import "react-toastify/dist/ReactToastify.css";
 //rrd
 import { useNavigate } from "react-router-dom";
 //mockdate
-import { mockEventTypes, mockLocations } from "../../MockData/MockData";
+import {
+  mockEventTypes,
+  mockLocations,
+  mockVirtualLocations,
+} from "../../MockData/MockData";
 //firebase work
 import {
   collection,
@@ -28,6 +32,7 @@ import {
   getDocs,
   updateDoc,
   where,
+  getDoc,
 } from "firebase/firestore";
 import {
   deleteObject,
@@ -99,7 +104,7 @@ export const handleNextButtonClick = async (
   setLoader,
   setSubmitted
 ) => {
-  console.log(eventDetailsT)
+  console.log(eventDetailsT);
   if (!eventDetailsT.name) {
     // Handle missing event name
     eventRefsT.eventName.current.classList.add("unfilled-input");
@@ -128,7 +133,7 @@ export const handleNextButtonClick = async (
       behavior: "smooth",
       block: "center",
     });
-    console.log("herer")
+
     toast.warn("Please a vaild date");
     return;
   }
@@ -576,6 +581,39 @@ const CreateEvent = ({ inputEventDetails }) => {
               </div>
             </div>
 
+            {/* Event type */}
+            <label className="label" htmlFor="eventType">
+              Event Type
+            </label>
+            <datalist id="eventTypeList" data-testid="locationsList">
+              {eventTypes.map((type, index) => (
+                <option key={index} value={type} />
+              ))}
+            </datalist>
+
+            <input
+              className="input"
+              name="eventType"
+              list="eventTypeList"
+              data-testid="type"
+              placeholder="e.g Education"
+              ref={eventTypeRef}
+              value={eventDetails.type || ""}
+              onFocus={() =>
+                eventTypeRef.current.classList.remove("unfilled-input")
+              }
+              onChange={(e) => {
+                handleChangeEventDetails(
+                  e.target.value,
+                  "type",
+                  setEventDetails
+                );
+                if (e.target.value === "Online") {
+                  setAvailableLocations(mockVirtualLocations);
+                }
+              }}
+            />
+            {/* Venue and location */}
             <div className="doubleInputContainer">
               {/* Venue type */}
               <div
@@ -583,7 +621,7 @@ const CreateEvent = ({ inputEventDetails }) => {
                 style={{ display: "flex", flexDirection: "column" }}
               >
                 <label className="label" htmlFor="eventVenueType">
-                  Venue Type
+                  {eventDetails.type==="Online" ? "Platform" : "Venue Type"}
                 </label>
                 <input
                   className="input"
@@ -607,8 +645,11 @@ const CreateEvent = ({ inputEventDetails }) => {
                 ></input>
 
                 <datalist id="venueList" data-testid="locationsList">
-                  {availableLocations.map((loc, index) => (
-                    <option key={index} value={loc.type} />
+                  
+                  {
+        
+                    [...new Set(availableLocations.map(platform => platform.type))].map((type, index) => (
+                    <option key={index} value={type} />
                   ))}
                 </datalist>
               </div>
@@ -649,36 +690,6 @@ const CreateEvent = ({ inputEventDetails }) => {
                 </datalist>
               </div>
             </div>
-
-            {/* Event type */}
-            <label className="label" htmlFor="eventType">
-              Event Type
-            </label>
-            <datalist id="eventTypeList" data-testid="locationsList">
-              {eventTypes.map((type, index) => (
-                <option key={index} value={type} />
-              ))}
-            </datalist>
-
-            <input
-              className="input"
-              name="eventType"
-              list="eventTypeList"
-              data-testid="type"
-              placeholder="e.g Education"
-              ref={eventTypeRef}
-              value={eventDetails.type || ""}
-              onFocus={() =>
-                eventTypeRef.current.classList.remove("unfilled-input")
-              }
-              onChange={(e) =>
-                handleChangeEventDetails(
-                  e.target.value,
-                  "type",
-                  setEventDetails
-                )
-              }
-            />
 
             {/* Ticket Price  Label*/}
             <label className="label" htmlFor="eventTicketPrice">
