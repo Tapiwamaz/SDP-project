@@ -265,10 +265,11 @@ export const createEventDB = async (
     newEvent.ticket_count = capacity;
     newEvent.event_id = v4();
     newEvent.active = true;
-    newEvent.approved = false;
+    // newEvent.approved = false;
+    newEvent.approved = true;
     newEvent.status = "pending";
     delete newEvent.eventPicture;
-    newEvent.user_id = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+    newEvent.user_id = "fMgS0KN8UBXu9uW63wAfzfxPfXy1";
 
     // Add image to bucket and event to Firestore
     await addDoc(eventCollection, newEvent);
