@@ -6,6 +6,7 @@
     padding: 10px; 
   }
   
+
   /* made buttons wider */
   .tabs button {
     padding: 15px 20px;
@@ -31,3 +32,4 @@
     background-color: #003366; 
     color: #fff; 
   }
+  

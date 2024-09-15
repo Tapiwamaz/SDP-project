@@ -1,6 +1,6 @@
 export const Events = [
     { 
-        event_id: "a53fd6b3-21f8-4e9e-9ad6-c8c4fd2a4b29", 
+        event_id: "a53fd6b3-21f8-4e9e-9ad6-c8c4fd2a4b30", 
         name: 'Tech Summit', 
         type: 'IT', 
         date: '2024-09-10T10:00:00.000Z', 

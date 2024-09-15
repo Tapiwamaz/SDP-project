@@ -4,7 +4,7 @@ import './HistoryEvents.css';
 
 const HistoryEvents = ({ events }) => {
   return (
-    <div className="history-events">
+    <div className="h-events-list">
       {events
       .filter(event => event.status !== 'pending')
         .map(event => (

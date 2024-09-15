@@ -3,7 +3,7 @@ import EventCard from '../EventCard/EventCard';
 import './PendingEvents.css';
 
 const PendingEvents = ({ events, onApprove, onReject }) => (
-  <div className="pending-events">
+  <div className="p-events-list">
     {events.filter(event => event.status === 'pending').map(event => (
       <EventCard 
         key={event.id}
