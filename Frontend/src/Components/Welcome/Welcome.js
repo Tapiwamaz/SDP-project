@@ -23,7 +23,7 @@ export const Welcome = () => {
                 <ImageContainer>
                     <StyledText size="16px">To continue please</StyledText>
                 </ImageContainer>
-                <StyledButton onClick={sign}>Sign in</StyledButton>
+                <StyledButton>Sign up</StyledButton>
                 <ImageContainer>
                     <StyledText>__________OR__________</StyledText>
                 </ImageContainer>

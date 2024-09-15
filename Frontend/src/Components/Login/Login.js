@@ -18,9 +18,15 @@ export const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate=useNavigate();
 
+    var emailInput = document.getElementById("emailInput");
+    var passwordInput = document.getElementById("passwordInput");
 
     const login = async () => {
         setErrorMessage("");
+        if (email === "" || password === "") {
+            setErrorMessage("Please fill in all fields");
+            return;
+        }
         try {
             await signInWithEmailAndPassword(auth, email, password);
             const user = auth.currentUser;
@@ -49,11 +55,31 @@ export const Login = () => {
             console.log("Success");
         }
         catch (error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            if (errorCode === 'auth/wrong-password') {
+                passwordInput.value = "";
+                setErrorMessage('Incorrect password');
+            }
+            if (errorCode === 'auth/user-not-found') {
+                emailInput.value = "";
+                passwordInput.value = "";
+                setErrorMessage('User not found');
+            }
+            if (errorCode === 'auth/invalid-email') {
+                emailInput.value = "";
+                passwordInput.value = "";
+                setErrorMessage('Invalid email address');
+            }
+            else {
+                setErrorMessage(errorMessage);
+            }
             console.error(error);
         }
     };
 
     const loginWithGoogle = async () => {
+        setErrorMessage("");
         try {
             await signInWithPopup(auth, googleProvider);
             const user = auth.currentUser;
@@ -96,8 +122,8 @@ export const Login = () => {
             <ImageContainer>
                 <StyledBoldText>Welcome Back!</StyledBoldText>
             </ImageContainer>
-            <StyledInput type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-            <StyledInput type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            <StyledInput id="emailInput" type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+            <StyledInput id="passwordInput" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
             <ClickableText><StyledLink href="www.google.com">Forgot password?</StyledLink></ClickableText>
             <ErrorMessage>{errorMessage}</ErrorMessage>
             <StyledButton onClick={login}>Login</StyledButton>
@@ -113,7 +139,7 @@ export const Login = () => {
             </ImageButton>
             </ImageContainer>
             <ImageContainer>
-                <StyledText size="16px">Don't have an account? <StyledLink href="../SignIn/SignIn.js">Sign in</StyledLink></StyledText>
+                <StyledText size="16px">Don't have an account? <StyledLink href="../SignIn/SignIn.js">Sign up</StyledLink></StyledText>
             </ImageContainer>
             
         </ResponsiveDiv>
