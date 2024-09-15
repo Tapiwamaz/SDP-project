@@ -1,0 +1,96 @@
+.myparent-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+  }
+  
+  .myevent-card {
+    /* width: 310px;
+    height: 500px; */
+    /* max-width: 400px; */
+    /* background-color: #f9f9f9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black; 
+    width: 310px; 
+    height: 380px; 
+    overflow: hidden; 
+  }
+  
+  .myevent-image {
+    /* width: 100%;
+    height: 200px;
+    object-fit: cover; */
+    width: 100%;
+    height: auto;
+    max-height: 150px; 
+    object-fit: cover; 
+    background-color: #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .myevent-card h2 {
+    font-size: 18px;
+    margin: 0 0 5px;
+  }
+  
+  .myevent-card p {
+    margin: 3px 0;
+    color: #000000;
+  }
+  
+   /*Container for the event details */
+  .myevent-details {
+    /* padding: 20px; */
+    display: flex;
+    flex-direction: column;
+    width: 100%; 
+  }
+  
+  /* Flex container for date and Free/Paid */
+  .myevent-row {
+    /* display: flex;
+    justify-content: space-between; */
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 5px; 
+  }
+  
+  /* Flex column for other details (time, location, organizer) */
+  .myevent-info {
+    /* display: flex;
+    flex-direction: column;
+    gap: 5px; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 0; 
+  }
+  
+  .myevent-payment-status {
+    /* color: #003366;
+    font-weight: bold; */
+
+    font-weight: bold;
+    color: #003366;
+    text-align: right;
+    flex-shrink: 0; 
+    margin-left: 20px; 
+  }
+  
+  
+
+  
