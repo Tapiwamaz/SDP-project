@@ -40,12 +40,6 @@ function App() {
 
       </Routes>
     </Router>
-    // <CreateEvent></CreateEvent>
-    // <Login></Login>
-    // <SignIn></SignIn>
-    // <Welcome></Welcome>
-    // <ProfilePage></ProfilePage>
-    // <CreateProfile></CreateProfile>
 
   );
 }
