@@ -1,4 +1,4 @@
-import { auth, googleProvider } from "../../config/firebase.js"
+import { auth, googleProvider } from "../../firebase_config.js"
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText, ResponsiveBackground, ResponsiveDiv } from "../Universal Styles/Universal.styles.js";

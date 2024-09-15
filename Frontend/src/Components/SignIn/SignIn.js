@@ -1,4 +1,4 @@
-import { auth, googleProvider, db } from "../../config/firebase.js"
+import { auth, googleProvider, db } from "../../firebase_config.js"
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { docRef, doc, collection, setDoc } from "firebase/firestore";
 import { useState } from "react";
