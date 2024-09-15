@@ -113,9 +113,9 @@ const EventCard = ({ event, onApprove, onReject }) => {
   return (
     <div className='parent-container'>
       <div className="event-card">
-        {/* <img src={event.imageURL} alt={event.title} className="event-image" /> */}
+        {/* <img src={event.image_url} alt={event.title} className="event-image" /> */}
         <img
-        src={event.imageURL || placeholderImage} // Use placeholder if imageURL is missing
+        src={event.image_url || placeholderImage} // Use placeholder if image_url is missing
         alt={event.name}
         onError={(e) => {
           e.target.src = placeholderImage; // If image fails to load, show the placeholder
@@ -145,8 +145,8 @@ const EventCard = ({ event, onApprove, onReject }) => {
         )}
         {onApprove && onReject && event.status === 'pending' && (
           <div className="actions">
-            <button onClick={() => onApprove(event.eventID)}>Approve</button>
-            <button onClick={() => onReject(event.eventID)}>Reject</button>
+            <button onClick={() => onApprove(event.event_id)}>Approve</button>
+            <button onClick={() => onReject(event.event_id)}>Reject</button>
           </div>
         )}
       </div>

@@ -9,106 +9,46 @@
     color: #003366;
   }
   
-  .tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
   
-  .tabs button {
-    background-color: #f0f0f0;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 10px;
-    cursor: pointer;
-    font-size: 16px;
-    color: #333;
-    border-radius: 5px;
-  }
-  
-  .tabs button.active {
-    background-color: #003366;
-    color: white;
-  }
-  
-  .tabs button:hover {
-    background-color: #005bb5;
-    color: white;
-  }
-  
-  .events-list {
+  .myevents-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
   }
   
-  .event-card {
+  /* .myevent-card {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     text-align: center;
     transition: transform 0.2s ease-in-out;
-  }
+  } */
   
-  .event-card:hover {
+  .myevent-card:hover {
     transform: scale(1.02);
   }
   
-  .event-image {
+  /* .myevent-image {
     width: 100%;
     height: 200px;
     object-fit: cover;
   }
   
-  .event-details {
+  .myevent-details {
     padding: 20px;
-  }
+  } */
   
-  .event-details h2 {
+  .myevent-details h2 {
     margin: 10px 0;
     font-size: 1.5em;
     color: #003366;
   }
   
-  .event-details p {
+  .myevent-details p {
     margin: 5px 0;
     color: #555;
   }
   
-  .event-actions {
-    margin-top: 15px;
-  }
-  
-  .event-actions button {
-    margin: 5px;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .event-actions button:hover {
-    background-color: #218838;
-  }
-  
-  .action-btn i {
-    margin-right: 5px;
-  }
-  
-  .action-btn {
-    padding: 10px;
-    margin: 5px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .action-btn:hover {
-    background-color: #c82333;
-  }
+
   

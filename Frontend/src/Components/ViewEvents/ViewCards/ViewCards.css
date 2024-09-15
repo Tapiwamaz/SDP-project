@@ -1,124 +1,96 @@
-.parent-container {
+.myparent-container {
     display: flex;
     justify-content: center;
     margin: 20px;
   }
   
-  .event-card {
-    width: 310px;
-    height: 500px;
+  .myevent-card {
+    /* width: 310px;
+    height: 500px; */
     /* max-width: 400px; */
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .event-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .event-details {
-    padding: 20px;
-  }
-  
-  .event-row {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .event-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .event-payment-status {
-    color: #007bff;
-    font-weight: bold;
-  }
-  
-  .actions {
-    margin-top: 15px;
-  }
-  
-  .actions button {
-    margin: 5px;
-    padding: 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .actions button:hover {
-    background-color: #218838;
-  }
-  
-  .description {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #17a2b8;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .description:hover {
-    background-color: #138496;
-  }
-  
-  .popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .popup-inner {
-    position: relative;
-    padding: 32px;
-    width: 100%;
-    max-width: 400px;
-    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+
+    background-color: #fff;
     border-radius: 8px;
-    text-align: center;
-  }
-  
-  .popup-inner .close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    cursor: pointer;
-  }
-  
-  .popup-content {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 15px;
     display: flex;
     flex-direction: column;
+    border: 1px solid black; 
+    width: 310px; 
+    height: 380px; 
+    overflow: hidden; 
   }
   
-  .popup-content button {
-    margin: 10px;
-    padding: 10px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  .myevent-image {
+    /* width: 100%;
+    height: 200px;
+    object-fit: cover; */
+    width: 100%;
+    height: auto;
+    max-height: 150px; 
+    object-fit: cover; 
+    background-color: #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .myevent-card h2 {
+    font-size: 18px;
+    margin: 0 0 5px;
   }
   
-  .popup-content button:hover {
-    background-color: #c82333;
+  .myevent-card p {
+    margin: 3px 0;
+    color: #000000;
   }
+  
+   /*Container for the event details */
+  .myevent-details {
+    /* padding: 20px; */
+    display: flex;
+    flex-direction: column;
+    width: 100%; 
+  }
+  
+  /* Flex container for date and Free/Paid */
+  .myevent-row {
+    /* display: flex;
+    justify-content: space-between; */
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 5px; 
+  }
+  
+  /* Flex column for other details (time, location, organizer) */
+  .myevent-info {
+    /* display: flex;
+    flex-direction: column;
+    gap: 5px; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 0; 
+  }
+  
+  .myevent-payment-status {
+    /* color: #003366;
+    font-weight: bold; */
+
+    font-weight: bold;
+    color: #003366;
+    text-align: right;
+    flex-shrink: 0; 
+    margin-left: 20px; 
+  }
+  
+  
+
   

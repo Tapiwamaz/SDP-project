@@ -9,8 +9,8 @@ function App() {
   return (
     <>
     
-      <Tabs></Tabs>
-      {/* <MyEvents/> */}
+      {/* <Tabs></Tabs> */}
+      <MyEvents/>
 
 
     </>

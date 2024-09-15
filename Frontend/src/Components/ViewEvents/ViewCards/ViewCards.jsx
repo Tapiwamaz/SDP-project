@@ -1,16 +1,7 @@
-// import React from 'react'
-
-// function ViewCards() {
-//   return (
-//     <div>ViewCards</div>
-//   )
-// }
-
-// export default ViewCards
-
 import React, { useState } from 'react';
 import './ViewCards.css';
 import Popup from '../../Popup/Popup'; // Assuming you have a Popup component
+//import MyPopup from "./MyPopup"
 import placeholderImage from './depositphotos_466819550-stock-illustration-image-available-icon-missing-image.jpg'; // Placeholder image
 
 const ViewCards = ({ event, onApprove, onReject, onCancel }) => {
@@ -35,26 +26,26 @@ const ViewCards = ({ event, onApprove, onReject, onCancel }) => {
   };
 
   return (
-    <div className="parent-container">
-      <div className="event-card">
+    <div className="myparent-container">
+      <div className="myevent-card">
         {/* Event Image */}
         <img
-          src={event.imageURL || placeholderImage}
+          src={event.image_url || placeholderImage}
           alt={event.name}
           onError={(e) => (e.target.src = placeholderImage)} // Fallback to placeholder if the image fails
-          className="event-image"
+          className="myevent-image"
         />
 
         {/* Event Information */}
         <h2>{event.name}</h2>
-        <div className="event-details">
-          <div className="event-row">
-            <p>{formatDate(event.date)}</p>
+        <div className="myevent-details">
+          <div className="myevent-row">
+            <p>Day - {formatDate(event.date)}</p>
             {/* <span className="event-payment-status">
               {event.isFree ? 'Free' : `Paid - R${event.price}`}
             </span> */}
           </div>
-          <div className="event-info">
+          <div className="myevent-info">
             <p>{formatTime(event.start_time)} - {formatTime(event.end_time)}</p>
             <p>{event.location}</p>
             <p>Capacity: {event.capacity}</p>
@@ -75,15 +66,10 @@ const ViewCards = ({ event, onApprove, onReject, onCancel }) => {
         </Popup>
 
         {/* Status and Approval/Reject Buttons */}
-        {event.status !== 'pending' && (
+        {/* {event.status !== 'pending' && (
           <p>Status: {event.status === 'approved' ? 'Approved' : 'Rejected'}</p>
-        )}
-        {onApprove && onReject && event.status === 'pending' && (
-          <div className="actions">
-            <button onClick={() => onApprove(event.id)}>Approve</button>
-            <button onClick={() => onReject(event.id)}>Reject</button>
-          </div>
-        )}
+        )} */}
+
       </div>
     </div>
   );

@@ -57,9 +57,56 @@ import './Tabs.css';
 import Header from '../Header/Header';
 import AsideDesktop from '../AsideDesktop/AsideDesktop';
 import { Events } from "../Mocky/Mocky"; 
+// import { db } from "../../firebase_config.js";
+// import {collection, getDocs, updateDoc, doc} from "firebase/Firestore"
 
 const Tabs = () => {
   const [events, setEvents] = useState([]);
+
+  //  // Fetch events from Firestore
+  //  useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     const eventsCollection = collection(db, 'Events'); // Change 'Events' to your collection name
+  //     const eventsSnapshot = await getDocs(eventsCollection);
+  //     const eventsList = eventsSnapshot.docs.map(doc => ({
+  //       ...doc.data(),
+  //       event_id: doc.id, // Ensure you map the Firestore document ID to your event object
+  //     }));
+  //     setEvents(eventsList);
+  //   };
+
+  //   fetchEvents();
+  // }, []);
+
+  // // Function to update the event status and approved field in Firestore
+  // const handleUpdate = async (id, newStatus, approvedValue) => {
+  //   const eventRef = doc(db, 'Events', id); // Point to the specific event document
+
+  //   try {
+  //     // Update both 'status' and 'approved' fields in Firestore
+  //     await updateDoc(eventRef, {
+  //       status: newStatus,
+  //       approved: approvedValue
+  //     });
+
+  //     // Update state locally to reflect the changes in the UI
+  //     setEvents(events.map(event =>
+  //       event.event_id === id
+  //         ? { ...event, status: newStatus, approved: approvedValue }
+  //         : event
+  //     ));
+  //   } catch (error) {
+  //     console.error("Error updating document: ", error);
+  //   }
+  // };
+
+  // const handleApprove = (id) => {
+  //   handleUpdate(id, 'approved', true); // Set status to 'approved' and approved to true
+  // };
+
+  // const handleReject = (id) => {
+  //   handleUpdate(id, 'rejected', false); // Set status to 'rejected' and approved to false
+  // };
 
   useEffect(() => {
     // Update the isFree field based on the price
@@ -71,11 +118,11 @@ const Tabs = () => {
   }, []);
 
   const handleApprove = (id) => {
-    setEvents(events.map(event => event.eventID === id ? { ...event, status: 'approved' } : event));
+    setEvents(events.map(event => event.event_id === id ? { ...event, status: 'approved' } : event));
   };
 
   const handleReject = (id) => {
-    setEvents(events.map(event => event.eventID === id ? { ...event, status: 'rejected' } : event));
+    setEvents(events.map(event => event.event_id === id ? { ...event, status: 'rejected' } : event));
   };
 
   const [activeTab, setActiveTab] = useState('pending');
