@@ -82,7 +82,7 @@ app.http("Rating", {
 
       // Uncomment the following lines to update the user's rating in the database
       const usersRef = collection(db, "Users");
-      const q = query(usersRef, where("userID", "==", userID));
+      const q = query(usersRef, where("user_id", "==", userID));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
@@ -147,12 +147,11 @@ app.post("BookTicket", {
         const ticketID = Math.random().toString(36).substring(2, 10);
 
         const ticketData = {
-          userID: userID,
-          eventID: eventID,
-          ticketQuantity: 1,
+          user_id: userID,
+          event_id: eventID,
           accessCode: accessCode,
           expired: false,
-          ticketID: ticketID, // Add the ticketID to the ticket data
+          ticket_id: ticketID, // Add the ticketID to the ticket data
         };
         try {
           const docRef = await addDoc(collection(db, "Tickets"), ticketData);
