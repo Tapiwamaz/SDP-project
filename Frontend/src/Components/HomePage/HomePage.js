@@ -72,7 +72,7 @@ const HomePage = () => {
   const filter=(type)=>{
     setActiveTag(type);
 
-    SetFilteredEvents(allEvents.filter(e=>e.type.match(type)));
+    SetFilteredEvents(allEvents.filter(e=>e.type.match(type)).filter(e=>e.approved===true));
 
     
   }
@@ -82,7 +82,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Header></Header>
+      <Header ></Header>
       <Page>
         <AsideDesktop></AsideDesktop>
         {/*Global aside called */}

@@ -41,7 +41,7 @@ export const Body=styled.div`
 
 
     @media (min-width: 769px) {
-    max-width: 85%;
+    width: 85%;
   }
     
 

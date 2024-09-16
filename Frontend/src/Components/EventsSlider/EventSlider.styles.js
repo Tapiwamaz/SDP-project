@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { Carousel } from 'react-responsive-carousel';
 
 export const Container = styled.div`
-  width: 100%;
-  max-width: 100%; /* Ensure it doesn't exceed the screen width */
+  /* width: 100%; */
+  min-width: 100%; /* Ensure it doesn't exceed the screen width */
   margin: 0 auto; 
   padding: 0 10px; 
   /* z-index: -1; */
