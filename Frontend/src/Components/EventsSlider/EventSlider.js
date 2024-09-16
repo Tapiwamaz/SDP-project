@@ -113,12 +113,12 @@ const goToEvent=(event)=>{
               events.filter(e=>e.approved===true).map((event) => (
 
                 
-                <Card key={event.id} onClick={()=>goToEvent(event)}>
-                    <img src='https://images.hdqwalls.com/wallpapers/water-through-rocks-4k-kl.jpg' alt='eventImage'/>
+                <Card key={event.event_id} onClick={()=>goToEvent(event)}>
+                    <img src={event.image_url} alt='eventImage'/>
                     <h3>{event.name}</h3>
                     <div>
-                      <p>{formatDate(event.date.split("T")[0])}</p>
-                      <p>{`${event.start_time.split("T")[1].split(":")[0]}:${event.start_time.split("T")[1].split(":")[1]}`}</p>
+                      <p>{formatDate(event.date)}</p>
+                      <p>{event.start_time}</p>
                       <p>{event.location}</p>
 
 

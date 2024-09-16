@@ -9,6 +9,7 @@ import {
   CpuChipIcon,
   BookOpenIcon,
   PlusCircleIcon,
+  DevicePhoneMobileIcon
 } from '@heroicons/react/24/outline';
 import styled from 'styled-components';
 
@@ -58,6 +59,8 @@ const Tags = ({ name, filter, isActive }) => {
         return { icon: ComputerDesktopIcon, color: '#48a56a' };
       case 'IT':
         return { icon: CpuChipIcon, color: '#b25da6' };
+      case 'Online':
+          return { icon: DevicePhoneMobileIcon, color: 'lime' };
       case 'Other':
         return { icon: PlusCircleIcon, color: 'grey' };
       default:

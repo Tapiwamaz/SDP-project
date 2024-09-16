@@ -15,6 +15,10 @@ import MyCalendar from '../EventsCalendar/EventsCalendar'
 
 
 const HomePage = () => {
+  const[allEvents,setAllEvents]=useState(null);
+
+  const [filteredEvents,SetFilteredEvents]=useState(null);
+
   useEffect(() => {
     const fetchEvents = async () =>{
       try {
@@ -31,7 +35,11 @@ const HomePage = () => {
           }
   
           const data = await response.json();
-          console.log('Data received from Azure Function:', data);
+          // console.log('Data received from Azure Function:', data);
+          // console.log(data);
+
+          setAllEvents(data);
+          SetFilteredEvents(data);
           return data;
       } catch (error) {
           console.error('Error fetching data:', error);
@@ -41,9 +49,10 @@ const HomePage = () => {
   fetchEvents();
 
   },[])
+  
  
   const [searchValue,setSearchValue]=useState(null);
-  const [filteredEvents,SetFilteredEvents]=useState(Events);
+  // const [filteredEvents,SetFilteredEvents]=useState(Events);
   // const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
   const filteredDateEvents= Events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -53,7 +62,6 @@ const HomePage = () => {
 
 
   const search=(e)=>{//function for searching for event name
-    console.log(e.target.value);
     setSearchValue(e.target.value);
   }
 
@@ -64,7 +72,7 @@ const HomePage = () => {
   const filter=(type)=>{
     setActiveTag(type);
 
-    SetFilteredEvents(Events.filter(e=>e.type.match(type)));
+    SetFilteredEvents(allEvents.filter(e=>e.type.match(type)));
 
     
   }
@@ -98,9 +106,9 @@ const HomePage = () => {
           {searchValue && (
             <>
               <h3>Results for {`"${searchValue}"`}</h3>
-              {Events.filter((e) => e.name.includes(searchValue)).length > 0 ? ( //if the array is empty display no results svg
+              {allEvents.filter((e) => e.name.includes(searchValue)).length > 0 ? ( //if the array is empty display no results svg
                 <EventSlider
-                  events={Events.filter((e) => e.name.includes(searchValue))}
+                  events={allEvents.filter((e) => e.name.includes(searchValue))}
                 />
               ) : (
                 <>
@@ -159,6 +167,13 @@ const HomePage = () => {
                 }
                 isActive={activeTag === "Religious"}
               ></Tags>
+                <Tags
+                name={"Online"}
+                filter={
+                  activeTag === "Online" ? null : () => filter("Online")
+                }
+                isActive={activeTag === "Online"}
+              ></Tags>
               <Tags
                 name={"Other"}
                 filter={activeTag === "Other" ? null : () => filter("Other")}
@@ -187,16 +202,22 @@ const HomePage = () => {
           </div>
 
           <EventSlider
-            events={filteredDateEvents}
+            events={filteredEvents}
           ></EventSlider>
               <div
             style={{
               width: "90%",
             }}
           >
-            <h3>Calander</h3>
+            <h3>Calendar</h3>
           </div>
-          <MyCalendar filter={filteredEvents}></MyCalendar>
+            {filteredEvents?
+            <>
+                      <MyCalendar filter={filteredEvents}></MyCalendar>
+                      </>:
+                      <p>Loading...</p>
+
+            }
         </Body>
       </Page>
     </>
