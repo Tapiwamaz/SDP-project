@@ -22,7 +22,7 @@
     flex-direction: column;
     border: 1px solid black; 
     width: 310px; 
-    height: 380px; 
+    height: 400px; 
     overflow: hidden; 
   }
   
@@ -91,6 +91,64 @@
     margin-left: 20px; 
   }
   
+
+  .event-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
   
 
+   .event-actions button {
+    /* background-color: #003366;
+    color: white; */
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  /*
+  .event-actions button:hover {
+    background-color: #002244;
+  }
   
+  .event-actions button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+   */
+
+   .button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .button-container button {
+    flex: 1; /* Make buttons equal in width */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .cancel-button {
+    background-color: rgb(229, 30, 30);
+    color: white;
+  }
+  
+  .cancel-button:hover {
+    background-color: darkred;
+  }
+  
+  .reschedule-button {
+    background-color: #003366;
+    color: white;
+  }
+  
+  .reschedule-button:hover {
+    background-color: #002244;
+  }

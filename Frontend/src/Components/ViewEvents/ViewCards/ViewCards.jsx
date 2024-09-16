@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+//with backend functionality 
+import React from 'react';
 import './ViewCards.css';
-import Popup from '../../Popup/Popup'; // Assuming you have a Popup component
-//import MyPopup from "./MyPopup"
 import placeholderImage from './depositphotos_466819550-stock-illustration-image-available-icon-missing-image.jpg'; // Placeholder image
 
-const ViewCards = ({ event, onApprove, onReject, onCancel }) => {
-  const [buttonPopup, setButtonPopup] = useState(false);
-
+const ViewCards = ({ event, onCancel }) => {
   const formatDate = (date) => {
     const eventDate = new Date(date);
     return eventDate.toLocaleDateString('en-US', {
@@ -25,51 +22,37 @@ const ViewCards = ({ event, onApprove, onReject, onCancel }) => {
     });
   };
 
+  const handleEdit = () => {
+    alert("Feature is coming soon :)");
+    console.log("Edit event placeholder");
+  };
+
   return (
     <div className="myparent-container">
       <div className="myevent-card">
-        {/* Event Image */}
         <img
           src={event.image_url || placeholderImage}
           alt={event.name}
-          onError={(e) => (e.target.src = placeholderImage)} // Fallback to placeholder if the image fails
+          onError={(e) => (e.target.src = placeholderImage)} 
           className="myevent-image"
         />
 
-        {/* Event Information */}
         <h2>{event.name}</h2>
         <div className="myevent-details">
-          <div className="myevent-row">
-            <p>Day - {formatDate(event.date)}</p>
-            {/* <span className="event-payment-status">
-              {event.isFree ? 'Free' : `Paid - R${event.price}`}
-            </span> */}
-          </div>
-          <div className="myevent-info">
-            <p>{formatTime(event.start_time)} - {formatTime(event.end_time)}</p>
-            <p>{event.location}</p>
-            <p>Capacity: {event.capacity}</p>
-            <p>Tickets Sold: {event.ticketsSold}</p>
-          </div>
+          <p>Day - {formatDate(event.date)}</p>
+          <p>{event.start_time} - {event.end_time}</p>
+          <p>{event.location}</p>
+          <p>Capacity: {event.capacity}</p>
+          <p>Ticket Count: {event.ticket_count}</p>
+          <p>Status: {event.status}</p>
         </div>
 
-        {/* Popup for Event Actions */}
-        <button className="description" onClick={() => setButtonPopup(true)}>
-          Options
-        </button>
-        <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
-          <div className="popup-content">
-            {onCancel && (
-              <button onClick={() => onCancel(event.id)}>Cancel Event</button>
-            )}
-          </div>
-        </Popup>
-
-        {/* Status and Approval/Reject Buttons */}
-        {/* {event.status !== 'pending' && (
-          <p>Status: {event.status === 'approved' ? 'Approved' : 'Rejected'}</p>
-        )} */}
-
+        <div className="event-actions">
+          <button className='reschedule-button' onClick={handleEdit}>Reschedule</button>
+          {onCancel && (
+            <button className='cancel-button' onClick={() => onCancel(event.id)}>Cancel Event</button>
+          )}
+        </div>
       </div>
     </div>
   );

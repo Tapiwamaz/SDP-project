@@ -1,28 +1,53 @@
+//with backend functionality 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios'; // for API calls
-import './MyEvents.css'; // Add appropriate CSS styles
-import ViewCards from '../ViewCards/ViewCards'; // Assuming ViewCards is a separate component
-import { Events } from '../../Mocky/Mocky';
+import { getFirestore, collection, query, where, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import './MyEvents.css';
+import ViewCards from '../ViewCards/ViewCards';
 import Header from '../../Header/Header';
 import AsideDesktop from '../../AsideDesktop/AsideDesktop';
+import { db } from '../../../firebase_config';
 
-const MyEvents = () => {
-  // const [activeTab, setActiveTab] = useState('upcoming');
+const MyEvents = ({ userId }) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    // Simulate fetching event data or fetch from API
-    // Replace this with an actual API request to get events for the organizer
-    setEvents(Events); // mockData is imported
-  }, []);
+    const fetchEvents = async () => {
+      try {
+        const eventsCollection = collection(db, 'Events');
+        const q = query(eventsCollection, where('user_id', '==', userId));
+        const querySnapshot = await getDocs(q);
 
+        const fetchedEvents = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
 
+        setEvents(fetchedEvents);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+
+    fetchEvents();
+  }, [userId]);
+
+  // const handleCancel = async (event_id) => {
+  //   try {
+  //     await deleteDoc(doc(db, 'Events', event_id));
+  //     setEvents(events.filter(event => event.id !== event_id));
+  //   } catch (error) {
+  //     console.error('Error cancelling event:', error);
+  //   }
+  // };
   const handleCancel = async (event_id) => {
-    try {
-      await axios.delete(`/api/events/${event_id}`);
-      setEvents(events.filter(event => event.id !== event_id));
-    } catch (error) {
-      console.error('Error cancelling event:', error);
+    const userConfirmed = window.confirm("Are you sure you want to cancel this event?"); //small nyana alert before cancelling
+    if (userConfirmed) {
+      try {
+        await deleteDoc(doc(db, 'Events', event_id));
+        setEvents(events.filter(event => event.id !== event_id));
+      } catch (error) {
+        console.error('Error cancelling event:', error);
+      }
     }
   };
 
@@ -30,7 +55,7 @@ const MyEvents = () => {
     <ViewCards
       key={event.id}
       event={event}
-      onCancel={event.status === 'upcoming' ? handleCancel : null}
+      onCancel={handleCancel} //event.status === 'pending' ? handleCancel : null (used to display cancel button only when status is pending)
     />
   );
 
@@ -38,11 +63,10 @@ const MyEvents = () => {
     <div>
       <Header />
       <AsideDesktop />
-      <div > {/*className="my-events-page"*/}
+      <div className="my-events-page">
         <h1>My Events</h1>
-
         <div className="myevents-list">
-          {events.map(renderViewCards)}
+          {events.length > 0 ? events.map(renderViewCards) : <p>No events found</p>}
         </div>
       </div>
     </div>
