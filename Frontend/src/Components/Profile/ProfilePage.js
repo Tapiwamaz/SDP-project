@@ -81,7 +81,7 @@ const Profile = () => {
         // Upload the new profile image to storage
         const imageRef = ref(
           storage,
-          `profileImages/${userData.userID + v4()}`
+          `profileImages/${userData.user_id + v4()}`
         );
         await uploadBytes(imageRef, imageFile);
         updatedImageURL = await getDownloadURL(imageRef); // Get the new image URL after upload
@@ -103,7 +103,7 @@ const Profile = () => {
         description: description,
         imageURL: updatedImageURL,
         email: userData.email,
-        userID: auth?.currentUser?.uid,
+        user_id: auth?.currentUser?.uid,
         rating: 0,
       })
     );
