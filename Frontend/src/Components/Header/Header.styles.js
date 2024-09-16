@@ -20,6 +20,7 @@ export const HeaderContainer = styled.header`
 `;
 
 export const Logo = styled.img`
+
   font-size: 1.5rem;
   margin: 0;
   height: 80px;
@@ -107,12 +108,15 @@ export const Profile = styled.div`
   flex-direction: row;
   justify-content: space-between;
   gap: 1.5rem;
-  align-items: center;
+  align-items: center;  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+
   img {
     &:hover {
       transform: scale(1.2);
       border: 2px solid var(--primary);
-      border-radius: 50%;
+      /* border-radius: 50%; */
     }
   }
 `;

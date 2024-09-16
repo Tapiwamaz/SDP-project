@@ -34,22 +34,17 @@ const eventColors = {
   Other: "grey",
 };
 
-// const EventComponent = ({ event }) => (
-//   <div>
-//     <strong>{event.title}</strong>
-//     {event.location && ` - ${event.location}`}
-//     {event.description && (
-//       <div style={{ fontSize: "small", marginTop: "5px" }}>
-//         {event.description}
-//       </div>
-//     )}
-//   </div>
-// );
-
 const MyCalendar = ({ events }) => {
   const [activeTag, setActiveTag] = useState(null); // State to track the active tag
   const [filteredEvents, SetFilteredEvents] = useState(Events);
   const [view, setView] = useState(Views.MONTH);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
+    setView("day");
+    // You can add your custom logic here, e.g., navigate to a different view or open a modal.
+  };
   const eventStyleGetter = (event) => {
     const backgroundColor = eventColors[event.type] || "grey"; // Default color
     const style = {
@@ -64,14 +59,24 @@ const MyCalendar = ({ events }) => {
       style,
     };
   };
+
+  const EventComponent = ({ event }) => (
+    <div>
+      <strong>{event.title}</strong>
+      {event.location && ` - ${event.location}`}
+      {event.description && (
+        <div style={{ fontSize: "small", marginTop: "5px" }}>
+          {event.description}
+        </div>
+      )}
+    </div>
+  );
   const filter = (type) => {
     // console.log("filteritng")
     setActiveTag(type);
 
     SetFilteredEvents(Events.filter((e) => e.type.match(type)));
   };
-
- 
 
   return (
     <>
@@ -85,15 +90,17 @@ const MyCalendar = ({ events }) => {
               localizer={localizer}
               events={filteredEvents}
               titleAccessor="name"
-              views={["month", "day", "week"]} // Use `view` for the selected view, not `views`
-             // Sync the calendar view with the dropdown
+              // views={["month", "day", "week"]}
+              view={view} // Use `view` for the selected view, not `views`
+              onView={setView} // Sync the calendar view with the dropdown
               style={{ height: 700 }}
               components={{
                 event: ({ event }) => (
                   <EventStyle>{/* Custom event content */}</EventStyle>
                 ),
                 month: {
-                  dateCellWrapper: ({ children }) => (
+                  dateCellWrapper: ({ children, value }) => (
+                    // <DateCellWrapper onClick={() => handleDateClick(value)}>
                     <DateCellWrapper>{children}</DateCellWrapper>
                   ),
                 },

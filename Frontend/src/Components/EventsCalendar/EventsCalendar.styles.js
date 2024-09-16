@@ -32,13 +32,13 @@ export const CalendarContainer = styled.div`
       padding-left: 1vh;
       padding-top: 0.5vh;
       border-radius: 10px;
-      cursor: pointer;
+      /* cursor: pointer; */
       height: auto; /* Adjust height for responsiveness */
       transition: background-color 0.5s ease;
 
-      &:hover {
-        background-color: #159eb7; /* Light blue background on hover */
-      }
+      // &:hover {
+      // background-color: #159eb7; /* Light blue background on hover */
+      // }
     }
   }
 
@@ -72,7 +72,6 @@ export const CalendarContainer = styled.div`
   }
 `;
 
-
 // Calendar Event Style (Remove borders for events)
 export const EventStyle = styled.div`
   border: none; /* Remove event borders */
@@ -97,14 +96,14 @@ export const DateCellWrapper = styled.div`
   padding-left: 1vh;
   padding-top: 0.5vh;
   border-radius: 10px;
-  cursor: pointer;
+  //cursor: pointer;
   height: 100vh;
   width: 100vw;
   transition: background-color 0.5s ease;
-  &:hover {
-    background-color: rgba(82, 81, 81, 0.17);
-    /* Light blue background on hover */
-  }
+  // &:hover {
+  //background-color: rgba(82, 81, 81, 0.17);
+  /* Light blue background on hover */
+  //}
 
   /* Remove borders around date cells */
 `;
@@ -145,6 +144,11 @@ export const CalendarWrapper = styled.div`
     padding-left: 1vh;
   }
 
+  .rbc-toolbar {
+    display: flex;
+    flex-direction: row;
+  }
+
   .rbc-toolbar-label {
     font-size: 2rem;
     font-weight: 700;
@@ -183,6 +187,10 @@ export const CalendarWrapper = styled.div`
 
   .rbc-row-segment {
     padding-top: 0.2vh;
+  }
+  .rbc-row-button-link {
+    width: 100%;
+    height: 100%;
   }
 `;
 
