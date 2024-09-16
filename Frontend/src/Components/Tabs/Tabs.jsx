@@ -182,7 +182,8 @@ const Tabs = () => {
       {activeTab === 'pending' ? (
         <PendingEvents events={events.filter(event => event.status === 'pending')} onApprove={handleApprove} onReject={handleReject} />
       ) : (
-        <HistoryEvents events={events.filter(event => event.status !== 'pending')} />
+        // <HistoryEvents events={events.filter(event => event.status !== 'pending')} />
+        <HistoryEvents events={events.filter(event => event.status !== 'pending').reverse()} /> //so recently evaluated events are at ze top
       )}
     </div>
   );
