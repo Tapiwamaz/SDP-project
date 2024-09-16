@@ -66,7 +66,7 @@ const MyEvents = ({ userId }) => {
       <div className="my-events-page">
         <h1>My Events</h1>
         <div className="myevents-list">
-          {events.length > 0 ? events.map(renderViewCards) : <p>No events found</p>}
+          {events.length > 0 ? [...events].reverse().map(renderViewCards) : <p>No events found</p>}
         </div>
       </div>
     </div>
