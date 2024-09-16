@@ -23,7 +23,7 @@ app.http("GetUser", {
       const userID = request.params.userID;
       context.log(userID); // assuming the userId is passed as a query parameter
       const usersRef = collection(db, "Users");
-      const q = query(usersRef, where("userID", "==", userID));
+      const q = query(usersRef, where("user_id", "==", userID));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         const userDoc = querySnapshot.docs[0];
