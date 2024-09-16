@@ -52,11 +52,9 @@ const HomePage = () => {
   
  
   const [searchValue,setSearchValue]=useState(null);
-  // const [filteredEvents,SetFilteredEvents]=useState(Events);
-  // const [filteredDateEvents,SetFilteredDateEvents]=useState(Events.sort((a, b) => new Date(a.date) - new Date(b.date)));
   const filteredDateEvents= Events.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  const [activeTag, setActiveTag] = useState(null); // State to track the active tag
+  const [activeTag, setActiveTag] = useState('No-Filter'); // State to track the active tag
+  const[noEvents,setNoEvents]=useState(false);
 
 
 
@@ -70,9 +68,30 @@ const HomePage = () => {
   // },[filteredEvents])
 
   const filter=(type)=>{
-    setActiveTag(type);
+    if(type==="No-Filter"){
+      setActiveTag(type);
+      SetFilteredEvents(allEvents);
+      setNoEvents(false);
 
-    SetFilteredEvents(allEvents.filter(e=>e.type.match(type)).filter(e=>e.approved===true));
+
+    }
+    else{
+      setActiveTag(type);
+      if(allEvents.filter(e=>e.type.match(type)).filter(e=>e.approved===true).length>0){
+        SetFilteredEvents(allEvents.filter(e=>e.type.match(type)).filter(e=>e.approved===true));
+        setNoEvents(false);
+
+
+      }
+      else{
+        setNoEvents(true);
+        SetFilteredEvents(null);
+      }
+
+
+
+    }
+
 
     
   }
@@ -122,6 +141,13 @@ const HomePage = () => {
           <TagsStyle>
             <h3>Tags</h3>
             <div>
+            <Tags
+                name={"No-Filter"}
+                filter={
+                  activeTag === "No-Filter" ? null : () => filter("No-Filter")
+                }
+                isActive={activeTag === "No-Filter"}
+              ></Tags>
               <Tags
                 name={"Education"}
                 filter={
@@ -189,10 +215,20 @@ const HomePage = () => {
           >
             <h3>Trending Events</h3>
           </div>
+          {noEvents?
+           <>  <img src={noResultsImage} alt="No Results" />
 
-          <EventSlider
-            events={filteredEvents}
-          ></EventSlider>
+           <h3>{`No Results found, Try Another Tag :)`}</h3>
+           </>
+          :
+           <EventSlider
+           events={filteredEvents}
+         ></EventSlider>
+         
+          
+        }
+
+         
           <div
             style={{
               width: "90%",
@@ -200,10 +236,18 @@ const HomePage = () => {
           >
             <h3>Latest Events</h3>
           </div>
-
+          {noEvents?
+          null
+                    
+          :
           <EventSlider
-            events={filteredEvents}
+          events={filteredEvents}
           ></EventSlider>
+
+
+          }
+
+        
               <div
             style={{
               width: "90%",
@@ -215,7 +259,7 @@ const HomePage = () => {
             <>
                       <MyCalendar filter={filteredEvents}></MyCalendar>
                       </>:
-                      <p>Loading...</p>
+                      <p>No Events to display</p>
 
             }
         </Body>

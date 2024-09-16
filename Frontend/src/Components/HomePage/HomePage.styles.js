@@ -37,11 +37,13 @@ export const Body=styled.div`
     flex-direction: column;
     align-items: center;
     animation: fade-in 300ms forwards;
-
-
-
-    @media (min-width: 769px) {
     width: 85%;
+
+
+
+    @media (max-width: 769px) {
+      
+    width: 100%;
   }
     
 

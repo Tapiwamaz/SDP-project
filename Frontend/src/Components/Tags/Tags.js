@@ -17,7 +17,7 @@ const Button = styled.button`
   background-color: ${({ isActive }) => (!isActive ? 'var(--primary)' : 'white')}; // Grey out inactive buttons
   /* opacity: 10%; */
   color: ${({ isActive }) => (!isActive ? 'white' : 'var(--primary)')};
-  border: ${({ isActive }) => (!isActive ? 'transparent 2px solid' : 'black 2px solid')};
+  border: ${({ isActive }) => (!isActive ? 'var(--primary) 2px solid' : 'black 2px solid')};
   border-radius: 20px;
   margin: 2px;
   padding: 10px;
