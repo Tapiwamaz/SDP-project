@@ -35,17 +35,17 @@ const eventColors = {
   Other: "grey",
 };
 
-const MyCalendar = ({ events }) => {
-  const [activeTag, setActiveTag] = useState(null); // State to track the active tag
-  const [filteredEvents, SetFilteredEvents] = useState(Events);
-  const [view, setView] = useState(Views.MONTH);
-  const [selectedDate, setSelectedDate] = useState(null);
+// const MyCalendar = ({ events }) => {
+//   const [activeTag, setActiveTag] = useState(null); // State to track the active tag
+//   const [filteredEvents, SetFilteredEvents] = useState(Events);
+//   const [view, setView] = useState(Views.MONTH);
+//   const [selectedDate, setSelectedDate] = useState(null);
 
-  const handleDateClick = (date) => {
-    setSelectedDate(date);
-    setView("day");
-    // You can add your custom logic here, e.g., navigate to a different view or open a modal.
-  };
+//   const handleDateClick = (date) => {
+//     setSelectedDate(date);
+//     setView("day");
+//     // You can add your custom logic here, e.g., navigate to a different view or open a modal.
+//   };
   const eventStyleGetter = (event) => {
     const backgroundColor = eventColors[event.type] || "grey"; // Default color
     const style = {
