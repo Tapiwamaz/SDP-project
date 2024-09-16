@@ -57,7 +57,7 @@ export const TicketTitle = styled.div`
 
   @media (min-width: 868px) {
     font-size: 1.5rem;
-    margin-right: 80px; /* Add some spacing between title and details */
+    margin-right: 40px; /* Add some spacing between title and details */
   }
 
   @media (max-width: 450px) {

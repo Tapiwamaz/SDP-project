@@ -28,8 +28,8 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id })  =>
   
         {/* QR code and Download link, same placement for all screen sizes */}
         <RightContainer>
-          <QRCode src={qrcode} alt="QR Code" />
-          <strong>{id}</strong>
+          {qrcode}
+          <p style={{fontSize: '8px', fontWeight:'bold'}}>{id}</p>
           <DownloadLink href="#">
             <img src={download}/>Download PDF 
           </DownloadLink>

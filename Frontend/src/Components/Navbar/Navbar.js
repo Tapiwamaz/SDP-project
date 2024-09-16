@@ -4,7 +4,7 @@ import { NavbarContainer, NavItem } from './Navbar.styles.js';
 
 export const Navbar = () => {
     const [activeTab, setActiveTab] = useState('Upcoming');
-  
+    
     return (
       <NavbarContainer>
         <NavItem

@@ -1,5 +1,5 @@
 import { Ticket } from "../Ticket/Ticket";
-import { auth, db } from "../../config/firebase";
+import { auth, db } from "../../firebase_config";
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { collection, query, where, getDocs, getDoc, doc } from "firebase/firestore";
@@ -15,11 +15,11 @@ export const TicketContainer = () => {
                 if (!user) {
                     // Handle case where user is not authenticated
                     console.error("No user is logged in");
-                    return;
+                    //return;
                 }
 
                 const collectionRef = collection(db, "Tickets");
-                const q = query(collectionRef, where("userID", "==", user.uid)); // Use user.uid for dynamic user ID
+                const q = query(collectionRef, where("user_id", "==", user.uid)); 
 
                 const querySnapshot = await getDocs(q);
                 const events = [];
@@ -27,12 +27,12 @@ export const TicketContainer = () => {
 
                 querySnapshot.forEach((doc) => {
                     ids.push(doc.id);
-                    events.push(doc.data().eventID);
+                    events.push(doc.data().event_id);
                 });
 
                 const data = [];
                 for (let i = 0; i < events.length; i++) {
-                    const eventRef = doc(db, "Events", events[i]); // Use doc() to get a document reference
+                    const eventRef = doc(db, "Events", events[i]); 
                     const eventDoc = await getDoc(eventRef);
                     const eventsData = eventDoc.data();
                     data.push({
@@ -43,12 +43,12 @@ export const TicketContainer = () => {
                         time: eventsData.start_time,
                         venue: eventsData.location,
                         total: eventsData.price,
-                        qrcode: <QRCodeSVG value={ids[i]} size={100} level={"H"} />
+                        qrcode: <QRCodeSVG value={ids[i]} size={50} />
                     });
                 }
 
-                setTickets(data); // Update state with fetched data
-                setLoading(false); // Set loading to false once data is fetched
+                setTickets(data); 
+                setLoading(false); 
             } catch (error) {
                 console.error("Error fetching tickets:", error);
                 setLoading(false);
@@ -59,7 +59,7 @@ export const TicketContainer = () => {
     }, []); // Empty dependency array means this effect runs once on mount
 
     if (loading) {
-        return <p>Loading...</p>; // Show loading state
+        return <p>Loading...</p>;
     }
 
     return (
