@@ -1,11 +1,15 @@
+import React from "react";
+import { useState, useEffect } from "react";
+import { signOut } from "firebase/auth";
 
-import React, { useState, useEffect } from 'react';
+import logo from "../../Images/Logo.svg.svg";
 import { HeaderContainer, Xicon, Profile, ProfileIcon, Burger, Aside, AsideNavItem, Logo } from './Header.styles';
-import logo from '../../Images/Logo.svg.svg';
-import { auth } from '../../firebase_config';
-import { useNavigate } from 'react-router';
-import ProfilePage from '../Profile/ProfilePage';
-import { signOut } from 'firebase/auth';
+import { auth } from "../../firebase_config";
+import { useNavigate } from "react-router";
+import ProfilePage from "../Profile/ProfilePage";;
+
+
+
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -120,6 +124,14 @@ const Header = () => {
           </Profile>
         )}
 
+          {/* </Profile>
+        ) : (
+          <Profile>
+            <ProfileIcon></ProfileIcon>
+            <p>Hello User</p>
+          </Profile>
+        )} */}
+
         <Aside open={isOpen}>
           <Xicon onClick={toggleMenu} data-testid="close-icon"></Xicon>
           {/* <AsideNavItem href="#home" onClick={toggleMenu}>
@@ -165,7 +177,13 @@ const Header = () => {
       )}
         </Aside>
       </HeaderContainer>
-      {profileCllicked ? <ProfilePage /> : null}
+      {profileCllicked? <ProfilePage/>:null}
+      {/* Profile Dropdown */}
+      {/* {screen === "desktop" && (
+        <ProfileDropdown isOpen={profileCllicked}>
+          <ProfilePage />
+        </ProfileDropdown>
+      )} */}
     </>
   );
 };

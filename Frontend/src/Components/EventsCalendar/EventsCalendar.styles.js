@@ -4,6 +4,7 @@ import styled from "styled-components";
 export const CalendarContainer = styled.div`
   height: 100vh;
   border: none;
+
   .rbc-header {
     background-color: transparent;
     text-align: left;
@@ -31,17 +32,44 @@ export const CalendarContainer = styled.div`
       padding-left: 1vh;
       padding-top: 0.5vh;
       border-radius: 10px;
-      cursor: pointer;
-      height: 100vh;
+      /* cursor: pointer; */
+      height: auto; /* Adjust height for responsiveness */
       transition: background-color 0.5s ease;
 
-      &:hover {
-        background-color: #159eb7; /* Light blue background on hover */
-      }
+      // &:hover {
+      // background-color: #159eb7; /* Light blue background on hover */
+      // }
     }
   }
 
-  /* Remove border around the entire calendar */
+  /* Media Queries */
+  @media (max-width: 1200px) {
+    height: auto;
+    padding: 1rem;
+
+    .rbc-toolbar-label {
+      font-size: 1.8rem;
+    }
+
+    .rbc-date-cell {
+      padding-left: 0.5vh;
+      padding-top: 0.2vh;
+    }
+  }
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 0.5rem;
+
+    .rbc-toolbar-label {
+      font-size: 1.5rem;
+    }
+
+    .rbc-date-cell {
+      padding-left: 0.2vh;
+      padding-top: 0.1vh;
+    }
+  }
 `;
 
 // Calendar Event Style (Remove borders for events)
@@ -68,14 +96,14 @@ export const DateCellWrapper = styled.div`
   padding-left: 1vh;
   padding-top: 0.5vh;
   border-radius: 10px;
-  cursor: pointer;
+  //cursor: pointer;
   height: 100vh;
   width: 100vw;
   transition: background-color 0.5s ease;
-  &:hover {
-    background-color: rgba(82, 81, 81, 0.17);
-    /* Light blue background on hover */
-  }
+  // &:hover {
+  //background-color: rgba(82, 81, 81, 0.17);
+  /* Light blue background on hover */
+  //}
 
   /* Remove borders around date cells */
 `;
@@ -116,6 +144,11 @@ export const CalendarWrapper = styled.div`
     padding-left: 1vh;
   }
 
+  .rbc-toolbar {
+    display: flex;
+    flex-direction: row;
+  }
+
   .rbc-toolbar-label {
     font-size: 2rem;
     font-weight: 700;
@@ -154,6 +187,10 @@ export const CalendarWrapper = styled.div`
 
   .rbc-row-segment {
     padding-top: 0.2vh;
+  }
+  .rbc-row-button-link {
+    width: 100%;
+    height: 100%;
   }
 `;
 

@@ -74,7 +74,7 @@ export const CreateProfile = () => {
           description: description,
           imageURL: profileImage,
           email: userEmail,
-          userID: userID,
+          user_id: userID,
           rating:0
         });
         setError(null)

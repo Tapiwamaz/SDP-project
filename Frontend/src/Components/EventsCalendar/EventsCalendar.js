@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Events } from "../MockData/EventsMock";
@@ -20,7 +20,9 @@ import {
 import Tags from "../Tags/Tags";
 import Header from "../Header/Header";
 import AsideDesktop from "../AsideDesktop/AsideDesktop";
+
 const localizer = momentLocalizer(moment);
+
 const eventColors = {
   Sports: "#EB8497",
   Entertainment: "#6688c3",
@@ -33,31 +35,31 @@ const eventColors = {
   Other: "grey",
 };
 
-// const EventComponent = ({ event }) => (
-//   <div>
-//     <strong>{event.title}</strong>
-//     {event.location && ` - ${event.location}`}
-//     {event.description && (
-//       <div style={{ fontSize: "small", marginTop: "5px" }}>
-//         {event.description}
-//       </div>
-//     )}
-//   </div>
-// );
-const eventStyleGetter = (event) => {
-  const backgroundColor = eventColors[event.type] || "grey"; // Default color
-  const style = {
-    backgroundColor,
-    borderRadius: "5px",
-    opacity: 0.8,
-    color: "black",
-    border: "0px",
-    display: "block",
+// const MyCalendar = ({ events }) => {
+//   const [activeTag, setActiveTag] = useState(null); // State to track the active tag
+//   const [filteredEvents, SetFilteredEvents] = useState(Events);
+//   const [view, setView] = useState(Views.MONTH);
+//   const [selectedDate, setSelectedDate] = useState(null);
+
+//   const handleDateClick = (date) => {
+//     setSelectedDate(date);
+//     setView("day");
+//     // You can add your custom logic here, e.g., navigate to a different view or open a modal.
+//   };
+  const eventStyleGetter = (event) => {
+    const backgroundColor = eventColors[event.type] || "grey"; // Default color
+    const style = {
+      backgroundColor,
+      borderRadius: "5px",
+      opacity: 0.8,
+      color: "black",
+      border: "0px",
+      display: "block",
+    };
+    return {
+      style,
+    };
   };
-  return {
-    style,
-  };
-};
 
 const MyCalendar = ({filter}) => {
   filter=filter?filter:[];
