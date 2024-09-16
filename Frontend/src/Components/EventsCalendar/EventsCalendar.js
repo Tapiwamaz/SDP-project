@@ -29,6 +29,7 @@ const eventColors = {
   Religious: "#6A4739",
   Gaming: "#48a56a",
   IT: "#b25da6",
+  Online:"lime",
   Other: "grey",
 };
 
@@ -59,6 +60,7 @@ const eventStyleGetter = (event) => {
 };
 
 const MyCalendar = ({filter}) => {
+  filter=filter?filter:[];
 
 
   return (
@@ -104,8 +106,9 @@ const MyCalendar = ({filter}) => {
                   },
                 }}
                 style={{ height: 600 }}
-                startAccessor={(event) => new Date(event["start_time"])} // Custom start accessor
-                endAccessor={(event) => new Date(event["end_time"])} // Custom end accessor
+                startAccessor={(event) => new Date(`${event.date}T${event.start_time}:00`)}
+                endAccessor={(event) => new Date(`${event.date}T${event.end_time}:00`)}
+                
                 eventPropGetter={eventStyleGetter} // Apply styles dynamically
               />
             </div>

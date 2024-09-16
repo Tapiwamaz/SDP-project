@@ -37,7 +37,7 @@ export const Card = styled.button`
     border-radius:inherit;
   }
   p{
-    margin: 0;
+    margin: 3px;
     font-size: small;
   }
   h3{
