@@ -1,6 +1,6 @@
 import React, {  useEffect, useState } from 'react'
 import Header from '../Header/Header'
-import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle } from './HomePage.styles'
+import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle ,EventRight} from './HomePage.styles'
 
 import EventSlider from '../EventsSlider/EventSlider'
 import AsideDesktop from '../AsideDesktop/AsideDesktop'
@@ -12,6 +12,7 @@ import noResultsImage from '../../Images/noResults.svg';
 import MyCalendar from '../EventsCalendar/EventsCalendar'
 
 import EventDisplay from '../EventDisplay/EventDisplay'
+import { Xicon } from '../Header/Header.styles'
 
 
 
@@ -278,7 +279,17 @@ const HomePage = () => {
         {console.log(`${EventsDisplay} from home page`)
         }
       </Page>
-      {EventsDisplay && <EventDisplay events={EventsDisplay}></EventDisplay>}
+      {EventsDisplay && 
+      <>
+      <EventRight>
+        <Xicon onClick={()=>setEventsDisplay(null)} style={{color:"black"}}></Xicon>
+      <EventDisplay events={EventsDisplay}></EventDisplay>
+      </EventRight>
+            
+            </>
+          }
+
+      
 
     </>
   );
