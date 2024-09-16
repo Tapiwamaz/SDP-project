@@ -11,7 +11,7 @@ const PayPalButton = ({ event, count, user_ID }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        eventID: event.eventID,
+        eventID: event.event_id,
         userID: user_ID,
         ticketQuantity: count,
       }),
@@ -21,7 +21,6 @@ const PayPalButton = ({ event, count, user_ID }) => {
       })
       .then((data) => {
         console.log(data);
-        navigate("/", { state: { amount: count, event } });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -94,25 +93,28 @@ const PayPalButton = ({ event, count, user_ID }) => {
               })
                 .then((response) => response.json())
                 .then((order_details) => {
-                  console.log(order_details);
+                  // console.log(order_details);
                   submitTicket();
-
+                  return{
+                    status: 200,
+                    body: "Complete"
+                  }
                   // Request server to create payout to seller
-                  return fetch("/api/create_payout", {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      amount: event.price * count, // replace with the price of the item
-                      receiver: "sb-g4y8632685072_api1.business.example.com", // replace with the seller's email
-                    }),
-                  });
-                })
-                .then((response) => response.json())
-                .then((payout) => {
-                  console.log("Create Payout Response");
-                  console.log(payout);
+                  // return fetch("/api/create_payout", {
+                  //   method: "POST",
+                  //   headers: {
+                  //     "Content-Type": "application/json",
+                  //   },
+                  //   body: JSON.stringify({
+                  //     amount: event.price * count, // replace with the price of the item
+                  //     receiver: "sb-g4y8632685072_api1.business.example.com", // replace with the seller's email
+                  //   }),
+                  // })
+                  //   .then((response) => response.json())
+                  //   .then((payout) => {
+                  //     console.log("Create Payout Response");
+                  //     console.log(payout);
+                  //   });
                 })
                 .catch((error) => {
                   console.log(error);

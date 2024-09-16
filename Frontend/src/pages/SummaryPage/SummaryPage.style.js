@@ -21,22 +21,8 @@ export const CostSummary = styled.section`
   border: 2px solid #d9d9d9;
   border-radius: 5px;
   background: #18336c;
-    color: #fff;
-`;
-export const PayButton = styled.button`
   color: #fff;
-  text-align: center;
-  font-size: 1em;
-  font-weight: 600;
-  display: flex;
-  height: 3.25em;
-  padding: 0.625em 1.25em;
-  justify-content: center;
-  align-items: center;
-  gap: 0.625em;
-  border-radius: 0.625em;
-  background: #18336c;
-  border: none;
+  margin-bottom: 1em;
 `;
 export const CardSummary = styled.section`
   display: grid;
@@ -82,4 +68,21 @@ export const CardSummary = styled.section`
     padding: 0; /* Remove default padding */
     line-height: 1; /* Adjust as needed */
   }
+`;
+
+export const BookButton = styled.button`
+  color: #fff;
+  font-size: 1em;
+  font-weight: 600;
+  height: 3.25em;
+  gap: 0.625em;
+  border-radius: 0.625em;
+  background: "#18336c";
+  border: none;
+  margin-top: 1em;
+  padding: 1em;
+  transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+&:hover {
+  filter: brightness(80%);
+}
 `;

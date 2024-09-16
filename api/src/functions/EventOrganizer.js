@@ -36,6 +36,7 @@ app.http("GetUser", {
           },
         };
       } else {
+        console.log("User not found");
         return {
           status: 404,
           body: "User not found",
@@ -164,7 +165,7 @@ app.post("BookTicket", {
       // Update the event count
       try {
         const eventsRef = collection(db, "Events");
-        const q = query(eventsRef, where("event_ID", "==", eventID));
+        const q = query(eventsRef, where("event_id", "==", eventID));
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {

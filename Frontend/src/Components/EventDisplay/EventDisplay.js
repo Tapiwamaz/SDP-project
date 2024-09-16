@@ -1,7 +1,7 @@
 // Import necessary modules and components
 import React, { useEffect, useState } from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
-import {  useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   EventDate,
   Location,
@@ -61,8 +61,8 @@ const EventDisplay = () => {
       }
       let data = await response.json();
       console.log(data);
-      if(!data.Rates){
-      data.Rates = 0;
+      if (!data.Rates) {
+        data.Rates = 0;
       }
       console.log("Data received from Azure Function:", data);
       return data;
@@ -71,32 +71,20 @@ const EventDisplay = () => {
       return null;
     }
   };
-// useEffect(() => {
-//    if (event.TicketCount >= event.capacity) {
-//      SetFull(true);
-//    }
-//   const fetchData = async () => {
-//     SetFull(false);
-//     if (Object.keys(EventOrg).length === 0) {
-//       const eventOrgData = await fetchEventOrganizer(
-//         "fMgS0KN8UBXu9uW63wAfzfxPfXy1"
-//       );
-
-//       setEventOrg(eventOrgData);
-//       setLoading(false);
-//     }
-//   };
-
-//   fetchData();
-// }, [EventOrg]);
-
   useEffect(() => {
-    if(event.TicketCount >= event.capacity){
+    if (event.TicketCount >= event.capacity) {
       SetFull(true);
     }
-    setEventOrg({ name: "kabelo", email: "dfa", description: "dfsadfdfa", imageURL: "https://avatar.iran.liara.run/public/92.92988318897864" });
-    setLoading(false);
-  }, []);
+    const fetchData = async () => {
+      if (Object.keys(EventOrg).length === 0) {
+        const eventOrgData = await fetchEventOrganizer(event.user_id);
+        setEventOrg(eventOrgData);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [EventOrg]);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -108,12 +96,7 @@ const EventDisplay = () => {
   }
 
   // Function to format the time
-  function formatTime(dateString) {
-    const date = new Date(dateString);
-    const hours = date.getUTCHours().toString().padStart(2, "0");
-    const minutes = date.getUTCMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
-  }
+
 
   // Function to handle the rating
   const handleRating = (value) => {
@@ -132,33 +115,32 @@ const EventDisplay = () => {
       setCount(count - 1);
     }
   };
- const submitRating = () =>
-  fetch(`api/Rating`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      rating: `${rating}`,
-      userID: `${EventOrg.userID}`,
-      rates: `${EventOrg.Rates}`,
-      EventOrgRating: `${EventOrg.rating}`,
-    }),
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`Server responded with status ${res.status}`);
-      }
-      return res.json();
+  const submitRating = () =>
+    fetch(`api/Rating`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        rating: `${rating}`,
+        userID: `${EventOrg.userID}`,
+        rates: `${EventOrg.Rates}`,
+        EventOrgRating: `${EventOrg.rating}`,
+      }),
     })
-    .then((data) => {
-      console.log(data);
-      setRated(false);
-      
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setRated(false);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   // Render the component
   return (
     <EventPages>
@@ -166,7 +148,7 @@ const EventDisplay = () => {
         <EventImagePlaceholder className="EventImage" />
       ) : (
         <EventImage
-          src={event.imageURL}
+          src={event.image_url}
           className="EventImage"
           alt="Event Image"
         />
@@ -187,8 +169,7 @@ const EventDisplay = () => {
         <Time>
           <TimeIcon />
           <p>
-            Start: {formatTime(event.start_time)} - End:{" "}
-            {formatTime(event.end_time)}
+            Start: {event.start_time} - End: {event.end_time}
           </p>
         </Time>
       )}
@@ -371,7 +352,9 @@ const EventDisplay = () => {
                       style={{
                         fontSize: "0.8em",
                       }}
-                      onClick={submitRating}
+                      onClick={() =>
+                        submitRating()
+                      }
                     >
                       Submit
                     </BookButton>

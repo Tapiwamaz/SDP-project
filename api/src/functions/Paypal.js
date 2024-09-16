@@ -86,6 +86,7 @@ app.http("create_order", {
     }
   },
 });
+
 app.post("complete_order", async (req, res) => {
   try {
     let body = "";
@@ -131,16 +132,7 @@ app.post("complete_order", async (req, res) => {
 
 app.post("create_payout", async (req, res) => {
   try {
-    // let body = "";
-    // for await (const chunk of req.body) {
-    //   body += chunk;
-    // }
-    // const charCodes = body.split(",").map(Number);
-    // const jsonString = String.fromCharCode(...charCodes);
-    // const json = JSON.parse(jsonString); // Parse the JSON string into an object
-
     const token = await getAccessToken();
-
     let create_payout_json = {
       sender_batch_header: {
         sender_batch_id: generateUUID(),

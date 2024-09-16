@@ -1,18 +1,40 @@
-import React from "react";
-import {
-  CostSummary,
-  PayButton,
-  SummaryPages,
-  CardSummary,
-} from "./SummaryPage.style";
+
+import { CostSummary, SummaryPages, CardSummary } from "./SummaryPage.style";
 import { useLocation } from "react-router";
 import { Page } from "../../Components/HomePage/HomePage.styles";
 import eventImage from "../../Images/ds.jpeg";
 import AsideDesktop from "../../Components/AsideDesktop/AsideDesktop";
 import Header from "../../Components/Header/Header";
-import PayPalButton from "../../Components/PayPalButton/PaypalButton";
-
+import PayPalButton  from "../../Components/PayPalButton/PaypalButton";
+import { BookButton } from "./SummaryPage.style";
+import SuccessModal from "../../Components/SuccesfullPayment/SuccessModal";
+import React, { useState } from 'react';
 export default function SummaryPage() {
+  const [showmodal, setShowmodal] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+ const submitTicket = async (event, count, user_ID) => {
+
+  setIsLoading(true);
+   fetch("api/BookTicket", {
+     method: "POST",
+     headers: {
+       "Content-Type": "application/json",
+     },
+     body: JSON.stringify({
+       eventID: event.event_id,
+       userID: user_ID,
+       ticketQuantity: count,
+     }),
+   })
+     .then((res) => {
+       setShowmodal(true);
+       return res.json();
+     })
+     .catch((error) => {
+       console.error("Error:", error);
+     });
+ };
+
   const event = useLocation().state.event;
   const amount = useLocation().state.amount;
   function formatDate(dateString) {
@@ -28,10 +50,6 @@ export default function SummaryPage() {
 
     return `${day} ${month} ${year}, ${time}`; // change this line to change the order
   }
-
-  function Pay() {
-  }
-
   return (
     <>
       <Header />
@@ -107,14 +125,40 @@ export default function SummaryPage() {
               <strong>R{event.price * amount}</strong>
             </p>
           </CostSummary>
-          <PayPalButton
-            event={event}
-            count={amount}
-            user_ID={"fMgS0KN8UBXu9uW63wAfzfxPfXy1"}
-          >
-          </PayPalButton>
+
+          {event.price == 0 ? (
+            <BookButton
+              onClick={() =>
+                submitTicket(event, amount, "fMgS0KN8UBXu9uW63wAfzfxPfXy1")
+              }
+              full={false}
+            >
+              Book
+            </BookButton>
+          ) : (
+            <PayPalButton
+              event={event}
+              count={amount}
+              user_ID={"fMgS0KN8UBXu9uW63wAfzfxPfXy1"}
+            ></PayPalButton>
+          )}
         </SummaryPages>
       </Page>
+      {isLoading && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(128, 128, 128, 0.5)",
+            zIndex: 100,
+          }}
+        />
+      )}
+      {showmodal && <SuccessModal showModal={showmodal} setShowModal={setShowmodal} />}
+      <SuccessModal showModal={showmodal} setShowModal={setShowmodal} />
     </>
   );
 }
