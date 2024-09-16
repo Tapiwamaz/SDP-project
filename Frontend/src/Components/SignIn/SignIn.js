@@ -33,7 +33,7 @@ export const SignIn = () => {
             const user = auth.currentUser;
             if (user) {
                 const userCollectionRef = collection(db, "Users"); // Replace with your collection name
-                const q = query(userCollectionRef, where("userID", "==", user.uid));
+                const q = query(userCollectionRef, where("user_id", "==", user.uid));
                 const querySnapshot = await getDocs(q);
               
                 if (!querySnapshot.empty) {//user is already there
@@ -81,7 +81,7 @@ export const SignIn = () => {
             const user = auth.currentUser;
             if (user) {
                 const userCollectionRef = collection(db, "Users"); // Replace with your collection name
-                const q = query(userCollectionRef, where("userID", "==", user.uid));
+                const q = query(userCollectionRef, where("user_id", "==", user.uid));
                 const querySnapshot = await getDocs(q);
                            
               

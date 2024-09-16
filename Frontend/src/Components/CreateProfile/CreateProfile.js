@@ -65,7 +65,7 @@ export const CreateProfile = () => {
 
   const postUser = async () => {
     const userCollectionRef = collection(db, "Users"); // Replace with your collection name
-    const q = query(userCollectionRef, where("userID", "==", userID));
+    const q = query(userCollectionRef, where("user_id", "==", userID));
     const querySnapshot = await getDocs(q);
     if(name && description && profileImage && userEmail && userID && querySnapshot.empty){
       try {
