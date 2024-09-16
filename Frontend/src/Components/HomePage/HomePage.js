@@ -41,8 +41,8 @@ const HomePage = () => {
           // console.log('Data received from Azure Function:', data);
           // console.log(data);
 
-          setAllEvents(data);
-          SetFilteredEvents(data);
+          setAllEvents(data.filter(e=>e.approved===true));
+          SetFilteredEvents(data.filter(e=>e.approved===true));
           return data;
       } catch (error) {
           console.error('Error fetching data:', error);
@@ -79,7 +79,7 @@ const HomePage = () => {
   const filter=(type)=>{
     if(type==="No-Filter"){
       setActiveTag(type);
-      SetFilteredEvents(allEvents);
+      SetFilteredEvents(allEvents.filter(e=>e.approved===true));
       setNoEvents(false);
 
 

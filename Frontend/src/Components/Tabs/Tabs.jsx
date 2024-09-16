@@ -168,9 +168,9 @@ const Tabs = () => {
   const [activeTab, setActiveTab] = useState('pending');
 
   return (
-    <div>
-      <Header />
-      <AsideDesktop />
+    <div className='Wrapper'>
+      {/* <Header />
+      <AsideDesktop /> */}
       <div className="tabs">
         <button onClick={() => setActiveTab('pending')} className={activeTab === 'pending' ? 'active' : ''}>
           Pending

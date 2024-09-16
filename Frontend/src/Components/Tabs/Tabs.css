@@ -32,4 +32,12 @@
     background-color: #003366; 
     color: #fff; 
   }
+
+  .Wrapper{
+    width: 85%;
+    @media (max-width: 769px) {
+      width: 100%;
+    }
+
+  }
   

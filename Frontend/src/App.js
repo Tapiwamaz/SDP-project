@@ -15,6 +15,9 @@ import { Welcome } from './Components/Welcome/Welcome.js';
 
 import { CreateProfile } from "./Components/CreateProfile/CreateProfile.js";
 
+import Tabs from "./Components/Tabs/Tabs.jsx";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.js";
+
 function App() {
 
   return (
@@ -36,6 +39,8 @@ function App() {
         
         <Route path="/calendar" element={<MyCalendar />} />
         <Route path="/createEvent" element={<CreateEvent />} />
+
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
 
 
 

@@ -5,6 +5,7 @@ export const Aside = styled.div`
   top: 0;
   right: 0;
   width: 15%;
+  min-height: 900px;
   background-color: var(--primaryGrey);
   padding: 2rem;
   display: flex;
