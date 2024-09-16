@@ -6,29 +6,32 @@ import { useState , useEffect } from 'react';
 import placeholderImage from "./depositphotos_466819550-stock-illustration-image-available-icon-missing-image.jpg"
 
 
-// const fetchUsername = async (user_id, setUsername) => {
-//   try {
-//     const response = await fetch(`/api/getUserById/${user_id}`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
+const fetchUsername = async (user_id, setUsername) => {
+  console.log(`Fetching username for user_id: ${user_id}`);
+  try {
+    const response = await fetch(`/api/getUserById/?user_id=${user_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-//     console.log(response);
-//     if (!response.ok) {
-//       throw new Error(`Error fetching username: ${response.statusText}`);
-//     }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-//     const data = await response.json();
-//     setUsername(data.name);
-//   } catch (error) {
-//     console.error('Error fetching username:', error);
-//   }
-// };
+    const data = await response.json();
+   // return data.name;
+    setUsername(data.name);
+  } catch (error) {
+    console.error('Error fetching username:', error);
+    return null;
+  }
+};
 
 const EventCard = ({ event, onApprove, onReject }) => {
   const [buttonPopup, setButtonPopup] = useState(false);
+  
 
   const formatDate = (date) => {
     const eventDate = new Date(date);
@@ -51,14 +54,14 @@ const EventCard = ({ event, onApprove, onReject }) => {
   //const placeholderImage = "https://st2.depositphotos.com/2102215/46681/v/450/depositphotos_466819550-stock-illustration-image-available-icon-missing-image.jpg";
 
 
-  // const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('');
  
-  // useEffect(() => {
-  //   console.log(event);
-  //   if (event.user_id) {
-  //     fetchUsername(event.user_id, setUsername);
-  //   }
-  // }, [event.user_id]);
+  useEffect(() => {
+    console.log(event);
+    if (event.user_id) {
+      fetchUsername(event.user_id, setUsername);
+    }
+  }, [event.user_id]);
 
   return (
     <div className='parent-container'>
@@ -76,13 +79,13 @@ const EventCard = ({ event, onApprove, onReject }) => {
         <div className="event-details">
           <div className="event-row">
             <p>Day - {event.date}</p>
-            <span className="event-payment-status">{event.isFree ? 'Free' : `Paid - R${event.price}`}</span>
+            <span className="event-payment-status">{event.price == 0 ? 'Free' : `Paid - R${event.price}`}</span> 
           </div>
           <div className="event-info">
             <p>{event.start_time} - {event.end_time}</p>
             <p>{event.location}</p>
             <div className="spacer"></div>
-            <p>Organizer: {event.organizer}</p>
+            <p>Organizer: {username}</p>
           </div>
         </div>
         <button className='description' onClick={() => setButtonPopup(true)}>Description</button>
