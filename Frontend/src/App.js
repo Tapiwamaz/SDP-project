@@ -27,9 +27,6 @@ function App() {
         <Route path="/logIn"  element={<Login />} />
         <Route path="/createProfile"  element={<CreateProfile />} />
         <Route path="/profile"  element={<ProfilePage />} />
-
-
-
         <Route path="/event" element={<EventPage />} />
         <Route path="/book" element={<BookTicket />} />
         <Route path="/summary" element={<SummaryPage />} />

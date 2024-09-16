@@ -1,5 +1,5 @@
-import React from 'react'
-import { useEffect,useState } from 'react';
+import React from "react";
+import { useEffect, useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import  Tags from '../Tags/Tags'
 import EventPage from '../../pages/EventPage/EventPage';
