@@ -60,23 +60,23 @@ const MyCalendar = ({ events }) => {
     };
   };
 
-  const EventComponent = ({ event }) => (
-    <div>
-      <strong>{event.title}</strong>
-      {event.location && ` - ${event.location}`}
-      {event.description && (
-        <div style={{ fontSize: "small", marginTop: "5px" }}>
-          {event.description}
-        </div>
-      )}
-    </div>
-  );
-  const filter = (type) => {
-    // console.log("filteritng")
-    setActiveTag(type);
+  // const EventComponent = ({ event }) => (
+  //   <div>
+  //     <strong>{event.title}</strong>
+  //     {event.location && ` - ${event.location}`}
+  //     {event.description && (
+  //       <div style={{ fontSize: "small", marginTop: "5px" }}>
+  //         {event.description}
+  //       </div>
+  //     )}
+  //   </div>
+  // );
+  // const filter = (type) => {
+  //   // console.log("filteritng")
+  //   setActiveTag(type);
 
-    SetFilteredEvents(Events.filter((e) => e.type.match(type)));
-  };
+  //   SetFilteredEvents(Events.filter((e) => e.type.match(type)));
+  // };
 
   return (
     <>

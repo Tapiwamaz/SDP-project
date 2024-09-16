@@ -102,17 +102,17 @@ export const Profile = styled.div`
     display: none;
   } */
   /* border-radius: 100px; */
-  width: fit-content;
+ 
   color: black;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   gap: 1.5rem;
-  align-items: center;  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ddd;
+  align-items: center;  
 
   img {
+    border-radius: 50%;
+    width: fit-content;
     &:hover {
       transform: scale(1.2);
       border: 2px solid var(--primary);
