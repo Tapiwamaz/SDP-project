@@ -19,7 +19,6 @@ import Tabs from "./Components/Tabs/Tabs.jsx";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.js";
 
 function App() {
-
   return (
     <Router>
       <Routes>
