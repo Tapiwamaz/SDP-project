@@ -27,14 +27,41 @@ import {
 } from "./EventDisplay.style";
 
 // Main component for the Event Page
-const EventDisplay = () => {
+const EventDisplay = ({events}) => {
+  console.log(events);
+  
   // Use the useNavigate hook for navigation
   const navigate = useNavigate();
   // Get the event and booking status from the location state
-  const event = useLocation().state.event;
+  // const event = useLocation().state.event;
+  // let event=events;
+  // const mobile= useLocation().state.event;
+  // if(!event){
+  //   event=mobile;
+  // }
+
+    const location = useLocation();
+    let event = null;
+  
+    const handleEvent = () => {
+      if (events === undefined) {
+        console.log("JumboTron");
+        
+        event = location.state.event;
+      }
+      else{
+        event=events;
+      }
+      // Rest of your logic...
+    };
+    handleEvent();
+  
+    // Rest of your component...
+  
   // const book = useLocation().state.booked;
-  const book = event.booked;
-  console.log(book);
+  // const book = event.booked;
+  const book=true;
+  // console.log(book);
 
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
@@ -46,7 +73,7 @@ const EventDisplay = () => {
   const [rated, setRated] = useState(false);
 
   // Log the event for debugging
-  // console.log(event);
+  console.log(event);
   const fetchEventOrganizer = async (UserID) => {
     try {
       const response = await fetch(`api/GetUser?userID=${UserID}`, {

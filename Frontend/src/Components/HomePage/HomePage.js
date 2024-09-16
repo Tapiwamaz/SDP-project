@@ -11,6 +11,8 @@ import noResultsImage from '../../Images/noResults.svg';
 
 import MyCalendar from '../EventsCalendar/EventsCalendar'
 
+import EventDisplay from '../EventDisplay/EventDisplay'
+
 
 
 
@@ -55,6 +57,7 @@ const HomePage = () => {
   const filteredDateEvents= Events.sort((a, b) => new Date(a.date) - new Date(b.date));
   const [activeTag, setActiveTag] = useState('No-Filter'); // State to track the active tag
   const[noEvents,setNoEvents]=useState(false);
+  // const[clickedBooked,setClickedBooked]=useState(false);
 
 
 
@@ -66,6 +69,11 @@ const HomePage = () => {
   // useEffect(()=>{
 
   // },[filteredEvents])
+  const[EventsDisplay,setEventsDisplay]=useState(null);
+  const displayEvent=(event)=>{
+    setEventsDisplay(event);
+
+  }
 
   const filter=(type)=>{
     if(type==="No-Filter"){
@@ -223,6 +231,8 @@ const HomePage = () => {
           :
            <EventSlider
            events={filteredEvents}
+           onDisplayEvent={displayEvent}
+
          ></EventSlider>
          
           
@@ -242,6 +252,8 @@ const HomePage = () => {
           :
           <EventSlider
           events={filteredEvents}
+          onDisplayEvent={displayEvent}
+
           ></EventSlider>
 
 
@@ -263,7 +275,11 @@ const HomePage = () => {
 
             }
         </Body>
+        {console.log(`${EventsDisplay} from home page`)
+        }
       </Page>
+      {EventsDisplay && <EventDisplay events={EventsDisplay}></EventDisplay>}
+
     </>
   );
 }

@@ -18,6 +18,7 @@ app.http("GetUser", {
   authLevel: "anonymous",
   handler: async (request, context) => {
     context.log(`Http function processed request for url "${request.url}"`);
+    
 
     try {
       const userID = request.params.userID;

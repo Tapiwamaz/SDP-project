@@ -10,7 +10,7 @@ import {LoadingCard, Card ,CustomCarousel,Container,Aside} from './EventSlider.s
 import { auth } from '../../firebase_config';
 
 
-const EventSlider = ({events}) => {
+const EventSlider = ({events,onDisplayEvent}) => {
     const [slidePercentage, setSlidePercentage] = useState(60);
     const[screen,setScreen]=useState(null);
     const [isOpen, setIsOpen] = useState(true);
@@ -88,7 +88,18 @@ const goToEvent=(event)=>{
   
  
   if(auth?.currentUser?.email){
-    navigate('/event' , {state: {event,booked:true}}); 
+
+    if(screen==="desktop"){
+      onDisplayEvent(event);
+      
+
+
+    }
+    else{
+      navigate('/event' , {state: {event,booked:true}}); 
+
+
+    }
 
 
   }
