@@ -181,8 +181,8 @@ export const Details = styled.div`
   }
 
   @media (max-width: 480px) {
-    width: 90vw;
-    padding-left: 5vw;
+    width: 90%;
+    padding-left: 3px;
   }
 `;
 
@@ -190,7 +190,11 @@ export const Email = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 2vh;
-
+  width: 25vw;
+  /* border: 1px solid var(--primary);
+  border-radius: 8px; 
+  background-color: var(--primary);
+  opacity: 80%; */
   h4 {
     margin: 0;
     padding-top: 1vh;
@@ -319,4 +323,12 @@ export const Icon = styled.div`
     height: 48px;
     width: 48px;
   }
+`;
+
+export const Bottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: fit-content;
+  height: fit-content;
 `;
