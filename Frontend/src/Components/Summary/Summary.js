@@ -56,7 +56,7 @@ export default function Summary({ event}) {
       <SummaryPages>
         <CardSummary>
           <div>
-            <img src={eventImage} alt="description" />
+            <img src={event.image_url} alt="description" />
           </div>
           <div className="textContainer">
             <h3>{event.name}</h3>

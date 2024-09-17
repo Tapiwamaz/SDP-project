@@ -3,7 +3,7 @@ const { app } = require("@azure/functions");
 
 const port = process.env.PORT || 4280;
 const clientId = process.env.REACT_APP_CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
+const clientSecret = process.env.REACT_APP_CLIENT_SECRET;
 const paypalBaseUrl = "https://api-m.sandbox.paypal.com";
 
 function generateUUID() {

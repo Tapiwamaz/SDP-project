@@ -428,7 +428,6 @@ const CreateEvent = ({ inputEventDetails }) => {
       <div>
         <Header />
         <section className="wrapperCreateEvent">
-          {/* <ToastContainer /> */}
 
           {loader && (
             <div className="loader">
