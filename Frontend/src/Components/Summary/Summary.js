@@ -1,5 +1,4 @@
 import { CostSummary, SummaryPages, CardSummary } from "./Summary.style";
-import eventImage from "../../Images/ds.jpeg";
 import PayPalButton from "../../Components/PayPalButton/PaypalButton";
 import { BookButton } from "./Summary.style";
 import SuccessModal from "../../Components/SuccesfullPayment/SuccessModal";
