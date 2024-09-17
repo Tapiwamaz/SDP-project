@@ -5,11 +5,14 @@ import {
   cleanup,
   waitFor,
 } from "@testing-library/react";
+
 import {
   handleImageChange,
   loadLocations,
   handleChangeEventDetails,
   createEventDB,
+  fetchStorage,
+  delay,
 } from "./CreateEvent";
 
 import CreateEvent from "./CreateEvent";
@@ -18,6 +21,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { addDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
+
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(),
@@ -106,40 +110,85 @@ jest.mock("uuid", () => ({
   v4: jest.fn(),
 }));
 
-test("handleChangeEventDetails updates event details correctly", () => {
-  let initialState = {};
 
-  let detail = "Freshers";
-  let detailType = "name";
-
-  const mockSetEventDetails = jest.fn((updateFunction) => {
-    const updatedState = updateFunction(initialState);
-    return updatedState;
+describe('Unit test (Functions)', () => {
+  // Set up the mock for localStorage
+  beforeEach(() => {
+    localStorage.clear();
   });
 
-  handleChangeEventDetails(detail, detailType, mockSetEventDetails);
+  it('fetchStorage Should return the parsed object when a valid JSON string is in localStorage', () => {
+    // Arrange
+    const key = 'testKey';
+    const value = { name: 'Sample Event', date: '2024-09-15' };
+    localStorage.setItem(key, JSON.stringify(value));
+    const result = fetchStorage(key);
 
-  // Check if setEventDetails was called with the correct state update
-  expect(mockSetEventDetails).toHaveBeenCalled();
-  expect(mockSetEventDetails).toHaveBeenCalledWith(expect.any(Function));
-
-  // Extract the state update function argument and call it to check the result
-  let updateFunction = mockSetEventDetails.mock.calls[0][0];
-  let updatedState = updateFunction(initialState);
-
-  expect(updatedState).toEqual({
-    name: detail,
+    expect(result).toEqual(value);
   });
-});
 
-test("Load locations function", () => {
-  const mockSetALocations = jest.fn();
+  it('fetchStorage should return null when the key does not exist in localStorage', () => {
 
-  const sampleLocations = ["Location 1", "Location 2", "Location 3"];
+    const key = 'nonExistentKey';
+    const result = fetchStorage(key);
 
-  loadLocations(mockSetALocations, sampleLocations);
-  expect(mockSetALocations).toHaveBeenCalled();
-  expect(mockSetALocations).toHaveBeenCalledWith(sampleLocations);
+    expect(result).toBeNull();
+  });
+
+  it('fetchStorage should return null when the stored item is not valid JSON', () => {
+    const key = 'invalidJsonKey';
+    localStorage.setItem(key, 'Invalid JSON String');
+    const result = fetchStorage(key);
+
+    expect(result).toBeNull();
+  });
+
+  it('Delay function', async () => {
+
+    const ms = 100; 
+    const start = Date.now();
+    await delay(ms);
+
+    const end = Date.now();
+    expect(end - start).toBeGreaterThanOrEqual(ms);
+  });
+
+  test("handleChangeEventDetails updates event details correctly", () => {
+    let initialState = {};
+  
+    let detail = "Freshers";
+    let detailType = "name";
+  
+    const mockSetEventDetails = jest.fn((updateFunction) => {
+      const updatedState = updateFunction(initialState);
+      return updatedState;
+    });
+  
+    handleChangeEventDetails(detail, detailType, mockSetEventDetails);
+  
+    // Check if setEventDetails was called with the correct state update
+    expect(mockSetEventDetails).toHaveBeenCalled();
+    expect(mockSetEventDetails).toHaveBeenCalledWith(expect.any(Function));
+  
+    // Extract the state update function argument and call it to check the result
+    let updateFunction = mockSetEventDetails.mock.calls[0][0];
+    let updatedState = updateFunction(initialState);
+  
+    expect(updatedState).toEqual({
+      name: detail,
+    });
+  });
+  
+  test("Load locations function", () => {
+    const mockSetALocations = jest.fn();
+  
+    const sampleLocations = ["Location 1", "Location 2", "Location 3"];
+  
+    loadLocations(mockSetALocations, sampleLocations);
+    expect(mockSetALocations).toHaveBeenCalled();
+    expect(mockSetALocations).toHaveBeenCalledWith(sampleLocations);
+  });
+  
 });
 
 describe("handleImageChange", () => {
@@ -318,7 +367,7 @@ describe("createEventDB", () => {
     expect(newEvent.event_id).toBe("mock-uuid");
     expect(newEvent.active).toBe(true);
     expect(newEvent.approved).toBe(false);
-    expect(newEvent.user_id).toBe("3fa85f64-5717-4562-b3fc-2c963f66afa6");
+    expect(newEvent.user_id).toBe("lWvmYviBNYWm6gOJrkgIF2RVpaC3");
     expect(addDoc).toHaveBeenCalledWith(eventCollection, newEvent);
   });
 
@@ -362,12 +411,14 @@ describe("Create Event rendering", () => {
     render(<CreateEvent inputEventDetails={null} />);
     const eventNameInput = screen.getByTestId("name");
     const eventDateInput = screen.getByTestId("date");
+    const typeInput = screen.getByTestId("type");
     const start_timeInput = screen.getByTestId("start_time");
     const end_timeInput = screen.getByTestId("end_time");
     const venue_typeInput = screen.getByTestId("venue_type");
     const priceInput = screen.getByTestId("price");
     const locationInput = screen.getByTestId("location");
     const descriptionInput = screen.getByTestId("description");
+    const nextButton = screen.getByText("Submit");
 
     fireEvent.change(eventNameInput, { target: { value: "Sample Event" } });
     fireEvent.change(eventDateInput, { target: { value: "2024-09-30" } });
@@ -375,6 +426,7 @@ describe("Create Event rendering", () => {
     fireEvent.change(end_timeInput, { target: { value: "08:00" } });
     fireEvent.change(priceInput, { target: { value: 7 } });
     fireEvent.change(locationInput, { target: { value: "Park" } });
+    fireEvent.change(typeInput, { target: { value: "edu" } });
     fireEvent.change(venue_typeInput, { target: { value: "Field" } });
     fireEvent.change(descriptionInput, { target: { value: "I dislike jest" } });
 
@@ -384,42 +436,42 @@ describe("Create Event rendering", () => {
     expect(start_timeInput.value).toBe("08:00");
     expect(locationInput.value).toBe("Park");
     expect(venue_typeInput.value).toBe("Field");
+    expect(typeInput.value).toBe("edu");
     expect(priceInput.value).toBe("7");
+    expect(descriptionInput.value).toBe("I dislike jest");
+    fireEvent.click(nextButton)
+    
+
+
 
   });
 
-  // it("shows image preview when an image is selected", async () => {
-  //   render(<CreateEvent inputEventDetails={null} />);
+  it("shows image preview when an image with width > height is selected", async () => {
+    render(<CreateEvent inputEventDetails={null} />);
 
-  //   const file = new File(["dummy image content"], "testImage.jpg", {
-  //     type: "image/jpeg",
-  //     width: 5000,
-  //     height: 1000,
-  //   });
-  //   const inputFile = screen.getByTestId("pictureInput");
+    // Mock an image file with width > height (landscape)
+    const file = new File(["dummy image content"], "testImage.jpg", {
+      type: "image/jpeg",
+    });
+    Object.defineProperty(file, 'width', { value: 5000 });
+    Object.defineProperty(file, 'height', { value: 1000 });
 
-  //   fireEvent.change(inputFile, { target: { files: [file] } });
+    const inputFile = screen.getByTestId("pictureInput");
 
-  //   await waitFor(() => {
-  //     expect(screen.getByAltText("Preview")).toBeInTheDocument();
-  //   });
-  // });
+    // Mocking change event
+    fireEvent.change(inputFile, { target: { files: [file] } });
 
-  // it("updates the class of input fields if validation fails", async () => {
-  //   render(<CreateEvent inputEventDetails={null} />);
+    await waitFor(() => {
+      // Expect the image preview to appear
+      expect(screen.getByAltText("Preview")).toBeInTheDocument();
+    });
+  });
 
-  //   const submitButton = screen.getByText("Submit");
-  //   fireEvent.click(submitButton);
-
-  //   await waitFor(() => {
-  //     const eventNameInput = screen.getByLabelText("Event Name");
-  //     expect(eventNameInput.classList).toContain("unfilled-input");
-  //   });
-  // });
 
   it(" auto fill the input fields if input is given", () => {
-    render(<CreateEvent inputEventDetails={{ name: "JestHater" }} />);
+    render(<CreateEvent inputEventDetails={{ name: "JestHater", venue_type: "field", type: "edu", location: "digs" }} />);
     const nameInput = screen.getByTestId("name");
     expect(nameInput.value).toBe("JestHater");
+    expect()
   });
 });

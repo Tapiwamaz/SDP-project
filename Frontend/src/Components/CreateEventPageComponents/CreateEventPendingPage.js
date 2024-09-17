@@ -1,11 +1,9 @@
 import { NavLink } from "react-router-dom";
 import WomenSvg from "../../Images/WomenHighFive.svg";
-import Header from "../Header/Header";
 
 const CreateEventPendingPage = ({ update }) => {
   return (
     <section className="wrapperCreateEvent">
-      <Header />
       <section className="createEventsContainer pendingPage">
         {!update ? (
           <h3 className="textAlign">

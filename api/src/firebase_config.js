@@ -1,6 +1,7 @@
 const { initializeApp } = require("firebase/app");
 const {getFirestore}  = require("firebase/firestore")
 
+
 // Initialize Firebase using environment variables from github secrets
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIRESTORE_API_KEY,
@@ -18,3 +19,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 // export the db to functions
 module.exports = { db };
+

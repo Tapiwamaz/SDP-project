@@ -15,8 +15,12 @@ import { Welcome } from './Components/Welcome/Welcome.js';
 
 import { CreateProfile } from "./Components/CreateProfile/CreateProfile.js";
 
-function App() {
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.js";
+// import MyEvents from "./Components/ViewEvents/MyEvents/MyEvents.jsx";
+import ViewMyEvents from "./pages/ViewMyEvents/ViewMyEvents.js";
+import { auth } from "./firebase_config.js";
 
+function App() {
   return (
     <Router>
       <Routes>
@@ -28,6 +32,8 @@ function App() {
         <Route path="/logIn"  element={<Login />} />
         <Route path="/createProfile"  element={<CreateProfile />} />
         <Route path="/profile"  element={<ProfilePage />} />
+        <Route path="/myEvents"  element={<ViewMyEvents userId={auth?.currentUser?.uid} />} />
+
 
         <Route path="/book" element={<BookTicket />} />
 
@@ -37,6 +43,8 @@ function App() {
         
         <Route path="/calendar" element={<MyCalendar />} />
         <Route path="/createEvent" element={<CreateEvent />} />
+
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
 
 
 

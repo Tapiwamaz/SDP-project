@@ -49,8 +49,8 @@ const AsideDesktop = () => {
             Home
           </AsideNavItem>
           <AsideNavItem
-            isActive={activeNavItem === '#myEvents'}
-            onClick={() => handleNavClick('#myEvents')}
+            isActive={activeNavItem === '/myEvents'}
+            onClick={() => handleNavClick('/myEvents')}
           >
             My Events
           </AsideNavItem>
@@ -66,6 +66,13 @@ const AsideDesktop = () => {
           >
             Create Event
           </AsideNavItem>
+          {auth?.currentUser?.uid===process.env.REACT_APP_ADMIN_ID &&
+                    <AsideNavItem onClick={() => handleNavClick('/adminDashboard')}>Approvals</AsideNavItem>
+
+
+          
+        }
+
           <AsideNavItem onClick={logout}>Logout</AsideNavItem>
         </>
       ) : (

@@ -154,7 +154,7 @@ const Header = () => {
             Home
           </AsideNavItem>
           <AsideNavItem
-            onClick={() => handleNavClick('#myEvents')}
+            onClick={() => handleNavClick('/myEvents')}
           >
             My Events
           </AsideNavItem>
@@ -168,6 +168,12 @@ const Header = () => {
           >
             Create Event
           </AsideNavItem>
+          {auth?.currentUser?.uid===process.env.REACT_APP_ADMIN_ID &&
+                    <AsideNavItem onClick={() => handleNavClick('/adminDashboard')}>Approvals</AsideNavItem>
+
+
+          
+        }
           <AsideNavItem onClick={logout}>Logout</AsideNavItem>
         </>
       ) : (
