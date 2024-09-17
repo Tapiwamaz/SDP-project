@@ -92,8 +92,6 @@ const goToEvent=(event)=>{
     }
     else{
       navigate('/event' , {state: {event}}); 
-
-
     }
 
 

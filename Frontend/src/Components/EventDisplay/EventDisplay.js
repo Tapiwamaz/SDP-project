@@ -27,26 +27,34 @@ import {
 } from "./EventDisplay.style";
 
 // Main component for the Event Page
-const EventDisplay = ({ events }) => {
+const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
   const navigate = useNavigate();
   const location = useLocation();
   let event = null;
   const handleEvent = () => {
     if (events === undefined) {
-      console.log("JumboTron");
-
       event = location.state.event;
     } else {
       event = events;
     }
   };
+  const goToSummary = () => {
+    event["count"] = count;
+    if(screen == "phone"){
+    navigate("/summary", { state: { event } });
+    }
+    else{
+      onDisplaySummary(event);
+    }
+  };  
   handleEvent();
   const book = event.booking;
   console.log(event);
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [Full, SetFull] = useState(false);
+  const [screen, setScreen] = useState(null);
   const [count, setCount] = useState(1);
   const [hover, setHover] = useState(-1);
   const [rating, setRating] = useState(0);
@@ -78,6 +86,12 @@ const EventDisplay = ({ events }) => {
     }
   };
   useEffect(() => {
+    const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
+    if (screenWidth <= 768) {
+      setScreen("phone");
+    } else {
+      setScreen("desktop");
+    }
     if (event.count >= event.capacity) {
       console.log("Event is full");
       SetFull(true);
@@ -87,14 +101,14 @@ const EventDisplay = ({ events }) => {
       SetFull(false);
     }
     const fetchData = async () => {
-      if (Object.keys(EventOrg).length === 0) {
+      if (Object.keys(EventOrg).length === 0 || loading) {
         const eventOrgData = await fetchEventOrganizer(event.user_id);
         setEventOrg(eventOrgData);
         setLoading(false);
       }
     };
     fetchData();
-  }, [EventOrg,Full]);
+  }, [EventOrg,Full,loading]);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -162,7 +176,10 @@ const EventDisplay = ({ events }) => {
           alt="Event Image"
         />
       )}
-      {loading ? <TitlePlaceHolder /> : <h1>{event.name}</h1>}
+      {loading ? <TitlePlaceHolder /> : <h1 style={{
+        color:"black",
+        textAlign:"left",
+      }}>{event.name}</h1>}
       {loading ? (
         <PlaceHolderText />
       ) : (
@@ -353,7 +370,7 @@ const EventDisplay = ({ events }) => {
               <BookButton
                 onClick={() =>
                   !Full &&
-                  navigate("/summary", { state: { amount: count, event } })
+                  goToSummary()
                 }
                 full={Full}
                 disabled={Full}

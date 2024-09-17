@@ -103,14 +103,12 @@ export const EventRight=styled.div`
 position: fixed; /* Keeps the element fixed to the right */
   right: 0; /* Aligns it to the right edge */
   top: 0; /* Aligns it to the top */
-  width: 30%; /* You can adjust this width based on your preference */
+  /* width: 30%; You can adjust this width based on your preference */
   height: 100vh; /* Ensures it takes up the full height of the viewport */
   background-color: white; /* You can set the background color as needed */
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
   z-index: 1000; /* Ensures it appears above other elements */
   padding: 20px;
   overflow-y: auto; /* Allows scrolling if the content overflows */
-
-
 `
 

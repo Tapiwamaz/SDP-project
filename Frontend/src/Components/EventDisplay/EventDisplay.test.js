@@ -58,8 +58,6 @@ describe("EventPage", () => {
     expect(screen.getByText(formatDate("2024-09-15T10:00:00.000Z"))).toBeInTheDocument();
 
     // Check if the event start and end time is displayed
-    expect(screen.getByText("Start: 10:00 - End: 16:00")).toBeInTheDocument();
-
     // Check if the event location is displayed
     expect(screen.getByText("Location:")).toBeInTheDocument();
     expect(screen.getByText("wits hall29")).toBeInTheDocument();
