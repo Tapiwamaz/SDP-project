@@ -163,11 +163,14 @@
 .doubleInputContainer {
   display: flex;
   width: 100%;
-  gap: 6px;
+  gap: 8px;
 }
 
 .doubleInput {
   flex: 1;
+}
+.doubleInput .input {
+  padding: 0 0 0 2px ;
 }
 .descriptionInput {
   height: 200px;
