@@ -49,8 +49,8 @@ const AsideDesktop = () => {
             Home
           </AsideNavItem>
           <AsideNavItem
-            isActive={activeNavItem === '#myEvents'}
-            onClick={() => handleNavClick('#myEvents')}
+            isActive={activeNavItem === '/myEvents'}
+            onClick={() => handleNavClick('/myEvents')}
           >
             My Events
           </AsideNavItem>

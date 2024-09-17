@@ -49,6 +49,13 @@
     margin: 5px 0;
     color: #555;
   }
+
+  .wrapper{
+    width: 85%;
+    @media (max-width: 769px) {
+      width: 100%;
+    }
+  }
   
 
   

@@ -60,9 +60,7 @@ const MyEvents = ({ userId }) => {
   );
 
   return (
-    <div>
-      <Header />
-      <AsideDesktop />
+    <div className='wrapper'>
       <div className="my-events-page">
         <h1>My Events</h1>
         <div className="myevents-list">

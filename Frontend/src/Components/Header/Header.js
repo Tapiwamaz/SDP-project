@@ -154,7 +154,7 @@ const Header = () => {
             Home
           </AsideNavItem>
           <AsideNavItem
-            onClick={() => handleNavClick('#myEvents')}
+            onClick={() => handleNavClick('/myEvents')}
           >
             My Events
           </AsideNavItem>
