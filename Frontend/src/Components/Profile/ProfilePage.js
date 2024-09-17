@@ -42,6 +42,9 @@ import {
 import { db, auth, storage } from "../../firebase_config.js";
 import { v4 } from "uuid";
 
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router";
+
 const Profile = () => {
   const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : {};
@@ -53,6 +56,7 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(userData.description);
+  const navigate=useNavigate();
 
   // file input change to update profile image
   const editImage = (e) => {
@@ -117,7 +121,7 @@ const Profile = () => {
     // Query for the document with the specific userID
     const q = query(
       usersCollectionRef,
-      where("userID", "==", auth?.currentUser?.uid)
+      where("user_id", "==", auth?.currentUser?.uid)
     );
 
     try {
@@ -157,6 +161,15 @@ const Profile = () => {
   // };
 
   //
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem('userData');
+      navigate('/welcome');
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -282,8 +295,8 @@ const Profile = () => {
               style={{ height: "27px", width: " 22px", color: "black" }}
             />
           </ButtonWrapper>
-          <ButtonWrapper>
-            <LeftSection>
+          <ButtonWrapper onClick={logout}>
+            <LeftSection >
               <ArrowRightStartOnRectangleIcon
                 style={{ height: "27px", width: "22px", color: "black" }}
                 isLogout={true}

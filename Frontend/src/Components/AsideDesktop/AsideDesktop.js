@@ -9,15 +9,7 @@ const AsideDesktop = () => {
   const [log, setLog] = useState(false);
   const [activeNavItem, setActiveNavItem] = useState(''); // Track active nav item
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem('userData');
-      navigate('/welcome');
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  
 
   useEffect(() => {
     // Listener to check auth state change
@@ -73,7 +65,7 @@ const AsideDesktop = () => {
           
         }
 
-          <AsideNavItem onClick={logout}>Logout</AsideNavItem>
+          {/* <AsideNavItem onClick={logout}>Logout</AsideNavItem> */}
         </>
       ) : (
         <AsideNavItem onClick={() => handleNavClick('/welcome')}>

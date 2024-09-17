@@ -174,7 +174,7 @@ const Header = () => {
 
           
         }
-          <AsideNavItem onClick={logout}>Logout</AsideNavItem>
+          {/* <AsideNavItem onClick={logout}>Logout</AsideNavItem> */}
         </>
       ) : (
         <AsideNavItem onClick={() => handleNavClick('/welcome')}>
