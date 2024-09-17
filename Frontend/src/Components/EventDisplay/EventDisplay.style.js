@@ -86,13 +86,18 @@ export const EventPages = styled.div`
   height: 3.25em;
   gap: 0.625em;
   border-radius: 0.625em;
-  background: ${props => props.full ? 'gray' : '#18336c'};
+  background: ${props => {
+    console.log(
+      props
+    );
+    
+    return props.full ? 'gray' : '#18336c'}};
   border: none;
   margin-top: 1em;
   padding: 1em;
+  margin-bottom: 1em;
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
-  /* cursor: ${props => props.full ? 'not-allowed' : 'pointer'}; */
-
+  
   &:hover {
     filter: ${props => props.full ? 'brightness(80%)' : 'brightness(200%)'};
   }

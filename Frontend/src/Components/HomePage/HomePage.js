@@ -1,116 +1,118 @@
-import React, {  useEffect, useState } from 'react'
-import Header from '../Header/Header'
-import {Page, Body,SearchContainer,SearchInput,StyledSearchIcon,TagsStyle ,EventRight} from './HomePage.styles'
+import React, { useEffect, useState } from "react";
+import Header from "../Header/Header";
+import {
+  Page,
+  Body,
+  SearchContainer,
+  SearchInput,
+  StyledSearchIcon,
+  TagsStyle,
+  EventRight,
+} from "./HomePage.styles";
 
-import EventSlider from '../EventsSlider/EventSlider'
-import AsideDesktop from '../AsideDesktop/AsideDesktop'
-import Tags from '../Tags/Tags'
-import { Events } from '../MockData/EventsMock'
+import EventSlider from "../EventsSlider/EventSlider";
+import AsideDesktop from "../AsideDesktop/AsideDesktop";
+import Tags from "../Tags/Tags";
+import { Events } from "../MockData/EventsMock";
 
-import noResultsImage from '../../Images/noResults.svg';
+import noResultsImage from "../../Images/noResults.svg";
 
-import MyCalendar from '../EventsCalendar/EventsCalendar'
+import MyCalendar from "../EventsCalendar/EventsCalendar";
 
-import EventDisplay from '../EventDisplay/EventDisplay'
-import { Xicon } from '../Header/Header.styles'
-
-
-
-
+import EventDisplay from "../EventDisplay/EventDisplay";
+import { Xicon } from "../Header/Header.styles";
+import Summary from "../Summary/Summary";
 const HomePage = () => {
-  const[allEvents,setAllEvents]=useState(null);
+  const [loading, setLoading] = useState(true);
+  const [allEvents, setAllEvents] = useState(null);
 
-  const [filteredEvents,SetFilteredEvents]=useState(null);
+  const [filteredEvents, SetFilteredEvents] = useState(null);
 
   useEffect(() => {
-    const fetchEvents = async () =>{
+    const fetchEvents = async () => {
       try {
-          // Using relative URL
-          const response = await fetch('/api/Basic', {
-              method: 'GET',
-              headers: {
-                  'Content-Type': 'application/json'
-              }
-          });
-  
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-  
-          const data = await response.json();
-          // console.log('Data received from Azure Function:', data);
-          // console.log(data);
+        // Using relative URL
+        const response = await fetch("/api/Basic", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-          setAllEvents(data.filter(e=>e.approved===true));
-          SetFilteredEvents(data.filter(e=>e.approved===true));
-          return data;
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        // console.log('Data received from Azure Function:', data);
+        // console.log(data);
+
+        setAllEvents(data.filter((e) => e.approved === true));
+        SetFilteredEvents(data.filter((e) => e.approved === true));
+        return data;
       } catch (error) {
-          console.error('Error fetching data:', error);
-          return null;
+        console.error("Error fetching data:", error);
+        return null;
       }
-  }
-  fetchEvents();
+    };
+    fetchEvents();
+  }, []);
 
-  },[])
-  
- 
-  const [searchValue,setSearchValue]=useState(null);
-  const filteredDateEvents= Events.sort((a, b) => new Date(a.date) - new Date(b.date));
-  const [activeTag, setActiveTag] = useState('No-Filter'); // State to track the active tag
-  const[noEvents,setNoEvents]=useState(false);
+  const [searchValue, setSearchValue] = useState(null);
+  const filteredDateEvents = Events.sort(
+    (a, b) => new Date(a.date) - new Date(b.date)
+  );
+  const [activeTag, setActiveTag] = useState("No-Filter"); // State to track the active tag
+  const [noEvents, setNoEvents] = useState(false);
   // const[clickedBooked,setClickedBooked]=useState(false);
 
-
-
-
-  const search=(e)=>{//function for searching for event name
+  const search = (e) => {
+    //function for searching for event name
     setSearchValue(e.target.value);
-  }
+  };
 
   // useEffect(()=>{
 
   // },[filteredEvents])
-  const[EventsDisplay,setEventsDisplay]=useState(null);
-  const displayEvent=(event)=>{
+  const [EventsDisplay, setEventsDisplay] = useState(null);
+  const displayEvent = (event) => {
     setEventsDisplay(event);
-
+    setLoading(true);
+    setSummary(null);
+  };
+  const [summary, setSummary] = useState(null);
+  const displaySummary = (event) => {
+    setSummary(event);
   }
 
-  const filter=(type)=>{
-    if(type==="No-Filter"){
+  const filter = (type) => {
+    if (type === "No-Filter") {
       setActiveTag(type);
-      SetFilteredEvents(allEvents.filter(e=>e.approved===true));
+      SetFilteredEvents(allEvents.filter((e) => e.approved === true));
       setNoEvents(false);
-
-
-    }
-    else{
+    } else {
       setActiveTag(type);
-      if(allEvents.filter(e=>e.type.match(type)).filter(e=>e.approved===true).length>0){
-        SetFilteredEvents(allEvents.filter(e=>e.type.match(type)).filter(e=>e.approved===true));
+      if (
+        allEvents
+          .filter((e) => e.type.match(type))
+          .filter((e) => e.approved === true).length > 0
+      ) {
+        SetFilteredEvents(
+          allEvents
+            .filter((e) => e.type.match(type))
+            .filter((e) => e.approved === true)
+        );
         setNoEvents(false);
-
-
-      }
-      else{
+      } else {
         setNoEvents(true);
         SetFilteredEvents(null);
       }
-
-
-
     }
-
-
-    
-  }
-
-
-
+  };
 
   return (
     <>
-      <Header ></Header>
+      <Header></Header>
       <Page>
         <AsideDesktop></AsideDesktop>
         {/*Global aside called */}
@@ -134,9 +136,11 @@ const HomePage = () => {
           {searchValue && (
             <>
               <h3>Results for {`"${searchValue}"`}</h3>
-              {allEvents.filter((e) => e.name.includes(searchValue)).length > 0 ? ( //if the array is empty display no results svg
+              {allEvents.filter((e) => e.name.includes(searchValue)).length >
+              0 ? ( //if the array is empty display no results svg
                 <EventSlider
                   events={allEvents.filter((e) => e.name.includes(searchValue))}
+                  onDisplayEvent={displayEvent}
                 />
               ) : (
                 <>
@@ -150,7 +154,7 @@ const HomePage = () => {
           <TagsStyle>
             <h3>Tags</h3>
             <div>
-            <Tags
+              <Tags
                 name={"No-Filter"}
                 filter={
                   activeTag === "No-Filter" ? null : () => filter("No-Filter")
@@ -202,11 +206,9 @@ const HomePage = () => {
                 }
                 isActive={activeTag === "Religious"}
               ></Tags>
-                <Tags
+              <Tags
                 name={"Online"}
-                filter={
-                  activeTag === "Online" ? null : () => filter("Online")
-                }
+                filter={activeTag === "Online" ? null : () => filter("Online")}
                 isActive={activeTag === "Online"}
               ></Tags>
               <Tags
@@ -224,22 +226,19 @@ const HomePage = () => {
           >
             <h3>Trending Events</h3>
           </div>
-          {noEvents?
-           <>  <img src={noResultsImage} alt="No Results" />
+          {noEvents ? (
+            <>
+              {" "}
+              <img src={noResultsImage} alt="No Results" />
+              <h3>{`No Results found, Try Another Tag :)`}</h3>
+            </>
+          ) : (
+            <EventSlider
+              events={filteredEvents}
+              onDisplayEvent={displayEvent}
+            ></EventSlider>
+          )}
 
-           <h3>{`No Results found, Try Another Tag :)`}</h3>
-           </>
-          :
-           <EventSlider
-           events={filteredEvents}
-           onDisplayEvent={displayEvent}
-
-         ></EventSlider>
-         
-          
-        }
-
-         
           <div
             style={{
               width: "90%",
@@ -247,52 +246,52 @@ const HomePage = () => {
           >
             <h3>Latest Events</h3>
           </div>
-          {noEvents?
-          null
-                    
-          :
-          <EventSlider
-          events={filteredEvents}
-          onDisplayEvent={displayEvent}
+          {noEvents ? null : (
+            <EventSlider
+              events={filteredEvents}
+              onDisplayEvent={displayEvent}
+            ></EventSlider>
+          )}
 
-          ></EventSlider>
-
-
-          }
-
-        
-              <div
+          <div
             style={{
               width: "90%",
             }}
           >
             <h3>Calendar</h3>
           </div>
-            {filteredEvents?
+          {filteredEvents ? (
             <>
-                      <MyCalendar filter={filteredEvents}></MyCalendar>
-                      </>:
-                      <p>No Events to display</p>
-
-            }
-        </Body>
-        {console.log(`${EventsDisplay} from home page`)
-        }
-      </Page>
-      {EventsDisplay && 
-      <>
-      <EventRight>
-        <Xicon onClick={()=>setEventsDisplay(null)} style={{color:"black"}}></Xicon>
-      <EventDisplay events={EventsDisplay}></EventDisplay>
-      </EventRight>
-            
+              <MyCalendar filter={filteredEvents}></MyCalendar>
             </>
-          }
-
-      
-
+          ) : (
+            <p>No Events to display</p>
+          )}
+        </Body>
+        {console.log(`${EventsDisplay} from home page`)}
+      </Page>
+      {EventsDisplay && (
+        <>
+          <EventRight>
+            <Xicon
+              onClick={() => setEventsDisplay(null)}
+              style={{ color: "black" }}
+            ></Xicon>
+            {!summary ? (
+              <EventDisplay
+                events={EventsDisplay}
+                loading={loading}
+                setLoading={setLoading}
+                onDisplaySummary={displaySummary}
+              ></EventDisplay>
+            ) : (
+              <Summary event={summary}/>
+            )}
+          </EventRight>
+        </>
+      )}
     </>
   );
-}
+};
 
-export default HomePage
+export default HomePage;

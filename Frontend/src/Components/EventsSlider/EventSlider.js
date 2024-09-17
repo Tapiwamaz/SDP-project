@@ -85,20 +85,13 @@ const formatTime=(time)=>{
 
 const goToEvent=(event)=>{
   console.log(screen);
-  
- 
+  event["booking"]=true;
   if(auth?.currentUser?.email){
-
     if(screen==="desktop"){
       onDisplayEvent(event);
-      
-
-
     }
     else{
-      navigate('/event' , {state: {event,booked:true}}); 
-
-
+      navigate('/event' , {state: {event}}); 
     }
 
 

@@ -27,53 +27,40 @@ import {
 } from "./EventDisplay.style";
 
 // Main component for the Event Page
-const EventDisplay = ({events}) => {
-  console.log(events);
-  
-  // Use the useNavigate hook for navigation
+const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
   const navigate = useNavigate();
-  // Get the event and booking status from the location state
-  // const event = useLocation().state.event;
-  // let event=events;
-  // const mobile= useLocation().state.event;
-  // if(!event){
-  //   event=mobile;
-  // }
-
-    const location = useLocation();
-    let event = null;
-  
-    const handleEvent = () => {
-      if (events === undefined) {
-        console.log("JumboTron");
-        
-        event = location.state.event;
-      }
-      else{
-        event=events;
-      }
-      // Rest of your logic...
-    };
-    handleEvent();
-  
-    // Rest of your component...
-  
-  // const book = useLocation().state.booked;
-  // const book = event.booked;
-  const book=true;
-  // console.log(book);
-
+  const location = useLocation();
+  let event = null;
+  const handleEvent = () => {
+    if (events === undefined) {
+      event = location.state.event;
+    } else {
+      event = events;
+    }
+  };
+  const goToSummary = () => {
+    event["count"] = count;
+    if(screen == "phone"){
+    navigate("/summary", { state: { event } });
+    }
+    else{
+      onDisplaySummary(event);
+    }
+  };  
+  handleEvent();
+  const book = event.booking;
+  console.log(event);
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [Full, SetFull] = useState(false);
+  const [screen, setScreen] = useState(null);
   const [count, setCount] = useState(1);
   const [hover, setHover] = useState(-1);
   const [rating, setRating] = useState(0);
   const [rated, setRated] = useState(false);
 
   // Log the event for debugging
-  console.log(event);
   const fetchEventOrganizer = async (UserID) => {
     try {
       const response = await fetch(`api/GetUser?userID=${UserID}`, {
@@ -99,19 +86,29 @@ const EventDisplay = ({events}) => {
     }
   };
   useEffect(() => {
-    if (event.TicketCount >= event.capacity) {
+    const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
+    if (screenWidth <= 768) {
+      setScreen("phone");
+    } else {
+      setScreen("desktop");
+    }
+    if (event.count >= event.capacity) {
+      console.log("Event is full");
       SetFull(true);
     }
+    else{
+      console.log("Event is not full");
+      SetFull(false);
+    }
     const fetchData = async () => {
-      if (Object.keys(EventOrg).length === 0) {
+      if (Object.keys(EventOrg).length === 0 || loading) {
         const eventOrgData = await fetchEventOrganizer(event.user_id);
         setEventOrg(eventOrgData);
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [EventOrg]);
+  }, [EventOrg,Full,loading]);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -123,7 +120,6 @@ const EventDisplay = ({events}) => {
   }
 
   // Function to format the time
-
 
   // Function to handle the rating
   const handleRating = (value) => {
@@ -180,13 +176,37 @@ const EventDisplay = ({events}) => {
           alt="Event Image"
         />
       )}
-      {loading ? <TitlePlaceHolder /> : <h1>{event.name}</h1>}
+      {loading ? <TitlePlaceHolder /> : <h1 style={{
+        color:"black",
+        textAlign:"left",
+      }}>{event.name}</h1>}
       {loading ? (
         <PlaceHolderText />
       ) : (
         <EventDate>
           <DateIcon />
-          <p>{formatDate(event.date)}</p>
+          <div>
+            <h4
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellih4sis",
+                lineHeight: "1",
+              }}
+            >
+              Date
+            </h4>
+            <p
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                lineHeight: "1",
+              }}
+            >
+             {formatDate(event.date)}
+            </p>
+          </div>
         </EventDate>
       )}
 
@@ -195,9 +215,28 @@ const EventDisplay = ({events}) => {
       ) : (
         <Time>
           <TimeIcon />
-          <p>
-            Start: {event.start_time} - End: {event.end_time}
-          </p>
+          <div>
+            <h4
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellih4sis",
+                lineHeight: "1",
+              }}
+            >
+              Time:
+            </h4>
+            <p
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                lineHeight: "1",
+              }}
+            >
+              Start: {event.start_time} - End: {event.end_time}
+            </p>
+          </div>
         </Time>
       )}
 
@@ -303,7 +342,7 @@ const EventDisplay = ({events}) => {
             </div>
             <p style={{ gridColumn: "span 2" }}>{EventOrg.description}</p>
           </EveOCard>
-          {!book ? (
+          {book ? (
             <>
               {!Full ? (
                 <>
@@ -331,7 +370,7 @@ const EventDisplay = ({events}) => {
               <BookButton
                 onClick={() =>
                   !Full &&
-                  navigate("/summary", { state: { amount: count, event } })
+                  goToSummary()
                 }
                 full={Full}
                 disabled={Full}
@@ -379,9 +418,7 @@ const EventDisplay = ({events}) => {
                       style={{
                         fontSize: "0.8em",
                       }}
-                      onClick={() =>
-                        submitRating()
-                      }
+                      onClick={() => submitRating()}
                     >
                       Submit
                     </BookButton>
@@ -394,13 +431,13 @@ const EventDisplay = ({events}) => {
                   </SubmitedRating>
                 )}
               </div>
-              <BookButton
+              {/* <BookButton
                 style={{
                   background: "crimson",
                 }}
               >
                 Alert
-              </BookButton>
+              </BookButton> */}
             </>
           )}
         </>
