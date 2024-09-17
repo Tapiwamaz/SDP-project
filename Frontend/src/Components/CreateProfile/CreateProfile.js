@@ -36,7 +36,7 @@ export const CreateProfile = () => {
   const [profileImage, setProfileImage] = useState(avatarURL); // State to store profile image, default is the logo
   const[name,setName]=useState(null);
   const[description,setDescription]=useState(null);
-  const[error,setError]=useState("no");
+  const[error,setError]=useState("");
 
 
   const fileInputRef = useRef(null); // Ref to trigger file input

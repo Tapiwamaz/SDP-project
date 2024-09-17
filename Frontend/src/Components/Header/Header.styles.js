@@ -115,7 +115,8 @@ export const Profile = styled.div`
 
   img {
     border-radius: 50%;
-    width: fit-content;
+    /* width: fit-content; */
+    width: 40px;
     &:hover {
       transform: scale(1.2);
       border: 2px solid var(--primary);

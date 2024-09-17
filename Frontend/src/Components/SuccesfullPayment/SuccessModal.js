@@ -54,7 +54,7 @@ export default function SuccessModal({ showModal, setShowModal }) {
           style={{
             width: "100%",
           }}
-          onClick={() => (window.location.href = "/my-tickets")}
+          onClick={() => (window.location.href = "/myBooking")}
         >
           Go to My Tickets
         </BookButton>

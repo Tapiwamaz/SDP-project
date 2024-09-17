@@ -224,12 +224,12 @@ const Profile = () => {
           </Rating>
           <Count>
             <EventsGrp>
-              <h3>26</h3>
+              <h3>11</h3>
               <h3>Events Done</h3>
             </EventsGrp>
 
             <EventsGrp>
-              <h3>26</h3>
+              <h3>19</h3>
               <h3>Events Attended</h3>
             </EventsGrp>
           </Count>
