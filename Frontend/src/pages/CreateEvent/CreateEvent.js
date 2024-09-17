@@ -426,7 +426,7 @@ const CreateEvent = ({ inputEventDetails }) => {
   } else
     return (
       <div>
-        {/* <Header /> */}
+        <Header />
         <section className="wrapperCreateEvent">
           {/* <ToastContainer /> */}
 
