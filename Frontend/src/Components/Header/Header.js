@@ -6,7 +6,7 @@ import logo from "../../Images/Logo.svg.svg";
 import { HeaderContainer, Xicon, Profile, ProfileIcon, Burger, Aside, AsideNavItem, Logo } from './Header.styles';
 import { auth } from "../../firebase_config";
 import { useNavigate } from "react-router";
-import ProfilePage from "../Profile/ProfilePage";;
+import ProfilePage from "../Profile/ProfilePage";
 
 
 

@@ -14,7 +14,7 @@ const ViewMyEvents = ({userID}) => {
       }}
     >
       <AsideDesktop />
-      <MyEvents userID={userID} />
+      <MyEvents  />
       </Page>
   </>
   )

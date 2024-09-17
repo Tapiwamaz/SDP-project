@@ -31,7 +31,7 @@ function App() {
         <Route path="/logIn"  element={<Login />} />
         <Route path="/createProfile"  element={<CreateProfile />} />
         <Route path="/profile"  element={<ProfilePage />} />
-        <Route path="/myEvents"  element={<ViewMyEvents userId={auth?.currentUser?.uid} />} />
+        <Route path="/myEvents"  element={<ViewMyEvents  />} />
 
 
         <Route path="/book" element={<BookTicket />} />
