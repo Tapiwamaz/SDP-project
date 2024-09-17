@@ -27,42 +27,22 @@ import {
 } from "./EventDisplay.style";
 
 // Main component for the Event Page
-const EventDisplay = ({events}) => {
-  console.log(events);
-  
-  // Use the useNavigate hook for navigation
+const EventDisplay = ({ events }) => {
   const navigate = useNavigate();
-  // Get the event and booking status from the location state
-  // const event = useLocation().state.event;
-  // let event=events;
-  // const mobile= useLocation().state.event;
-  // if(!event){
-  //   event=mobile;
-  // }
+  const location = useLocation();
+  let event = null;
+  const handleEvent = () => {
+    if (events === undefined) {
+      console.log("JumboTron");
 
-    const location = useLocation();
-    let event = null;
-  
-    const handleEvent = () => {
-      if (events === undefined) {
-        console.log("JumboTron");
-        
-        event = location.state.event;
-      }
-      else{
-        event=events;
-      }
-      // Rest of your logic...
-    };
-    handleEvent();
-  
-    // Rest of your component...
-  
-  // const book = useLocation().state.booked;
-  // const book = event.booked;
-  const book=true;
-  // console.log(book);
-
+      event = location.state.event;
+    } else {
+      event = events;
+    }
+  };
+  handleEvent();
+  const book = event.booking;
+  console.log(event);
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
   const [loading, setLoading] = useState(true);
@@ -73,7 +53,6 @@ const EventDisplay = ({events}) => {
   const [rated, setRated] = useState(false);
 
   // Log the event for debugging
-  console.log(event);
   const fetchEventOrganizer = async (UserID) => {
     try {
       const response = await fetch(`api/GetUser?userID=${UserID}`, {
@@ -99,8 +78,13 @@ const EventDisplay = ({events}) => {
     }
   };
   useEffect(() => {
-    if (event.TicketCount >= event.capacity) {
+    if (event.count >= event.capacity) {
+      console.log("Event is full");
       SetFull(true);
+    }
+    else{
+      console.log("Event is not full");
+      SetFull(false);
     }
     const fetchData = async () => {
       if (Object.keys(EventOrg).length === 0) {
@@ -109,9 +93,8 @@ const EventDisplay = ({events}) => {
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [EventOrg]);
+  }, [EventOrg,Full]);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -123,7 +106,6 @@ const EventDisplay = ({events}) => {
   }
 
   // Function to format the time
-
 
   // Function to handle the rating
   const handleRating = (value) => {
@@ -186,7 +168,28 @@ const EventDisplay = ({events}) => {
       ) : (
         <EventDate>
           <DateIcon />
-          <p>{formatDate(event.date)}</p>
+          <div>
+            <h4
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellih4sis",
+                lineHeight: "1",
+              }}
+            >
+              Date
+            </h4>
+            <p
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                lineHeight: "1",
+              }}
+            >
+             {formatDate(event.date)}
+            </p>
+          </div>
         </EventDate>
       )}
 
@@ -195,9 +198,28 @@ const EventDisplay = ({events}) => {
       ) : (
         <Time>
           <TimeIcon />
-          <p>
-            Start: {event.start_time} - End: {event.end_time}
-          </p>
+          <div>
+            <h4
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellih4sis",
+                lineHeight: "1",
+              }}
+            >
+              Time:
+            </h4>
+            <p
+              style={{
+                margin: "0",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                lineHeight: "1",
+              }}
+            >
+              Start: {event.start_time} - End: {event.end_time}
+            </p>
+          </div>
         </Time>
       )}
 
@@ -303,7 +325,7 @@ const EventDisplay = ({events}) => {
             </div>
             <p style={{ gridColumn: "span 2" }}>{EventOrg.description}</p>
           </EveOCard>
-          {!book ? (
+          {book ? (
             <>
               {!Full ? (
                 <>
@@ -379,9 +401,7 @@ const EventDisplay = ({events}) => {
                       style={{
                         fontSize: "0.8em",
                       }}
-                      onClick={() =>
-                        submitRating()
-                      }
+                      onClick={() => submitRating()}
                     >
                       Submit
                     </BookButton>
@@ -394,13 +414,13 @@ const EventDisplay = ({events}) => {
                   </SubmitedRating>
                 )}
               </div>
-              <BookButton
+              {/* <BookButton
                 style={{
                   background: "crimson",
                 }}
               >
                 Alert
-              </BookButton>
+              </BookButton> */}
             </>
           )}
         </>

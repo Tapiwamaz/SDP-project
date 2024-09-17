@@ -20,6 +20,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        
         <Route path="/" index element={<HomePage />} />
         <Route path="/welcome"  element={<Welcome />} />
 

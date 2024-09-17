@@ -9,11 +9,18 @@ import PayPalButton  from "../../Components/PayPalButton/PaypalButton";
 import { BookButton } from "./SummaryPage.style";
 import SuccessModal from "../../Components/SuccesfullPayment/SuccessModal";
 import React, { useState } from 'react';
+import { auth } from "../../firebase_config";
 export default function SummaryPage() {
-  const [showmodal, setShowmodal] = useState(true);
+  const user_id = auth?.currentUser?.uid;
+  console.log(user_id);
+  const [showmodal, setShowmodal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
- const submitTicket = async (event, count, user_ID) => {
 
+  const DisplayModal = () => {
+    setShowmodal(true);
+  };
+
+ const submitTicket = async (event, count, user_ID) => {
   setIsLoading(true);
    fetch("api/BookTicket", {
      method: "POST",
@@ -128,10 +135,11 @@ export default function SummaryPage() {
 
           {event.price == 0 ? (
             <BookButton
-              onClick={() =>
-                submitTicket(event, amount, "fMgS0KN8UBXu9uW63wAfzfxPfXy1")
-              }
-              full={false}
+              onClick={() => submitTicket(event, amount, user_id)}
+              style={{
+                background: "#18336c",
+              }}
+              full = {false}
             >
               Book
             </BookButton>
@@ -139,26 +147,30 @@ export default function SummaryPage() {
             <PayPalButton
               event={event}
               count={amount}
-              user_ID={"fMgS0KN8UBXu9uW63wAfzfxPfXy1"}
+              user_ID={user_id}
+              onDisplayModal={DisplayModal}
             ></PayPalButton>
           )}
         </SummaryPages>
+        {isLoading && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(128, 128, 128, 0.5)",
+              zIndex: 100,
+            }}
+          />
+        )}
+        {showmodal && (
+          <SuccessModal showModal={showmodal} setShowModal={setShowmodal} />
+        )}
       </Page>
-      {isLoading && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(128, 128, 128, 0.5)",
-            zIndex: 100,
-          }}
-        />
-      )}
-      {showmodal && <SuccessModal showModal={showmodal} setShowModal={setShowmodal} />}
-      <SuccessModal showModal={showmodal} setShowModal={setShowmodal} />
+
+      {/* <SuccessModal showModal={showmodal} setShowModal={setShowmodal} /> */}
     </>
   );
 }
