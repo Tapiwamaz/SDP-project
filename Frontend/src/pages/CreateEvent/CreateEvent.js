@@ -427,7 +427,7 @@ const CreateEvent = ({ inputEventDetails }) => {
     return (
       <>
         <Header />
-        <ToastContainer/>
+        {/* <ToastContainer/> */}
         <section className="wrapperCreateEvent">
           {/* <ToastContainer /> */}
 
