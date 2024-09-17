@@ -25,12 +25,13 @@ export const TicketContainer = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const user = auth.currentUser;
-                if (!user) {
-                    // Handle case where user is not authenticated
-                    console.error("No user is logged in");
-                    //return;
-                }
+                // const user = auth.currentUser;
+                // if (!user) {
+                //     // Handle case where user is not authenticated
+                //     console.error("No user is logged in");
+                //     //return;
+                // }
+                console.log(userId)
 
                 const collectionRef = collection(db, "Tickets");
                 const q = query(collectionRef, where("user_id", "==", userId)); 
@@ -115,7 +116,7 @@ export const TicketContainer = () => {
         };
 
         fetchTickets(); // Fetch tickets on component mount
-    }, []); // Empty dependency array means this effect runs once on mount
+    }, [userId]); // Empty dependency array means this effect runs once on mount
 
     if (loading) {
         return <p>Loading...</p>;
@@ -124,8 +125,10 @@ export const TicketContainer = () => {
     return (
         <>
         {/* <Navbar></Navbar> */}
+        
         <div>
-            {tickets.map(ticket => (
+            <h1>Tickets</h1>
+            {tickets?tickets.map(ticket => (
                 <Ticket
                     key={ticket.id}
                     title={ticket.title}
@@ -137,7 +140,7 @@ export const TicketContainer = () => {
                     qrcode={ticket.qrcode}
                     id={ticket.id}
                 />
-            ))}
+            )):<p> No Bookings made</p>}
         </div>
         </>
     );
