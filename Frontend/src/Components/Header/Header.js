@@ -159,7 +159,7 @@ const Header = () => {
             My Events
           </AsideNavItem>
           <AsideNavItem
-            onClick={() => handleNavClick('#bookings')}
+            onClick={() => handleNavClick('/myBooking')}
           >
             My Bookings
           </AsideNavItem>
