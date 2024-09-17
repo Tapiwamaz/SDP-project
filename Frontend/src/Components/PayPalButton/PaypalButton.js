@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const PayPalButton = ({ event, count, user_ID }) => {
+const PayPalButton = ({ event, count, user_ID , onDisplayModal}) => {
   const navigate = useNavigate();
   const paypal = useRef();
   const submitTicket = async () => {
@@ -95,6 +95,7 @@ const PayPalButton = ({ event, count, user_ID }) => {
                 .then((order_details) => {
                   // console.log(order_details);
                   submitTicket();
+                  onDisplayModal();
                   return{
                     status: 200,
                     body: "Complete"

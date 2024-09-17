@@ -73,7 +73,6 @@ const HomePage = () => {
   const[EventsDisplay,setEventsDisplay]=useState(null);
   const displayEvent=(event)=>{
     setEventsDisplay(event);
-
   }
 
   const filter=(type)=>{
