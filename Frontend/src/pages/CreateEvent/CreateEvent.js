@@ -40,7 +40,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import { db, storage } from "../../firebase_config";
+import { auth, db, storage } from "../../firebase_config";
 //components
 import Header from "../../Components/Header/Header";
 // uuid
@@ -93,6 +93,7 @@ export const handleImageChange = (
     setImageError("Something went wrong uploading your picture");
   }
 };
+
 export const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export const handleNextButtonClick = async (
@@ -245,6 +246,21 @@ export const handleNextButtonClick = async (
   }
 };
 
+export const fetchStorage = (key) => {
+  try {
+    const storedItem = localStorage.getItem(key);
+
+    if (storedItem) {
+      return JSON.parse(storedItem);
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching object from localStorage:", error);
+    return null;
+  }
+};
+
 export const createEventDB = async (
   newEvent,
   eventCollection,
@@ -266,9 +282,13 @@ export const createEventDB = async (
     newEvent.event_id = v4();
     newEvent.active = true;
     newEvent.approved = false;
+    // newEvent.approved = true;
     newEvent.status = "pending";
     delete newEvent.eventPicture;
-    newEvent.user_id = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+    if (!newEvent.user_id) {
+      newEvent.user_id = "lWvmYviBNYWm6gOJrkgIF2RVpaC3";
+    }
+    console.log(newEvent)
 
     // Add image to bucket and event to Firestore
     await addDoc(eventCollection, newEvent);
@@ -325,6 +345,7 @@ export const updateEventDB = async (
 
 const CreateEvent = ({ inputEventDetails }) => {
   const navigate = useNavigate();
+  const userData = fetchStorage("userData") || {};
   // todays date to start date picker
   const todayDate = new Date().toISOString().split("T")[0];
   //preview image
@@ -375,11 +396,18 @@ const CreateEvent = ({ inputEventDetails }) => {
 
   useEffect(() => {
     // loadLocations(setAvailableLocations, mockLocations );
+    const userId = auth?.currentUser?.uid;
     setAvailableLocations(mockLocations);
     setEventTypes(mockEventTypes);
     if (inputEventDetails) {
       setImgSrc(inputEventDetails.image_url);
       setEventDetails(inputEventDetails);
+    }
+    else if (userData.user_id){
+      setEventDetails({user_id: userData.user_id});
+    }
+    else if (userId){
+      setEventDetails({user_id: userId});
     }
   }, []);
 
@@ -389,380 +417,398 @@ const CreateEvent = ({ inputEventDetails }) => {
   */
 
   if (submitted) {
-    return <CreateEventPendingPage update={!!inputEventDetails} />;
+    return (
+      <>
+        <Header />
+        <CreateEventPendingPage update={!!inputEventDetails} />
+      </>
+    );
   } else
     return (
-      <section className="wrapperCreateEvent">
-        {/* <ToastContainer /> */}
-
-        {loader && (
-          <div className="loader">
-            <div className="centerLoader" />
-          </div>
-        )}
+      <>
         <Header />
+        {/* <ToastContainer/> */}
+        <section className="wrapperCreateEvent">
+          {/* <ToastContainer /> */}
 
-        <section className="createEventsContainer">
-          <section className="desktopAside">
-            <div className="formInfoContainer">
-              <nav className="navBarCreateEvents" onClick={() => navigate(-1)}>
-                <ArrowLeftCircleIcon
-                  width={40}
-                  className="backButtonCreateEvent"
-                />
-              </nav>
-              <h4 data-testid="title">Create your event</h4>
-              <p>Please fill in the all the fields in the form. </p>
+          {loader && (
+            <div className="loader">
+              <div className="centerLoader" />
             </div>
-            <img
-              className="createEventsSvg"
-              src={PendingSvg}
-              alt="pending"
-            ></img>
-          </section>
+          )}
 
-          <section className="inputs">
-            {/* Image  */}
-            {imgSrc && (
-              // <>
-              <img className="imageHolder" src={imgSrc} alt="Preview" />
-            )}
+          <section className="createEventsContainer">
+            <section className="desktopAside">
+              <div className="formInfoContainer">
+                <nav
+                  className="navBarCreateEvents"
+                  onClick={() => navigate(-1)}
+                >
+                  <ArrowLeftCircleIcon
+                    width={40}
+                    className="backButtonCreateEvent"
+                  />
+                </nav>
+                <h4 data-testid="title">Create your event</h4>
+                <p>Please fill in the all the fields in the form. </p>
+              </div>
+              <img
+                className="createEventsSvg"
+                src={PendingSvg}
+                alt="pending"
+              ></img>
+            </section>
 
-            <div
-              className="drop-file-container"
-              style={{
-                position: imgSrc ? "absolute" : "static",
-                background: !imgSrc
-                  ? "var(--primary)"
-                  : hovered
-                  ? "rgba(54, 69, 79,0.4)"
-                  : "transparent",
-                color: !imgSrc ? "white" : hovered ? "white" : "transparent",
-              }}
-              onMouseEnter={() => {
-                setHovered(true);
-              }}
-              onMouseLeave={() => setHovered(false)}
-            >
+            <section className="inputs">
+              {/* Image  */}
+              {imgSrc && (
+                // <>
+                <img className="imageHolder" src={imgSrc} alt="Preview" />
+              )}
+
+              <div
+                className="drop-file-container"
+                style={{
+                  position: imgSrc ? "absolute" : "static",
+                  background: !imgSrc
+                    ? "var(--primary)"
+                    : hovered
+                    ? "rgba(54, 69, 79,0.4)"
+                    : "transparent",
+                  color: !imgSrc ? "white" : hovered ? "white" : "transparent",
+                }}
+                onMouseEnter={() => {
+                  setHovered(true);
+                }}
+                onMouseLeave={() => setHovered(false)}
+              >
+                <input
+                  id="file-upload"
+                  className="input"
+                  type="file"
+                  accept="image/*"
+                  name="eventPicture"
+                  data-testid="pictureInput"
+                  ref={eventPictureRef}
+                  onChange={(e) => {
+                    handleImageChange(e, setImgSrc, setImage, setImageError);
+                    handleChangeEventDetails(
+                      e.target.value,
+                      "eventPicture",
+                      setEventDetails
+                    );
+                  }}
+                ></input>
+                <label htmlFor="file-upload" className="uploadMediaLabel">
+                  <div className="iconsMediaUpload">
+                    <CameraIcon width={30} />
+                    <div id="dividerLine" />
+                    <VideoCameraIcon width={30} />
+                  </div>
+                  <strong>Drag and drop media here</strong>
+                  {imageError && (
+                    <strong style={{ color: "red" }}>{imageError}</strong>
+                  )}
+                </label>
+              </div>
+
+              {/* event name */}
+              <label className="label" htmlFor="eventName">
+                Event Name
+              </label>
               <input
-                id="file-upload"
                 className="input"
-                type="file"
-                accept="image/*"
-                name="eventPicture"
-                data-testid="pictureInput"
-                ref={eventPictureRef}
-                onChange={(e) => {
-                  handleImageChange(e, setImgSrc, setImage, setImageError);
+                name="eventName"
+                data-testid="name"
+                ref={eventNameRef}
+                value={eventDetails.name || ""}
+                onFocus={() =>
+                  eventNameRef.current.classList.remove("unfilled-input")
+                }
+                onChange={(e) =>
                   handleChangeEventDetails(
                     e.target.value,
-                    "eventPicture",
+                    "name",
+                    setEventDetails
+                  )
+                }
+              />
+
+              <label className="label" htmlFor="eventDate">
+                Date
+              </label>
+              <input
+                className="input"
+                type="date"
+                data-testid="date"
+                name="eventDate"
+                ref={eventDateRef}
+                min={todayDate}
+                value={eventDetails.date || ""}
+                onFocus={(e) => {
+                  eventDateRef.current.classList.remove("unfilled-input");
+                }}
+                onChange={(e) =>
+                  handleChangeEventDetails(
+                    e.target.value,
+                    "date",
+                    setEventDetails
+                  )
+                }
+              ></input>
+
+              {/* Time inputs */}
+              <div className="doubleInputContainer">
+                <div
+                  className="doubleInput"
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <label className="label" htmlFor="eventDate">
+                    Start Time
+                  </label>
+                  <input
+                    className="input"
+                    type="time"
+                    min="08:00"
+                    data-testid="start_time"
+                    name="eventStartTime"
+                    ref={eventStartTimeRef}
+                    value={eventDetails.start_time || ""}
+                    onFocus={(e) => {
+                      eventStartTimeRef.current.classList.remove(
+                        "unfilled-input"
+                      );
+                    }}
+                    onChange={(e) =>
+                      handleChangeEventDetails(
+                        e.target.value,
+                        "start_time",
+                        setEventDetails
+                      )
+                    }
+                  ></input>
+                </div>
+
+                <div
+                  className="doubleInput"
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <label className="label" htmlFor="eventDate">
+                    End Time
+                  </label>
+                  <input
+                    className="input"
+                    value={eventDetails.end_time || ""}
+                    type="time"
+                    data-testid="end_time"
+                    min="08:00"
+                    placeholder="e.g 08:00"
+                    ref={eventEndTimeRef}
+                    name="eventEndTime"
+                    onFocus={(e) => {
+                      eventEndTimeRef.current.classList.remove(
+                        "unfilled-input"
+                      );
+                    }}
+                    onChange={(e) =>
+                      handleChangeEventDetails(
+                        e.target.value,
+                        "end_time",
+                        setEventDetails
+                      )
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Event type */}
+              <label className="label" htmlFor="eventType">
+                Event Type
+              </label>
+              <datalist id="eventTypeList" data-testid="locationsList">
+                {eventTypes.map((type, index) => (
+                  <option key={index} value={type} />
+                ))}
+              </datalist>
+
+              <input
+                className="input"
+                name="eventType"
+                list="eventTypeList"
+                data-testid="type"
+                placeholder="e.g Education"
+                ref={eventTypeRef}
+                value={eventDetails.type || ""}
+                onFocus={() =>
+                  eventTypeRef.current.classList.remove("unfilled-input")
+                }
+                onChange={(e) => {
+                  handleChangeEventDetails(
+                    e.target.value,
+                    "type",
                     setEventDetails
                   );
+                  if (e.target.value === "Online") {
+                    setAvailableLocations(mockVirtualLocations);
+                  }
                 }}
-              ></input>
-              <label htmlFor="file-upload" className="uploadMediaLabel">
-                <div className="iconsMediaUpload">
-                  <CameraIcon width={30} />
-                  <div id="dividerLine" />
-                  <VideoCameraIcon width={30} />
-                </div>
-                <strong>Drag and drop media here</strong>
-                {imageError && (
-                  <strong style={{ color: "red" }}>{imageError}</strong>
-                )}
-              </label>
-            </div>
+              />
+              {/* Venue and location */}
+              <div className="doubleInputContainer">
+                {/* Venue type */}
+                <div
+                  className="doubleInput"
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <label className="label" htmlFor="eventVenueType">
+                    {eventDetails.type === "Online" ? "Platform" : "Venue Type"}
+                  </label>
+                  <input
+                    className="input"
+                    list="venueList"
+                    data-testid="venue_type"
+                    placeholder="e.g Lecture room"
+                    ref={eventVenueTypeRef}
+                    value={eventDetails.venue_type || ""}
+                    onFocus={() =>
+                      eventVenueTypeRef.current.classList.remove(
+                        "unfilled-input"
+                      )
+                    }
+                    name="eventVenueType"
+                    onChange={(e) => {
+                      handleChangeEventDetails(
+                        e.target.value,
+                        "venue_type",
+                        setEventDetails
+                      );
+                      setFilterVenueType(e.target.value);
+                    }}
+                  ></input>
 
-            {/* event name */}
-            <label className="label" htmlFor="eventName">
-              Event Name
-            </label>
-            <input
-              className="input"
-              name="eventName"
-              data-testid="name"
-              ref={eventNameRef}
-              value={eventDetails.name || ""}
-              onFocus={() =>
-                eventNameRef.current.classList.remove("unfilled-input")
-              }
-              onChange={(e) =>
-                handleChangeEventDetails(
-                  e.target.value,
-                  "name",
-                  setEventDetails
-                )
-              }
-            />
-
-            <label className="label" htmlFor="eventDate">
-              Date
-            </label>
-            <input
-              className="input"
-              type="date"
-              data-testid="date"
-              name="eventDate"
-              ref={eventDateRef}
-              min={todayDate}
-              value={eventDetails.date || ""}
-              onFocus={(e) => {
-                eventDateRef.current.classList.remove("unfilled-input");
-              }}
-              onChange={(e) =>
-                handleChangeEventDetails(
-                  e.target.value,
-                  "date",
-                  setEventDetails
-                )
-              }
-            ></input>
-
-            {/* Time inputs */}
-            <div className="doubleInputContainer">
-              <div
-                className="doubleInput"
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <label className="label" htmlFor="eventDate">
-                  Start Time
-                </label>
-                <input
-                  className="input"
-                  type="time"
-                  min="08:00"
-                  data-testid="start_time"
-                  name="eventStartTime"
-                  ref={eventStartTimeRef}
-                  value={eventDetails.start_time || ""}
-                  onFocus={(e) => {
-                    eventStartTimeRef.current.classList.remove(
-                      "unfilled-input"
-                    );
-                  }}
-                  onChange={(e) =>
-                    handleChangeEventDetails(
-                      e.target.value,
-                      "start_time",
-                      setEventDetails
-                    )
-                  }
-                ></input>
-              </div>
-
-              <div
-                className="doubleInput"
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <label className="label" htmlFor="eventDate">
-                  End Time
-                </label>
-                <input
-                  className="input"
-                  value={eventDetails.end_time || ""}
-                  type="time"
-                  data-testid="end_time"
-                  min="08:00"
-                  placeholder="e.g 08:00"
-                  ref={eventEndTimeRef}
-                  name="eventEndTime"
-                  onFocus={(e) => {
-                    eventEndTimeRef.current.classList.remove("unfilled-input");
-                  }}
-                  onChange={(e) =>
-                    handleChangeEventDetails(
-                      e.target.value,
-                      "end_time",
-                      setEventDetails
-                    )
-                  }
-                />
-              </div>
-            </div>
-
-            {/* Event type */}
-            <label className="label" htmlFor="eventType">
-              Event Type
-            </label>
-            <datalist id="eventTypeList" data-testid="locationsList">
-              {eventTypes.map((type, index) => (
-                <option key={index} value={type} />
-              ))}
-            </datalist>
-
-            <input
-              className="input"
-              name="eventType"
-              list="eventTypeList"
-              data-testid="type"
-              placeholder="e.g Education"
-              ref={eventTypeRef}
-              value={eventDetails.type || ""}
-              onFocus={() =>
-                eventTypeRef.current.classList.remove("unfilled-input")
-              }
-              onChange={(e) => {
-                handleChangeEventDetails(
-                  e.target.value,
-                  "type",
-                  setEventDetails
-                );
-                if (e.target.value === "Online") {
-                  setAvailableLocations(mockVirtualLocations);
-                }
-              }}
-            />
-            {/* Venue and location */}
-            <div className="doubleInputContainer">
-              {/* Venue type */}
-              <div
-                className="doubleInput"
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <label className="label" htmlFor="eventVenueType">
-                  {eventDetails.type==="Online" ? "Platform" : "Venue Type"}
-                </label>
-                <input
-                  className="input"
-                  list="venueList"
-                  data-testid="venue_type"
-                  placeholder="e.g Lecture room"
-                  ref={eventVenueTypeRef}
-                  value={eventDetails.venue_type || ""}
-                  onFocus={() =>
-                    eventVenueTypeRef.current.classList.remove("unfilled-input")
-                  }
-                  name="eventVenueType"
-                  onChange={(e) => {
-                    handleChangeEventDetails(
-                      e.target.value,
-                      "venue_type",
-                      setEventDetails
-                    );
-                    setFilterVenueType(e.target.value);
-                  }}
-                ></input>
-
-                <datalist id="venueList" data-testid="locationsList">
-                  
-                  {
-        
-                    [...new Set(availableLocations.map(platform => platform.type))].map((type, index) => (
-                    <option key={index} value={type} />
-                  ))}
-                </datalist>
-              </div>
-
-              {/* Location */}
-              <div
-                className="doubleInput"
-                style={{ display: "flex", flexDirection: "column" }}
-              >
-                <label className="label" htmlFor="eventLocation">
-                  Location
-                </label>
-                <input
-                  className="input"
-                  list="locationsList"
-                  data-testid="location"
-                  onFocus={() =>
-                    eventLocationRef.current.classList.remove("unfilled-input")
-                  }
-                  ref={eventLocationRef}
-                  value={eventDetails.location || ""}
-                  name="eventLocation"
-                  onChange={(e) =>
-                    handleChangeEventDetails(
-                      e.target.value,
-                      "location",
-                      setEventDetails
-                    )
-                  }
-                ></input>
-
-                <datalist id="locationsList">
-                  {availableLocations
-                    .filter((x) => x.type === filterVenueType)
-                    .map((loc) => (
-                      <option value={loc.location} />
+                  <datalist id="venueList" data-testid="locationsList">
+                    {[
+                      ...new Set(
+                        availableLocations.map((platform) => platform.type)
+                      ),
+                    ].map((type, index) => (
+                      <option key={index} value={type} />
                     ))}
-                </datalist>
+                  </datalist>
+                </div>
+
+                {/* Location */}
+                <div
+                  className="doubleInput"
+                  style={{ display: "flex", flexDirection: "column" }}
+                >
+                  <label className="label" htmlFor="eventLocation">
+                    Location
+                  </label>
+                  <input
+                    className="input"
+                    list="locationsList"
+                    data-testid="location"
+                    onFocus={() =>
+                      eventLocationRef.current.classList.remove(
+                        "unfilled-input"
+                      )
+                    }
+                    ref={eventLocationRef}
+                    value={eventDetails.location || ""}
+                    name="eventLocation"
+                    onChange={(e) =>
+                      handleChangeEventDetails(
+                        e.target.value,
+                        "location",
+                        setEventDetails
+                      )
+                    }
+                  ></input>
+
+                  <datalist id="locationsList">
+                    {availableLocations
+                      .filter((x) => x.type === filterVenueType)
+                      .map((loc) => (
+                        <option value={loc.location} />
+                      ))}
+                  </datalist>
+                </div>
               </div>
-            </div>
 
-            {/* Ticket Price  Label*/}
-            <label className="label" htmlFor="eventTicketPrice">
-              Ticket Price
-            </label>
-            {/* Ticket Price  input*/}
-            <input
-              className="input"
-              type="number"
-              ref={eventTicketPriceRef}
-              data-testid="price"
-              value={eventDetails.price || null}
-              placeholder="e.g R 50"
-              step={10}
-              onFocus={() =>
-                eventTicketPriceRef.current.classList.remove("unfilled-input")
-              }
-              min={0}
-              name="eventTicketPrice"
-              onChange={(e) =>
-                handleChangeEventDetails(
-                  e.target.value,
-                  "price",
-                  setEventDetails
-                )
-              }
-            ></input>
+              {/* Ticket Price  Label*/}
+              <label className="label" htmlFor="eventTicketPrice">
+                Ticket Price
+              </label>
+              {/* Ticket Price  input*/}
+              <input
+                className="input"
+                type="number"
+                ref={eventTicketPriceRef}
+                data-testid="price"
+                value={eventDetails.price || null}
+                placeholder="e.g R 50"
+                step={10}
+                onFocus={() =>
+                  eventTicketPriceRef.current.classList.remove("unfilled-input")
+                }
+                min={0}
+                name="eventTicketPrice"
+                onChange={(e) =>
+                  handleChangeEventDetails(
+                    e.target.value,
+                    "price",
+                    setEventDetails
+                  )
+                }
+              ></input>
 
-            {/* Event description  Label*/}
-            <label className="label" htmlFor="eventDescription">
-              Description
-            </label>
-            {/* Event description input*/}
-            <textarea
-              className="input descriptionInput"
-              value={eventDetails.description}
-              placeholder="Give a short description of your event to attract more attendees! ☺"
-              name="eventDescription"
-              data-testid="description"
-              maxLength={200}
-              ref={eventDescriptionRef}
-              onFocus={() =>
-                eventDescriptionRef.current.classList.remove("unfilled-input")
-              }
-              onChange={(e) =>
-                handleChangeEventDetails(
-                  e.target.value,
-                  "description",
-                  setEventDetails
-                )
-              }
-            ></textarea>
+              {/* Event description  Label*/}
+              <label className="label" htmlFor="eventDescription">
+                Description
+              </label>
+              {/* Event description input*/}
+              <textarea
+                className="input descriptionInput"
+                value={eventDetails.description}
+                placeholder="Give a short description of your event to attract more attendees! ☺"
+                name="eventDescription"
+                data-testid="description"
+                maxLength={200}
+                ref={eventDescriptionRef}
+                onFocus={() =>
+                  eventDescriptionRef.current.classList.remove("unfilled-input")
+                }
+                onChange={(e) =>
+                  handleChangeEventDetails(
+                    e.target.value,
+                    "description",
+                    setEventDetails
+                  )
+                }
+              ></textarea>
 
-            <button
-              className="btn createEventButtonNext"
-              type="button"
-              onClick={() => {
-                handleNextButtonClick(
-                  eventDetails,
-                  eventRefs,
-                  image,
-                  availableLocations,
-                  eventsCollectionRef,
-                  setLoader,
-                  setSubmitted
-                );
-              }}
-            >
-              Submit
-            </button>
+              <button
+                className="btn createEventButtonNext"
+                type="button"
+                onClick={() => {
+                  handleNextButtonClick(
+                    eventDetails,
+                    eventRefs,
+                    image,
+                    availableLocations,
+                    eventsCollectionRef,
+                    setLoader,
+                    setSubmitted
+                  );
+                }}
+              >
+                Submit
+              </button>
+            </section>
           </section>
         </section>
-      </section>
+      </>
     );
 };
 
