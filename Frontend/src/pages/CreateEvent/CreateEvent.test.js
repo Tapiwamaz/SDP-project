@@ -11,22 +11,25 @@ import {
   loadLocations,
   handleChangeEventDetails,
   createEventDB,
+  updateEventDB,
   fetchStorage,
   delay,
 } from "./CreateEvent";
 
 import CreateEvent from "./CreateEvent";
+import { handleNextButtonClick } from "./CreateEvent.helpers";
 
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL,deleteObject } from "firebase/storage";
 import { addDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
-import { MemoryRouter, Route, Routes } from "react-router";
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(),
   GoogleAuthProvider: jest.fn(),
 }));
+
+jest.setTimeout(10000);
 
 jest.mock(
   "../../Components/CreateEventPageComponents/CreateEventPendingPage",
@@ -47,6 +50,13 @@ jest.mock(
   }
 );
 window.HTMLElement.prototype.scrollIntoView = jest.fn();
+
+jest.mock("react-toastify", () => ({
+  toast: {
+    warn: jest.fn(),
+    error: jest.fn(),
+  },
+}));
 
 jest.mock("firebase/storage", () => ({
   getDownloadURL: jest.fn(),
@@ -113,6 +123,42 @@ jest.mock("firebase/firestore", () => ({
 jest.mock("uuid", () => ({
   v4: jest.fn(),
 }));
+
+const mockEventRefs = {
+  eventName: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventDate: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventStartTime: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventEndTime: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventType: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventVenueType: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventLocation: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventDescription: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventTicketPrice: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+  eventPicture: {
+    current: { classList: { add: jest.fn() }, scrollIntoView: jest.fn() },
+  },
+};
+
+const mockSetLoader = jest.fn();
+const mockSetSubmitted = jest.fn();
 
 describe("Unit test (Functions)", () => {
   // Set up the mock for localStorage
@@ -259,15 +305,9 @@ describe("handleImageChange", () => {
 
     // Simulate the onload event of the image
     img.onload();
-
-    // Verify that the state setters were called correctly
     expect(mockSetImage).toHaveBeenCalledWith(file);
     expect(mockSetImageError).toHaveBeenCalledWith(null);
-
-    // Verify that FileReader was used to create a preview URL
     expect(reader.readAsDataURL).toHaveBeenCalledWith(file);
-
-    // Simulate FileReader onloadend
     reader.onloadend();
     expect(mockSetImgSrc).toHaveBeenCalledWith(reader.result);
   });
@@ -323,6 +363,17 @@ describe("handleImageChange", () => {
     // Verify that setImgSrc was not called
     expect(mockSetImgSrc).not.toHaveBeenCalled();
   });
+
+  it("No file uploaded",()=>{
+    const event = {
+      target: {
+        files: [],
+      },
+    };
+
+    handleImageChange(event, mockSetImgSrc, mockSetImage, mockSetImageError);
+    expect(mockSetImageError).toHaveBeenCalledWith("Something went wrong uploading your picture");
+  })
 });
 
 describe("createEventDB", () => {
@@ -419,6 +470,7 @@ describe("Create Event rendering", () => {
     const locationInput = screen.getByTestId("location");
     const descriptionInput = screen.getByTestId("description");
     const nextButton = screen.getByText("Submit");
+    const inputFile = screen.getByTestId("pictureInput");
 
     fireEvent.change(eventNameInput, { target: { value: "Sample Event" } });
     fireEvent.change(eventDateInput, { target: { value: "2024-09-30" } });
@@ -439,10 +491,19 @@ describe("Create Event rendering", () => {
     expect(typeInput.value).toBe("edu");
     expect(priceInput.value).toBe("7");
     expect(descriptionInput.value).toBe("I dislike jest");
-    fireEvent.click(nextButton);
-  });
+    // Mock an image file with width > height (landscape)
+    const file = new File(["dummy image content"], "testImage.jpeg", {
+      type: "image/jpeg",
+    });
 
-  // it("shows image preview when an image with width > height is selected", async () => {
+    Object.defineProperty(file, "width", { value: 500 });
+    Object.defineProperty(file, "height", { value: 100 });
+    fireEvent.change(inputFile, { target: { files: [file] } });
+    expect(inputFile.files[0].name).toBe(file.name);
+    fireEvent.click(nextButton);
+
+    // expect(do).toBe("here")
+  });
   //   render(<CreateEvent inputEventDetails={null} />);
 
   //   // Mock an image file with width > height (landscape)
@@ -503,4 +564,304 @@ describe("Create Event rendering", () => {
     expect(nameInput.value).toBe("JestHater");
     expect();
   });
+
 });
+
+describe("handleNextButtonClick", () => {
+  afterEach(() => {
+    jest.clearAllMocks(); // Reset mocks between tests
+  });
+
+  it("should show warning and highlight event name if missing", async () => {
+    const mockEventDetails = {}; // Missing name
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(mockEventRefs.eventName.current.classList.add).toHaveBeenCalledWith(
+      "unfilled-input"
+    );
+    expect(mockEventRefs.eventName.current.scrollIntoView).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith("Please enter your events name");
+  });
+
+  it("should show warning and highlight event date if missing", async () => {
+    const mockEventDetails = { name: "Test Event" }; // Missing date
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(mockEventRefs.eventDate.current.classList.add).toHaveBeenCalledWith(
+      "unfilled-input"
+    );
+    expect(mockEventRefs.eventDate.current.scrollIntoView).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith("Please enter your events date");
+  });
+
+  it("should show warning for invalid date format", async () => {
+    const mockEventDetails = { name: "Test Event", date: "invalid-date" };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(mockEventRefs.eventDate.current.classList.add).toHaveBeenCalledWith(
+      "unfilled-input"
+    );
+    expect(mockEventRefs.eventDate.current.scrollIntoView).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith("Please a vaild date");
+  });
+
+  it("should show warning for no start time", async () => {
+    const mockEventDetails = { name: "Test Event", date: "2024-09-24" };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(
+      mockEventRefs.eventStartTime.current.classList.add
+    ).toHaveBeenCalledWith("unfilled-input");
+    expect(
+      mockEventRefs.eventStartTime.current.scrollIntoView
+    ).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith(
+      "Please enter your events start time"
+    );
+  });
+
+  it("should show warning for no end time", async () => {
+    const mockEventDetails = {
+      name: "Test Event",
+      date: "2024-09-24",
+      start_time: "07:00",
+    };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(
+      mockEventRefs.eventEndTime.current.classList.add
+    ).toHaveBeenCalledWith("unfilled-input");
+    expect(
+      mockEventRefs.eventEndTime.current.scrollIntoView
+    ).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith(
+      "Please enter your events end time"
+    );
+  });
+
+  it("should show warning for no event type", async () => {
+    const mockEventDetails = {
+      name: "Test Event",
+      date: "2024-09-24",
+      start_time: "07:00",
+      end_time: "08:00",
+    };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(mockEventRefs.eventType.current.classList.add).toHaveBeenCalledWith(
+      "unfilled-input"
+    );
+    expect(mockEventRefs.eventType.current.scrollIntoView).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith("Please select your event type");
+  });
+
+  it("should show warning for no event venue type", async () => {
+    const mockEventDetails = {
+      name: "Test Event",
+      date: "2024-09-24",
+      start_time: "07:00",
+      end_time: "08:00",
+      type: "danso",
+    };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(
+      mockEventRefs.eventVenueType.current.classList.add
+    ).toHaveBeenCalledWith("unfilled-input");
+    expect(
+      mockEventRefs.eventVenueType.current.scrollIntoView
+    ).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith(
+      "Please select the event venue type"
+    );
+  });
+
+  it("should show warning for no event location", async () => {
+    const mockEventDetails = {
+      name: "Test Event",
+      date: "2024-09-24",
+      start_time: "07:00",
+      end_time: "08:00",
+      type: "danso",
+      venue_type: "case closed",
+    };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(
+      mockEventRefs.eventLocation.current.classList.add
+    ).toHaveBeenCalledWith("unfilled-input");
+    expect(
+      mockEventRefs.eventLocation.current.scrollIntoView
+    ).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith(
+      "Please select your events location"
+    );
+  });
+
+  it("should show warning for no event description", async () => {
+    const mockEventDetails = {
+      name: "Test Event",
+      date: "2024-09-24",
+      start_time: "07:00",
+      end_time: "08:00",
+      type: "danso",
+      venue_type: "case closed",
+      location: "hit to give",
+    };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(
+      mockEventRefs.eventDescription.current.classList.add
+    ).toHaveBeenCalledWith("unfilled-input");
+    expect(
+      mockEventRefs.eventDescription.current.scrollIntoView
+    ).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith(
+      "Please enter your events description"
+    );
+  });
+
+  it("should show warning for no event price", async () => {
+    const mockEventDetails = {
+      name: "Test Event",
+      date: "2024-09-24",
+      start_time: "07:00",
+      end_time: "08:00",
+      type: "danso",
+      venue_type: "case closed",
+      location: "hit to give",
+      description: "pops no advice",
+    };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(
+      mockEventRefs.eventTicketPrice.current.classList.add
+    ).toHaveBeenCalledWith("unfilled-input");
+    expect(
+      mockEventRefs.eventTicketPrice.current.scrollIntoView
+    ).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith(
+      "Please enter your events ticket price"
+    );
+  });
+
+  it("should show warning for no picture", async () => {
+    const mockEventDetails = {
+      name: "Test Event",
+      date: "2024-09-24",
+      start_time: "07:00",
+      end_time: "08:00",
+      type: "danso",
+      venue_type: "case closed",
+      location: "hit to give",
+      description: "pops no advice",
+      price: 10,
+    };
+
+    await handleNextButtonClick(
+      mockEventDetails,
+      mockEventRefs,
+      null,
+      [],
+      "eventCollection",
+      mockSetLoader,
+      mockSetSubmitted
+    );
+
+    expect(
+      mockEventRefs.eventPicture.current.scrollIntoView
+    ).toHaveBeenCalled();
+    expect(toast.warn).toHaveBeenCalledWith("Please upload a picture");
+  });
+});
+
