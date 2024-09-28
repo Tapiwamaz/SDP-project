@@ -3,19 +3,7 @@ import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Events } from "../MockData/EventsMock";
-import {
-  CalendarContainer,
-  EventStyle,
-  DateCellWrapper,
-  DaySlot,
-  EventDescription,
-  EventTitle,
-  EventLocation,
-  CalendarWrapper,
-  TagsStyle,
-  Body,
-  Page,
-} from "./EventsCalendar.styles";
+import { CalendarWrapper, Body } from "./EventsCalendar.styles";
 
 import Tags from "../Tags/Tags";
 import Header from "../Header/Header";
@@ -31,7 +19,7 @@ const eventColors = {
   Religious: "#6A4739",
   Gaming: "#48a56a",
   IT: "#b25da6",
-  Online:"lime",
+  Online: "#ABCCC9",
   Other: "grey",
 };
 
@@ -46,77 +34,62 @@ const eventColors = {
 //     setView("day");
 //     // You can add your custom logic here, e.g., navigate to a different view or open a modal.
 //   };
-  const eventStyleGetter = (event) => {
-    const backgroundColor = eventColors[event.type] || "grey"; // Default color
-    const style = {
-      backgroundColor,
-      borderRadius: "5px",
-      opacity: 0.8,
-      color: "black",
-      border: "0px",
-      display: "block",
-    };
+
+const eventStyleGetter = (event) => {
+  const backgroundColor = eventColors[event.type] || "grey"; // Default color
+  const style = {
+    backgroundColor,
+    borderRadius: "5px",
+    opacity: 0.8,
+    color: "black",
+    border: "0px",
+    display: "block",
+    height: "fit-content",
+  };
+  return {
+    style,
+  };
+};
+
+const MyCalendar = ({ filter }) => {
+  filter = filter ? filter : [];
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [view, setView] = useState("month");
+
+  const dayPropGetter = (date) => {
     return {
-      style,
+      style: { cursor: "pointer" }, // Make the whole cell clickable
+      onClick: () => {
+        setView(Views.DAY); // Switch to day view
+        setCurrentDate(date);
+        console.log("hello"); // Set the selected date
+      },
     };
   };
 
-const MyCalendar = ({filter}) => {
-  filter=filter?filter:[];
-
-
   return (
     <>
-  
-        <Body>
-         
-          <CalendarWrapper>
-            <div style={{ height: 500 }}>
-              <Calendar
-                localizer={localizer}
-                events={filter}
-                titleAccessor="name"
-                views={["month", "week", "day"]}
-                components={{
-                  event: ({ event }) => (
-                    <EventStyle>
-                      {/* <strong>{event.name}</strong> */}
-                      {/* {event.location && ` - ${event.location}`} */}
-                    </EventStyle>
-                  ),
-                  month: {
-                    dateCellWrapper: ({ children }) => (
-                      <DateCellWrapper>{children}</DateCellWrapper>
-                    ),
-                  },
-                  day: {
-                    event: ({ event }) => (
-                      <DaySlot>
-                        <EventStyle>
-                          <EventTitle>{event.name}</EventTitle>
-                          {/* {event.location && (
-                            <EventLocation>{event.location}</EventLocation>
-                          )} */}
-                          {event.description && (
-                            <EventDescription>
-                              {event.description}
-                            </EventDescription>
-                          )}
-                        </EventStyle>
-                      </DaySlot>
-                    ),
-                  },
-                }}
-                style={{ height: 600 }}
-                startAccessor={(event) => new Date(`${event.date}T${event.start_time}:00`)}
-                endAccessor={(event) => new Date(`${event.date}T${event.end_time}:00`)}
-                
-                eventPropGetter={eventStyleGetter} // Apply styles dynamically
-              />
-            </div>
-            {/* //{" "} */}
-          </CalendarWrapper>
-        </Body>
+      <Body>
+        <CalendarWrapper>
+          <div style={{ height: 600 }}>
+            <Calendar
+              localizer={localizer}
+              events={filter}
+              titleAccessor="name"
+              views={["month", "week", "day"]}
+              style={{ height: 600 }}
+              startAccessor={(event) =>
+                new Date(`${event.date}T${event.start_time}:00`)
+              }
+              endAccessor={(event) =>
+                new Date(`${event.date}T${event.end_time}:00`)
+              }
+              eventPropGetter={eventStyleGetter} // Apply styles dynamically
+            />
+          </div>
+          {/* //{" "} */}
+        </CalendarWrapper>
+      </Body>
       {/* </Page> */}
     </>
   );
