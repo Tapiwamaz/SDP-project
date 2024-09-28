@@ -1,10 +1,12 @@
 import { auth, googleProvider, db } from "../../firebase_config.js"
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { docRef, doc, collection, setDoc } from "firebase/firestore";
+import { docRef, doc, collection, setDoc,query,where,getDocs } from "firebase/firestore";
 import { useState } from "react";
 import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
+
+import { useNavigate } from "react-router";
 
 export const SignIn = () => {
     const [name, setName] = useState("");
@@ -12,6 +14,8 @@ export const SignIn = () => {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     var checkbox = document.getElementById("checkbox");
+    const navigate=useNavigate();
+
 
     const signin = async () => {
         setErrorMessage("");
@@ -24,18 +28,30 @@ export const SignIn = () => {
             return;
         }
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
+            await createUserWithEmailAndPassword(auth, email, password);
+            // navigate('/createProfile');
+            const user = auth.currentUser;
+            if (user) {
+                const userCollectionRef = collection(db, "Users"); // Replace with your collection name
+                const q = query(userCollectionRef, where("user_id", "==", user.uid));
+                const querySnapshot = await getDocs(q);
+              
+                if (!querySnapshot.empty) {//user is already there
+                    querySnapshot.forEach((doc) => {
+                        const userData = doc.data();
+                        
+                        localStorage.setItem("userData", JSON.stringify(userData));
+                        
+                        console.log("User data stored in local storage:", userData);
+                      }); 
+                    navigate('/')
 
-            try {
-                const docRef = doc(db, "Users", user.uid);
-                await setDoc(docRef, {
-                    name: name,
-                    email: email
-                  });
-            }
-            catch (error) {
-                console.error(error);
+                }
+                else{
+                    navigate('/createProfile')
+
+                }
+
             }
         }
         catch (error) {
@@ -60,19 +76,34 @@ export const SignIn = () => {
     const signInWithGoogle = async () => {
         setErrorMessage("");
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
+            await signInWithPopup(auth, googleProvider);
+            // navigate('/createProfile');
+            const user = auth.currentUser;
+            if (user) {
+                const userCollectionRef = collection(db, "Users"); // Replace with your collection name
+                const q = query(userCollectionRef, where("user_id", "==", user.uid));
+                const querySnapshot = await getDocs(q);
+                           
+              
+                if (!querySnapshot.empty) {//user is already there
+                    querySnapshot.forEach((doc) => {
+                        const userData = doc.data();
+                        
+                        localStorage.setItem("userData", JSON.stringify(userData));
+                        
+                        console.log("User data stored in local storage:", userData);
+                      });   
+                    navigate('/')
 
-            try {
-                const docRef = doc(db, "Users", user.uid);
-                await setDoc(docRef, {
-                    name: user.displayName,
-                    email: user.email
-                  });
+
+                }
+                else{
+                    navigate('/createProfile')
+
+                }
+
             }
-            catch (error) {
-                console.error(error);
-            }
+
         }
         catch (error) {
             setErrorMessage(error.message);

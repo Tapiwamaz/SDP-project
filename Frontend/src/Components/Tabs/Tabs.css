@@ -1,0 +1,43 @@
+/* Tab styling */
+.tabs {
+    display: flex; 
+    justify-content: space-around; 
+    background-color: #e0e0e0;
+    padding: 10px; 
+  }
+  
+
+  /* made buttons wider */
+  .tabs button {
+    padding: 15px 20px;
+    border: none;
+    background-color: transparent; 
+    cursor: pointer; 
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #000000; 
+    border-radius: 5px; 
+    flex: 1; 
+    text-align: center; 
+    margin: 0; 
+  }
+  
+  
+  .tabs button:last-child {
+    margin-right: 2px;
+  }
+  
+  
+  .tabs .active {
+    background-color: #003366; 
+    color: #fff; 
+  }
+
+  .Wrapper{
+    width: 85%;
+    @media (max-width: 769px) {
+      width: 100%;
+    }
+
+  }
+  

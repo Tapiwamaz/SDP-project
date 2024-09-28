@@ -1,7 +1,16 @@
 import { ImageContainer, StyledImage, StyledBoldText, StyledText, StyledButton, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
+import { useNavigate } from "react-router";
 
 export const Welcome = () => {
+    const navigate = useNavigate();
+    const sign=()=>{
+        navigate('/signIn');
+    }
+    const login=()=>{
+        navigate('/logIn');
+    }
+
     return (
         <ResponsiveBackground>
             <ResponsiveDiv>
@@ -14,11 +23,11 @@ export const Welcome = () => {
                 <ImageContainer>
                     <StyledText size="16px">To continue please</StyledText>
                 </ImageContainer>
-                <StyledButton>Sign up</StyledButton>
+                <StyledButton onClick={sign}>Sign up</StyledButton>
                 <ImageContainer>
                     <StyledText>__________OR__________</StyledText>
                 </ImageContainer>
-                <StyledButton>Login</StyledButton>
+                <StyledButton onClick={login}>Login</StyledButton>
                 <ImageContainer></ImageContainer>
             </ResponsiveDiv>
         </ResponsiveBackground>

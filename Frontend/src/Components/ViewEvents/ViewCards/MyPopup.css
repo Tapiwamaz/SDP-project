@@ -1,0 +1,63 @@
+.mydescription {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .mydescription:hover {
+    background-color: #138496;
+  }
+  
+  .mypopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .mypopup-inner {
+    position: relative;
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .mypopup-inner .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    cursor: pointer;
+  }
+  
+  .mypopup-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mypopup-content button {
+    margin: 10px;
+    padding: 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .mypopup-content button:hover {
+    background-color: #c82333;
+  }

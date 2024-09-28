@@ -7,8 +7,11 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@azure/functions": "^4.0.0"
+    "@azure/functions": "^4.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "firebase": "^10.13.1",
+    "node-fetch": "^3.3.2"
   },
-  "devDependencies": {},
   "main": "src/{index.js,functions/*.js}"
 }
