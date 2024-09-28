@@ -25,7 +25,7 @@ function getAccessToken() {
     body: data,
   })
     .then((res) => res.json())
-    .then((data) => console.log(data), data.access_token);
+    .then((data) => data.access_token);
 }
 // const fetch = require('node-fetch');
 app.http("create_order", {

@@ -76,6 +76,7 @@ const PayPalButton = ({ event, count, user_ID , onDisplayModal}) => {
               })
                 .then((response) => response.json())
                 .then((order) => {
+                  console.log(order);
                   return order.id;
                 });
             },

@@ -1,4 +1,5 @@
 // Import necessary modules and components
+// rG4AF+FH
 import React, { useEffect, useState } from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -27,15 +28,26 @@ import {
 } from "./EventDisplay.style";
 import SecurityModal from "../SecurityModal/SecurityModal";
 // Main component for the Event Page
-const EventDisplay = ({ events, loading, setLoading, onDisplaySummary, ticket }) => {
+const EventDisplay = ({
+  events,
+  loading,
+  setLoading,
+  onDisplaySummary,
+  ticket,
+}) => {
   console.log(!!loading);
   const navigate = useNavigate();
   const location = useLocation();
   let event = null;
+  let tick = null;
   const handleEvent = () => {
     if (events === undefined) {
+      tick = location.state.ticket;
+      console.log(tick);
       event = location.state.event;
     } else {
+      tick = ticket;
+      console.log(ticket);
       event = events;
     }
   };
@@ -56,15 +68,15 @@ const EventDisplay = ({ events, loading, setLoading, onDisplaySummary, ticket })
   const [Load, setLoad] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   // Log the event for debugging
-  if (ticket) {
-    setRated(ticket.rated);
-  }
   useEffect(() => {
     const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
     if (screenWidth <= 768) {
       setScreen("phone");
     } else {
       setScreen("desktop");
+    }
+    if (!book) {
+      setRated(tick.rated);
     }
     if (event.ticket_count === 0) {
       console.log("Event is full");
@@ -150,7 +162,7 @@ const EventDisplay = ({ events, loading, setLoading, onDisplaySummary, ticket })
       },
       body: JSON.stringify({
         rating: `${rating}`,
-        userID: `${EventOrg.userID}`,
+        userID: `${EventOrg.user_id}`,
         rates: `${EventOrg.Rates}`,
         EventOrgRating: `${EventOrg.rating}`,
       }),
@@ -163,7 +175,7 @@ const EventDisplay = ({ events, loading, setLoading, onDisplaySummary, ticket })
       })
       .then((data) => {
         console.log(data);
-        setRated(false);
+        setRated(true);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -405,7 +417,7 @@ const EventDisplay = ({ events, loading, setLoading, onDisplaySummary, ticket })
                   padding: "1em",
                 }}
               >
-                {rated ? (
+                {!rated ? (
                   <>
                     <h3
                       style={{

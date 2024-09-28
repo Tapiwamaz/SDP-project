@@ -92,7 +92,7 @@ app.http("Rating", {
           Rates: rates + 1, // assuming 'rates' is defined somewhere in your code
         });
         const data = { rating: newRating };
-        return {
+        return { 
           status: 200,
           body: JSON.stringify(data),
           headers: {
