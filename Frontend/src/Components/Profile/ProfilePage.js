@@ -47,10 +47,10 @@ import { v4 } from "uuid";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
 
-const Profile = () => {
+const ProfilePage = () => {
   const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : {};
-  const UsersCollectionRef = collection(db, "Users");
+
 
   const [profileImage, setProfileImage] = useState(userData.imageURL || null);
   const fileInputRef = useRef(null);
@@ -222,21 +222,7 @@ const Profile = () => {
 
     fetchCount();
   }, []);
-  // const handleImageChange = (event, setImageSrc, setImage, setImageError) => {
-  //   const file = event.target.files[0];
 
-  //   if (file) {
-  //     const img = new Image();
-  //     img.src = URL.createObjectURL(file);
-  //     img.onload = () => {
-  //       URL.revokeObjectURL(img.src); // Clean up memory
-  //     };
-  //   } else {
-  //     setImageError("Something went wrong uploading your picture");
-  //   }
-  // };
-
-  //
   const logout = async () => {
     try {
       await signOut(auth);
@@ -409,4 +395,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;
