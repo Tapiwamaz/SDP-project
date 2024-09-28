@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //rrd
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 //mockdate
 import {
   mockEventTypes,
@@ -25,16 +25,14 @@ import {
   mockVirtualLocations,
 } from "../../MockData/MockData";
 //firebase work
-import {
-  collection,
-} from "firebase/firestore";
+import { collection } from "firebase/firestore";
 
-import { auth, db ,storage} from "../../firebase_config";
+import { auth, db, storage } from "../../firebase_config";
 //components
 import Header from "../../Components/Header/Header";
 
 import CreateEventPendingPage from "../../Components/CreateEventPageComponents/CreateEventPendingPage";
-import { handleNextButtonClick } from "./CreateEvent.helpers";
+import { fetchVenues, handleNextButtonClick } from "./CreateEvent.helpers";
 
 import { addDoc, query, getDocs, updateDoc, where } from "firebase/firestore";
 import {
@@ -46,8 +44,6 @@ import {
 
 // uuid
 import { v4 } from "uuid";
-
-
 
 export const fetchStorage = (key) => {
   try {
@@ -113,7 +109,6 @@ export const handleImageChange = (
 
 export const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-
 export const createEventDB = async (
   newEvent,
   eventCollection,
@@ -122,26 +117,25 @@ export const createEventDB = async (
 ) => {
   try {
     const capacity = locations.filter(
-      (loc) => loc.location === newEvent.location
-    )[0].capacity;
+      (loc) => loc.venueName === newEvent.location
+    )[0].venueCapacity;
+    const venueId = locations.filter(
+      (loc) => loc.venueName === newEvent.location
+    )[0].id;
 
     const imageRef = ref(storage, `eventsImages/${imageT.name + v4()}`);
     const snapshot = await uploadBytes(imageRef, imageT);
     const downloadURL = await getDownloadURL(snapshot.ref);
 
     newEvent.image_url = downloadURL;
+    newEvent.venue_id = venueId;
     newEvent.capacity = capacity;
     newEvent.ticket_count = capacity;
     newEvent.event_id = v4();
     newEvent.active = true;
     newEvent.approved = false;
-    // newEvent.approved = true;
     newEvent.status = "pending";
     delete newEvent.eventPicture;
-    if (!newEvent.user_id) {
-      newEvent.user_id = "lWvmYviBNYWm6gOJrkgIF2RVpaC3";
-    }
-    console.log(newEvent);
 
     // Add image to bucket and event to Firestore
     await addDoc(eventCollection, newEvent);
@@ -159,20 +153,19 @@ export const updateEventDB = async (
 ) => {
   try {
     const capacity = locations.filter(
-      (loc) => loc.location === updatedEvent.location
-    )[0].capacity;
+      (loc) => loc.venueName === updatedEvent.location
+    )[0].venueCapacity;
     updatedEvent.capacity = capacity;
 
     const oldImageUrl = updatedEvent.image_url;
+    updatedEvent.approved = false;
+    updatedEvent.status = "pending";
 
     // If the old image URL exists, delete the old image from storage
     // this should only be done if there another image uploaded
-    if (imageT.name) {
-      if (oldImageUrl) {
-        const oldImageRef = ref(storage, oldImageUrl);
-        await deleteObject(oldImageRef);
-      }
-
+    if (imageT && imageT.name && oldImageUrl) {
+      const oldImageRef = ref(storage, oldImageUrl);
+      await deleteObject(oldImageRef);
       const imageRef = ref(storage, `eventsImages/${imageT.name + v4()}`);
       const snapshot = await uploadBytes(imageRef, imageT);
       const downloadURL = await getDownloadURL(snapshot.ref);
@@ -195,10 +188,13 @@ export const updateEventDB = async (
   }
 };
 
-
 const CreateEvent = ({ inputEventDetails }) => {
   const navigate = useNavigate();
   const userData = fetchStorage("userData") || {};
+  const location = useLocation();
+  if (location && location.state && location.state.inputEventDetails) {
+    inputEventDetails = location.state.inputEventDetails;
+  }
   // todays date to start date picker
   const todayDate = new Date().toISOString().split("T")[0];
   //preview image
@@ -238,7 +234,7 @@ const CreateEvent = ({ inputEventDetails }) => {
     eventPicture: eventPictureRef,
   });
 
-  const [availableLocations, setAvailableLocations] = useState([]);
+  const [availableLocations, setAvailableLocations] = useState(mockLocations);
   const [eventTypes, setEventTypes] = useState(mockEventTypes);
 
   // db variables
@@ -248,19 +244,25 @@ const CreateEvent = ({ inputEventDetails }) => {
   // Functions
 
   useEffect(() => {
-    // loadLocations(setAvailableLocations, mockLocations );
     const userId = auth?.currentUser?.uid;
-    setAvailableLocations(mockLocations);
+    const data = fetchVenues();
+    data.then((res) => {
+      if (res) {
+        setAvailableLocations(res);
+      } else {
+        setAvailableLocations(mockLocations);
+        console.error("Error fetching data from venues");
+      }
+    });
+
     setEventTypes(mockEventTypes);
     if (inputEventDetails) {
       setImgSrc(inputEventDetails.image_url);
       setEventDetails(inputEventDetails);
-    }
-    else if (userData.user_id){
-      setEventDetails({user_id: userData.user_id});
-    }
-    else if (userId){
-      setEventDetails({user_id: userId});
+    } else if (userId) {
+      setEventDetails({ user_id: userId });
+    } else if (userData.user_id) {
+      setEventDetails({ user_id: userData.user_id });
     }
   }, []);
 
@@ -281,7 +283,6 @@ const CreateEvent = ({ inputEventDetails }) => {
       <div>
         <Header />
         <section className="wrapperCreateEvent">
-
           {loader && (
             <div className="loader">
               <div className="centerLoader" />
@@ -293,6 +294,7 @@ const CreateEvent = ({ inputEventDetails }) => {
               <div className="formInfoContainer">
                 <nav
                   className="navBarCreateEvents"
+                  data-testid="navBarCreateEvents"
                   onClick={() => navigate(-1)}
                 >
                   <ArrowLeftCircleIcon
@@ -313,12 +315,12 @@ const CreateEvent = ({ inputEventDetails }) => {
             <section className="inputs">
               {/* Image  */}
               {imgSrc && (
-                // <>
                 <img className="imageHolder" src={imgSrc} alt="Preview" />
               )}
 
               <div
                 className="drop-file-container"
+                data-testid="drop-file-container"
                 style={{
                   position: imgSrc ? "absolute" : "static",
                   background: !imgSrc
@@ -385,98 +387,11 @@ const CreateEvent = ({ inputEventDetails }) => {
                 }
               />
 
-              <label className="label" htmlFor="eventDate">
-                Date
-              </label>
-              <input
-                className="input"
-                type="date"
-                data-testid="date"
-                name="eventDate"
-                ref={eventDateRef}
-                min={todayDate}
-                value={eventDetails.date || ""}
-                onFocus={(e) => {
-                  eventDateRef.current.classList.remove("unfilled-input");
-                }}
-                onChange={(e) =>
-                  handleChangeEventDetails(
-                    e.target.value,
-                    "date",
-                    setEventDetails
-                  )
-                }
-              ></input>
-
-              {/* Time inputs */}
-              <div className="doubleInputContainer">
-                <div
-                  className="doubleInput"
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <label className="label" htmlFor="eventDate">
-                    Start Time
-                  </label>
-                  <input
-                    className="input"
-                    type="time"
-                    min="08:00"
-                    data-testid="start_time"
-                    name="eventStartTime"
-                    ref={eventStartTimeRef}
-                    value={eventDetails.start_time || ""}
-                    onFocus={(e) => {
-                      eventStartTimeRef.current.classList.remove(
-                        "unfilled-input"
-                      );
-                    }}
-                    onChange={(e) =>
-                      handleChangeEventDetails(
-                        e.target.value,
-                        "start_time",
-                        setEventDetails
-                      )
-                    }
-                  ></input>
-                </div>
-
-                <div
-                  className="doubleInput"
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <label className="label" htmlFor="eventDate">
-                    End Time
-                  </label>
-                  <input
-                    className="input"
-                    value={eventDetails.end_time || ""}
-                    type="time"
-                    data-testid="end_time"
-                    min="08:00"
-                    placeholder="e.g 08:00"
-                    ref={eventEndTimeRef}
-                    name="eventEndTime"
-                    onFocus={(e) => {
-                      eventEndTimeRef.current.classList.remove(
-                        "unfilled-input"
-                      );
-                    }}
-                    onChange={(e) =>
-                      handleChangeEventDetails(
-                        e.target.value,
-                        "end_time",
-                        setEventDetails
-                      )
-                    }
-                  />
-                </div>
-              </div>
-
               {/* Event type */}
               <label className="label" htmlFor="eventType">
                 Event Type
               </label>
-              <datalist id="eventTypeList" data-testid="locationsList">
+              <datalist id="eventTypeList" data-testid="eventTypeList">
                 {eventTypes.map((type, index) => (
                   <option key={index} value={type} />
                 ))}
@@ -504,88 +419,202 @@ const CreateEvent = ({ inputEventDetails }) => {
                   }
                 }}
               />
+
+              {!inputEventDetails && (
+                <label className="label" htmlFor="eventDate">
+                  Date
+                </label>
+              )}
+              {!inputEventDetails && (
+                <input
+                  className="input"
+                  type="date"
+                  data-testid="date"
+                  name="eventDate"
+                  ref={eventDateRef}
+                  min={todayDate}
+                  value={eventDetails.date || ""}
+                  onFocus={(e) => {
+                    eventDateRef.current.classList.remove("unfilled-input");
+                  }}
+                  onChange={(e) =>
+                    handleChangeEventDetails(
+                      e.target.value,
+                      "date",
+                      setEventDetails
+                    )
+                  }
+                ></input>
+              )}
+
               {/* Venue and location */}
-              <div className="doubleInputContainer">
-                {/* Venue type */}
-                <div
-                  className="doubleInput"
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <label className="label" htmlFor="eventVenueType">
-                    {eventDetails.type === "Online" ? "Platform" : "Venue Type"}
-                  </label>
-                  <input
-                    className="input"
-                    list="venueList"
-                    data-testid="venue_type"
-                    placeholder="e.g Lecture room"
-                    ref={eventVenueTypeRef}
-                    value={eventDetails.venue_type || ""}
-                    onFocus={() =>
-                      eventVenueTypeRef.current.classList.remove(
-                        "unfilled-input"
-                      )
-                    }
-                    name="eventVenueType"
-                    onChange={(e) => {
-                      handleChangeEventDetails(
-                        e.target.value,
-                        "venue_type",
-                        setEventDetails
-                      );
-                      setFilterVenueType(e.target.value);
-                    }}
-                  ></input>
+              {!inputEventDetails && (
+                <div className="doubleInputContainer">
+                  {/* Venue type */}
+                  <div
+                    className="doubleInput"
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <label className="label" htmlFor="eventVenueType">
+                      {eventDetails.type === "Online"
+                        ? "Platform"
+                        : "Venue Type"}
+                    </label>
+                    <input
+                      className="input"
+                      list="venueList"
+                      data-testid="venue_type"
+                      placeholder="e.g Lecture room"
+                      ref={eventVenueTypeRef}
+                      value={eventDetails.venue_type || ""}
+                      onFocus={() =>
+                        eventVenueTypeRef.current.classList.remove(
+                          "unfilled-input"
+                        )
+                      }
+                      name="eventVenueType"
+                      onChange={(e) => {
+                        handleChangeEventDetails(
+                          e.target.value,
+                          "venue_type",
+                          setEventDetails
+                        );
+                        setFilterVenueType(e.target.value);
+                      }}
+                    ></input>
 
-                  <datalist id="venueList" data-testid="locationsList">
-                    {[
-                      ...new Set(
-                        availableLocations.map((platform) => platform.type)
-                      ),
-                    ].map((type, index) => (
-                      <option key={index} value={type} />
-                    ))}
-                  </datalist>
-                </div>
-
-                {/* Location */}
-                <div
-                  className="doubleInput"
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <label className="label" htmlFor="eventLocation">
-                    Location
-                  </label>
-                  <input
-                    className="input"
-                    list="locationsList"
-                    data-testid="location"
-                    onFocus={() =>
-                      eventLocationRef.current.classList.remove(
-                        "unfilled-input"
-                      )
-                    }
-                    ref={eventLocationRef}
-                    value={eventDetails.location || ""}
-                    name="eventLocation"
-                    onChange={(e) =>
-                      handleChangeEventDetails(
-                        e.target.value,
-                        "location",
-                        setEventDetails
-                      )
-                    }
-                  ></input>
-
-                  <datalist id="locationsList">
-                    {availableLocations
-                      .filter((x) => x.type === filterVenueType)
-                      .map((loc) => (
-                        <option value={loc.location} />
+                    <datalist id="venueList" data-testid="locationsList">
+                      {[
+                        ...new Set(
+                          availableLocations.map(
+                            (platform) => platform.venueType
+                          )
+                        ),
+                      ].map((type, index) => (
+                        <option key={index} value={type} />
                       ))}
-                  </datalist>
+                    </datalist>
+                  </div>
+
+                  {/* Location */}
+                  <div
+                    className="doubleInput"
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <label className="label" htmlFor="eventLocation">
+                      Location
+                    </label>
+                    <input
+                      className="input"
+                      list="locationsList"
+                      data-testid="location"
+                      onFocus={() =>
+                        eventLocationRef.current.classList.remove(
+                          "unfilled-input"
+                        )
+                      }
+                      ref={eventLocationRef}
+                      value={eventDetails.location || ""}
+                      name="eventLocation"
+                      onChange={(e) =>
+                        handleChangeEventDetails(
+                          e.target.value,
+                          "location",
+                          setEventDetails
+                        )
+                      }
+                    ></input>
+
+                    <datalist id="locationsList">
+                      {availableLocations
+                        .filter((x) => x.venueType === filterVenueType)
+                        .map((loc) => (
+                          <option value={loc.venueName} />
+                        ))}
+                    </datalist>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Time inputs */}
+              {!inputEventDetails && (
+                <div className="doubleInputContainer">
+                  <div
+                    className="doubleInput"
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <label className="label" htmlFor="eventDate">
+                      Start Time
+                    </label>
+                    <input
+                      className="input"
+                      placeholder="e.g 08:00"
+                      data-testid="start_time"
+                      list="timeSlotsList"
+                      name="eventStartTime"
+                      disabled={!eventDetails.location}
+                      ref={eventStartTimeRef}
+                      value={eventDetails.start_time || ""}
+                      onFocus={(e) => {
+                        eventStartTimeRef.current.classList.remove(
+                          "unfilled-input"
+                        );
+                      }}
+                      onChange={(e) =>
+                        handleChangeEventDetails(
+                          e.target.value,
+                          "start_time",
+                          setEventDetails
+                        )
+                      }
+                    ></input>
+
+                    <datalist id="timeSlotsList" data-testid="timeSlotsList">
+                      {availableLocations.filter(
+                        (v) => v.venueName === eventDetails.location
+                      )[0] &&
+                        availableLocations
+                          .filter(
+                            (v) => v.venueName === eventDetails.location
+                          )[0]
+                          .timeSlots.map((t, index) => (
+                            <option key={index}>{t}</option>
+                          ))}
+                    </datalist>
+                  </div>
+
+                  <div
+                    className="doubleInput"
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
+                    <label className="label" htmlFor="eventDate">
+                      End Time
+                    </label>
+                    <input
+                      className="input"
+                      value={eventDetails.end_time || ""}
+                      data-testid="end_time"
+                      list="timeSlotsList"
+                      placeholder="e.g 09:00"
+                      disabled={!eventDetails.location}
+                      ref={eventEndTimeRef}
+                      name="eventEndTime"
+                      onFocus={(e) => {
+                        eventEndTimeRef.current.classList.remove(
+                          "unfilled-input"
+                        );
+                      }}
+                      onChange={(e) =>
+                        handleChangeEventDetails(
+                          e.target.value,
+                          "end_time",
+                          setEventDetails
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* Ticket Price  Label*/}
               <label className="label" htmlFor="eventTicketPrice">

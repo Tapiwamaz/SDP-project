@@ -12,9 +12,8 @@
 
 .btn:hover {
   transform: scale(1.01);
-  background-color: white;
-  border: black solid 3px;
-  color: black;
+  background-color: #002244;
+  color: white;
 }
 
 .wrapperCreateEvent {
