@@ -362,7 +362,7 @@ const EventDisplay = ({ events, loading, setLoading, onDisplaySummary, ticket })
             </div>
             <p style={{ gridColumn: "span 2" }}>{EventOrg.description}</p>
           </EveOCard>
-          {!book ? (
+          {book ? (
             <>
               {!Full ? (
                 <>
