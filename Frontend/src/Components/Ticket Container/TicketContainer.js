@@ -62,11 +62,13 @@ export const TicketContainer = () => {
         const querySnapshot = await getDocs(q);
         const events = [];
         const ids = [];
+        const ratings = [];
 
         querySnapshot.forEach((doc) => {
           console.log(doc);
           ids.push(doc.id);
           events.push(doc.data().event_id);
+          ratings.push(doc.data().rated);
         });
         console.log(events);
         console.log(ids);
@@ -108,6 +110,7 @@ export const TicketContainer = () => {
                 // Push the event data into the array
                 data.push({
                   id: ids[i], // ticket id
+                  rated: ratings[i], // ticket rating
                   active: eventsData.active,
                   capacity: eventsData.capacity,
                   description: eventsData.description,
