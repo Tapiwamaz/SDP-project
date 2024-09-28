@@ -88,13 +88,19 @@ export const TicketContainer = () => {
                                 // Push the event data into the array
                                 data.push({
                                     id: ids[i], // ticket id
+                                    active: eventsData.active,
+                                    capacity: eventsData.capacity,
+                                    description: eventsData.description,
+                                    type: eventsData.type,
                                     title: eventsData.name,
-                                    url: eventsData.image_url,
+                                    url: eventsData.image_url,  // event image
                                     date: eventsData.date,
                                     time: eventsData.start_time,
+                                    endTime: eventsData.end_time,
                                     venue: eventsData.location,
                                     total: eventsData.price,
-                                    qrcode: <QRCodeSVG value={ids[i]} size={50} /> // QR code with ticket id
+                                    qrcode: <QRCodeSVG value={ids[i]} size={50} /> ,// QR code with ticket id
+                                    eventData: eventsData
                                 });
                             });
                         } else {
@@ -122,6 +128,10 @@ export const TicketContainer = () => {
         return <p>Loading...</p>;
     }
 
+    const handleTicketClick = (ticket) => {
+        console.log(ticket.eventData.name);
+    };
+
     return (
         <>
         {/* <Navbar></Navbar> */}
@@ -139,6 +149,7 @@ export const TicketContainer = () => {
                     url={ticket.url}
                     qrcode={ticket.qrcode}
                     id={ticket.id}
+                    onClick={() => handleTicketClick(ticket)}
                 />
             )):<p> No Bookings made</p>}
         </div>

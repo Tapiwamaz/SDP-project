@@ -1,9 +1,9 @@
 import { TicketContainer, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, QRCode, DownloadLink } from "./Ticket.styles";
 import download from '../../Images/download.svg';
 
-export const Ticket = ({ title, date, time, venue, total, url, qrcode, id })  => {
+export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick })  => {
     return (
-      <TicketContainer>
+      <TicketContainer onClick={onClick}>
         {/* Mobile: Image on the left, Larger screens: Image below title */}
         <TicketImage src={url} alt="Event Image" />
   
