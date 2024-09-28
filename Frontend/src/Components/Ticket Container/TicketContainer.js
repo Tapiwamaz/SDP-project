@@ -153,6 +153,7 @@ export const TicketContainer = () => {
   }
 
   const handleTicketClick = (ticket) => {
+    setLoad(true);
     const event = ticket.eventData;
     if (screen === "desktop") {
       setTick(ticket);
@@ -204,7 +205,7 @@ export const TicketContainer = () => {
 
               <EventDisplay
                 events={EventsDisplay}
-                loading={false}
+                loading={Load}
                 setLoading={setLoad}
                 ticket={tick}
               ></EventDisplay>

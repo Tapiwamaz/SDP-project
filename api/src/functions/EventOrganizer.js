@@ -50,6 +50,7 @@ app.http("GetUser", {
     }
   },
 });
+
 app.http("Rating", {
   // when a rating happens we must update the ticket to rated
   methods: ["PUT"],
@@ -72,11 +73,13 @@ app.http("Rating", {
       let rating = parseInt(data.rating);
       let rates = parseInt(data.rates);
       let EventOrgRating = parseInt(data.EventOrgRating);
+      const ticketId = data.ticketID;
 
       context.log(`Received userID: ${userID}`);
       context.log(`Received rating: ${rating}`);
       context.log(`Received EventOrgRating: ${EventOrgRating}`);
       context.log(`Received rates: ${rates}`);
+      context.log(`Received ticketId: ${ticketId}`);
 
       const newRating = (EventOrgRating * rates + rating) / (rates + 1);
 
@@ -91,8 +94,12 @@ app.http("Rating", {
           rating: newRating,
           Rates: rates + 1, // assuming 'rates' is defined somewhere in your code
         });
+        const ticketRef = doc(db, "Tickets", ticketId);
+        await updateDoc(ticketRef, {
+          rated: true,
+        });
         const data = { rating: newRating };
-        return { 
+        return {
           status: 200,
           body: JSON.stringify(data),
           headers: {

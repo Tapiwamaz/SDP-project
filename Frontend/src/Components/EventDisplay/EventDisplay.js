@@ -77,6 +77,7 @@ const EventDisplay = ({
     }
     if (!book) {
       setRated(tick.rated);
+      console.log(rated);
     }
     if (event.ticket_count === 0) {
       console.log("Event is full");
@@ -165,6 +166,7 @@ const EventDisplay = ({
         userID: `${EventOrg.user_id}`,
         rates: `${EventOrg.Rates}`,
         EventOrgRating: `${EventOrg.rating}`,
+        ticketID: `${tick.id}`,
       }),
     })
       .then((res) => {
