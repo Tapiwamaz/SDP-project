@@ -142,5 +142,56 @@ const mockVirtualLocations = [
   },
 ];
 
+const mockNotifications = [
+  {
+    notification_id: "notif_001",
+    time: "2024-09-23T10:15:00",
+    notification_type: "admin",
+    message: "Your account has been verified.",
+    event_id: "event_101",
+    organiser_id: "org_001",
+    name:"Tapiwa"
+  },
+  {
+    notification_id: "notif_002",
+    time: "2024-09-25T12:30:00",
+    notification_type: "organizer",
+    message: "The event 'Tech Summit' has been updated.",
+    event_id: "event_102",
+    organiser_id: "org_002",
+    name:"Tapiwa"
 
-export { mockEventData, mockLocations,mockEventTypes, mockVirtualLocations };
+  },
+  {
+    notification_id: "notif_003",
+    time: "2024-09-26T08:00:00",
+    notification_type: "edit",
+    message: "Your event 'Marketing 101' has been edited successfully.",
+    event_id: "event_103",
+    organiser_id: "org_003",
+    name:"Tapiwa"
+
+  },
+  {
+    notification_id: "notif_004",
+    time: "2024-09-26T09:45:00",
+    notification_type: "admin",
+    message: "New features have been added to your dashboard.",
+    event_id: "event_104",
+    organiser_id: "org_001",
+    name:"Tapiwa"
+
+  },
+  {
+    notification_id: "notif_005",
+    time: "2024-09-27T16:15:00",
+    notification_type: "organizer",
+    message: "The event 'AI Conference' has been canceled.",
+    event_id: "event_105",
+    organiser_id: "org_002",
+    name:"Tapiwa"
+  },
+];
+
+
+export { mockEventData, mockLocations,mockEventTypes, mockVirtualLocations ,mockNotifications};
