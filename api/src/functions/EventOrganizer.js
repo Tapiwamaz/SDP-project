@@ -153,6 +153,7 @@ app.post("BookTicket", {
           expired: false,
           ticket_id: ticketID, // Add the ticketID to the ticket data
           rated: false,
+          cancelled: false,
         };
         try {
           const docRef = await addDoc(collection(db, "Tickets"), ticketData);
