@@ -1,103 +1,161 @@
-import styled from 'styled-components';
+import styled from "styled-components";
+import { UserIcon, XMarkIcon } from "@heroicons/react/24/solid"; // or '@heroicons/react/outline' for an outlined version
 
-// Header Container
 export const HeaderContainer = styled.header`
+  /* position: static; */
+  /* width: 100%; */
+  background-color: white;
   display: flex;
-  justify-content: center; /* Center items horizontally */
+  justify-content: space-between;
   align-items: center;
-  height: 10vh;
-  padding: 15px 20px; /* Adequate padding */
-  width: 100%; /* Ensure full width */
-  box-sizing: border-box; /* Include padding in width calculation */
+  padding: 1rem 2rem;
+  border-bottom: black 2px solid;
+  color: black;
+  overflow-y: hidden;
 
-  /* Container adjustments for different screen sizes */
   @media (max-width: 768px) {
-    padding: 15px 10px; /* Adjust padding for smaller screens */
+    font-size: smaller;
+    flex-direction: row-reverse;
   }
 `;
 
-// Image button styles (back & search buttons)
-export const ImageButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: 50%; /* Make it circular */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Circular shadow effect */
-  padding: 15px; /* Increased padding for better touch area */
-  margin-right: 30px; /* Space between buttons */
-  margin-left: 30px; /* Space between buttons */
-  margin-top: 30px; /* Space between buttons */
-  
-  img {
-    width: 40px; /* Default size */
-    height: 40px; /* Default size */
-    border-radius: 50%; /* Ensure the image inside is circular */
+export const Logo = styled.img`
+
+  font-size: 1.5rem;
+  margin: 0;
+  height: 80px;
+  @media (max-width: 768px) {
+    display: none;
   }
+`;
+
+export const Nav = styled.nav`
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+export const NavItem = styled.a`
+  color: black;
+  text-decoration: none;
+  font-size: 1rem;
 
   &:hover {
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+    text-decoration: underline;
+  }
+`;
+
+export const Burger = styled.div`
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+
+  span {
+    height: 3px;
+    width: 25px;
+    background-color: black;
+    margin-bottom: 5px;
+    border-radius: 5px;
   }
 
   @media (max-width: 768px) {
-    img {
-      width: 25px;
-      height: 25px;
+    display: flex;
+  }
+`;
+
+export const Aside = styled.aside`
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 190px;
+  background-color: var(--primaryGrey);
+
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(100%)")};
+  transition: transform 0.3s ease-in-out;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+`;
+
+export const AsideNavItem = styled.a`
+  color: white;
+  text-decoration: none;
+  font-size: 1.25rem;
+  /* height: 50px; */
+  margin: 10px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+export const Profile = styled.div`
+  /* @media (min-width: 769px) {
+    display: none;
+  } */
+  /* border-radius: 100px; */
+  width: fit-content;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center; 
+  /* object-fit: cover; */
+
+  img {
+    border-radius: 50%;
+    /* width: fit-content; */
+    width: 40px;
+    &:hover {
+      transform: scale(1.2);
+      border: 2px solid var(--primary);
+      /* border-radius: 50%; */
     }
-    padding: 12px; /* Adjust padding for smaller screens */
-  }
-
-  @media (max-width: 480px) {
-    img {
-      width: 15px; /* Smaller size for very small screens */
-      height: 15px; /* Smaller size for very small screens */
-    }
-    padding: 10px; /* Adjust padding for very small screens */
   }
 `;
 
-// Title styling
-export const Title = styled.h1`
-  flex-grow: 1;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-  
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 18px; /* Adjust font size for very small screens */
-  }
+export const ProfileIcon = styled(UserIcon)`
+  border: black 2px solid;
+  border-radius: 100%;
+  width: 40px;
+  height: 30px;
+  color: black;
+  cursor: pointer;
 `;
 
-// Search Input styling
-export const SearchInput = styled.input`
-  width: 20%; /* Default width of search input */
-  height: 35px;
-  padding: 5px 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 15px;
-  outline: none;
-  transition: width 0.3s ease;
-  box-sizing: border-box; /* Include padding in width calculation */
-
-  &:focus {
-    width: 250px; /* Expands when focused */
-  }
-
-  @media (max-width: 768px) {
-    
-    font-size: 14px;
-  }
-
-  @media (max-width: 480px) {
-    
-    font-size: 12px;
-    padding: 4px 8px; /* Adjust padding */
-  }
+export const Xicon = styled(XMarkIcon)`
+  color: white;
+  width: 40px;
+  height: 30px;
 `;
 
+export const ProfileDropdown = styled.div`
+  position: absolute;
+  top: 121px; /* Just below the header */
+  right: 0;
+  width: 100%; /* Full width dropdown */
+  background-color: white;
+  height: fit-content;
+  z-index: 999; /* Ensure it stays above the content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+  transition: max-height 0.4s ease-in-out;
+  max-height: ${({ isOpen }) => (isOpen ? "250px" : "0")}; /* Smooth dropdown */
+  overflow: hidden;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
 
+  @media (min-width: 768px) {
+    /* width: ; Limit width for larger screens */
+  }
+`;

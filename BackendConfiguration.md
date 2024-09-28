@@ -1,7 +1,7 @@
 # Setup
 <!--  -->
 First navigate to your api folder in a terminal and install firebase's node_modules
-# `npm install Firebase`
+# `npm install firebase`
 <!--  -->
 
 # Creating an api function
