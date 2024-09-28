@@ -1,4 +1,4 @@
-import styled ,{keyframes} from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   MapPinIcon,
   BanknotesIcon,
@@ -63,6 +63,7 @@ export const TimeIcon = styled(ClockIcon)`
 
 export const EventPages = styled.div`
   border: 1px solid #d9d9d9;
+  font-family: "Khula";
   display: flex;
   width: 91%;
   flex-direction: column;
@@ -79,27 +80,27 @@ export const EventPages = styled.div`
     width: 450px;
     font-size: 1.25em;
   }
-`;export const BookButton = styled.button`
+`;
+export const BookButton = styled.button`
   color: #fff;
   font-size: 1em;
   font-weight: 600;
   height: 3.25em;
   gap: 0.625em;
   border-radius: 0.625em;
-  background: ${props => {
-    console.log(
-      props
-    );
-    
-    return props.full ? 'gray' : '#18336c'}};
+  background: ${(props) => {
+    console.log(props);
+
+    return props.full ? "gray" : "#18336c";
+  }};
   border: none;
   margin-top: 1em;
   padding: 1em;
   margin-bottom: 1em;
   transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
-  
+
   &:hover {
-    filter: ${props => props.full ? 'brightness(80%)' : 'brightness(200%)'};
+    filter: ${(props) => (props.full ? "brightness(80%)" : "brightness(200%)")};
   }
 `;
 
@@ -213,7 +214,7 @@ export const Email = styled.p`
   margin-top: -2px;
 
   @media (max-width: 400px) {
-    margin-top:-.7em;
+    margin-top: -0.7em;
   }
 `;
 
@@ -226,6 +227,6 @@ export const SubmitedRating = styled.div`
 `;
 
 export const SubmitedRatingTick = styled(CheckBadgeIcon)`
-width: 2.5em;
-color: green;
-`
+  width: 2.5em;
+  color: green;
+`;

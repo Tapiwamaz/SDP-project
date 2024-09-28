@@ -2,12 +2,8 @@ import React, { useState } from "react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Events } from "../MockData/EventsMock";
 import { CalendarWrapper, Body } from "./EventsCalendar.styles";
-
-import Tags from "../Tags/Tags";
-import Header from "../Header/Header";
-import AsideDesktop from "../AsideDesktop/AsideDesktop";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
 
@@ -23,17 +19,55 @@ const eventColors = {
   Other: "grey",
 };
 
-// const MyCalendar = ({ events }) => {
-//   const [activeTag, setActiveTag] = useState(null); // State to track the active tag
-//   const [filteredEvents, SetFilteredEvents] = useState(Events);
-//   const [view, setView] = useState(Views.MONTH);
-//   const [selectedDate, setSelectedDate] = useState(null);
+const CustomToolbar = (props) => {
+  const { label, view } = props;
 
-//   const handleDateClick = (date) => {
-//     setSelectedDate(date);
-//     setView("day");
-//     // You can add your custom logic here, e.g., navigate to a different view or open a modal.
-//   };
+  const handleNavigate = (event) => {
+    const action = event.target.value;
+
+    switch (action) {
+      case "today":
+        props.onNavigate("TODAY");
+        break;
+      case "prev":
+        props.onNavigate("PREV");
+        break;
+      case "next":
+        props.onNavigate("NEXT");
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleViewChange = (event) => {
+    const newView = event.target.value;
+    props.onView(newView);
+  };
+
+  return (
+    <div className="rbc-toolbar">
+      {/* Label for the current date */}
+
+      {/* Dropdown for navigation */}
+      <select onChange={handleNavigate} defaultValue="">
+        <option value="" disabled>
+          Navigate
+        </option>
+        <option value="today">Today</option>
+        <option value="prev">Previous</option>
+        <option value="next">Next</option>
+      </select>
+      <span className="rbc-toolbar-label">{label}</span>
+      {/* Dropdown for changing views */}
+      <select onChange={handleViewChange} value={view}>
+        <option value="month">Month</option>
+        <option value="week">Week</option>
+        <option value="day">Day</option>
+      </select>
+    </div>
+  );
+};
 
 const eventStyleGetter = (event) => {
   const backgroundColor = eventColors[event.type] || "grey"; // Default color
@@ -56,15 +90,11 @@ const MyCalendar = ({ filter }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState("month");
 
-  const dayPropGetter = (date) => {
-    return {
-      style: { cursor: "pointer" }, // Make the whole cell clickable
-      onClick: () => {
-        setView(Views.DAY); // Switch to day view
-        setCurrentDate(date);
-        console.log("hello"); // Set the selected date
-      },
-    };
+  const handleSelectSlot = (slotInfo) => {
+    // Handle the click event to switch to day view
+    setView(Views.DAY);
+    setCurrentDate(slotInfo.start);
+    console.log("Selected date:", slotInfo.start);
   };
 
   return (
@@ -84,13 +114,20 @@ const MyCalendar = ({ filter }) => {
               endAccessor={(event) =>
                 new Date(`${event.date}T${event.end_time}:00`)
               }
-              eventPropGetter={eventStyleGetter} // Apply styles dynamically
+              eventPropGetter={eventStyleGetter}
+              date={currentDate}
+              view={view}
+              components={{
+                toolbar: CustomToolbar, // Use custom toolbar
+              }}
+              onNavigate={(date) => setCurrentDate(date)}
+              onView={(view) => setView(view)}
+              onSelectSlot={handleSelectSlot}
+              selectable
             />
           </div>
-          {/* //{" "} */}
         </CalendarWrapper>
       </Body>
-      {/* </Page> */}
     </>
   );
 };

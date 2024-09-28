@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 // Calendar Wrapper (if needed for specific layout control)
 export const CalendarWrapper = styled.div`
-  padding: 2vh;
-  height: 100vh;
+  padding: 0.5vh;
+  height: 100%;
   border: none;
   font-family: "Khula";
 
@@ -24,6 +24,21 @@ export const CalendarWrapper = styled.div`
   .rbc-toolbar {
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 480px) {
+    }
+  }
+
+  .rbc-toolbar select {
+    margin-left: 10px;
+    height: 35px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
   }
 
   .rbc-toolbar-label {
@@ -35,7 +50,7 @@ export const CalendarWrapper = styled.div`
     background-color: var(--primary);
     color: white;
     border-radius: 10px;
-
+    //make it flex coloumn for mobile
     button {
       color: white;
       border-color: transparent;
@@ -48,18 +63,19 @@ export const CalendarWrapper = styled.div`
 
   .rbc-month-row {
     border: none;
+    &:hover {
+      background-color: "#36454F";
+    }
   }
 
   .rbc-month-view {
     border: none;
-  } /* Remove outer calendar border */
+  }
 
   .rbc-event {
     height: 1.5vh;
     color: white;
     font-size: small;
-
-    //background-color: var(--);
   }
 
   .rbc-row-segment {
