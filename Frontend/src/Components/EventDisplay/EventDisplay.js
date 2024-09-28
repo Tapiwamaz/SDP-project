@@ -1,4 +1,5 @@
 // Import necessary modules and components
+// rG4AF+FH
 import React, { useEffect, useState } from "react";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -25,31 +26,36 @@ import {
   SubmitedRating,
   SubmitedRatingTick,
 } from "./EventDisplay.style";
-
+import SecurityModal from "../SecurityModal/SecurityModal";
 // Main component for the Event Page
-const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
+const EventDisplay = ({
+  events,
+  loading,
+  setLoading,
+  onDisplaySummary,
+  ticket,
+}) => {
+  console.log(!!loading);
   const navigate = useNavigate();
   const location = useLocation();
   let event = null;
+  let tick = null;
   const handleEvent = () => {
     if (events === undefined) {
+      tick = location.state.ticket;
+      console.log(tick);
       event = location.state.event;
     } else {
+      tick = ticket;
+      console.log(ticket);
       event = events;
     }
   };
-  const goToSummary = () => {
-    event["count"] = count;
-    if(screen == "phone"){
-    navigate("/summary", { state: { event } });
-    }
-    else{
-      onDisplaySummary(event);
-    }
-  };  
   handleEvent();
+  // console.log(event);
+  // console.log(event.name);
+
   const book = event.booking;
-  console.log(event);
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
   // const [loading, setLoading] = useState(true);
@@ -59,8 +65,46 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
   const [hover, setHover] = useState(-1);
   const [rating, setRating] = useState(0);
   const [rated, setRated] = useState(false);
-
+  const [Load, setLoad] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   // Log the event for debugging
+  useEffect(() => {
+    const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
+    if (screenWidth <= 768) {
+      setScreen("phone");
+    } else {
+      setScreen("desktop");
+    }
+    if (!book) {
+      setRated(tick.rated);
+      console.log(rated);
+    }
+    if (event.ticket_count === 0) {
+      console.log("Event is full");
+      SetFull(true);
+    } else {
+      console.log("Event is not full");
+      SetFull(false);
+    }
+    const fetchData = async () => {
+      if (Object.keys(EventOrg).length === 0 || !!loading) {
+        const eventOrgData = await fetchEventOrganizer(event.user_id);
+        setEventOrg(eventOrgData);
+        setLoad(false);
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [EventOrg, Full, loading]);
+
+  const goToSummary = () => {
+    event["count"] = count;
+    if (screen == "phone") {
+      navigate("/summary", { state: { event } });
+    } else {
+      onDisplaySummary(event);
+    }
+  };
   const fetchEventOrganizer = async (UserID) => {
     try {
       const response = await fetch(`api/GetUser?userID=${UserID}`, {
@@ -85,31 +129,7 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
       return null;
     }
   };
-  useEffect(() => {
-    const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
-    if (screenWidth <= 768) {
-      setScreen("phone");
-    } else {
-      setScreen("desktop");
-    }
-    if (event.count >= event.capacity) {
-      console.log("Event is full");
-      SetFull(true);
-    }
-    else{
-      console.log("Event is not full");
-      SetFull(false);
-    }
-    const fetchData = async () => {
-      if (Object.keys(EventOrg).length === 0 || loading) {
-        const eventOrgData = await fetchEventOrganizer(event.user_id);
-        setEventOrg(eventOrgData);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [EventOrg,Full,loading]);
-
+  // Function to format the time
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.toLocaleString("en-US", { day: "numeric" });
@@ -118,9 +138,6 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
 
     return `${day} ${month} ${year}`; // change this line to change the order
   }
-
-  // Function to format the time
-
   // Function to handle the rating
   const handleRating = (value) => {
     setRating(value);
@@ -146,9 +163,10 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
       },
       body: JSON.stringify({
         rating: `${rating}`,
-        userID: `${EventOrg.userID}`,
+        userID: `${EventOrg.user_id}`,
         rates: `${EventOrg.Rates}`,
         EventOrgRating: `${EventOrg.rating}`,
+        ticketID: `${tick.id}`,
       }),
     })
       .then((res) => {
@@ -159,16 +177,24 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
       })
       .then((data) => {
         console.log(data);
-        setRated(false);
+        setRated(true);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+
+  const openSecurityModal = () => {
+    setOpenModal(true);
+  };
   // Render the component
+
   return (
     <EventPages>
-      {loading ? (
-        <EventImagePlaceholder className="EventImage" />
+      {!!loading || Load ? (
+        <EventImagePlaceholder
+          data-testid="ImagePLaceholder"
+          className="EventImage"
+        />
       ) : (
         <EventImage
           src={event.image_url}
@@ -176,12 +202,20 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
           alt="Event Image"
         />
       )}
-      {loading ? <TitlePlaceHolder /> : <h1 style={{
-        color:"black",
-        textAlign:"left",
-      }}>{event.name}</h1>}
-      {loading ? (
-        <PlaceHolderText />
+      {!!loading || Load ? (
+        <TitlePlaceHolder data-testid="Titleplaceholder" />
+      ) : (
+        <h1
+          style={{
+            color: "black",
+            textAlign: "left",
+          }}
+        >
+          {event.name}
+        </h1>
+      )}
+      {!!loading || Load ? (
+        <PlaceHolderText data-testid="Placeholdertext 1" />
       ) : (
         <EventDate>
           <DateIcon />
@@ -204,14 +238,14 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
                 lineHeight: "1",
               }}
             >
-             {formatDate(event.date)}
+              {formatDate(event.date)}
             </p>
           </div>
         </EventDate>
       )}
 
-      {loading ? (
-        <PlaceHolderText />
+      {!!loading || Load ? (
+        <PlaceHolderText data-testid="Placeholdertext 2" />
       ) : (
         <Time>
           <TimeIcon />
@@ -240,8 +274,8 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
         </Time>
       )}
 
-      {loading ? (
-        <PlaceHolderText />
+      {!!loading || Load ? (
+        <PlaceHolderText data-testid="Placeholdertext 3" />
       ) : (
         <Location>
           <LocationIcon />
@@ -269,8 +303,8 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
           </div>
         </Location>
       )}
-      {loading ? (
-        <PlaceHolderText />
+      {!!loading || Load ? (
+        <PlaceHolderText data-testid="Placeholdertext 4" />
       ) : (
         <Price>
           <PriceIcon />
@@ -298,8 +332,8 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
           </div>
         </Price>
       )}
-      {loading ? (
-        <TitlePlaceHolder />
+      {!!loading || Load ? (
+        <TitlePlaceHolder data-testid="Titleplaceholder 2" />
       ) : (
         <>
           <h2
@@ -368,10 +402,7 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
               ) : null}
 
               <BookButton
-                onClick={() =>
-                  !Full &&
-                  goToSummary()
-                }
+                onClick={() => !Full && goToSummary()}
                 full={Full}
                 disabled={Full}
               >
@@ -388,7 +419,7 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
                   padding: "1em",
                 }}
               >
-                {rated ? (
+                {!rated ? (
                   <>
                     <h3
                       style={{
@@ -431,13 +462,20 @@ const EventDisplay = ({ events,loading,setLoading,onDisplaySummary }) => {
                   </SubmitedRating>
                 )}
               </div>
-              {/* <BookButton
+              <BookButton
                 style={{
                   background: "crimson",
                 }}
+                onClick={openSecurityModal}
               >
                 Alert
-              </BookButton> */}
+              </BookButton>
+              {openModal && (
+                <SecurityModal
+                  event={event}
+                  onClose={() => setOpenModal(false)}
+                />
+              )}
             </>
           )}
         </>
