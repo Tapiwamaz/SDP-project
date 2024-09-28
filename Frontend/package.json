@@ -13,6 +13,7 @@
     "qrcode.react": "^4.0.1",
     "react": "^18.3.1",
     "react-big-calendar": "^1.14.0",
+    "react-confetti": "^6.1.0",
     "react-dom": "^18.3.1",
     "react-qr-code": "^2.0.15",
     "react-responsive-carousel": "^3.2.23",
@@ -24,10 +25,16 @@
     "uuid": "^10.0.0",
     "web-vitals": "^2.1.4"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.{js,jsx,ts,tsx}",
+      "!**/node_modules/**"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=False react-scripts build",
-    "test": "react-scripts test",
+    "build": "react-scripts build",
+    "test": "react-scripts test ",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,5 +54,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "jest-canvas-mock": "^2.5.2",
+    "jest-fetch-mock": "^3.0.3"
   }
 }

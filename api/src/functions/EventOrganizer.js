@@ -51,6 +51,7 @@ app.http("GetUser", {
   },
 });
 app.http("Rating", {
+  // when a rating happens we must update the ticket to rated
   methods: ["PUT"],
   authLevel: "anonymous",
   handler: async (request, context) => {
@@ -151,6 +152,7 @@ app.post("BookTicket", {
           accessCode: accessCode,
           expired: false,
           ticket_id: ticketID, // Add the ticketID to the ticket data
+          rated: false,
         };
         try {
           const docRef = await addDoc(collection(db, "Tickets"), ticketData);
@@ -170,25 +172,26 @@ app.post("BookTicket", {
           const eventDoc = querySnapshot.docs[0];
 
           await updateDoc(eventDoc.ref, {
-            count: increment(ticketQuantity),
+            ticket_count: increment(-ticketQuantity),
           });
           console.log("Event count successfully updated!");
           return {
             status: 200,
-            body: "Ticket booked successfully",
+            body: JSON.stringify({
+              message: "Ticket booked successfully",
+            }),
           };
         } else {
           console.log("No such event!");
           return {
             status: 404,
-            body: "Event not found",
           };
         }
       } catch (error) {
         console.error("Error updating event count: ", error);
         return {
           status: 500,
-          body: "Internal Server Error",
+          message: "Internal Server Error",
         };
       }
     } catch (error) {
