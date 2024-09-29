@@ -116,9 +116,9 @@ export const createEventDB = async (
   locations
 ) => {
   try {
-    const capacity = locations.filter(
+    const capacity = parseInt(locations.filter(
       (loc) => loc.venueName === newEvent.location
-    )[0].venueCapacity;
+    )[0].venueCapacity);
     const venueId = locations.filter(
       (loc) => loc.venueName === newEvent.location
     )[0].id;
