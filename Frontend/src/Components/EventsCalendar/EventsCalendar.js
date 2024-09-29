@@ -85,7 +85,7 @@ const eventStyleGetter = (event) => {
   };
 };
 
-const EventsCalendar = ({ filter }) => {
+const MyCalendar = ({ filter }) => {
   filter = filter ? filter : [];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [view, setView] = useState("month");
@@ -132,4 +132,4 @@ const EventsCalendar = ({ filter }) => {
   );
 };
 
-export default EventsCalendar;
+export default MyCalendar;

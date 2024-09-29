@@ -1,7 +1,7 @@
 import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import EventsCalendar from "./EventsCalendar";
+import MyCalendar from "./EventsCalendar";
 
 // Mock moment since react-big-calendar uses moment for localization
 jest.mock("moment", () => () => ({
@@ -21,14 +21,14 @@ const sampleEvents = [
 
 describe("MyCalendar component", () => {
   test("renders calendar with events", () => {
-    render(<EventsCalendar filter={sampleEvents} />);
+    render(<MyCalendar filter={sampleEvents} />);
 
     // Check if the event is displayed in the calendar
     expect(screen.getByText("Sample Event")).toBeInTheDocument();
   });
 
   test("renders the custom toolbar with dropdowns", () => {
-    render(<EventsCalendar filter={sampleEvents} />);
+    render(<MyCalendar filter={sampleEvents} />);
 
     // Check if both dropdowns and label exist in the toolbar
     expect(screen.getByText("Navigate")).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("MyCalendar component", () => {
   });
 
   test("changes calendar view when selecting from the view dropdown", () => {
-    render(<EventsCalendar filter={sampleEvents} />);
+    render(<MyCalendar filter={sampleEvents} />);
 
     // Simulate changing the view to 'Week'
     const viewDropdown = screen.getByDisplayValue("Month");
@@ -48,7 +48,7 @@ describe("MyCalendar component", () => {
   });
 
   test("navigates to previous and next dates using dropdown", () => {
-    render(<EventsCalendar filter={sampleEvents} />);
+    render(<MyCalendar filter={sampleEvents} />);
 
     // Simulate navigating to 'Next'
     const navigateDropdown = screen.getByText("Navigate");
@@ -59,7 +59,7 @@ describe("MyCalendar component", () => {
   });
 
   test("switches to day view when a date is selected", () => {
-    render(<EventsCalendar filter={sampleEvents} />);
+    render(<MyCalendar filter={sampleEvents} />);
 
     // Simulate selecting a slot in the calendar
     const calendarSlot = screen.getByText("Sample Event");
@@ -70,7 +70,7 @@ describe("MyCalendar component", () => {
   });
 
   test("displays the correct event color based on event type", () => {
-    render(<EventsCalendar filter={sampleEvents} />);
+    render(<MyCalendar filter={sampleEvents} />);
 
     // Check the background color of the event
     const eventElement = screen.getByText("Sample Event");

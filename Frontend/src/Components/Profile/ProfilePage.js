@@ -47,10 +47,9 @@ import { v4 } from "uuid";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
 
-const ProfilePage = () => {
+const Profile = () => {
   const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : {};
-
 
   const [profileImage, setProfileImage] = useState(userData.imageURL || null);
   const fileInputRef = useRef(null);
@@ -395,4 +394,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Profile;
