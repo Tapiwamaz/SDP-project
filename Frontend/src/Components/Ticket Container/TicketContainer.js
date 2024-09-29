@@ -1,4 +1,5 @@
 import { Ticket } from "../Ticket/Ticket";
+import { NavbarContainer, NavItem } from "../Navbar/Navbar.styles.js";
 import { auth, db } from "../../firebase_config";
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
@@ -24,6 +25,7 @@ export const TicketContainer = () => {
   const [Load, setLoad] = useState(true);
   const [tick, setTick] = useState(null);
   const [EventsDisplay, setEventsDisplay] = useState(null);
+  const [activeTab, setActiveTab] = useState('Upcoming');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -138,6 +140,26 @@ export const TicketContainer = () => {
         }
 
         setTickets(data);
+        data.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+
+          if (dateA === dateB) {
+            return a.time.localeCompare(b.time);
+          }
+          return dateA - dateB;
+        });
+
+        if (activeTab === 'Upcoming') {
+          setTickets(data.filter((ticket) => new Date(ticket.date) >= new Date()));
+        }
+        if (activeTab === 'Completed') {
+          setTickets(data.filter((ticket) => new Date(ticket.date) < new Date()));
+        }
+        if (activeTab === 'Canceled') {
+          setTickets(data.filter((ticket) => ticket.active === false));
+        }
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching tickets:", error);
@@ -146,7 +168,7 @@ export const TicketContainer = () => {
     };
 
     fetchTickets(); // Fetch tickets on component mount
-  }, [userId]); // Empty dependency array means this effect runs once on mount
+  }, [userId, activeTab]); // Empty dependency array means this effect runs once on mount
 
   if (loading) {
     return <p>Loading...</p>;
@@ -177,6 +199,26 @@ export const TicketContainer = () => {
 
       <div>
         <h1>Tickets</h1>
+        <NavbarContainer>
+          <NavItem
+            isActive={activeTab === 'Upcoming'}
+            onClick={() => setActiveTab('Upcoming')}
+          >
+            Upcoming
+          </NavItem>
+          <NavItem
+            isActive={activeTab === 'Completed'}
+            onClick={() => setActiveTab('Completed')}
+          >
+            Completed
+          </NavItem>
+          <NavItem
+            isActive={activeTab === 'Canceled'}
+            onClick={() => setActiveTab('Canceled')}
+          >
+            Canceled
+          </NavItem>
+        </NavbarContainer>
         {tickets ? (
           tickets.map((ticket) => (
             <Ticket

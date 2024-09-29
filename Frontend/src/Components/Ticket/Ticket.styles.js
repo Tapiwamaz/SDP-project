@@ -48,6 +48,7 @@ export const TextContainer = styled.div`
     flex-direction: row;
     margin-top: 10px;
   }
+
 `;
 
 // Title at the top
