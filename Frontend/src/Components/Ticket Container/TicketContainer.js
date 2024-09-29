@@ -69,12 +69,14 @@ export const TicketContainer = () => {
         const events = [];
         const ids = [];
         const ratings = [];
+        const cancelled = [];
 
         querySnapshot.forEach((doc) => {
           console.log(doc);
           ids.push(doc.id);
           events.push(doc.data().event_id);
           ratings.push(doc.data().rated);
+          cancelled.push(doc.data().cancelled);
         });
         console.log(events);
         console.log(ids);
@@ -117,7 +119,7 @@ export const TicketContainer = () => {
                 data.push({
                   id: ids[i], // ticket id
                   rated: ratings[i], // ticket rating
-                  active: eventsData.active,
+                  cancelled: cancelled[i], // ticket cancelled status
                   capacity: eventsData.capacity,
                   description: eventsData.description,
                   type: eventsData.type,
@@ -155,13 +157,13 @@ export const TicketContainer = () => {
         });
 
         if (activeTab === 'Upcoming') {
-          setTickets(data.filter((ticket) => new Date(ticket.date) >= new Date()));
+          setTickets(data.filter((ticket) => new Date(ticket.date) >= new Date() && !ticket.cancelled === true));
         }
         if (activeTab === 'Completed') {
-          setTickets(data.filter((ticket) => new Date(ticket.date) < new Date()));
+          setTickets(data.filter((ticket) => new Date(ticket.date) < new Date() && !ticket.cancelled === true));
         }
         if (activeTab === 'Canceled') {
-          setTickets(data.filter((ticket) => ticket.active === false));
+          setTickets(data.filter((ticket) => ticket.cancelled === true));
         }
 
         setLoading(false);
