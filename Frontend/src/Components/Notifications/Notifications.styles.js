@@ -1,82 +1,74 @@
 import styled from "styled-components";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
-export const Top=styled.div`
-    width: 100%;
-    /* height: 300px; */
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    padding: 5px;
-    border-bottom: 2px solid lightgray;
-    margin-bottom: 5px;
+export const Top = styled.div`
+  width: 100%;
+  /* height: 300px; */
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 5px;
+  border-bottom: 2px solid lightgray;
+  margin-bottom: 5px;
 
-    @media (max-width: 769px) {
-        justify-content: space-evenly;
+  @media (max-width: 769px) {
+    justify-content: space-evenly;
   }
 
-    
-
-
-/* 
+  /* 
   .backButtonCreateEvent {
     cursor: pointer;
     transition: all 200ms ease-in-out; */
-    /* border-radius: 50%; */
-    /* box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px; */
+  /* border-radius: 50%; */
+  /* box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px; */
   /* } */
   /* .backButtonCreateEvent:hover {
     transform: scale(1.1);
   } */
-  
-`
+`;
 
-export const Card=styled.div`
-width: 100%;
-background-color: lightgrey;
-padding: 11px;
-border-bottom: 2px solid black;
-display: flex;
-flex-direction: column;
-gap:0;
-margin:0;
-/* border-radius: 0px 10px 0px 40px; */
+export const Card = styled.div`
+  width: 100%;
+  background-color: lightgrey;
+  padding: 11px;
+  border-bottom: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  /* border-radius: 0px 10px 0px 40px; */
 
-img{
-
+  img {
     height: 40px;
     width: 40px;
-    border-radius:50% ;
-}
-p{
+    border-radius: 50%;
+  }
+  p {
     margin: 2;
-}
-.headerNoti{
+  }
+  .headerNoti {
     display: flex;
     flex-direction: row;
     gap: 10px;
-}
-.leftNoti{
+  }
+  .leftNoti {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    h5{
-        margin:0;
+    h5 {
+      margin: 0;
     }
-    p{ 
-        margin:0;
-        font-size: small;
-
+    p {
+      margin: 0;
+      font-size: small;
     }
+  }
+`;
 
-}
-
-`
-
-export const StyledPlus=styled(PlusCircleIcon)`
-width: 40px;
-
-`
+export const StyledPlus = styled(PlusCircleIcon)`
+  width: 40px;
+  cursor: pointer;
+`;
 
 export const LoadingCard = styled.div`
   background: linear-gradient(90deg, grey 25%, lightgrey 50%, grey 75%);
@@ -86,8 +78,7 @@ export const LoadingCard = styled.div`
   height: 100px;
   animation: loading 1.5s infinite;
   padding: 11px;
-border-bottom: 2px solid black;
-  
+  border-bottom: 2px solid black;
 
   @keyframes loading {
     0% {
@@ -100,8 +91,3 @@ border-bottom: 2px solid black;
 `;
 
 
-
-  
-
-  
-  
