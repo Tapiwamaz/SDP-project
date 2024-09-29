@@ -6,7 +6,21 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
 
     const downloadOnClick = (event) => {
       event.stopPropagation();
-      html2pdf(document.getElementById('ticket'));
+      const container = document.createElement('div');
+      container.innerHTML = `
+          <h1>${title}</h1>
+          <span>
+            <p>Date: ${date}</p> 
+            <p>Time: ${time}</p>
+            <p>Venue: ${venue}</p>
+            <p>Total: R${total}</p>
+          </span>
+          <img src=${qrcode}/>
+        `;
+      
+      html2pdf(container, {
+        margin: 20
+      });
     }
 
     return (
