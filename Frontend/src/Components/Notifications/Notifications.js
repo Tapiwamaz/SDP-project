@@ -1,30 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { mockEventData, mockNotifications } from "../../MockData/MockData";
 import Header from "../Header/Header";
-import {
-  ArrowLeftCircleIcon,
-  PlusCircleIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router";
 import { formatDistanceToNow } from "date-fns";
-import {
-  Top,
-  Card,
-  StyledPlus,
-  LoadingCard,
-} from "./Notifications.styles";
+import { Top, Card, StyledPlus, LoadingCard } from "./Notifications.styles";
 
 import noResultsImage from "../../Images/noResults.svg";
 import CreateNotifications from "./CreateNotifications";
+import { ToastContainer } from "react-toastify";
 
-export const createNotification = (setMyNotification,setCreateNotificationClicked) => {
-  setMyNotification({message:""})
-  setCreateNotificationClicked(p=> !p)
+export const createNotification = (setCreateNotificationClicked) => {
+  setCreateNotificationClicked((p) => !p);
 };
-export const fetchEvents = () =>{
-
-}
-
+export const fetchEvents = () => {};
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -44,21 +33,28 @@ const Notifications = () => {
   const [createNotificationClicked, setCreateNotificationClicked] =
     useState(false);
   const [myEvents, setMyEvents] = useState(mockEventData);
-  const [myNotification, setMyNotification] = useState({message:""})
 
   // useEffect (() => {
-// fetch my Events
+  // fetch my Events
   // },[])
 
   return (
     <div>
+      <ToastContainer/>
       <Header />
       <Top>
         <ArrowLeftCircleIcon width={40} onClick={() => navigate(-1)} />
         <h3>Notifications</h3>
-        <StyledPlus onClick={()=> createNotification(setMyNotification,setCreateNotificationClicked)}></StyledPlus>
+        <StyledPlus
+          onClick={() => createNotification(setCreateNotificationClicked)}
+        ></StyledPlus>
       </Top>
-      {createNotificationClicked && <CreateNotifications myNotification={myNotification} myEvents={myEvents} setMyNotification={setMyNotification}/>}
+      {createNotificationClicked && (
+        <CreateNotifications
+          myEvents={myEvents}
+          setOpen={setCreateNotificationClicked}
+        />
+      )}
       {loaded ? (
         mockNotifications.length > 0 ? (
           sortedNotifications.map((noti) => (

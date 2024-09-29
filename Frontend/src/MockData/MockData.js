@@ -9,6 +9,7 @@ const mockEventData = [
     description:
       "A conference bringing together tech enthusiasts and professionals to discuss the latest in technology and innovation.",
     location: "Tech Hub Convention Center, San Francisco, CA",
+    event_id:"12"
   },
   {
     name: "Summer Music Festival",
@@ -20,6 +21,7 @@ const mockEventData = [
     description:
       "An all-day music festival featuring top artists from various genres, along with food trucks and other entertainment.",
     location: "Central Park, New York, NY",
+    event_id:"9"
   },
   {
     name: "Charity Gala",
@@ -31,6 +33,7 @@ const mockEventData = [
     description:
       "An elegant evening event to raise funds for a local charity, featuring dinner, live performances, and an auction.",
     location: "Grand Ballroom, Hilton Hotel, Chicago, IL",
+    event_id:"10"
   },
   {
     name: "Startup Pitch Night",
@@ -42,6 +45,7 @@ const mockEventData = [
     description:
       "A networking event where startups pitch their venue_ideas to a panel of investors and get feedback.",
     location: "Innovation Hub, Austin, TX",
+    event_id:"11"
   },
   {
     name: "Yoga in the Park",
@@ -53,6 +57,7 @@ const mockEventData = [
     description:
       "A relaxing morning yoga session in the park, open to all skill levels.",
     location: "Green Meadows Park, Seattle, WA",
+    event_id:"12"
   },
 ];
 
