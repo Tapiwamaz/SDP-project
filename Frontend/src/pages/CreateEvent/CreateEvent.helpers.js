@@ -169,7 +169,7 @@ export const fetchVenues = async () => {
 
   try {
     const response = await fetch(
-      "https://wits-infrastructure-management.web.app/api/venues/?closureStatus=False",
+      "https://wits-infrastructure-management.web.app/api/venues/?isClosed=False",
       {
         method: "GET",
         headers: {
