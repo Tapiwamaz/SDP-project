@@ -1,5 +1,8 @@
 import { Ticket } from "../Ticket/Ticket";
 import { NavbarContainer, NavItem } from "../Navbar/Navbar.styles.js";
+import { ModalWrapper, Overlay, ModalContent } from "../Ticket/Ticket.styles.js";
+import { ImageContainer } from "../Universal Styles/Universal.styles.js";
+import { StyledButton } from "../Ticket/Ticket.styles";
 import { auth, db } from "../../firebase_config";
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
@@ -27,6 +30,7 @@ export const TicketContainer = () => {
   const [EventsDisplay, setEventsDisplay] = useState(null);
   const [activeTab, setActiveTab] = useState('Upcoming');
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -192,6 +196,7 @@ export const TicketContainer = () => {
       });
     }
   };
+
 
   return (
     <>

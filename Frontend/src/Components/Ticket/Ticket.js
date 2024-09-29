@@ -1,27 +1,42 @@
-import { TicketContainer, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, QRCode, DownloadLink } from "./Ticket.styles";
+import { TicketContainer, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, StyledButton, DownloadLink, ModalContent, ModalWrapper, Overlay } from "./Ticket.styles";
+import { useState } from 'react';
 import download from '../../Images/download.svg';
 import html2pdf from 'html2pdf.js';
 
 export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick })  => {
 
+  const cancel = (event) => {
+    event.stopPropagation();
+    const userResponse = window.confirm("Are you sure you want to cancel this booking? You will be refunded in full");
+    if (userResponse) {
+      alert("Booking cancelled. You will be refunded in full.");
+    }
+    else {
+      alert("Booking not cancelled.");
+    }
+  }
+
     const downloadOnClick = (event) => {
       event.stopPropagation();
       const container = document.createElement('div');
+      const img = document.createElement('img');
       container.innerHTML = `
           <h1>${title}</h1>
-          <span>
-            <p>Date: ${date}</p> 
-            <p>Time: ${time}</p>
-            <p>Venue: ${venue}</p>
-            <p>Total: R${total}</p>
-          </span>
-          <img src=${qrcode}/>
+          <p>Date: ${date}</p> 
+          <p>Time: ${time}</p>
+          <p>Venue: ${venue}</p>
+          <p>Total: R${total}</p>
+          <img src=${qrcode} alt="QRcode" />
+          <p>${id}</p>
         `;
       
       html2pdf(container, {
-        margin: 20
+        margin: 20,
+        filename: id+'.pdf'
       });
     }
+
+    
 
     return (
       <TicketContainer onClick={onClick} id="ticket">
@@ -45,6 +60,7 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
   
           {/* Bold total amount */}
           <Total>Total: R{total}</Total>
+          
         </TextContainer>
   
         {/* QR code and Download link, same placement for all screen sizes */}
@@ -54,8 +70,10 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
           <DownloadLink onClick={downloadOnClick} data-html2canvas-ignore>
             <img src={download}/>Download PDF 
           </DownloadLink>
+          <StyledButton onClick={cancel}>Cancel Booking</StyledButton>
         </RightContainer>
       </TicketContainer>
+ 
     );
   };
   
