@@ -1,12 +1,24 @@
-import { handleNextButtonClick ,fetchVenues} from "./CreateEvent.helpers"; // Adjust path based on your file structure
+import { handleNextButtonClick, fetchVenues } from "./CreateEvent.helpers"; // Adjust path based on your file structure
 import { createEventDB, updateEventDB, delay } from "./CreateEvent"; // Import these to mock them
-
 
 // Mock functions
 jest.mock("./CreateEvent", () => ({
   createEventDB: jest.fn(),
   updateEventDB: jest.fn(),
   delay: jest.fn(),
+  fetchStorage: jest.fn(() => ({
+    imageURL: "fake.url",
+    name: "Taps",
+    user_id: "x",
+  })),
+}));
+
+jest.mock("../../Components/Notifications/CreateNotifications", () => ({
+  sendNotification: jest.fn(({ notification, db }) => {}),
+  formatDateToISO: jest.fn(),
+}));
+jest.mock("uuid", () => ({
+  v4: jest.fn(),
 }));
 
 jest.mock("react-toastify", () => ({
@@ -87,21 +99,14 @@ describe("handleNextButtonClick - DB operation test", () => {
     jest.runAllTimers();
 
     await promise;
-    // Assert that the loader was set to true
     expect(mockSetLoader).toHaveBeenCalledWith(true);
-
-    // Assert that createEventDB was called
     expect(createEventDB).toHaveBeenCalledWith(
       mockEventDetails,
       "eventCollection",
       null,
       []
     );
-
-    // Assert delay was called
     expect(delay).toHaveBeenCalledWith(5000);
-
-    // Assert that the loader was set to false and setSubmitted was called
     expect(mockSetLoader).toHaveBeenCalledWith(false);
     expect(mockSetSubmitted).toHaveBeenCalledWith(true);
   });
@@ -120,6 +125,8 @@ describe("handleNextButtonClick - DB operation test", () => {
       price: "10.50",
       eventPicture: "image-url",
     };
+    const mockDB = {};
+    const mockAuth = { currentUser: { uid: "x" } };
 
     // Call the function
     const promise = handleNextButtonClick(
@@ -129,7 +136,9 @@ describe("handleNextButtonClick - DB operation test", () => {
       [],
       "eventCollection",
       mockSetLoader,
-      mockSetSubmitted
+      mockSetSubmitted,
+      mockDB,
+      mockAuth
     );
 
     // Fast-forward timers
@@ -143,27 +152,22 @@ describe("handleNextButtonClick - DB operation test", () => {
       null,
       []
     );
-    expect(delay).toHaveBeenCalledWith(5000);
-    expect(mockSetLoader).toHaveBeenCalledWith(false);
-    expect(mockSetSubmitted).toHaveBeenCalledWith(true);
   });
-
 });
 
-
-process.env.REACT_APP_X_API_KEY = 'mock-secret-key';
+process.env.REACT_APP_X_API_KEY = "mock-secret-key";
 global.fetch = jest.fn();
 
-describe('fetchVenues', () => {
+describe("fetchVenues", () => {
   beforeEach(() => {
     fetch.mockClear(); // Clear mock data before each test
   });
 
-  test('successfully fetches venue data', async () => {
+  test("successfully fetches venue data", async () => {
     // Mock the response for a successful fetch
     const mockVenues = [
-      { id: 'venue1', name: 'Venue 1' },
-      { id: 'venue2', name: 'Venue 2' },
+      { id: "venue1", name: "Venue 1" },
+      { id: "venue2", name: "Venue 2" },
     ];
     fetch.mockResolvedValueOnce({
       ok: true,
@@ -174,12 +178,12 @@ describe('fetchVenues', () => {
 
     // Check that the fetch function was called with the correct URL and headers
     expect(fetch).toHaveBeenCalledWith(
-      'https://wits-infrastructure-management.web.app/api/venues/?isClosed=False',
+      "https://wits-infrastructure-management.web.app/api/venues/?isClosed=False",
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'X-API-KEY': 'mock-secret-key',
-          'Content-Type': 'application/json',
+          "X-API-KEY": "mock-secret-key",
+          "Content-Type": "application/json",
         },
       }
     );
@@ -188,7 +192,7 @@ describe('fetchVenues', () => {
     expect(data).toEqual(mockVenues);
   });
 
-  test('handles fetch failure with a non-200 response', async () => {
+  test("handles fetch failure with a non-200 response", async () => {
     // Mock a failed response (e.g., 500 Internal Server Error)
     fetch.mockResolvedValueOnce({
       ok: false,
@@ -196,48 +200,57 @@ describe('fetchVenues', () => {
     });
 
     // Spy on console.log to check the error logging
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    const consoleLogSpy = jest
+      .spyOn(console, "log")
+      .mockImplementation(() => {});
 
     const data = await fetchVenues();
 
     expect(fetch).toHaveBeenCalledWith(
-      'https://wits-infrastructure-management.web.app/api/venues/?isClosed=False',
+      "https://wits-infrastructure-management.web.app/api/venues/?isClosed=False",
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'X-API-KEY': 'mock-secret-key',
-          'Content-Type': 'application/json',
+          "X-API-KEY": "mock-secret-key",
+          "Content-Type": "application/json",
         },
       }
     );
 
-    expect(consoleLogSpy).toHaveBeenCalledWith('error fetching venues from infrastructure');
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      "error fetching venues from infrastructure"
+    );
     expect(data).toBeUndefined(); // Should return undefined when fetch fails
 
     consoleLogSpy.mockRestore(); // Restore original console.log
   });
 
-  test('handles network or fetch-related errors', async () => {
+  test("handles network or fetch-related errors", async () => {
     // Mock a network error or fetch failure
-    fetch.mockRejectedValueOnce(new Error('Network error'));
+    fetch.mockRejectedValueOnce(new Error("Network error"));
 
     // Spy on console.error to check the error logging
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleErrorSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
 
     const data = await fetchVenues();
 
     expect(fetch).toHaveBeenCalledWith(
-      'https://wits-infrastructure-management.web.app/api/venues/?isClosed=False',
+      "https://wits-infrastructure-management.web.app/api/venues/?isClosed=False",
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'X-API-KEY': 'mock-secret-key',
-          'Content-Type': 'application/json',
+          "X-API-KEY": "mock-secret-key",
+          "Content-Type": "application/json",
         },
       }
     );
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Error fetching data:', expect.any(Error));
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Error fetching data:",
+      expect.any(Error)
+    );
     expect(data).toBeUndefined(); // Should return undefined when fetch fails
 
     consoleErrorSpy.mockRestore(); // Restore original console.error

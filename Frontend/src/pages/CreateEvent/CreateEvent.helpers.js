@@ -1,4 +1,14 @@
-import { createEventDB, updateEventDB, delay } from "./CreateEvent";
+import { v4 } from "uuid";
+import {
+  formatDateToISO,
+  sendNotification,
+} from "../../Components/Notifications/CreateNotifications";
+import {
+  createEventDB,
+  updateEventDB,
+  delay,
+  fetchStorage,
+} from "./CreateEvent";
 import { toast } from "react-toastify";
 
 export const handleNextButtonClick = async (
@@ -8,7 +18,9 @@ export const handleNextButtonClick = async (
   locations,
   eventCollection,
   setLoader,
-  setSubmitted
+  setSubmitted,
+  db,
+  auth
 ) => {
   if (!eventDetailsT.name || eventDetailsT.name == "") {
     // Handle missing event name
@@ -21,8 +33,8 @@ export const handleNextButtonClick = async (
     return;
   }
 
-   // check type , venue type , location and descrption
-   if (!eventDetailsT.type || eventDetailsT.type == "") {
+  // check type , venue type , location and descrption
+  if (!eventDetailsT.type || eventDetailsT.type == "") {
     // Handle missing event type
     eventRefsT.eventType.current.classList.add("unfilled-input");
     eventRefsT.eventType.current.scrollIntoView({
@@ -76,7 +88,11 @@ export const handleNextButtonClick = async (
     return;
   }
 
-  if (!eventDetailsT.start_time || eventDetailsT.start_time == "" ||  new Date("2024-09-27T" + eventDetailsT.start_time) == "Invalid Date") {
+  if (
+    !eventDetailsT.start_time ||
+    eventDetailsT.start_time == "" ||
+    new Date("2024-09-27T" + eventDetailsT.start_time) == "Invalid Date"
+  ) {
     // Handle missing event start time
     eventRefsT.eventStartTime.current.classList.add("unfilled-input");
     eventRefsT.eventStartTime.current.scrollIntoView({
@@ -87,7 +103,11 @@ export const handleNextButtonClick = async (
     return;
   }
 
-  if (!eventDetailsT.end_time || eventDetailsT.end_time == "" ||  new Date("2024-09-27T" + eventDetailsT.end_time) == "Invalid Date") {
+  if (
+    !eventDetailsT.end_time ||
+    eventDetailsT.end_time == "" ||
+    new Date("2024-09-27T" + eventDetailsT.end_time) == "Invalid Date"
+  ) {
     // Handle missing event end time
     eventRefsT.eventEndTime.current.classList.add("unfilled-input");
     eventRefsT.eventEndTime.current.scrollIntoView({
@@ -111,7 +131,7 @@ export const handleNextButtonClick = async (
     toast.warn("Please choose valid start and end times");
     return;
   }
-  
+
   // check  price
   if (!eventDetailsT.price || eventDetailsT.price == "") {
     eventRefsT.eventTicketPrice.current.classList.add("unfilled-input");
@@ -137,7 +157,6 @@ export const handleNextButtonClick = async (
   }
 
   if (!eventDetailsT.eventPicture && !eventDetailsT.image_url) {
-    // eventRefsT.event.current.classList.add("unfilled-input");
     eventRefsT.eventPicture.current.scrollIntoView({
       behavior: "smooth",
       block: "center",
@@ -151,6 +170,20 @@ export const handleNextButtonClick = async (
   try {
     if (eventDetailsT.event_id) {
       updateEventDB(eventDetailsT, eventCollection, imageT, locations);
+      const userData = fetchStorage("userData");
+      let notification = {
+        message:
+          "Event has been edited by the oganizer: It will need to be re-approved",
+        time: formatDateToISO(new Date()),
+        notification_id: v4(),
+        name: userData.name,
+        organizer_id: auth?.currentUser?.uid,
+        event_id: eventDetailsT.event_id,
+        notification_type: "edit",
+        image_url: userData.imageURL,
+      };
+
+      sendNotification(notification, db);
     } else {
       createEventDB(eventDetailsT, eventCollection, imageT, locations);
     }
@@ -191,4 +224,3 @@ export const fetchVenues = async () => {
     return;
   }
 };
-

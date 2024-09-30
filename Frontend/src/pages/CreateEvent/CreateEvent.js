@@ -700,7 +700,9 @@ const CreateEvent = ({ inputEventDetails }) => {
                     availableLocations,
                     eventsCollectionRef,
                     setLoader,
-                    setSubmitted
+                    setSubmitted,
+                    db,
+                    auth
                   );
                 }}
               >
