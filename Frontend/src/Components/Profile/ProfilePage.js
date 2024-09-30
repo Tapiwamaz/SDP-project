@@ -47,7 +47,7 @@ import { v4 } from "uuid";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
 
-const Profile = () => {
+export const Profile = () => {
   const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : {};
 
@@ -73,7 +73,6 @@ const Profile = () => {
       setScreen("desktop");
     }
   };
-
   useEffect(() => {
     // Call updateSlidePercentage on mount and window resize
     updateSlidePercentage(); // Initial call
@@ -89,7 +88,6 @@ const Profile = () => {
       const imageUrl = URL.createObjectURL(file);
       setProfileImage(imageUrl); // Update preview
       setImageFile(file); // Save the file for uploading
-      console.log(imageUrl);
     }
   };
 
@@ -154,7 +152,6 @@ const Profile = () => {
 
       // Check if a document exists
       if (querySnapshot.empty) {
-        console.log("No matching documents.");
         return;
       }
 
@@ -163,8 +160,6 @@ const Profile = () => {
 
       // Update the document
       await updateDoc(docRef, updateData);
-
-      console.log("Document successfully updated!");
     } catch (error) {
       console.error("Error updating document: ", error);
     }

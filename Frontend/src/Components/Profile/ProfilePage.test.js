@@ -7,9 +7,16 @@ import {
   act,
 } from "@testing-library/react";
 // import "@testing-library/jest-dom/extend-expect";
-import Profile from "./ProfilePage";
+import { Profile, updateSlidePercentage } from "./ProfilePage";
 import { BrowserRouter } from "react-router-dom";
 import { auth } from "../../firebase_config";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 
 // Mock Firebase functions
 
@@ -43,6 +50,7 @@ jest.mock("firebase/firestore", () => ({
     Promise.resolve({
       size: 0,
       docs: [{ ref: { update: jest.fn() } }],
+      empty: true,
     })
   ),
   updateDoc: jest.fn(),
@@ -69,6 +77,10 @@ jest.mock("firebase/storage", () => ({
   getStorage: jest.fn(),
 }));
 
+const setUpWidth = (width) => {
+  global.innerWidth = width;
+  global.dispatchEvent(new Event("resize")); // Trigger resize event
+};
 describe("Profile Component", () => {
   const mockUserData = {
     user_id: "123",
@@ -78,12 +90,24 @@ describe("Profile Component", () => {
     imageURL: "mockProfileImage.jpg",
     rating: 4.5,
   };
- let setTicketCount, setEventCount;
+  let setScreenMock;
+  let setTicketCount, setEventCount;
+  let setProfileImage, setImageFile;
   beforeEach(() => {
     localStorage.setItem("userData", JSON.stringify(mockUserData));
     auth.currentUser = { uid: "123" };
     setTicketCount = jest.fn();
     setEventCount = jest.fn();
+    setProfileImage = jest.fn();
+    setImageFile = jest.fn();
+
+    // Mock useState to provide the mock functions
+    jest
+      .spyOn(React, "useState")
+      .mockImplementation((initial) => [initial, setProfileImage]);
+    jest
+      .spyOn(React, "useState")
+      .mockImplementation((initial) => [initial, setImageFile]);
   });
 
   afterEach(() => {
@@ -174,14 +198,93 @@ describe("Profile Component", () => {
     // Click the Log Out button
     fireEvent.click(screen.getByText("Log Out"));
 
-    // Wait for the logout to complete
-    // await waitFor(() => {
-    //   expect(mockNavigate).toHaveBeenCalledWith("/welcome");
-    // });
-
     // Ensure localStorage has been cleared
     localStorage.removeItem("userData");
     expect(localStorage.getItem("userData")).toBe(null);
   });
-  
+
+  it("shows Header when screen type is 'phone'", () => {
+    // Set up the width and trigger resize
+    setUpWidth(768);
+
+    // Mock the setScreen function
+    const setScreenMock = jest.fn();
+
+    // Mock useState to provide the mock function
+    jest
+      .spyOn(React, "useState")
+      .mockImplementationOnce((initial) => [initial, setScreenMock]);
+
+    render(
+      <BrowserRouter>
+        <Profile />
+      </BrowserRouter>
+    );
+
+    // Assert that the Header is displayed
+    expect(screen.getByText("Mocked Header")).toBeInTheDocument();
+  });
+
+  it("does not show Header when screen type is 'desktop'", () => {
+    // Set up the width and trigger resize
+    setUpWidth(1024);
+
+    // Mock the setScreen function
+    const setScreenMock = jest.fn();
+
+    // Mock useState to provide the mock function
+    jest
+      .spyOn(React, "useState")
+      .mockImplementationOnce((initial) => [initial, setScreenMock]);
+
+    render(
+      <BrowserRouter>
+        <Profile />
+      </BrowserRouter>
+    );
+
+    // Assert that the Header is not displayed
+    expect(screen.queryByText("Mocked Header")).not.toBeInTheDocument();
+  });
+
+  it("shows that the document isnt updated if empty", async () => {
+    getDocs.mockResolvedValueOnce({ empty: true });
+    updateDoc.mockResolvedValue();
+    render(<Profile />);
+    await waitFor(() => {
+      expect(updateDoc).not.toHaveBeenCalled(); // Should not call addDoc if user already exists
+    });
+  });
+
+  // it("shows that the document has been updated", async () => {
+  //   auth.currentUser = { uid: "123" };
+
+  //   // Create a mock document reference and data to update
+  //   const mockDocRef = { id: "mockDocRef" };
+  //   const updateData = { name: "Updated Name" }; // Example data to update
+
+  //   // Mock the return value of getDocs to simulate an existing document
+  //   getDocs.mockResolvedValueOnce({
+  //     empty: false,
+  //     docs: [{ ref: mockDocRef }], // Mock the document reference with `ref`
+  //   });
+
+  //   // Mock updateDoc to simulate a successful update
+  //   updateDoc.mockResolvedValueOnce();
+
+  //   // Render the Profile component
+  //   render(<Profile />);
+
+  //   // Trigger the action that leads to the updateDocumentByUserID function being called
+  //   // fireEvent.click(screen.getByText("Edit Profile"));
+  //   // fireEvent.click(screen.getByText("Save")); // Adjust based on your UI
+
+  //   // Wait for the updateDoc function to be called
+  //   await waitFor(() => {
+  //     expect(updateDoc).toHaveBeenCalled(); // Should not call addDoc if user already exists
+  //   });
+  //   //expect(getDocs).toHaveBeenCalled(); // Ensure getDocs was called
+  //   // Verify that updateDoc is called with the correct parameters
+  //   // Ensure updateDoc was called once
+  // });
 });
