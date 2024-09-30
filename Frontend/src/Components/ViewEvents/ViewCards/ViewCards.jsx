@@ -50,8 +50,10 @@ const ViewCards = ({ event, onCancel }) => {
         </div>
 
         <div className="event-actions">
+          {event.status !== 'rejected' && event.status !== 'cancelled' && (
           <button className='reschedule-button' onClick={() => handleEdit(event)}>Edit Event</button>
-          {onCancel && (
+          )}
+          {event.status !== 'rejected' && event.status !== 'cancelled' && onCancel && (
             <button className='cancel-button' onClick={() => onCancel(event.id)}>Cancel Event</button>
           )}
         </div>
