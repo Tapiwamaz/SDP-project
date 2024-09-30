@@ -30,7 +30,6 @@ export const CreateProfile = () => {
     const avatarURL=`https://avatar.iran.liara.run/public/${IDRandom}`;
     const userEmail=auth?.currentUser?.email;
     const userID=auth?.currentUser?.uid
-    console.log(userID);
     
     
   const [profileImage, setProfileImage] = useState(avatarURL); // State to store profile image, default is the logo
@@ -39,23 +38,9 @@ export const CreateProfile = () => {
   const[error,setError]=useState("");
 
 
-  const fileInputRef = useRef(null); // Ref to trigger file input
   const navigate=useNavigate();
 
-  // // Function to handle image upload
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => setProfileImage(reader.result); // Set profile image to the uploaded one
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
-  // Function to trigger file input
-  // const handleClick = () => {
-  //   fileInputRef.current.click();
-  // };
 
   const newAvatar=()=>{
     const IDRand=Math.random()*101;
