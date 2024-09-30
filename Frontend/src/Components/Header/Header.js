@@ -91,11 +91,7 @@ const Header = () => {
       <HeaderContainer>
         <Logo src={logo} />
 
-        <Burger onClick={toggleMenu} data-testid="burger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </Burger>
+      
         
         {(auth?.currentUser && userData) ? (
           <Profile>
@@ -122,6 +118,11 @@ const Header = () => {
             <p>Hello User</p>
           </Profile>
         )} */}
+          <Burger onClick={toggleMenu} data-testid="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </Burger>
 
         <Aside open={isOpen}>
           <Xicon onClick={toggleMenu} data-testid="close-icon"></Xicon>
