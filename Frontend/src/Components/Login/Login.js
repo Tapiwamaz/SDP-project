@@ -42,7 +42,7 @@ export const Login = () => {
                         
                         localStorage.setItem("userData", JSON.stringify(userData));
                         
-                        console.log("User data stored in local storage:", userData);
+                        //console.log("User data stored in local storage:", userData);
                       }); 
                     navigate('/')
 
@@ -53,7 +53,7 @@ export const Login = () => {
                 }
 
             }
-            console.log("Success");
+            //console.log("Success");
         }
         catch (error) {
             var errorCode = error.code;
@@ -95,7 +95,7 @@ export const Login = () => {
                         
                         localStorage.setItem("userData", JSON.stringify(userData));
                         
-                        console.log("User data stored in local storage:", userData);
+                        //console.log("User data stored in local storage:", userData);
                       }); 
                     navigate('/')
 
