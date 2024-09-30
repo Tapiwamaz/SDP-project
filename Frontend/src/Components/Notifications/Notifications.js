@@ -9,11 +9,24 @@ import { Top, Card, StyledPlus, LoadingCard } from "./Notifications.styles";
 import noResultsImage from "../../Images/noResults.svg";
 import CreateNotifications from "./CreateNotifications";
 import { ToastContainer } from "react-toastify";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "../../firebase_config";
 
 export const createNotification = (setCreateNotificationClicked) => {
   setCreateNotificationClicked((p) => !p);
 };
-export const fetchEvents = () => {};
+
+export const eventsByUserID = async (userId, setEvents) => {
+  try {
+    const q = query(collection(db, "Events"), where("user_id", "==", userId));
+    const querySnapshot = await getDocs(q);
+    const events = querySnapshot.docs.map((d) => d.data())
+    setEvents(events);
+  } catch (error) {
+    console.error("Error fetching entry count:", error);
+    return null;
+  }
+};
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -34,13 +47,17 @@ const Notifications = () => {
     useState(false);
   const [myEvents, setMyEvents] = useState(mockEventData);
 
-  // useEffect (() => {
-  // fetch my Events
-  // },[])
+  // Fetch the count when the component mounts
+  useEffect(() => {
+    if (auth?.currentUser?.uid) {
+      eventsByUserID(auth?.currentUser?.uid, setMyEvents);
+    }
+
+  }, []);
 
   return (
     <div>
-      <ToastContainer/>
+      <ToastContainer />
       <Header />
       <Top>
         <ArrowLeftCircleIcon width={40} onClick={() => navigate(-1)} />
