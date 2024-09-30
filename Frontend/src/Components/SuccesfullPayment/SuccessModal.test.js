@@ -1,8 +1,11 @@
-import { render, fireEvent, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import React from 'react';
-import { BrowserRouter as Router} from 'react-router-dom';
-import SuccessModal from './SuccessModal';
+import { render, fireEvent, screen } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
+import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import SuccessModal from "./SuccessModal";
+import Confetti from "react-confetti";
+
+// Mock navigate function from react-router-dom
 const mockNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
@@ -10,7 +13,13 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-describe('SuccessModal', () => {
+jest.mock("react-confetti", () => {
+  return function DummyConfetti() {
+    return <div data-testid="confetti" />;
+  };
+});
+
+describe("SuccessModal", () => {
   let mockShowModal;
   let mockSetShowModal;
 
@@ -19,35 +28,84 @@ describe('SuccessModal', () => {
     mockSetShowModal = jest.fn();
   });
 
-  test('renders modal when showModal is true', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("renders modal when showModal is true", () => {
     render(
       <Router>
-        <SuccessModal showModal={mockShowModal} setShowModal={mockSetShowModal} />
+        <SuccessModal
+          showModal={mockShowModal}
+          setShowModal={mockSetShowModal}
+        />
       </Router>
     );
 
-    expect(screen.getByText('Congratulations!')).toBeInTheDocument();
-    expect(screen.getByText('You have successfully completed your payment.')).toBeInTheDocument();
-    expect(screen.getByText('Go to Homepage')).toBeInTheDocument();
-    expect(screen.getByText('Go to My Tickets')).toBeInTheDocument();
+    // Check if the modal content is rendered
+    expect(screen.getByText("Congratulations!")).toBeInTheDocument();
+    expect(
+      screen.getByText("You have successfully completed your payment.")
+    ).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Go to Homepage'));
-    expect(mockNavigate).toHaveBeenCalledWith('/');
-    fireEvent.click(screen.getByText('Go to My Tickets'));
-    expect(mockNavigate).toHaveBeenCalledWith('/myBooking');
+    // Check if buttons are rendered
+    expect(screen.getByText("Go to Homepage")).toBeInTheDocument();
+    expect(screen.getByText("Go to My Tickets")).toBeInTheDocument();
 
+    // Check if Confetti is rendered
+    expect(screen.getByTestId("confetti")).toBeInTheDocument();
   });
 
-  test('does not render modal when showModal is false', () => {
-    mockShowModal = false;
+  test("does not render modal when showModal is false", () => {
     render(
       <Router>
-        <SuccessModal showModal={mockShowModal} setShowModal={mockSetShowModal} />
+        <SuccessModal showModal={false} setShowModal={mockSetShowModal} />
       </Router>
     );
-    expect(screen.queryByText('Congratulations!')).not.toBeInTheDocument();
-    expect(screen.queryByText('You have successfully completed your payment.')).not.toBeInTheDocument();
-    expect(screen.queryByText('Go to Homepage')).not.toBeInTheDocument();
-    expect(screen.queryByText('Go to My Tickets')).not.toBeInTheDocument();
+
+    // Modal content should not be in the document
+    expect(screen.queryByText("Congratulations!")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("You have successfully completed your payment.")
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Go to Homepage")).not.toBeInTheDocument();
+    expect(screen.queryByText("Go to My Tickets")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("confetti")).not.toBeInTheDocument();
   });
+
+  test('navigates to homepage when "Go to Homepage" is clicked', () => {
+    render(
+      <Router>
+        <SuccessModal
+          showModal={mockShowModal}
+          setShowModal={mockSetShowModal}
+        />
+      </Router>
+    );
+
+    // Simulate clicking the "Go to Homepage" button
+    fireEvent.click(screen.getByText("Go to Homepage"));
+
+    // Check if navigate was called with the correct route
+    expect(mockNavigate).toHaveBeenCalledWith("/");
+  });
+
+  test('navigates to my tickets when "Go to My Tickets" is clicked', () => {
+    render(
+      <Router>
+        <SuccessModal
+          showModal={mockShowModal}
+          setShowModal={mockSetShowModal}
+        />
+      </Router>
+    );
+
+    // Simulate clicking the "Go to My Tickets" button
+    fireEvent.click(screen.getByText("Go to My Tickets"));
+
+    // Check if navigate was called with the correct route
+    expect(mockNavigate).toHaveBeenCalledWith("/myBooking");
+  });
+
+  
 });

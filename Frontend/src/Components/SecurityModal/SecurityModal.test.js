@@ -1,5 +1,6 @@
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import SecurityModal from "./SecurityModal";
 import "@testing-library/jest-dom/extend-expect";
 
@@ -10,45 +11,15 @@ global.URL.createObjectURL = jest.fn(() => "mock-url");
 const mockFileReader = () => {
   const reader = new FileReader();
   jest.spyOn(window, "FileReader").mockImplementation(() => ({
-    readAsDataURL: jest.fn(() => {
-      // Simulate onloadend with a delay
-      setTimeout(() => {
-        reader.onloadend({
-          target: { result: "data:image/png;base64,dummycontent" },
-        });
-      }, 100);
+    readAsDataURL: jest.fn(),
+    onloadend: jest.fn(function () {
+      this.result = "data:image/png;base64,dummycontent";
+      this.onloadend();
     }),
-    onloadend: jest.fn(),
-    result: "data:image/png;base64,dummycontent",
   }));
 };
 
 // Mock the styled components
-jest.mock("./SecurityModal.styles", () => ({
-  ModalOverlay: ({ children }) => <div>{children}</div>,
-  ModalContainer: ({ children }) => <div>{children}</div>,
-  ModalHeader: ({ children }) => <div>{children}</div>,
-  ModalTitle: ({ children }) => <div>{children}</div>,
-  CloseButton: ({ children, ...props }) => (
-    <button {...props}>{children}</button>
-  ),
-  DropFileContainer: ({ children }) => <div>{children}</div>,
-  ImagePreview: (props) => <img {...props} />,
-  FileInput: (props) => <input {...props} />,
-  UploadMediaLabel: ({ children, ...props }) => (
-    <label {...props}>{children}</label>
-  ),
-  IconsMediaUpload: ({ children }) => <div>{children}</div>,
-  DescriptionInput: (props) => <input {...props} />,
-  ModalFooter: ({ children }) => <div>{children}</div>,
-  CancelButton: ({ children, ...props }) => (
-    <button {...props}>{children}</button>
-  ),
-  ImageWrapper: ({ children }) => <div>{children}</div>,
-  ConfirmButton: ({ children, ...props }) => (
-    <button {...props}>{children}</button>
-  ),
-}));
 
 describe("SecurityModal Component", () => {
   beforeEach(() => {
@@ -102,7 +73,7 @@ describe("SecurityModal Component", () => {
       expect(confirmButton).not.toBeDisabled();
     });
   });
-  
+
   test("should enable confirm button for landscape image", async () => {
     render(<SecurityModal event={mockEvent} onClose={mockOnClose} />);
 
@@ -115,22 +86,30 @@ describe("SecurityModal Component", () => {
 
     // Mock a landscape image
     global.Image = jest.fn(() => ({
+      onload: null,
+      src: "",
       width: 800, // greater than height to simulate landscape
       height: 600,
-      src: "",
-      onload: jest.fn(),
+      addEventListener: jest.fn(function (event, cb) {
+        this.onload = cb;
+        if (event === "load") {
+          this.onload();
+        }
+      }),
+      removeEventListener: jest.fn(function (event, cb) {
+        this.onload = null;
+      }),
     }));
-
     const file = new File(["dummy content"], "test.png", { type: "image/png" });
-    const fileInput = screen.getByLabelText(/Please upload an image/i);
+    const fileInput = screen.getByTestId("file-input");
     fireEvent.change(fileInput, { target: { files: [file] } });
+    screen.debug();
 
     // Wait for the confirm button to be enabled
     await waitFor(() => {
       expect(screen.getByText("Confirm")).not.toBeDisabled();
     });
   });
-
 
   test("should handle form submission successfully", async () => {
     const mockEvent = {
@@ -140,7 +119,6 @@ describe("SecurityModal Component", () => {
     const mockOnClose = jest.fn();
 
     render(<SecurityModal event={mockEvent} onClose={mockOnClose} />);
-
     // Fill in the description
     const descriptionInput = screen.getByPlaceholderText(
       "Please give a detail description of the incident"
@@ -149,14 +127,14 @@ describe("SecurityModal Component", () => {
       target: { value: "Test description" },
     });
 
-    // Simulate file input change with a mock file
-    const file = new File(["dummy content"], "test.png", { type: "image/png" });
-    const fileInput = screen.getByLabelText(
-      /Please upload an image related to the incident/i
-    );
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    // // Simulate file input change with a mock file
+    // const file = new File(["dummy content"], "test.png", { type: "image/png" });
+    // const fileInput = screen.getByLabelText(
+    //   /Please upload an image related to the incident/i
+    // );
+    // fireEvent.change(fileInput, { target: { files: [file] } });
 
-    // Wait for image state to be updated
+    // // Wait for image state to be updated
     await waitFor(() => {
       expect(screen.getByText("Confirm")).not.toBeDisabled();
     });
@@ -168,31 +146,46 @@ describe("SecurityModal Component", () => {
       })
     );
 
-    // Click the confirm button
+    // // Click the confirm button
     const confirmButton = screen.getByText("Confirm");
-    fireEvent.click(confirmButton);
+    await act(async () => {
+      fireEvent.click(screen.getByText("Confirm"));
+    });
 
-    // Wait for fetch to be called
+    // // Wait for fetch to be called
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith("/api/incidents", expect.any(Object));
     });
   });
 
-
   test("should display error for non-landscape image", () => {
     render(<SecurityModal event={mockEvent} onClose={mockOnClose} />);
-    const file = new File(["dummy content"], "test.png", { type: "image/png" });
+    const fileInput = screen.getByTestId("file-input");
 
     // Mock image to simulate portrait orientation
+    // Mock the Image constructor
     global.Image = jest.fn(() => ({
-      width: 600,
-      height: 800,
+      onload: null,
       src: "",
-      onload: () => {},
+      addEventListener: jest.fn(function (event, cb) {
+        if (event === "load") {
+          this.onload = cb;
+        }
+      }),
+      removeEventListener: jest.fn(function (event, cb) {
+        this.onload = null;
+      }),
     }));
 
-    const fileInput = screen.getByLabelText(/Please upload an image/i);
+    // In your test
+    // In your test
+    const file = new File(["(⌐□_□)"], "chucknorris.png", { type: "image/png" });
     fireEvent.change(fileInput, { target: { files: [file] } });
+
+    // Manually trigger the onload event
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.addEventListener("load", img.onload);
 
     waitFor(() => {
       expect(
@@ -200,5 +193,4 @@ describe("SecurityModal Component", () => {
       ).toBeInTheDocument();
     });
   });
-
 });

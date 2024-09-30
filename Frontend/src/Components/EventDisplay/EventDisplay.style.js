@@ -86,11 +86,7 @@ export const EventPages = styled.div`
   height: 3.25em;
   gap: 0.625em;
   border-radius: 0.625em;
-  background: ${props => {
-    console.log(
-      props
-    );
-    
+  background: ${props => { 
     return props.full ? 'gray' : '#18336c'}};
   border: none;
   margin-top: 1em;

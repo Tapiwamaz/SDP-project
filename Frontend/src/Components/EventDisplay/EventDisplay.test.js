@@ -1,160 +1,297 @@
-// EventDisplay.test.js
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { act } from "react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import { MemoryRouter } from "react-router-dom";
-import EventDisplay from "./EventDisplay"; // Adjust the path if necessary
+import { useLocation, useNavigate } from "react-router-dom";
+import EventDisplay from "./EventDisplay";
 
-// Mock data for events
-const mockEvent = {
-  id: "1",
-  name: "Sample Event",
-  date: "2024-12-25",
-  start_time: "10:00 AM",
-  end_time: "2:00 PM",
-  location: "Building A",
-  price: "100",
-  description: "This is a sample event description.",
-  image_url: "https://example.com/event.jpg",
-  capacity: 100,
-  count: 50,
-  user_id: "user1",
-  booking: false,
-};
+// Mock dependencies
+jest.mock("react-router-dom", () => ({
+  useNavigate: jest.fn(),
+  useLocation: jest.fn(),
+}));
 
-// Mock function to simulate loading
-const mockSetLoading = jest.fn();
-const mockOnDisplaySummary = jest.fn();
+// Mock SecurityModal component
+jest.mock("../SecurityModal/SecurityModal", () => {
+  return function DummyModal({ showModal, setShowModal }) {
+    return <div data-testid="Security-Modal">Security Modal Mock</div>;
+  };
+});
 
 describe("EventDisplay Component", () => {
+  const mockEvent = {
+    user_id: "user123",
+    name: "Sample Event",
+    date: "2023-09-30",
+    start_time: "10:00 AM",
+    end_time: "12:00 PM",
+    location: "Sample Location",
+    price: 100,
+    description: "Sample Event Description",
+    image_url: "sample-image-url",
+    booking: true,
+    ticket_count: 10,
+  };
+
+  const mockEventOrg = {
+    user_id: "user123",
+    name: "Organizer Name",
+    email: "organizer@example.com",
+    imageURL: "organizer-image-url",
+    description: "Organizer Description",
+    Rates: 5,
+    rating: 4,
+  };
+
+  const mockLocation = {
+    state: {
+      event: mockEvent,
+      ticket: { rated: false, id: "ticket123" },
+    },
+  };
+
+  const mockSetLoading = jest.fn();
+  const mockOnDisplaySummary = jest.fn();
+  const mockNavigate = jest.fn();
+
   beforeEach(() => {
+    useNavigate.mockReturnValue(mockNavigate);
+    useLocation.mockReturnValue(mockLocation);
+    global.fetch = jest.fn((url) => {
+      if (url.includes("api/GetUser")) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockEventOrg),
+        });
+      }
+      if (url.includes("api/Rating")) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ success: true }),
+        });
+      }
+      return Promise.reject(new Error("Unknown API"));
+    });
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
-    
+  });
+  test("Shows Loading placeHolders when loading", async () => {
+    await act(async () => {
+      render(<EventDisplay loading={true} setLoading={mockSetLoading} />);
+    });
+    expect(screen.getByTestId("ImagePLaceholder")).toBeInTheDocument();
   });
 
-  test("renders event details correctly", () => {
-    render(
-      <MemoryRouter>
-        <EventDisplay
-          events={mockEvent}
-          loading={false} // Ensure loading is set to false
-          setLoading={mockSetLoading}
-          onDisplaySummary={mockOnDisplaySummary}
-        />
-      </MemoryRouter>
-    );
+  test("Shows Event Display and Event Oraganiser details when not loading", async () => {
+    await act(async () => {
+      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+    });
 
-    // Check event name
     expect(screen.getByText("Sample Event")).toBeInTheDocument();
-    // Check formatted date
-    expect(screen.getByText("25 December 2024")).toBeInTheDocument();
-    // Check event time
+    expect(screen.getByText("Date")).toBeInTheDocument();
+    expect(screen.getByText("30 September 2023")).toBeInTheDocument();
+    expect(screen.getByText("Time:")).toBeInTheDocument();
     expect(
-      screen.getByText(/Start: 10:00 AM - End: 2:00 PM/i)
+      screen.getByText("Start: 10:00 AM - End: 12:00 PM")
     ).toBeInTheDocument();
-    // Check event location
-    expect(screen.getByText(/Building A/i)).toBeInTheDocument();
-    // Check event price
-    expect(screen.getByText(/R100/i)).toBeInTheDocument();
+    expect(screen.getByText("Location:")).toBeInTheDocument();
+    expect(screen.getByText("Sample Location")).toBeInTheDocument();
+    expect(screen.getByText("Price Per Ticket:")).toBeInTheDocument();
+    expect(screen.getByText("R100")).toBeInTheDocument();
+    expect(screen.getByText("About Event :")).toBeInTheDocument();
+    expect(screen.getByText("Sample Event Description")).toBeInTheDocument();
+    expect(screen.getByText("Organizer Name")).toBeInTheDocument();
+    expect(screen.getByText("organizer@example.com")).toBeInTheDocument();
+    expect(screen.getByText("Organizer Description")).toBeInTheDocument();
+    expect(screen.getByText("Number of Tickets")).toBeInTheDocument();
+    expect(screen.getByText("Current count: 1")).toBeInTheDocument();
   });
 
-  test("displays placeholder when loading", () => {
-    render(
-      <MemoryRouter>
+  test("Book now button is disabled when ticket count is 0", async () => {
+    mockLocation.state.event.ticket_count = 0;
+    await act(async () => {
+      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+    });
+    expect(screen.getByTestId("SoldOutButton")).toBeDisabled();
+  });
+
+  test("Book now button is enabled when ticket count is greater than 0 and Calls onDisplaySummary when Called", async () => {
+    mockLocation.state.event.ticket_count = 10;
+    await act(async () => {
+      render(
         <EventDisplay
-          events={mockEvent}
-          loading={true} // Set loading to true to show placeholders
+          loading={false}
           setLoading={mockSetLoading}
           onDisplaySummary={mockOnDisplaySummary}
         />
-      </MemoryRouter>
-    );
-
-    // Check for placeholder elements
-    expect(screen.queryAllByRole("img")[0]).toHaveClass(
-      "EventImagePlaceholder"
-    );
+      );
+    });
+    expect(screen.getByTestId("BookNowButton")).toBeEnabled();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("BookNowButton"));
+    });
+    expect(mockOnDisplaySummary).toHaveBeenCalledWith(mockEvent);
   });
 
-  test("increments and decrements ticket count", () => {
-    render(
-      <MemoryRouter>
-        <EventDisplay
-          events={mockEvent}
-          loading={false} // Ensure loading is set to false
-          setLoading={mockSetLoading}
-          onDisplaySummary={mockOnDisplaySummary}
-        />
-      </MemoryRouter>
-    );
-
-    // Find the increment and decrement buttons
-    const incrementButton = screen.getByTestId("increment-button"); // Update to use data-testid
-    const decrementButton = screen.getByTestId("decrement-button");
-    const currentCount = screen.getByText(/Current count: 1/i);
-
-    // Check initial count
-    expect(currentCount).toBeInTheDocument();
-
-    // Click increment button
-    fireEvent.click(incrementButton);
-    expect(screen.getByText(/Current count: 2/i)).toBeInTheDocument();
-
-    // Click decrement button
-    fireEvent.click(decrementButton);
-    expect(screen.getByText(/Current count: 1/i)).toBeInTheDocument();
+  test("Increment and Decrement buttons Change the count of tickets", async () => {
+    await act(async () => {
+      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("IncrementButton"));
+    });
+    expect(screen.getByText("Current count: 2")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("DecrementButton"));
+    });
+    expect(screen.getByText("Current count: 1")).toBeInTheDocument();
   });
 
-  test("displays and closes SecurityModal", () => {
-    render(
-      <MemoryRouter>
-        <EventDisplay
-          events={mockEvent}
-          loading={false} // Ensure loading is set to false
-          setLoading={mockSetLoading}
-          onDisplaySummary={mockOnDisplaySummary}
-        />
-      </MemoryRouter>
-    );
+  test("Rate button is enabled when ticket is rated false and Calls the Rating api", async () => {
+    mockLocation.state.ticket.rated = false;
+    mockLocation.state.event.booking = false;
+    await act(async () => {
+      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+    });
 
-    // Click "Alert" button to open modal
-    const alertButton = screen.getByRole("button", { name: /Alert/i });
-    fireEvent.click(alertButton);
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("Star-3"));
+    });
 
-    // Check that the SecurityModal is displayed
-    expect(screen.getByText(/Report an Incident/i)).toBeInTheDocument();
-
-    // Close the modal
-    const closeButton = screen.getByText("×");
-    fireEvent.click(closeButton);
-
-    // Check that the modal is closed
-    expect(screen.queryByText(/Report an Incident/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId("SubmitButton")).toBeEnabled();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("SubmitButton"));
+    });
+    expect(screen.getByText("We appreciate your feedback")).toBeInTheDocument();
   });
 
-  test("submits rating", () => {
-    render(
-      <MemoryRouter>
-        <EventDisplay
-          events={mockEvent}
-          loading={false} // Ensure loading is set to false
-          setLoading={mockSetLoading}
-          onDisplaySummary={mockOnDisplaySummary}
-        />
-      </MemoryRouter>
-    );
+  test("Alert Button Calls the Security Modal", async () => {
+    await act(async () => {
+      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId("AlertButton"));
+    });
+    expect(screen.getByText("Security Modal Mock")).toBeInTheDocument();
+  });
 
-    // Check that the rating section is visible
-    expect(screen.getByText(/Are you enjoying The event/i)).toBeInTheDocument();
-
-    // Click on a star rating
-    fireEvent.click(screen.getAllByRole("button", { name: "★" })[3]);
-
-    // Click submit button
-    const submitButton = screen.getByRole("button", { name: /Submit/i });
-    fireEvent.click(submitButton);
-
-    // Check for thank you message after submitting rating
-    expect(screen.getByText(/Thank you for your Rating/i)).toBeInTheDocument();
+  test("Rate button is disabled when ticket is rated true", async () => {
+    mockLocation.state.ticket.rated = true;
+    mockLocation.state.event.booking = false;
+    await act(async () => {
+      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+    });
+    expect(screen.getByText("We appreciate your feedback")).toBeInTheDocument();
+    mockLocation.state.event.booking = true;
+    mockLocation.state.ticket.rated = false;
   });
 });
+// describe("EventDisplay Component API Error", () => {
+//   const mockEvent = {
+//     user_id: "user123",
+//     name: "Sample Event",
+//     date: "2023-09-30",
+//     start_time: "10:00 AM",
+//     end_time: "12:00 PM",
+//     location: "Sample Location",
+//     price: 100,
+//     description: "Sample Event Description",
+//     image_url: "sample-image-url",
+//     booking: true,
+//     ticket_count: 10,
+//   };
+
+//   const mockEventOrg = {
+//     user_id: "user123",
+//     name: "Organizer Name",
+//     email: "organizer@example.com",
+//     imageURL: "organizer-image-url",
+//     description: "Organizer Description",
+//     Rates: 5,
+//     rating: 4,
+//   };
+
+//   const mockLocation = {
+//     state: {
+//       event: mockEvent,
+//       ticket: { rated: false, id: "ticket123" },
+//     },
+//   };
+
+//   const mockSetLoading = jest.fn();
+//   const mockNavigate = jest.fn();
+
+//   beforeEach(() => {
+//     useNavigate.mockReturnValue(mockNavigate);
+//     useLocation.mockReturnValue(mockLocation);
+//     global.fetch = jest.fn((url) => {
+//       // Simulate error responses for the specific API endpoints
+//       if (url.includes("api/GetUser")) {
+//         return Promise.resolve({
+//           ok: false,
+//           status: 404,
+//           json: () => Promise.resolve({ error: "User not found" }),
+//         });
+//       }
+//       if (url.includes("api/Rating")) {
+//         return Promise.resolve({
+//           ok: false,
+//           status: 500,
+//           json: () => Promise.resolve({ error: "Failed to submit rating" }),
+//         });
+//       }
+//       return Promise.reject(new Error("Unknown API"));
+//     });
+//   });
+
+//   afterEach(() => {
+//     jest.clearAllMocks();
+//   });
+
+//   test("Handles API error when fetching event organizer details", async () => {
+//     await act(async () => {
+//       render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+//     });
+
+//     // Check that the error is displayed to the user
+//     await waitFor(() => {
+//       expect(
+//         screen.getByText("Error fetching event organizer details")
+//       ).toBeInTheDocument();
+//     });
+
+//     // Check that the fetch was called with the correct API URL
+//     expect(global.fetch).toHaveBeenCalledWith(
+//       "api/GetUser?userID=user123",
+//       expect.any(Object)
+//     );
+//   });
+
+//   test("Handles API error when submitting a rating", async () => {
+//     await act(async () => {
+//       render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+//     });
+
+//     // Simulate user interaction to rate the event
+//     fireEvent.click(screen.getByTestId("Star-3"));
+//     fireEvent.click(screen.getByTestId("SubmitButton"));
+
+//     // Check that the error is displayed to the user 
+//    // Check that the fetch was called with the correct API URL and payload
+//     expect(global.fetch).toHaveBeenCalledWith(
+//       "api/Rating",
+//       expect.objectContaining({
+//         method: "PUT",
+//         body: JSON.stringify({
+//           rating: "3",
+//           userID: "user123",
+//           rates: "5",
+//           EventOrgRating: "4",
+//           ticketID: "ticket123",
+//         }),
+//       })
+//     );
+//   });
+// });

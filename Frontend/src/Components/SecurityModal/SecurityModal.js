@@ -64,15 +64,14 @@ const SecurityModal = ({ event, onClose }) => {
       }
     } catch (error) {
       setSubmissionStatus("error");
-    } finally {
+    } 
+    finally {
       setLoading(false); // Stop loader
     }
-    setSubmissionStatus("success");
   };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-
     if (file) {
       const img = new Image();
       img.src = URL.createObjectURL(file);
@@ -80,12 +79,13 @@ const SecurityModal = ({ event, onClose }) => {
         if (img.width > img.height) {
           setImage(file);
           setImageError(null);
-
+ 
           const reader = new FileReader();
           reader.onloadend = () => {
             setImgSrc(reader.result);
           };
           reader.readAsDataURL(file);
+ 
         } else {
           setImageError("Please upload a landscape image.");
           setImage(null);
@@ -107,28 +107,31 @@ const SecurityModal = ({ event, onClose }) => {
 
         {loading ? (
           // Show loader while submitting
-          <Loader>Submitting...</Loader>
+          <Loader></Loader>
         ) : submissionStatus ? (
           // Show message after submission
           <>
             <Message status={submissionStatus}>
               {submissionStatus === "success" ? (
-                <ul>
-                  <li>Incident reported successfully!</li>
-                  <li>Notification sent to security.</li>
-                  <li>Admin alerted.</li>
-                </ul>
+                <p>
+                  The WITS security team have received this report and will
+                  act on it as soon as possible. Below are details for
+                  emergencyservices if required immediately
+                </p>
               ) : (
-                "Failed to report the incident. Please try again."
+                <p>
+                  Failed to report the incident. Please try again. iF the issue
+                  persists, please contact the security office.Contact details
+                  below
+                </p>
               )}
             </Message>
-            {submissionStatus === "success" && <Confetti />}
             <EmergencyInfo>
               <h4>Emergency Services Contact Information</h4>
-              <p>📞 Emergency Hotline: 911</p>
-              <p>🚓 Local Police: 123-456-7890</p>
-              <p>🚑 Ambulance Service: 098-765-4321</p>
-              <p>📱 Security Office: 555-555-5555</p>
+              <p>📞 Emergency Hotline: 112</p>
+              <p>🚓 Local Police: 10111</p>
+              <p>🚑 Ambulance Service: 10177</p>
+              <p>📱 Wits Security Office: 0117174444 / 0117176666</p>
             </EmergencyInfo>
           </>
         ) : (
