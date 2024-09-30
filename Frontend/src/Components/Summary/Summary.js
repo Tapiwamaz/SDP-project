@@ -40,6 +40,7 @@ export default function Summary({ event }) {
       .then((data) => {
         // console.log("Success:", data);
         setShowmodal(true);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error:", error);
