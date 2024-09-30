@@ -150,7 +150,8 @@ const mockNotifications = [
     message: "Your account has been verified.",
     event_id: "event_101",
     organiser_id: "org_001",
-    name:"Tapiwa"
+    name:"Tapiwa",
+    image_url:"vvwrvwrvrbwbr"
   },
   {
     notification_id: "notif_002",
@@ -159,7 +160,9 @@ const mockNotifications = [
     message: "The event 'Tech Summit' has been updated.",
     event_id: "event_102",
     organiser_id: "org_002",
-    name:"Tapiwa"
+    name:"Tapiwa",
+    image_url:"vvwrvwrvrbwbr"
+
 
   },
   {
@@ -169,7 +172,9 @@ const mockNotifications = [
     message: "Your event 'Marketing 101' has been edited successfully.",
     event_id: "event_103",
     organiser_id: "org_003",
-    name:"Tapiwa"
+    name:"Tapiwa",
+    image_url:"vvwrvwrvrbwbr"
+
 
   },
   {
@@ -179,7 +184,9 @@ const mockNotifications = [
     message: "New features have been added to your dashboard.",
     event_id: "event_104",
     organiser_id: "org_001",
-    name:"Tapiwa"
+    name:"Tapiwa",
+    image_url:"vvwrvwrvrbwbr"
+
 
   },
   {
@@ -189,7 +196,9 @@ const mockNotifications = [
     message: "The event 'AI Conference' has been canceled.",
     event_id: "event_105",
     organiser_id: "org_002",
-    name:"Tapiwa"
+    name:"Tapiwa",
+    image_url:"vvwrvwrvrbwbr"
+
   },
 ];
 

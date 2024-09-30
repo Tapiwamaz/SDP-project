@@ -75,7 +75,8 @@ export const CreateProfile = () => {
           imageURL: profileImage,
           email: userEmail,
           user_id: userID,
-          rating:0
+          rating:0,
+          Rates:0
         });
         setError(null)
         localStorage.setItem("userData", JSON.stringify({name:name,description:description,imageURL:profileImage,email:userEmail,rating:0}));
@@ -100,16 +101,12 @@ export const CreateProfile = () => {
   return (
     <ResponsiveBackground>
       <ResponsiveDiv>
-      {/* <backgroundCard> */}
 
         <ImageContainer>
           <StyledImage src={logo} alt="Logo" />
         </ImageContainer>
-        {/* <ImageContainer> */}
           <StyledBoldText>Create Profile!</StyledBoldText>
-        {/* </ImageContainer> */}
         
-        {/* Circular Image for Profile */}
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <StyledImage
             src={profileImage}
@@ -123,14 +120,7 @@ export const CreateProfile = () => {
             }}
             // onClick={handleClick}
           />
-          {/* Hidden File Input */}
-          {/* <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }} // Hide the input
-            accept="image/*" // Accept only image files
-            onChange={handleImageChange} // Handle file selection
-          /> */}
+        
         </div>
         <button onClick={newAvatar} style={{display:"flex", alignItems:"center",gap:"2px",height:"24px",borderRadius:'10px'}}>
           <ArrowPathIcon style={{
@@ -138,10 +128,8 @@ export const CreateProfile = () => {
           }}/>
           <p> Generate new avatar</p>
           </button>
-        {/* <p>Click profile image to change it</p> */}
 
 
-        {/* Input Fields */}
         <Field>
             <h4> Nickname</h4>
             <StyledInput type="text" placeholder="Name" onChange={(e)=>setName(e.target.value)} />
@@ -160,7 +148,6 @@ export const CreateProfile = () => {
         <StyledButton style={{marginBottom:"20px"}} onClick={postUser}>Go to events</StyledButton>
 
       </ResponsiveDiv>
-      {/* </backgroundCard> */}
 
     </ResponsiveBackground>
   );

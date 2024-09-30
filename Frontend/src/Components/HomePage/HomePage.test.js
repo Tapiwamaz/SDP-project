@@ -11,6 +11,15 @@ jest.mock('../EventsSlider/EventSlider', () => () => <div>Mocked EventSlider</di
 jest.mock('../EventsCalendar/EventsCalendar', () => () => <div>Mocked Calendar</div>);
 jest.mock('../Summary/Summary', () => () => <div>Mocked Summary</div>);
 
+jest.mock("firebase/auth", () => ({
+  getAuth: jest.fn(),
+  GoogleAuthProvider: jest.fn(),
+}));
+jest.mock("firebase/storage", () => ({
+  getStorage: jest.fn(),
+}));
+
+
 const mockEvents = [
     { id: 1, name: 'Event 1', type: 'Education', approved: true, date: '2023-09-25' },
     { id: 2, name: 'Event 2', type: 'Sports', approved: true, date: '2023-10-10' },
@@ -49,7 +58,7 @@ describe('HomePage Component', () => {
         expect(eventSliders).toHaveLength(2); // Check if there are exactly 2 instances
         // Wait for the events to be rendered
         await waitFor(() =>{ expect(screen.getByText('Trending Events')).toBeInTheDocument()});
-        await waitFor(() =>{ expect(screen.getByText('Latest Events')).toBeInTheDocument()});
+        await waitFor(() =>{ expect(screen.getByText('Events happening Soon')).toBeInTheDocument()});
 
 
       });
@@ -69,6 +78,24 @@ describe('HomePage Component', () => {
           expect(screen.getByText('No Results found')).toBeInTheDocument();
         });
       });
+
+      // test('displays event summary when summary is clicked', async () => {
+      //   render(<HomePage />);
+      
+      //   // Simulate displaying an event
+      //   await waitFor(() => {
+      //     const eventDisplay = screen.getByText('Mocked EventDisplay');
+      //     expect(eventDisplay).toBeInTheDocument();
+      //   });
+      
+      //   // Simulate clicking the summary to display it
+      //   fireEvent.click(screen.getByText('Mocked EventDisplay'));
+      
+      //   // Check that the summary is displayed
+      //   await waitFor(() => {
+      //     expect(screen.getByText('Mocked Summary')).toBeInTheDocument();
+      //   });
+      // });
 
   
 });

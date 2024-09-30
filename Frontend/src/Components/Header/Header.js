@@ -175,12 +175,7 @@ const Header = () => {
         </Aside>
       </HeaderContainer>
       {profileCllicked? <ProfilePage/>:null}
-      {/* Profile Dropdown */}
-      {/* {screen === "desktop" && (
-        <ProfileDropdown isOpen={profileCllicked}>
-          <ProfilePage />
-        </ProfileDropdown>
-      )} */}
+    
     </>
   );
 };
