@@ -2,8 +2,11 @@
 import React from 'react';
 import './ViewCards.css';
 import placeholderImage from './depositphotos_466819550-stock-illustration-image-available-icon-missing-image.jpg'; // Placeholder image
+import { useNavigate } from 'react-router';
 
 const ViewCards = ({ event, onCancel }) => {
+
+  const navigate = useNavigate()
   const formatDate = (date) => {
     const eventDate = new Date(date);
     return eventDate.toLocaleDateString('en-US', {
@@ -22,9 +25,8 @@ const ViewCards = ({ event, onCancel }) => {
     });
   };
 
-  const handleEdit = () => {
-    alert("Feature is coming soon :)");
-    console.log("Edit event placeholder");
+  const handleEdit = (event) => {
+    navigate("/createEvent",{ state: { inputEventDetails: event }} )
   };
 
   return (
@@ -48,7 +50,7 @@ const ViewCards = ({ event, onCancel }) => {
         </div>
 
         <div className="event-actions">
-          <button className='reschedule-button' onClick={handleEdit}>Reschedule</button>
+          <button className='reschedule-button' onClick={() => handleEdit(event)}>Edit Event</button>
           {onCancel && (
             <button className='cancel-button' onClick={() => onCancel(event.id)}>Cancel Event</button>
           )}
