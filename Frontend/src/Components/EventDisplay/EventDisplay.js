@@ -1,6 +1,7 @@
 // Import necessary modules and components
 // rG4AF+FH
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -71,17 +72,23 @@ const EventDisplay = ({
     if (!book) {
       setRated(tick.rated);
     }
-    if (event.ticket_count === 0) {
-      SetFull(true);
-    } else {
-      SetFull(false);
-    }
+    SetFull(event.ticket_count === 0);
     const fetchData = async () => {
-      if (Object.keys(EventOrg).length === 0 || !!loading) {
-        const eventOrgData = await fetchEventOrganizer(event.user_id);
-        setEventOrg(eventOrgData);
-        setLoad(false);
-        setLoading(false);
+      try {
+        if (Object.keys(EventOrg).length === 0 || !!loading) {
+          const eventOrgData = await fetchEventOrganizer(event.user_id);
+          if (!eventOrgData) {
+            toast.error("Failed to fetch event organizer details");
+          } else {
+            setEventOrg(eventOrgData);
+          }
+          setLoad(false);
+          setLoading(false);
+        }
+      } catch (error) {
+        toast.error(
+          "An unexpected error occurred while fetching event organizer details."
+        );
       }
     };
     fetchData();
@@ -108,12 +115,10 @@ const EventDisplay = ({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       let data = await response.json();
-      // if (!data.Rates) {
-      //   data.Rates = 0;
-      // }
       return data;
     } catch (error) {
       console.error("Error fetching data:", error);
+      toast.error("Failed to fetch event organizer details");
       return null;
     }
   };
@@ -168,6 +173,7 @@ const EventDisplay = ({
       })
       .catch((error) => {
         console.error("Error:", error);
+        toast.error("Failed to submit rating");
       });
 
   const openSecurityModal = () => {
@@ -178,6 +184,7 @@ const EventDisplay = ({
 
   return (
     <EventPages>
+      <ToastContainer />
       {!!loading || Load ? (
         <EventImagePlaceholder
           data-testid="ImagePLaceholder"
