@@ -18,9 +18,13 @@ export const createNotification = (setCreateNotificationClicked) => {
 
 export const eventsByUserID = async (userId, setEvents) => {
   try {
-    const q = query(collection(db, "Events"), where("user_id", "==", userId));
+    const q = query(
+      collection(db, "Events"),
+      where("user_id", "==", userId),
+      where("approved", "==", true)
+    );
     const querySnapshot = await getDocs(q);
-    const events = querySnapshot.docs.map((d) => d.data())
+    const events = querySnapshot.docs.map((d) => d.data());
     setEvents(events);
   } catch (error) {
     console.error("Error fetching entry count:", error);
@@ -52,7 +56,6 @@ const Notifications = () => {
     if (auth?.currentUser?.uid) {
       eventsByUserID(auth?.currentUser?.uid, setMyEvents);
     }
-
   }, []);
 
   return (
@@ -62,9 +65,12 @@ const Notifications = () => {
       <Top>
         <ArrowLeftCircleIcon width={40} onClick={() => navigate(-1)} />
         <h3>Notifications</h3>
-        <StyledPlus
-          onClick={() => createNotification(setCreateNotificationClicked)}
-        ></StyledPlus>
+        {/* Only organizers can make notifications based on their events so if you don't any made events */}
+        {myEvents.length > 0 && (
+          <StyledPlus
+            onClick={() => createNotification(setCreateNotificationClicked)}
+          ></StyledPlus>
+        )}
       </Top>
       {createNotificationClicked && (
         <CreateNotifications

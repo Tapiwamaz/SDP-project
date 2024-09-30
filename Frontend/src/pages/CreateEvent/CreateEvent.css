@@ -124,8 +124,11 @@
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  /* gap: 0.65rem; */
   flex: 1;
+}
+.inputs > * {
+  margin-bottom: 0.65rem;
 }
 
 .input {
@@ -157,6 +160,7 @@
   align-self: center;
   width: 50%;
   border: none;
+  margin: 0.65rem 0;
 }
 
 .doubleInputContainer {
@@ -174,6 +178,16 @@
 .descriptionInput {
   height: 200px;
   resize: none;
+  padding: 0.5rem;
+  font-weight: normal;
+  font-size: 1.4rem;
+  margin: 0;
+}
+.chrsLeft {
+  padding: 0;
+  margin: 0;
+  text-align: right;
+  font: inherit
 }
 
 .unfilled-input {
@@ -291,7 +305,7 @@
   }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 768px) {
   .drop-file-container,
   .imageHolder {
     width: 100%;

@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import CreateNotifications, {
+  formatDateToISO,
   handleChangeNoti,
   handleSendButtonClick,
   sendNotification,
@@ -101,7 +102,7 @@ describe("Unit tests (Functions)", () => {
       notification_id: undefined,
       notification_type: "organizer",
       organiser_id: auth.currentUser.uid,
-      time: new Date().toLocaleDateString(),
+      time: formatDateToISO(new Date()),
     };
 
     expect(mockSendNoti).toHaveBeenCalled();
@@ -136,6 +137,13 @@ describe("Unit tests (Functions)", () => {
     expect(addDoc).toHaveBeenCalledWith(mockCollectionRef, notification);
     expect(toast.success).toHaveBeenCalledWith("Your message has been sent");
   });
+
+  test("formateDateIso", ()=> {
+    const date = new Date(2023, 8, 30, 14, 45, 30); // September 30, 2023 14:45:30
+    const formattedDate = formatDateToISO(date);
+    expect(formattedDate).toBe('2023-09-30T14:45:30');
+
+  })
 });
 
 describe("Branching tests", () => {

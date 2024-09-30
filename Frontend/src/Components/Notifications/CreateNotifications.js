@@ -29,6 +29,17 @@ export const sendNotification = async (notification, db) => {
   }
 };
 
+export const  formatDateToISO = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); 
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+}
+
 export const handleSendButtonClick = (
   notification,
   organiser,
@@ -43,8 +54,8 @@ export const handleSendButtonClick = (
     event_id: events[notification.eventIndex].event_id,
     message: notification.message,
   };
-  sendingNotification["image_url"] = organiser.image_url || organiser.imageURL;
-  sendingNotification["time"] = new Date().toLocaleDateString();
+  sendingNotification["image_url"] = organiser.image_url;
+  sendingNotification["time"] = formatDateToISO(new Date());
   sendingNotification["notification_type"] = "organizer";
   sendingNotification["name"] = organiser.name;
   sendingNotification["notification_id"] = v4();

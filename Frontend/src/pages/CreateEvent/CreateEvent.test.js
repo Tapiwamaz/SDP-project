@@ -27,9 +27,8 @@ import {
 } from "firebase/storage";
 import { addDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(),
@@ -66,6 +65,7 @@ jest.mock("react-toastify", () => ({
     warn: jest.fn(),
     error: jest.fn(),
   },
+  ToastContainer: () => ()=> <div>MockToastContainer</div>
 }));
 
 jest.mock("react-router-dom", () => ({
@@ -123,6 +123,27 @@ jest.mock("../../MockData/MockData", () => ({
     "Entertainment",
     "Gaming",
     "IT",
+  ],
+  mockVirtualLocations: [
+    {
+      id: "05i5Vi0aZVKd8ZEzHNvw",
+      campus: "East",
+      timeSlots: [
+        "08:00",
+        "09:00",
+        "10:15",
+        "11:15",
+        "12:30",
+        "14:15",
+        "15:15",
+        "16:15",
+      ],
+      venueType: "Lecture Venue",
+      isClosed: false,
+      buildingName: "Robert Sobukwe",
+      venueName: "CB216A",
+      venueCapacity: "30",
+    },
   ],
 }));
 
@@ -932,6 +953,17 @@ describe("CreateEvent html component functions", () => {
 
     expect(mockNavigate).toHaveBeenCalledWith(-1);
   });
+
+  it("Character left p tag", () => {
+    render(<CreateEvent inputEventDetails={null} />);
+    const descriptionInput = screen.getByTestId("description");
+    expect(screen.queryByTestId("chrLeft")).not.toBeInTheDocument();
+    fireEvent.change(descriptionInput, { target: { value: "foo" } });
+    const chrLeftP = screen.getByTestId("chrLeft");
+    expect(chrLeftP).toBeInTheDocument();
+    expect(chrLeftP.textContent).toEqual("Characters left: 197");
+    expect(chrLeftP.style.color).toEqual("rgb(3, 197, 0)");
+  });
 });
 
 describe("updateEventDB", () => {
@@ -1052,8 +1084,17 @@ describe("Datalists", () => {
   });
   it("Locations datalist", () => {
     render(<CreateEvent inputEventDetails={null} />);
+    const venue_typeInput = screen.getByTestId("venue_type");
+    fireEvent.change(venue_typeInput, {target: {value: "Lecture Venue"}});
     const locationsList = screen.getByTestId("locationsList");
     expect(locationsList.children.length).toBeGreaterThanOrEqual(1);
+    const nameList = screen.getByTestId("venueNames");
+    expect(nameList.children.length).toBeGreaterThanOrEqual(1);
+    const locationInput = screen.getByTestId("location");
+    fireEvent.change(locationInput, {target: {value: "CB216A"}});
+
+    const timeSlotList = screen.getByTestId("timeSlotsList");
+    expect(timeSlotList.children.length).toBeGreaterThanOrEqual(1)
   });
   it("eventType datalist", () => {
     render(<CreateEvent inputEventDetails={null} />);
@@ -1071,5 +1112,43 @@ describe("Functions within html components", () => {
     const locationInput = screen.getByTestId("location");
     fireEvent.focus(locationInput);
     expect("unfilled-input" in locationInput.classList).toBe(false);
+
+    const descriptionInput = screen.getByTestId("description");
+    fireEvent.focus(descriptionInput);
+    expect("unfilled-input" in descriptionInput.classList).toBe(false);
+
+    const priceInput = screen.getByTestId("price");
+    fireEvent.focus(priceInput);
+    expect("unfilled-input" in priceInput.classList).toBe(false);
+
+    const end_timeInput = screen.getByTestId("end_time");
+    fireEvent.focus(end_timeInput);
+    expect("unfilled-input" in end_timeInput.classList).toBe(false);
+
+    const start_timeInput = screen.getByTestId("start_time");
+    fireEvent.focus(start_timeInput);
+    expect("unfilled-input" in start_timeInput.classList).toBe(false);
+
+    const venue_typeInput = screen.getByTestId("venue_type");
+    fireEvent.focus(venue_typeInput);
+    expect("unfilled-input" in venue_typeInput.classList).toBe(false);
+
+    const eventDateInput = screen.getByTestId("date");
+    fireEvent.focus(eventDateInput);
+    expect("unfilled-input" in eventDateInput.classList).toBe(false);
+
+    const typeInput = screen.getByTestId("type");
+    fireEvent.focus(typeInput);
+    expect("unfilled-input" in typeInput.classList).toBe(false);
+
+    const nameInput = screen.getByTestId("name");
+    fireEvent.focus(nameInput);
+    expect("unfilled-input" in nameInput.classList).toBe(false);
+
+    const imageInput = screen.getByTestId("drop-file-container");
+    fireEvent.mouseEnter(imageInput);
+    fireEvent.mouseLeave(imageInput);
+
+    fireEvent.change(typeInput, { target: { value: "Online" } });
   });
 });

@@ -14,6 +14,11 @@ export const SelectEventsInput = styled.select`
   height: 5vh;
   margin: 0 0 0.5rem 0;
   font-size: 1rem;
+  border-width: 2px;
+
+  &:hover {
+    border-color:var(--primary);
+  }
 `;
 export const MessageInput = styled.textarea`
   resize: none;
@@ -24,11 +29,10 @@ export const MessageInput = styled.textarea`
   height: 15vh;
   border: 2px solid black;
   max-lines: 2;
-  /* margin: 0 0 0.5rem 0; */
-  :focus,
-  :active {
-    border-color: white;
-    border: none;
+  border-color: gray;
+  &:focus,
+  &:active {
+    border-color: var(--primary);
     outline: none;
   }
 `;

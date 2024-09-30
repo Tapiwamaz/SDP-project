@@ -14,7 +14,7 @@ import "./CreateEvent.css";
 // react
 import { useEffect, useRef, useState } from "react";
 // toast
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //rrd
 import { useLocation, useNavigate } from "react-router-dom";
@@ -116,9 +116,10 @@ export const createEventDB = async (
   locations
 ) => {
   try {
-    const capacity = parseInt(locations.filter(
-      (loc) => loc.venueName === newEvent.location
-    )[0].venueCapacity);
+    const capacity = parseInt(
+      locations.filter((loc) => loc.venueName === newEvent.location)[0]
+        .venueCapacity
+    );
     const venueId = locations.filter(
       (loc) => loc.venueName === newEvent.location
     )[0].id;
@@ -282,6 +283,7 @@ const CreateEvent = ({ inputEventDetails }) => {
     return (
       <div>
         <Header />
+        <ToastContainer />
         <section className="wrapperCreateEvent">
           {loader && (
             <div className="loader">
@@ -528,11 +530,11 @@ const CreateEvent = ({ inputEventDetails }) => {
                       }
                     ></input>
 
-                    <datalist id="locationsList">
+                    <datalist id="locationsList" data-testid="venueNames">
                       {availableLocations
                         .filter((x) => x.venueType === filterVenueType)
-                        .map((loc) => (
-                          <option value={loc.venueName} />
+                        .map((loc, i) => (
+                          <option key={i} value={loc.venueName} />
                         ))}
                     </datalist>
                   </div>
@@ -673,6 +675,19 @@ const CreateEvent = ({ inputEventDetails }) => {
                   )
                 }
               ></textarea>
+              {eventDetails.description && (
+                <p
+                  data-testid="chrLeft"
+                  className="chrsLeft"
+                  style={{
+                    color: `rgb(${eventDetails.description.length},${
+                      200 - eventDetails.description.length
+                    },0)`,
+                  }}
+                >
+                  Characters left: {200 - eventDetails.description.length}
+                </p>
+              )}
 
               <button
                 className="btn createEventButtonNext"
