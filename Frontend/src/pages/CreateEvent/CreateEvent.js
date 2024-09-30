@@ -429,6 +429,7 @@ const CreateEvent = ({ inputEventDetails }) => {
                 <input
                   className="input"
                   type="date"
+                  id="eventDate"
                   data-testid="date"
                   name="eventDate"
                   ref={eventDateRef}
@@ -462,6 +463,7 @@ const CreateEvent = ({ inputEventDetails }) => {
                     </label>
                     <input
                       className="input"
+                      id="eventVenueType"
                       list="venueList"
                       data-testid="venue_type"
                       placeholder="e.g Lecture room"
@@ -506,6 +508,7 @@ const CreateEvent = ({ inputEventDetails }) => {
                     </label>
                     <input
                       className="input"
+                      id="eventLocation"
                       list="locationsList"
                       data-testid="location"
                       onFocus={() =>
@@ -543,11 +546,12 @@ const CreateEvent = ({ inputEventDetails }) => {
                     className="doubleInput"
                     style={{ display: "flex", flexDirection: "column" }}
                   >
-                    <label className="label" htmlFor="eventDate">
+                    <label className="label" htmlFor="eventStartTime">
                       Start Time
                     </label>
                     <input
                       className="input"
+                      id="eventStartTime"
                       placeholder="e.g 08:00"
                       data-testid="start_time"
                       list="timeSlotsList"
@@ -587,11 +591,12 @@ const CreateEvent = ({ inputEventDetails }) => {
                     className="doubleInput"
                     style={{ display: "flex", flexDirection: "column" }}
                   >
-                    <label className="label" htmlFor="eventDate">
+                    <label className="label" htmlFor="eventEndTime">
                       End Time
                     </label>
                     <input
                       className="input"
+                      id="eventEndTime"
                       value={eventDetails.end_time || ""}
                       data-testid="end_time"
                       list="timeSlotsList"
@@ -624,6 +629,7 @@ const CreateEvent = ({ inputEventDetails }) => {
               <input
                 className="input"
                 type="number"
+                id="eventTicketPrice"
                 ref={eventTicketPriceRef}
                 data-testid="price"
                 value={eventDetails.price || null}

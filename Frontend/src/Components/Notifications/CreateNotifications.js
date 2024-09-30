@@ -22,14 +22,22 @@ export const sendNotification = async (notification, db) => {
   try {
     const notificationCollectionRef = collection(db, "Notifications");
     await addDoc(notificationCollectionRef, notification);
-    toast.success("Your message has been sent")
+    toast.success("Your message has been sent");
   } catch (e) {
     console.error("Error creating notification:", e);
     throw new Error("Failed to create notification. Please try again.");
   }
 };
 
-export const handleSendButtonClick = (notification, organiser, events,db,auth,setOpen) => {
+export const handleSendButtonClick = (
+  notification,
+  organiser,
+  events,
+  db,
+  auth,
+  setOpen,
+  sendNotification
+) => {
   const sendingNotification = {
     organiser_id: auth?.currentUser?.uid,
     event_id: events[notification.eventIndex].event_id,
@@ -40,11 +48,11 @@ export const handleSendButtonClick = (notification, organiser, events,db,auth,se
   sendingNotification["notification_type"] = "organizer";
   sendingNotification["name"] = organiser.name;
   sendingNotification["notification_id"] = v4();
-  sendNotification(sendingNotification,db);
-  setOpen(false)
+  sendNotification(sendingNotification, db);
+  setOpen(false);
 };
 
-const CreateNotifications = ({ myEvents ,setOpen}) => {
+const CreateNotifications = ({ myEvents, setOpen }) => {
   const [filledForm, setFilledForm] = useState(false);
   const [myNotification, setMyNotification] = useState({
     message: "",
@@ -59,7 +67,7 @@ const CreateNotifications = ({ myEvents ,setOpen}) => {
     } else {
       setFilledForm(false);
     }
-  }, [myNotification]);
+  }, [myNotification,myNotification.message]);
 
   return (
     <CreateNotificationWrapper>
@@ -68,7 +76,7 @@ const CreateNotifications = ({ myEvents ,setOpen}) => {
           handleChangeNoti("eventIndex", e.target.value, setMyNotification)
         }
       >
-        <option value="none" selected disabled hidden>
+        <option value="-1" selected disabled hidden>
           Select an event
         </option>
         {myEvents.map((event, index) => (
@@ -78,19 +86,28 @@ const CreateNotifications = ({ myEvents ,setOpen}) => {
         ))}
       </SelectEventsInput>
       <MessageInput
+        data-testid="h"
         placeholder="Please enter your message"
         maxLength={200}
         onChange={(e) =>
           handleChangeNoti("message", e.target.value, setMyNotification)
         }
-      />
+      ></MessageInput>
       <ChrLeftLabel>
         Characters left: {200 - myNotification.message.length}
       </ChrLeftLabel>
       <SendButton
         disabled={!filledForm}
         onClick={() =>
-          handleSendButtonClick(myNotification, userData, myEvents,db,auth, setOpen)
+          handleSendButtonClick(
+            myNotification,
+            userData,
+            myEvents,
+            db,
+            auth,
+            setOpen,
+            sendNotification
+          )
         }
       >
         Send

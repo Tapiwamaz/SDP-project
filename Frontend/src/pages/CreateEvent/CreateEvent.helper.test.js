@@ -174,7 +174,7 @@ describe('fetchVenues', () => {
 
     // Check that the fetch function was called with the correct URL and headers
     expect(fetch).toHaveBeenCalledWith(
-      'https://wits-infrastructure-management.web.app/api/venues/?closureStatus=False',
+      'https://wits-infrastructure-management.web.app/api/venues/?isClosed=False',
       {
         method: 'GET',
         headers: {
@@ -201,7 +201,7 @@ describe('fetchVenues', () => {
     const data = await fetchVenues();
 
     expect(fetch).toHaveBeenCalledWith(
-      'https://wits-infrastructure-management.web.app/api/venues/?closureStatus=False',
+      'https://wits-infrastructure-management.web.app/api/venues/?isClosed=False',
       {
         method: 'GET',
         headers: {
@@ -227,7 +227,7 @@ describe('fetchVenues', () => {
     const data = await fetchVenues();
 
     expect(fetch).toHaveBeenCalledWith(
-      'https://wits-infrastructure-management.web.app/api/venues/?closureStatus=False',
+      'https://wits-infrastructure-management.web.app/api/venues/?isClosed=False',
       {
         method: 'GET',
         headers: {
