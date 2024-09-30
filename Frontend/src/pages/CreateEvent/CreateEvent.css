@@ -1,6 +1,6 @@
 .btn {
   background-color: var(--primary);
-  color: var(--background);
+  color: white;
   border-radius: 2.5rem;
   font-family: inherit;
   font-size: inherit;
@@ -11,17 +11,14 @@
 }
 
 .btn:hover {
-  transform: scale(1.01);
-  background-color: white;
-  border: black solid 3px;
-  color: black;
+  filter: brightness(150%);
+  color: white;
 }
 
 .wrapperCreateEvent {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 15px;
   margin: 0 auto;
   animation: fade-in 300ms forwards;
 }
@@ -127,8 +124,11 @@
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  /* gap: 0.65rem; */
   flex: 1;
+}
+.inputs > * {
+  margin-bottom: 0.65rem;
 }
 
 .input {
@@ -142,6 +142,7 @@
   font-weight: 600;
   cursor: pointer;
   background-color: rgba(54, 69, 79,0.1);
+  box-sizing: border-box;
  
 }
 
@@ -158,6 +159,8 @@
 .createEventButtonNext {
   align-self: center;
   width: 50%;
+  border: none;
+  margin: 0.65rem 0;
 }
 
 .doubleInputContainer {
@@ -175,6 +178,16 @@
 .descriptionInput {
   height: 200px;
   resize: none;
+  padding: 0.5rem;
+  font-weight: normal;
+  font-size: 1.4rem;
+  margin: 0;
+}
+.chrsLeft {
+  padding: 0;
+  margin: 0;
+  text-align: right;
+  font: inherit
 }
 
 .unfilled-input {
@@ -292,7 +305,7 @@
   }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 768px) {
   .drop-file-container,
   .imageHolder {
     width: 100%;
@@ -310,9 +323,9 @@
 
   .drop-file-container {
     width: 85vw;
+    align-self: center;
   }
   .createEventsContainer {
-    width: 100%;
     box-shadow: none;
     margin: 0;
   }
