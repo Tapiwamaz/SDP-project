@@ -69,6 +69,7 @@ const goToEvent=(event)=>{
   if(auth?.currentUser?.email){
     if(screen==="desktop"){
       onDisplayEvent(event);
+      
     }
     else{
       navigate('/event' , {state: {event}}); 
