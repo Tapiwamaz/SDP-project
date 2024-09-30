@@ -54,7 +54,7 @@ export const handleSendButtonClick = (
     event_id: events[notification.eventIndex].event_id,
     message: notification.message,
   };
-  sendingNotification["image_url"] = organiser.image_url;
+  sendingNotification["image_url"] = organiser.imageURL || organiser.image_url;
   sendingNotification["time"] = formatDateToISO(new Date());
   sendingNotification["notification_type"] = "organizer";
   sendingNotification["name"] = organiser.name;
