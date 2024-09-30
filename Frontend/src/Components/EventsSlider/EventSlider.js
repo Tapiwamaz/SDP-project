@@ -50,6 +50,7 @@ const EventSlider = ({events,onDisplayEvent}) => {
 
       
     }, []);
+    
     let formattedDate;
 const formatDate=(date)=>{
   const eventDate = new Date(date);

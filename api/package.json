@@ -10,7 +10,7 @@
     "@azure/functions": "^4.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
-    "firebase": "^10.13.1",
+    "firebase": "^10.13.2",
     "node-fetch": "^3.3.2"
   },
   "main": "src/{index.js,functions/*.js}"

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Wrapper,
+  Page,
   ProfileImage,
-  Summary,
-  EventsGrp,
+  PictureWrapper,
+  CountWrapper,
   Count,
   Text,
   Rating,
@@ -13,7 +13,9 @@ import {
   ButtonWrapper,
   LeftSection,
   ButtonGrp,
-  Numbers,
+  Stats,
+  Contents,
+  NavigationSection,
 } from "./ProfilePage.styles";
 import profileimg from "../../Images/profileimg.jpg";
 import {
@@ -45,10 +47,9 @@ import { v4 } from "uuid";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
 
-const Profile = () => {
+export const Profile = () => {
   const storedUserData = localStorage.getItem("userData");
   const userData = storedUserData ? JSON.parse(storedUserData) : {};
-  const UsersCollectionRef = collection(db, "Users");
 
   const [profileImage, setProfileImage] = useState(userData.imageURL || null);
   const fileInputRef = useRef(null);
@@ -56,8 +57,30 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(userData.description);
-  const navigate=useNavigate();
+  const [ticketCount, setTicketCount] = useState(0);
+  const [eventCount, setEventCount] = useState(0);
+  const [screen, setScreen] = useState(null);
+  const navigate = useNavigate();
 
+  const updateSlidePercentage = () => {
+    const screenWidth = window.innerWidth; // Get the current screen width
+
+    if (screenWidth <= 768) {
+      // If the screen width is 768px or less, it's a phone
+      setScreen("phone");
+    } else {
+      // Default for larger screens
+      setScreen("desktop");
+    }
+  };
+  useEffect(() => {
+    // Call updateSlidePercentage on mount and window resize
+    updateSlidePercentage(); // Initial call
+    window.addEventListener("resize", updateSlidePercentage);
+
+    // Cleanup listener on unmount
+    return () => window.removeEventListener("resize", updateSlidePercentage);
+  }, []);
   // file input change to update profile image
   const editImage = (e) => {
     const file = e.target.files[0];
@@ -65,7 +88,6 @@ const Profile = () => {
       const imageUrl = URL.createObjectURL(file);
       setProfileImage(imageUrl); // Update preview
       setImageFile(file); // Save the file for uploading
-      console.log(imageUrl);
     }
   };
 
@@ -130,7 +152,6 @@ const Profile = () => {
 
       // Check if a document exists
       if (querySnapshot.empty) {
-        console.log("No matching documents.");
         return;
       }
 
@@ -139,33 +160,68 @@ const Profile = () => {
 
       // Update the document
       await updateDoc(docRef, updateData);
-
-      console.log("Document successfully updated!");
     } catch (error) {
       console.error("Error updating document: ", error);
     }
   }
 
-  // const handleImageChange = (event, setImageSrc, setImage, setImageError) => {
-  //   const file = event.target.files[0];
+  // Async function to count the number of entries by user ID
+  const countEntriesByUser = async (userId) => {
+    try {
+      const today = new Date();
+      const q = query(
+        collection(db, "Tickets"),
+        where("user_id", "==", userId),
+        where("date", ">", today)
+      );
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.size; // Return the count of user entries
+    } catch (error) {
+      console.error("Error fetching entry count:", error);
+      return 0;
+    }
+  };
 
-  //   if (file) {
-  //     const img = new Image();
-  //     img.src = URL.createObjectURL(file);
-  //     img.onload = () => {
-  //       URL.revokeObjectURL(img.src); // Clean up memory
-  //     };
-  //   } else {
-  //     setImageError("Something went wrong uploading your picture");
-  //   }
-  // };
+  // Fetch the count when the component mounts
+  useEffect(() => {
+    const fetchCount = async () => {
+      if (auth?.currentUser?.uid) {
+        const count = await countEntriesByUser(auth?.currentUser?.uid);
+        setTicketCount(count); // Update the entry count state
+      }
+    };
 
-  //
+    fetchCount();
+  }, []);
+
+  const countEventsByUser = async (userId) => {
+    try {
+      const q = query(collection(db, "Events"), where("user_id", "==", userId));
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.size; // Return the count of user entries
+    } catch (error) {
+      console.error("Error fetching entry count:", error);
+      return 0;
+    }
+  };
+
+  // Fetch the count when the component mounts
+  useEffect(() => {
+    const fetchCount = async () => {
+      if (auth?.currentUser?.uid) {
+        const count = await countEventsByUser(auth?.currentUser?.uid);
+        setEventCount(count); // Update the entry count state
+      }
+    };
+
+    fetchCount();
+  }, []);
+
   const logout = async () => {
     try {
       await signOut(auth);
-      localStorage.removeItem('userData');
-      navigate('/welcome');
+      localStorage.removeItem("userData");
+      navigate("/welcome");
     } catch (err) {
       console.error(err);
     }
@@ -173,145 +229,162 @@ const Profile = () => {
 
   return (
     <>
-      <Wrapper>
-        <Summary>
-          <ProfileImage
-            src={profileImage}
-            alt="Profile"
-            style={{ cursor: isEditing ? "pointer" : "default" }}
-            onClick={isEditing ? () => fileInputRef.current.click() : null} // Trigger image upload only in edit mode
-          />
-
-          {/* Conditionally show file input when editing */}
-          {isEditing && (
-            <div>
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={editImage}
-                style={{ display: "none" }}
-              />
-              <p
-                onClick={handleFileInputClick}
-                style={{
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-              >
-                Edit picture
-              </p>
-            </div>
-          )}
-        </Summary>
-
-        <Numbers>
-          {/* Name Field */}
-          {isEditing ? (
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              style={{ fontSize: "20px", marginBottom: "10px" }}
+      {screen === "phone" && <Header />}
+      <Page>
+        <Contents>
+          <PictureWrapper>
+            <ProfileImage
+              src={profileImage}
+              alt="Profile"
+              style={{ cursor: isEditing ? "pointer" : "default" }}
+              onClick={isEditing ? () => fileInputRef.current.click() : null} // Trigger image upload only in edit mode
             />
-          ) : (
-            <h2>{name}</h2>
-          )}
 
-          <Rating>
-            <StarIcon style={{ height: "3vh", width: "3vw", color: "black" }} />
-            <h4 style={{ color: "#676363" }}>{userData.rating}</h4>
-          </Rating>
-          <Count>
-            <EventsGrp>
-              <h3>11</h3>
-              <h3>Events Done</h3>
-            </EventsGrp>
-
-            <EventsGrp>
-              <h3>19</h3>
-              <h3>Events Attended</h3>
-            </EventsGrp>
-          </Count>
-        </Numbers>
-        <Details>
-          <Email>
-            <h4>Email</h4>
-            <h4 style={{ color: "#676363" }}>{userData.email}</h4>
-          </Email>
-          <About>
-            <h4>About</h4>
-            {isEditing ? (
+            {isEditing && (
               <div>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows="4"
-                  style={{
-                    width: "100%",
-                    fontSize: "12px",
-                    marginBottom: "10px",
-                  }}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={editImage}
+                  style={{ display: "none" }}
                 />
-                <button
-                  onClick={() => onSaveProfile(auth?.currentUser?.uid)}
-                  style={{ marginTop: "10px" }}
+                <p
+                  onClick={handleFileInputClick}
+                  style={{
+                    cursor: "pointer",
+                    color: "#18336C",
+                    fontSize: screen === "phone" ? "1.2rem" : "1.5rem",
+                  }}
                 >
-                  Save
-                </button>
+                  Edit picture
+                </p>
               </div>
-            ) : (
-              <h4 style={{ color: "#676363" }}>
-                {description || "Click to add a description"}
-              </h4>
             )}
-          </About>
-        </Details>
-        <ButtonGrp>
-          <ButtonWrapper onClick={()=>navigate('/notifications')}>
-            <LeftSection>
-              <BellIcon
-                style={{ height: "27px", width: " 22px", color: "black" }}
+          </PictureWrapper>
+
+          <Stats>
+            {isEditing ? (
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                style={{ fontSize: "20px", marginBottom: "10px" }}
               />
+            ) : (
+              <h2 style={{ color: "#18336C" }}>{name}</h2>
+            )}
 
-              <Text>Notifications</Text>
-            </LeftSection>
-            <ArrowRightIcon
-              style={{ height: "27px", width: " 22px", color: "black" }}
-            />
-          </ButtonWrapper>
+            <Rating>
+              <StarIcon
+                style={{
+                  height: screen === "phone" ? "6vw" : "3vw",
+                  width: screen === "phone" ? "6vh" : "3vh",
+                  color: "#eaaf41",
+                }}
+              />
+              <h4 style={{ color: "#676363" }}>{userData.rating}</h4>
+            </Rating>
+            <Count>
+              <CountWrapper>
+                <h3 style={{ fontWeight: "800" }}>{eventCount}</h3>
+                <h3 style={{ fontWeight: "600", color: "#18336C" }}>
+                  Events Done
+                </h3>
+              </CountWrapper>
 
-          <ButtonWrapper>
-            <LeftSection onClick={handleEditClick}>
-              <PencilIcon
-                style={{ height: "27px", width: "22px", color: "black" }}
-              >
-                {/* <LogoutIcon /> */}
-              </PencilIcon>
+              <CountWrapper>
+                <h3 style={{ fontWeight: "800" }}>{ticketCount}</h3>
+                <h3 style={{ fontWeight: "600", color: "#18336C" }}>
+                  Events Attended
+                </h3>
+              </CountWrapper>
+            </Count>
+          </Stats>
+          <Details>
+            <Email>
+              <h4 style={{ fontWeight: "600", color: "#18336C" }}>Email</h4>
+              <h4 style={{ color: "#676363" }}>{userData.email}</h4>
+            </Email>
+            <About>
+              <h4 style={{ fontWeight: "600", color: "#18336C" }}>About</h4>
+              {isEditing ? (
+                <div>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows="5"
+                    style={{
+                      width: "95%",
+                      fontSize: "12px",
+                      marginBottom: "10px",
+                    }}
+                  />
+                  <button
+                    onClick={() => onSaveProfile(auth?.currentUser?.uid)}
+                    style={{
+                      marginTop: "10px",
+                      height: screen === "phone" ? "40px" : "30px", // Larger height on phones
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              ) : (
+                <h4 style={{ color: "#676363" }}>
+                  {description || "Click to add a description"}
+                </h4>
+              )}
+            </About>
+          </Details>
+          <NavigationSection>
+            <ButtonGrp>
+              <ButtonWrapper>
+                <LeftSection>
+                  <BellIcon
+                    style={{ height: "27px", width: " 22px", color: "black" }}
+                  />
 
-              <Text>Edit Profile</Text>
-            </LeftSection>
-            <ArrowRightIcon
-              style={{ height: "27px", width: " 22px", color: "black" }}
-            />
-          </ButtonWrapper>
-          <ButtonWrapper onClick={logout}>
-            <LeftSection >
-              <ArrowRightStartOnRectangleIcon
-                style={{ height: "27px", width: "22px", color: "black" }}
-                isLogout={true}
-              >
-                {/* <LogoutIcon /> */}
-              </ArrowRightStartOnRectangleIcon>
+                  <Text>Notifications</Text>
+                </LeftSection>
+                <ArrowRightIcon
+                  style={{ height: "27px", width: " 22px", color: "black" }}
+                />
+              </ButtonWrapper>
 
-              <Text isLogout={true}>Log Out</Text>
-            </LeftSection>
-            <ArrowRightIcon
-              style={{ height: "27px", width: " 22px", color: "black" }}
-            />
-          </ButtonWrapper>
-        </ButtonGrp>
-      </Wrapper>
+              <ButtonWrapper>
+                <LeftSection onClick={handleEditClick}>
+                  <PencilIcon
+                    style={{ height: "27px", width: "22px", color: "black" }}
+                  >
+                    {/* <LogoutIcon /> */}
+                  </PencilIcon>
+
+                  <Text>Edit Profile</Text>
+                </LeftSection>
+                <ArrowRightIcon
+                  style={{ height: "27px", width: " 22px", color: "black" }}
+                />
+              </ButtonWrapper>
+              <ButtonWrapper onClick={logout}>
+                <LeftSection>
+                  <ArrowRightStartOnRectangleIcon
+                    style={{ height: "27px", width: "22px", color: "black" }}
+                    isLogout={true}
+                  >
+                    {/* <LogoutIcon /> */}
+                  </ArrowRightStartOnRectangleIcon>
+
+                  <Text isLogout={true}>Log Out</Text>
+                </LeftSection>
+                <ArrowRightIcon
+                  style={{ height: "27px", width: " 22px", color: "black" }}
+                />
+              </ButtonWrapper>
+            </ButtonGrp>
+          </NavigationSection>
+        </Contents>
+      </Page>
     </>
   );
 };
