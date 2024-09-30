@@ -3,24 +3,9 @@ import EventCard from '../EventCard/EventCard';
 import './PendingEvents.css';
 import { db } from '../../firebase_config';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-
-
-// const PendingEvents = ({ events, onApprove, onReject }) => (
-//   <div className="p-events-list">
-//     {events.filter(event => event.status === 'pending').map(event => (
-//       <EventCard 
-//         key={event.id}
-//         event={event} 
-//         onApprove={onApprove}
-//         onReject={onReject}
-//       />
-//     ))}
-//   </div>
-// );
-
-// export default PendingEvents;
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import noResults from "../../Images/noResults.svg"
 
 const secretKey = process.env.REACT_APP_X_API_KEY;
 
@@ -105,38 +90,35 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
   
 
 const PendingEvents = ({ events, handleApprove, handleReject }) => {
-  //const [rejectReason, setRejectReason] = useState('');
+
   const [rejectReasons, setRejectReasons] = useState({});
   
+  const sortedEvents = events
+    .filter(event => event.status === 'pending')
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   // Approve the event if venue is available
   const handleEventApprove = async (event) => {
-    //const { eventId, venueId, bookingDate, bookingStartTime, bookingEndTime } = event;
+    
     const userDetails = await fetchUserDetails(event.user_id);
-    const isAvailable = await checkVenueAvailability(event.venue_id, event.date, event.start_time, event.end_time);
+    const isAvailable = await checkVenueAvailability(event.location, event.date, event.start_time, event.end_time);
     
     if (!isAvailable) {
       alert('Venue is already booked. Please reject the event.');
     } else {
-      const bookingResponse = await createBooking(userDetails.email, event.venue_id, event.date, event.start_time, event.end_time, event.description);
+      const bookingResponse = await createBooking(userDetails.email, event.location, event.date, event.start_time, event.end_time, event.description);
       if (bookingResponse) {
         // Notify and approve the event
         handleApprove(event.event_id);
+        toast.success('Event successfully approved!');
+        //console.log("booked venue!");
       }
-      console.log("booked venue!");
+      else {
+        toast.error('Error occurred while approving the event.');
+        //console.log("could not book venue!");
+      }
     }
   };
-
-  // Reject the event with reason
-  // const handleEventReject = async (event) => {
-  //   if (!rejectReason.trim()) {
-  //     alert('Please provide a reason for rejection');
-  //     return;
-  //   }
-
-  //   handleReject(event.event_id, rejectReason);
-  //   setRejectReason('');
-  // };
 
 
   //handling reasons separately for each event
@@ -159,13 +141,23 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
       ...prevReasons,
       [event.event_id]: '',
     }));
+    toast.success('Event successfully rejected!');
   };
 
 
+  if (sortedEvents.length === 0) {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <img src={noResults} alt="No events found" />
+        <p>No pending events found</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-events-list">
-      {events.filter(event => event.status === 'pending').map(event => (
+      <ToastContainer />
+      {sortedEvents.map(event => (
         <div key={event.id}>
           <EventCard 
             event={event} 
@@ -180,22 +172,7 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
                 placeholder="Enter reject reason"
               />
             )}
-
           />
-          {/* Input for reject reason */}
-          {/* <input 
-            type="text"
-            value={rejectReason}
-            onChange={(e) => setRejectReason(e.target.value)}
-            placeholder="Enter reject reason"
-          /> */}
-
-          {/* <input 
-          type="text"
-          value={rejectReasons[event.event_id] || ''}
-          onChange={(e) => handleRejectReasonChange(event.event_id, e.target.value)}
-          placeholder="Enter reject reason"
-          /> */}
         </div>
       ))}
     </div>

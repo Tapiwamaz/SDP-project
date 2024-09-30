@@ -11,9 +11,25 @@ import { collection, query, where, getDocs, updateDoc, serverTimestamp, addDoc, 
 // Function to send notification to Firestore
 const sendNotification = async (organizerId, eventId, notificationType, message, name, imageUrl) => {
   try {
+
+    const formatDate = () => {
+      const now = new Date();
+      
+      const padZero = (num) => num.toString().padStart(2, '0'); // Helper to add leading zero
+      
+      const year = now.getFullYear();
+      const month = padZero(now.getMonth() + 1); // Months are 0-indexed
+      const day = padZero(now.getDate());
+      const hours = padZero(now.getHours());
+      const minutes = padZero(now.getMinutes());
+      const seconds = padZero(now.getSeconds());
+
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    };
+
     const notificationData = {
       notification_id: Date.now().toString(), // Use a timestamp as a mock ID or generate a UUID
-      time: serverTimestamp(), // Automatically sets the time when the notification is created
+      time: formatDate(),  //serverTimestamp(), // Automatically sets the time when the notification is created
       notification_type: notificationType, // 'approved' or 'rejected'
       message,
       event_id: eventId,
@@ -23,7 +39,7 @@ const sendNotification = async (organizerId, eventId, notificationType, message,
     };
 
     await addDoc(collection(db, 'Notifications'), notificationData);
-    console.log("Notification sent successfully.");
+    //console.log("Notification sent successfully.");
   } catch (error) {
     console.error("Error sending notification:", error);
   }
@@ -62,7 +78,7 @@ const fetchEvents = async (setEvents) =>{
       );
 
       setEvents(updatedEvents);
-      console.log('Data received from Azure Function:', data);
+      //console.log('Data received from Azure Function:', data);
       //return data;
   } catch (error) {
       console.error('Error fetching data:', error);
@@ -87,7 +103,7 @@ const updateEventDB = async (updatedEvent) => {
       await updateDoc(docRef, eventWithoutIDs);
     });
 
-    console.log("Event updated successfully.");
+    //console.log("Event updated successfully.");
   } catch (error) {
     console.error("Error updating event:", error);
     throw new Error("Failed to update event. Please try again.");
@@ -139,10 +155,10 @@ const Tabs = () => {
       await sendNotification(
         updatedEvent.user_id, // Organizer's user ID
         updatedEvent.event_id, // Event ID
-        'approved', // Notification type
+        'admin', // Notification type
         'Your event has been approved!', // Message
         userDetails.name, // Organizer's name
-        updatedEvent.image_url // Optionally, the event image URL
+        updatedEvent.image_url //the event image URL
       );
 
       setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
@@ -160,7 +176,6 @@ const Tabs = () => {
 
       updatedEvent.approved = false;
       updatedEvent.status = 'rejected';
-      //updatedEvent.rejectReason = rejectReason;
 
       await updateEventDB(updatedEvent);
 
@@ -168,10 +183,10 @@ const Tabs = () => {
       await sendNotification(
         updatedEvent.user_id, // Organizer's user ID
         updatedEvent.event_id, // Event ID
-        'rejected', // Notification type
+        'admin', // Notification type
         `Your event was rejected. Reason: ${rejectReason}`, // Message with reason
         userDetails.name, // Organizer's name
-        updatedEvent.image_url // Optionally, the event image URL
+        updatedEvent.image_url //the event image URL
       );
 
       setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
@@ -191,7 +206,7 @@ const Tabs = () => {
         </button>
       </div>
       {activeTab === 'pending' ? (
-        <PendingEvents events={events} handleApprove={handleApprove} handleReject={handleReject} />
+        <PendingEvents events={events.filter(event => event.status === 'pending')} handleApprove={handleApprove} handleReject={handleReject} />
       ) : (
         <HistoryEvents events={events.filter(event => event.status !== 'pending').reverse()} />
       )}
@@ -199,57 +214,6 @@ const Tabs = () => {
   );
 
 
-
-  // // Handle event approval
-  // const handleApprove = async (id) => {
-  //   const updatedEvent = events.find(event => event.event_id === id);
-  //   if (updatedEvent) {
-  //     updatedEvent.approved = true; // Set approved to true
-  //     updatedEvent.status = 'approved';
-
-  //     await updateEventDB(updatedEvent); // Call the function to update Firestore
-
-  //     // Update UI after event approval
-  //     setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
-  //   }
-  // };
-
-  // // Handle event rejection
-  // const handleReject = async (id) => {
-  //   const updatedEvent = events.find(event => event.event_id === id);
-  //   if (updatedEvent) {
-  //     updatedEvent.approved = false; // Set approved to false
-  //     updatedEvent.status = 'rejected';
-
-  //     await updateEventDB(updatedEvent); // Call the function to update Firestore
-
-  //     // Update UI after event rejection
-  //     setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
-  //   }
-  // };
-
-  // const [activeTab, setActiveTab] = useState('pending');
-
-  // return (
-  //   <div className='Wrapper'>
-  //     {/* <Header />
-  //     <AsideDesktop /> */}
-  //     <div className="tabs">
-  //       <button onClick={() => setActiveTab('pending')} className={activeTab === 'pending' ? 'active' : ''}>
-  //         Pending
-  //       </button>
-  //       <button onClick={() => setActiveTab('history')} className={activeTab === 'history' ? 'active' : ''}>
-  //         History
-  //       </button>
-  //     </div>
-  //     {activeTab === 'pending' ? (
-  //       <PendingEvents events={events.filter(event => event.status === 'pending')} onApprove={handleApprove} onReject={handleReject} />
-  //     ) : (
-  //       // <HistoryEvents events={events.filter(event => event.status !== 'pending')} />
-  //       <HistoryEvents events={events.filter(event => event.status !== 'pending').reverse()} /> //so recently evaluated events are at ze top
-  //     )}
-  //   </div>
-  // );
 };
 
 export default Tabs;

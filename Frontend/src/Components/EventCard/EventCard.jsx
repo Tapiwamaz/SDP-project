@@ -7,7 +7,7 @@ import placeholderImage from "./depositphotos_466819550-stock-illustration-image
 
 
 const fetchUsername = async (user_id, setUsername) => {
-  console.log(`Fetching username for user_id: ${user_id}`);
+  //console.log(`Fetching username for user_id: ${user_id}`);
   try {
     const response = await fetch(`/api/getUserById/?user_id=${user_id}`, {
       method: 'GET',
@@ -57,7 +57,7 @@ const EventCard = ({ event, onApprove, onReject, rejectInput }) => {
   const [username, setUsername] = useState('');
  
   useEffect(() => {
-    console.log(event);
+    //console.log(event);
     if (event.user_id) {
       fetchUsername(event.user_id, setUsername);
     }
