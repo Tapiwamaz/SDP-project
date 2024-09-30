@@ -173,7 +173,7 @@ export const handleNextButtonClick = async (
       const userData = fetchStorage("userData");
       let notification = {
         message:
-          "Event has been edited by the oganizer: It will need to be re-approved",
+          `${eventDetailsT.name} has been edited by the oganizer: It will need to be re-approved`,
         time: formatDateToISO(new Date()),
         notification_id: v4(),
         name: userData.name,
