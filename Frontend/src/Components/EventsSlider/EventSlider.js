@@ -65,7 +65,6 @@ return formattedDate;
 
 
 const goToEvent=(event)=>{
-  console.log(screen);
   event["booking"]=true;
   if(auth?.currentUser?.email){
     if(screen==="desktop"){
@@ -81,7 +80,6 @@ const goToEvent=(event)=>{
     navigate('/welcome')
   }
   
-// navigate('/event' , {state: {event,booked:true}}); 
 }
   
     return (
@@ -120,16 +118,14 @@ const goToEvent=(event)=>{
               ))
              :
              noEvents.map((events)=>(
-              <LoadingCard></LoadingCard>
+              <LoadingCard data-testid="loading"></LoadingCard>
 
              ))
 
              }
                 
           </CustomCarousel>
-          {/* {screen==="desktop"?
-          <EventPage></EventPage>
-          :<p>bruh</p>} */}
+         
 
 
         </Container>
