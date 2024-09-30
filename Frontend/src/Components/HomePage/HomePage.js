@@ -162,10 +162,9 @@ const HomePage = () => {
           {searchValue && (
             <>
               <h3>Results for {`"${searchValue}"`}</h3>
-              {allEvents.filter((e) => e.name.includes(searchValue)).length >
-              0 ? ( //if the array is empty display no results svg
+              {allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase())).length >0 ? ( //if the array is empty display no results svg
                 <EventSlider
-                  events={allEvents.filter((e) => e.name.includes(searchValue))}
+                  events={allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase()))}
                   onDisplayEvent={displayEvent}
                 />
               ) : (
