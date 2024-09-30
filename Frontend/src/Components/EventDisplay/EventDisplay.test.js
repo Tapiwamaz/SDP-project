@@ -49,8 +49,9 @@ describe("EventDisplay Component", () => {
       ticket: { rated: false, id: "ticket123" },
     },
   };
-
+  
   const mockSetLoading = jest.fn();
+  const mockSetEventOrg = jest.fn();
   const mockOnDisplaySummary = jest.fn();
   const mockNavigate = jest.fn();
 
@@ -86,7 +87,7 @@ describe("EventDisplay Component", () => {
 
   test("Shows Event Display and Event Oraganiser details when not loading", async () => {
     await act(async () => {
-      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+      render(<EventDisplay loading={false} setLoading={mockSetLoading} setEventOrg={mockSetEventOrg} EventOrg={mockEvent} />);
     });
 
     expect(screen.getByText("Sample Event")).toBeInTheDocument();
@@ -188,6 +189,7 @@ describe("EventDisplay Component", () => {
     mockLocation.state.ticket.rated = false;
   });
 });
+
 // describe("EventDisplay Component API Error", () => {
 //   const mockEvent = {
 //     user_id: "user123",
@@ -258,7 +260,7 @@ describe("EventDisplay Component", () => {
 //     // Check that the error is displayed to the user
 //     await waitFor(() => {
 //       expect(
-//         screen.getByText("Error fetching event organizer details")
+//         screen.getALLByText("Failed to fetch event organizer details")
 //       ).toBeInTheDocument();
 //     });
 

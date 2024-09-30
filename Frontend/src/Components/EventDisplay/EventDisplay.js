@@ -77,9 +77,7 @@ const EventDisplay = ({
       try {
         if (Object.keys(EventOrg).length === 0 || !!loading) {
           const eventOrgData = await fetchEventOrganizer(event.user_id);
-          if (!eventOrgData) {
-            toast.error("Failed to fetch event organizer details");
-          } else {
+          if (eventOrgData) {
             setEventOrg(eventOrgData);
           }
           setLoad(false);
@@ -118,7 +116,9 @@ const EventDisplay = ({
       return data;
     } catch (error) {
       console.error("Error fetching data:", error);
-      toast.error("Failed to fetch event organizer details");
+      if (loading || Load) {
+        toast.error("Failed to fetch event organizer details");
+      }
       return null;
     }
   };
@@ -177,7 +177,6 @@ const EventDisplay = ({
       });
 
   const openSecurityModal = () => {
-    console.log("open modal");
     setOpenModal(true);
   };
   // Render the component
@@ -404,7 +403,7 @@ const EventDisplay = ({
                   disabled={true}
                   data-testid="SoldOutButton"
                 >
-                  "Sold Out"
+                  Sold Out
                 </BookButton>
               ) : (
                 <BookButton
@@ -413,7 +412,7 @@ const EventDisplay = ({
                   disabled={false}
                   data-testid="BookNowButton"
                 >
-                  "Book Now"
+                  Book Now
                 </BookButton>
               )}
             </>

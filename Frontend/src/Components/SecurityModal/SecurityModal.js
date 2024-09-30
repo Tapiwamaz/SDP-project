@@ -1,61 +1,135 @@
-import React, { useState, useRef } from "react";
-import Confetti from "react-confetti";
-
-import {
-  ArrowLeftCircleIcon,
-  CameraIcon,
-  VideoCameraIcon,
-} from "@heroicons/react/24/outline";
+import React, { useState } from "react";
 import {
   ModalOverlay,
   ModalContainer,
   ModalHeader,
   ModalTitle,
   CloseButton,
-  DropFileContainer,
-  ImagePreview,
-  FileInput,
-  UploadMediaLabel,
-  IconsMediaUpload,
   DescriptionInput,
+  FlexContainer,
+  Select,
+  Label,
   ModalFooter,
   CancelButton,
-  ImageWrapper,
   ConfirmButton,
   Loader,
   Message,
-  EmergencyInfo, // Add a styled component for emergency information
-} from "./SecurityModal.styles"; // Import your styled components
+  EmergencyInfo,
+} from "./SecurityModal.styles"; // Import styled components
+
+const incidentOptions = ["fire", "security", "health", "weather", "natural"];
+const locationOptions = [
+  "Dig Fields",
+  "Olives and Plates Wits Club",
+  "Sturrock Park",
+  "Wits First Year Parking",
+  "Barnato Hall",
+  "West Campus Village",
+  "Convocation Dining Hall",
+  "DJ Du Plessis Centre",
+  "Wits Judo Hall",
+  "Wits Chalsty Centre",
+  "Oliver Schreiner School of Law",
+  "Wits Law Lawns",
+  "Wits Law Clinic",
+  "2nd+ Year Parking",
+  "First National Bank Building",
+  "David Webster Hall of Residence",
+  "Wits Squash Courts",
+  "Wits Hall 29",
+  "Wits Commerce Library",
+  "Faculty of Commerce, Law and Management CLM Building",
+  "Wits Tower of Light",
+  "New Commerce Building",
+  "The Old Grandstand",
+  "Wits Plus",
+  "TW Kambule Mathematical Sciences Building",
+  "Wits Science Stadium",
+  "Wits CCDU",
+  "Wits GoldFields Laboratories",
+  "Flower Hall",
+  "Wits CLTD",
+  "The Chamber of Mines Building",
+  "Origins Centre",
+  "Palaeoscience Centre",
+  "Bernard Price Building",
+  "Post Graduate Club",
+  "Wits Richard Ward Building",
+  "Hillman Building",
+  "South-West Engineering",
+  "Solomon Mahlangu House",
+  "Robert Sobukwe Block",
+  "Wits Great Hall",
+  "Wits Theatre",
+  "Wits Humphrey Raikes",
+  "Wits School Of Arts",
+  "Wits Chris Seabrooke Music Hall",
+  "The Nunnery",
+  "Wits Digital Arts Division",
+  "Wits University Corner",
+  "Wits Gate House",
+  "Oppenheimer Life Sciences",
+  "Wits Physics Building",
+  "Emthongeni Community Centre",
+  "Wits Biology Building",
+  "Umthombo Building",
+  "Wartenweiler Library",
+  "Geosciences Building",
+  "Wits Library Lawns",
+  "The Matrix",
+  "Sunnyside Residence",
+  "North West Engineering Building",
+  "John Moffat",
+  "Amphitheatre",
+  "Wits School of Construction Economics and Management",
+  "Old Mutual Sports Hall",
+  "Wits Swimming Pool",
+  "Wits Main Dining Hall",
+  "Jan Smuts House",
+  "East Campus Basketball Court",
+  "Wits College House",
+  "Mens Halls Of Residence",
+  "Dalrymple House",
+  "Wits Anglo American Digital Dome",
+  "Bidvest Stadium",
+  "Hofmeyr House",
+  "Wits University Jubilee Hall",
+  "Wits Rugby Stadium",
+  "International House Residence",
+  "The Sanctuary",
+  "Bozzoli Sports Pavilion",
+  "Wits Musallah",
+  "Wits Language School",
+  "Schonland Research Centre",
+  "Schonland Research and Workshops",
+  "iThemba LABS",
+  "Walter Milton Oval",
+];
 
 const SecurityModal = ({ event, onClose }) => {
-  const [imgSrc, setImgSrc] = useState(null);
-  const [image, setImage] = useState(null);
-  const [imageError, setImageError] = useState(null);
   const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
+  const [incidentType, setIncidentType] = useState("");
   const [loading, setLoading] = useState(false);
-  const [submissionStatus, setSubmissionStatus] = useState(""); // "success" or "error"
-  const eventPictureRef = useRef();
-
+  const [submissionStatus, setSubmissionStatus] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loader
-    const data = {
-      description,
-      image,
-      building_name: event.location,
-      timestamp: new Date().toISOString(),
-      status: "pending",
-      id: event.id,
-    };
+    setLoading(true);
 
+    // Create a FormData object
+    const formData = new FormData();
+    formData.append("description", description);
+    formData.append("building_name", location);
+    formData.append("type", incidentType);
+    formData.append("photo", null);
     try {
-      const response = await fetch("/api/incidents", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://campussafetyapp.azurewebsites.net/incidents/report-incidents-external",
+        {
+          method: "POST",
+          body: formData, // Send the FormData
+        }
+      );
 
       if (response.ok) {
         setSubmissionStatus("success");
@@ -64,36 +138,8 @@ const SecurityModal = ({ event, onClose }) => {
       }
     } catch (error) {
       setSubmissionStatus("error");
-    } 
-    finally {
-      setLoading(false); // Stop loader
-    }
-  };
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = () => {
-        if (img.width > img.height) {
-          setImage(file);
-          setImageError(null);
- 
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setImgSrc(reader.result);
-          };
-          reader.readAsDataURL(file);
- 
-        } else {
-          setImageError("Please upload a landscape image.");
-          setImage(null);
-        }
-        URL.revokeObjectURL(img.src);
-      };
-    } else {
-      setImageError("Something went wrong uploading your picture.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,23 +152,20 @@ const SecurityModal = ({ event, onClose }) => {
         </ModalHeader>
 
         {loading ? (
-          // Show loader while submitting
-          <Loader></Loader>
+          <Loader />
         ) : submissionStatus ? (
-          // Show message after submission
           <>
             <Message status={submissionStatus}>
               {submissionStatus === "success" ? (
                 <p>
-                  The WITS security team have received this report and will
-                  act on it as soon as possible. Below are details for
-                  emergencyservices if required immediately
+                  The WITS security team has received this report and will act
+                  on it as soon as possible. Below are details for emergency
+                  services if required immediately.
                 </p>
               ) : (
                 <p>
-                  Failed to report the incident. Please try again. iF the issue
-                  persists, please contact the security office.Contact details
-                  below
+                  Failed to report the incident. Please try again. If the issue
+                  persists, contact the security office. Contact details below.
                 </p>
               )}
             </Message>
@@ -135,46 +178,47 @@ const SecurityModal = ({ event, onClose }) => {
             </EmergencyInfo>
           </>
         ) : (
-          // Render form content when not loading or after a submission attempt
           <>
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                height: "45%",
-                borderRadius: "10px",
-              }}
-            >
-              <ImageWrapper>
-                {imgSrc && <ImagePreview src={imgSrc} alt="Uploaded preview" />}
-                <DropFileContainer hasImage={!!imgSrc}>
-                  <FileInput
-                    id="security-file-upload"
-                    type="file"
-                    accept="image/*"
-                    ref={eventPictureRef}
-                    onChange={handleImageChange}
-                    data-testid="file-input"
-                  />
-                  <UploadMediaLabel htmlFor="security-file-upload">
-                    <IconsMediaUpload>
-                      <CameraIcon width={30} />
-                      <div id="dividerLine" />
-                      <VideoCameraIcon width={30} />
-                    </IconsMediaUpload>
-                    <strong>
-                      Please upload an image related to the incident{" "}
-                    </strong>
-                    {imageError && (
-                      <strong style={{ color: "red" }}>{imageError}</strong>
-                    )}
-                  </UploadMediaLabel>
-                </DropFileContainer>
-              </ImageWrapper>
-            </div>
+            <FlexContainer>
+              {/* Location Dropdown */}
+              <div>
+                <Label htmlFor="location">Select Location:</Label>
+                <Select
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  required
+                >
+                  <option value="">Select a location</option>
+                  {locationOptions.map((loc, index) => (
+                    <option key={index} value={loc}>
+                      {loc}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+
+              {/* Incident Type Dropdown */}
+              <div>
+                <Label htmlFor="incidentType">Incident Type:</Label>
+                <Select
+                  id="incidentType"
+                  value={incidentType}
+                  onChange={(e) => setIncidentType(e.target.value)}
+                  required
+                >
+                  <option value="">Select an incident type</option>
+                  {incidentOptions.map((incident, index) => (
+                    <option key={index} value={incident}>
+                      {incident}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            </FlexContainer>
 
             <DescriptionInput
-              placeholder="Please give a detail description of the incident"
+              placeholder="Please provide a detailed description of the incident"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -183,15 +227,13 @@ const SecurityModal = ({ event, onClose }) => {
               <CancelButton onClick={onClose}>Cancel</CancelButton>
               <ConfirmButton
                 onClick={handleSubmit}
-                disabled={!description} // Disable button if no description or image
+                disabled={!description || !location || !incidentType}
               >
                 Confirm
               </ConfirmButton>
             </ModalFooter>
           </>
         )}
-
-        {/* Emergency Services Information */}
       </ModalContainer>
     </ModalOverlay>
   );

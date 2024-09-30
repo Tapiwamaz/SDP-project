@@ -1,5 +1,4 @@
-// SecurityModal.styles.js (or wherever you define your styles)
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
 // Styled component for emergency information
 export const EmergencyInfo = styled.div`
@@ -45,7 +44,7 @@ export const Loader = styled.div`
 
 // Message component for displaying success/error messages
 export const Message = styled.div`
-  color: ${(props) => (props.status === 'success' ? 'green' : 'red')};
+  color: ${(props) => (props.status === "success" ? "green" : "red")};
   text-align: center;
   margin-top: 20px;
 `;
@@ -64,15 +63,16 @@ export const ModalOverlay = styled.div`
   z-index: 9999;
 `;
 
-// Main modal box
+// Main modal box (responsive)
 export const ModalContainer = styled.div`
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  padding: 2rem;
   width: 90%;
-  height: 90%;
   max-width: 600px;
+  max-height: 85%;
+  overflow-y: auto;
 `;
 
 // Header of the modal
@@ -100,102 +100,63 @@ export const CloseButton = styled.button`
   }
 `;
 
-// Container for image upload area
-export const DropFileContainer = styled.div`
+// Flex container for dropdowns (responsive layout)
+export const FlexContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 100%;
+  justify-content: space-between;
+  gap: 10px;
   width: 100%;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ hasImage }) =>
-    hasImage ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 255, 0.3)"}; // Blue background if no image
-  color: white;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: opacity 300ms ease-in-out;
-  cursor: pointer;
-  z-index: 1;
-
-  // When image is uploaded, hide the container until hover
-  opacity: ${({ hasImage }) => (hasImage ? 0 : 1)};
-`;
-// Wrapper that controls hover behavior for visibility
-export const ImageWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  overflow: hidden; // Ensures no content spills outside the wrapper
-
-  &:hover ${DropFileContainer} {
-    opacity: 1; // Show DropFileContainer when hovered
-  }
-`;
-
-
-// Hidden file input for image upload
-export const FileInput = styled.input`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-  z-index: 2;
-`;
-
-export const ImagePreview = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-  position: relative;
-  z-index: 0; // Ensures image is behind the DropFileContainer
-`;
-
-export const UploadMediaLabel = styled.label`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 16px;
-  pointer-events: none; /* Prevents clicking on label instead of input */
-  text-align: center;
-  z-index: 3; // Ensures label is on top
-`;
-
-
-
-export const IconsMediaUpload = styled.div`
-  display: flex;
-  gap: 5px;
   margin-bottom: 1rem;
 `;
 
+// Dropdown Select with responsive width
+export const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #fff;
+  outline: none;
+
+  &:focus {
+    border-color: #0077cc;
+  }
+`;
+
+// Label for dropdown and form elements
+export const Label = styled.label`
+  font-size: 14px;
+  color: #333;
+  display: block;
+`;
+
+// Description input (textarea)
 export const DescriptionInput = styled.textarea`
   box-sizing: border-box;
   width: 100%;
-  height: 25%;
+  height: 120px;
   border-radius: 0.75rem;
-  border: none;
+  border: 1px solid #ccc;
   padding: 1rem;
   font-family: inherit;
-  font-weight: 600;
-  background-color: rgba(54, 69, 79, 0.1);
-  margin-top: 1rem;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  margin-top: 10px;
 
-  &:focus,
-  &:active {
-    outline: 2px solid var(--primary);
+  &:focus {
+    border-color: #0077cc;
   }
 `;
+
+// Footer container for buttons
 export const ModalFooter = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 1.5rem;
 `;
 
+// Cancel button styling
 export const CancelButton = styled.button`
   background-color: #f0f0f0;
   color: #333;
@@ -213,6 +174,7 @@ export const CancelButton = styled.button`
   }
 `;
 
+// Confirm button styling
 export const ConfirmButton = styled.button`
   background-color: var(--primary);
   color: var(--background);
@@ -230,7 +192,8 @@ export const ConfirmButton = styled.button`
     border: black solid 3px;
     color: black;
   }
-    &:disabled {
+
+  &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
