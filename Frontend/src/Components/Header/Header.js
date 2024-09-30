@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { signOut } from "firebase/auth";
 
 import logo from "../../Images/Logo.svg.svg";
 import {
