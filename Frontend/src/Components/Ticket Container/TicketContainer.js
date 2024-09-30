@@ -60,7 +60,7 @@ export const TicketContainer = () => {
         //     console.error("No user is logged in");
         //     //return;
         // }
-        console.log(userId);
+        //console.log(userId);
 
         const collectionRef = collection(db, "Tickets");
         const q = query(collectionRef, where("user_id", "==", userId));
@@ -72,14 +72,13 @@ export const TicketContainer = () => {
         const cancelled = [];
 
         querySnapshot.forEach((doc) => {
-          console.log(doc);
+          //console.log(doc);
           ids.push(doc.id);
           events.push(doc.data().event_id);
           ratings.push(doc.data().rated);
           cancelled.push(doc.data().cancelled);
         });
-        console.log(events);
-        console.log(ids);
+        
 
         const data = [];
         // for (let i = 0; i < events.length; i++) {
@@ -113,7 +112,7 @@ export const TicketContainer = () => {
             if (!querySnapshot.empty) {
               querySnapshot.forEach((doc) => {
                 const eventsData = doc.data();
-                console.log(eventsData);
+                
 
                 // Push the event data into the array
                 data.push({
@@ -135,7 +134,7 @@ export const TicketContainer = () => {
                 });
               });
             } else {
-              console.log(`No event found with event_id: ${events[i]}`);
+              //console.log(`No event found with event_id: ${events[i]}`);
             }
           } catch (error) {
             console.error(
