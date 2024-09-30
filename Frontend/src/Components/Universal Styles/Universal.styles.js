@@ -199,3 +199,36 @@ export const CheckboxText = styled.label`
   font-size: 16px;    /* Same font size as input */
   color: #333;        /* Text color */
 `;
+
+export const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Overlay = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+`;
+
+export const ModalContent = styled.div`
+  position: relative;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  
+`;

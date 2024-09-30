@@ -42,7 +42,7 @@ export const SignIn = () => {
                         
                         localStorage.setItem("userData", JSON.stringify(userData));
                         
-                        console.log("User data stored in local storage:", userData);
+                        //console.log("User data stored in local storage:", userData);
                       }); 
                     navigate('/')
 
@@ -91,7 +91,7 @@ export const SignIn = () => {
                         
                         localStorage.setItem("userData", JSON.stringify(userData));
                         
-                        console.log("User data stored in local storage:", userData);
+                        //console.log("User data stored in local storage:", userData);
                       });   
                     navigate('/')
 
@@ -111,6 +111,7 @@ export const SignIn = () => {
         }
     };
 
+
     return (
         <ResponsiveBackground>
             <ResponsiveDiv>
@@ -125,7 +126,7 @@ export const SignIn = () => {
                 <StyledInput type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                 <CheckboxContainer>
                     <StyledCheckbox id="checkbox"/>
-                    <CheckboxText>I agree to the <StyledLink>Terms and Conditions</StyledLink></CheckboxText>
+                    <CheckboxText>I agree to the <StyledLink href="https://www.lipsum.com/feed/html" target="_blank">Terms and Conditions</StyledLink></CheckboxText>
                 </CheckboxContainer>
                 <ErrorMessage>{errorMessage}</ErrorMessage>
                 <StyledButton onClick={signin}>Sign Up</StyledButton>
