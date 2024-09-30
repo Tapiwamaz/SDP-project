@@ -29,7 +29,7 @@ const fetchUsername = async (user_id, setUsername) => {
   }
 };
 
-const EventCard = ({ event, onApprove, onReject }) => {
+const EventCard = ({ event, onApprove, onReject, rejectInput }) => {
   const [buttonPopup, setButtonPopup] = useState(false);
   
 
@@ -102,6 +102,10 @@ const EventCard = ({ event, onApprove, onReject }) => {
             <button onClick={() => onReject(event.event_id)}>Reject</button>
           </div>
         )}
+        <div className="spacer"></div>
+
+        {rejectInput}
+
       </div>
     </div>
   );
