@@ -1,4 +1,8 @@
 import { Ticket } from "../Ticket/Ticket";
+import { NavbarContainer, NavItem } from "../Navbar/Navbar.styles.js";
+import { ModalWrapper, Overlay, ModalContent } from "../Ticket/Ticket.styles.js";
+import { ImageContainer } from "../Universal Styles/Universal.styles.js";
+import { StyledButton } from "../Ticket/Ticket.styles";
 import { auth, db } from "../../firebase_config";
 import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
@@ -24,7 +28,9 @@ export const TicketContainer = () => {
   const [Load, setLoad] = useState(true);
   const [tick, setTick] = useState(null);
   const [EventsDisplay, setEventsDisplay] = useState(null);
+  const [activeTab, setActiveTab] = useState('Upcoming');
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -54,7 +60,7 @@ export const TicketContainer = () => {
         //     console.error("No user is logged in");
         //     //return;
         // }
-        console.log(userId);
+        //console.log(userId);
 
         const collectionRef = collection(db, "Tickets");
         const q = query(collectionRef, where("user_id", "==", userId));
@@ -63,15 +69,16 @@ export const TicketContainer = () => {
         const events = [];
         const ids = [];
         const ratings = [];
+        const cancelled = [];
 
         querySnapshot.forEach((doc) => {
-          console.log(doc);
+          //console.log(doc);
           ids.push(doc.id);
           events.push(doc.data().event_id);
           ratings.push(doc.data().rated);
+          cancelled.push(doc.data().cancelled);
         });
-        console.log(events);
-        console.log(ids);
+        
 
         const data = [];
         // for (let i = 0; i < events.length; i++) {
@@ -105,13 +112,13 @@ export const TicketContainer = () => {
             if (!querySnapshot.empty) {
               querySnapshot.forEach((doc) => {
                 const eventsData = doc.data();
-                console.log(eventsData);
+                
 
                 // Push the event data into the array
                 data.push({
                   id: ids[i], // ticket id
                   rated: ratings[i], // ticket rating
-                  active: eventsData.active,
+                  cancelled: cancelled[i], // ticket cancelled status
                   capacity: eventsData.capacity,
                   description: eventsData.description,
                   type: eventsData.type,
@@ -127,7 +134,7 @@ export const TicketContainer = () => {
                 });
               });
             } else {
-              console.log(`No event found with event_id: ${events[i]}`);
+              //console.log(`No event found with event_id: ${events[i]}`);
             }
           } catch (error) {
             console.error(
@@ -138,6 +145,26 @@ export const TicketContainer = () => {
         }
 
         setTickets(data);
+        data.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+
+          if (dateA === dateB) {
+            return a.time.localeCompare(b.time);
+          }
+          return dateA - dateB;
+        });
+
+        if (activeTab === 'Upcoming') {
+          setTickets(data.filter((ticket) => new Date(ticket.date) >= new Date() && !ticket.cancelled === true));
+        }
+        if (activeTab === 'Completed') {
+          setTickets(data.filter((ticket) => new Date(ticket.date) < new Date() && !ticket.cancelled === true));
+        }
+        if (activeTab === 'Canceled') {
+          setTickets(data.filter((ticket) => ticket.cancelled === true));
+        }
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching tickets:", error);
@@ -146,7 +173,7 @@ export const TicketContainer = () => {
     };
 
     fetchTickets(); // Fetch tickets on component mount
-  }, [userId]); // Empty dependency array means this effect runs once on mount
+  }, [userId, activeTab]); // Empty dependency array means this effect runs once on mount
 
   if (loading) {
     return <p>Loading...</p>;
@@ -171,12 +198,33 @@ export const TicketContainer = () => {
     }
   };
 
+
   return (
     <>
       {/* <Navbar></Navbar> */}
 
       <div>
         <h1>Tickets</h1>
+        <NavbarContainer>
+          <NavItem
+            isActive={activeTab === 'Upcoming'}
+            onClick={() => setActiveTab('Upcoming')}
+          >
+            Upcoming
+          </NavItem>
+          <NavItem
+            isActive={activeTab === 'Completed'}
+            onClick={() => setActiveTab('Completed')}
+          >
+            Completed
+          </NavItem>
+          <NavItem
+            isActive={activeTab === 'Canceled'}
+            onClick={() => setActiveTab('Canceled')}
+          >
+            Canceled
+          </NavItem>
+        </NavbarContainer>
         {tickets ? (
           tickets.map((ticket) => (
             <Ticket

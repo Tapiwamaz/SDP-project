@@ -48,6 +48,7 @@ export const TextContainer = styled.div`
     flex-direction: row;
     margin-top: 10px;
   }
+
 `;
 
 // Title at the top
@@ -157,3 +158,57 @@ export const DownloadLink = styled.a`
 `;
 
 
+export const StyledButton = styled.button`
+  width: 80%;              /* 75% of the viewport width */
+  height: auto;              /* Auto-adjust height */
+  padding: 10px;             /* Padding inside the button */
+  margin: 15px;
+  background-color: #d22b2b; /* Darkish blue background */
+  color: white;              /* White text */
+  border: none;              /* No border */
+  border-radius: 15px;       /* Rounded edges */
+  font-size: 14px;           /* Font size matching the input */
+  cursor: pointer;           /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+
+  &:hover {
+    background-color: red; /* Slightly lighter blue on hover */
+  }
+
+  &:active {
+    background-color: #880808; /* Darker blue when button is pressed */
+  }
+`;
+
+export const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Overlay = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+`;
+
+export const ModalContent = styled.div`
+  position: relative;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  width: 500px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  
+`;
