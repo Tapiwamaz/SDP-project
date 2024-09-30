@@ -46,7 +46,7 @@ export default function SuccessModal({ showModal, setShowModal }) {
           style={{
             width: "100%",
           }}
-          onClick={() => navigate("/")}
+          onClick={() => setShowModal(false)}
         >
           Go to Homepage
         </BookButton>
