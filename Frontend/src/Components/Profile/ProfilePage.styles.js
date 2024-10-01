@@ -95,6 +95,7 @@ export const ProfileImage = styled.img`
   @media (min-width: 768px) {
     width: 170px; /* Adjust size for desktop landscape */
     height: 170px;
+    margin-top: 20px;
   }
 `;
 

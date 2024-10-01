@@ -62,7 +62,7 @@ const HomePage = () => {
         setAllEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date()));
         SetFilteredEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date()) );
         SetFilteredTrendingEvents ( data.filter((e) => e.approved === true && new Date(e.date) >= new Date()) );
-        console.log(data.length);
+        // console.log(data.length);
         
         if(data.length===1){
           setNoEvents(true);
@@ -262,7 +262,7 @@ const HomePage = () => {
               onDisplayEvent={displayEvent}
             ></EventSlider>
           )}
-          {console.log(filteredTrendingEvents)}
+          {/* {console.log(filteredTrendingEvents)} */}
 
           <div
             style={{
