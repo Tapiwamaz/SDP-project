@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import  Tags from '../Tags/Tags'
 import { useNavigate } from 'react-router-dom';
+import { ClockIcon,CalendarDaysIcon,MapPinIcon } from "@heroicons/react/24/outline";
 
 import {LoadingCard, Card ,CustomCarousel,Container} from './EventSlider.styles';
 
@@ -101,10 +102,27 @@ const goToEvent=(event)=>{
                 <Card key={event.event_id} onClick={()=>goToEvent(event)}>
                     <img src={event.image_url} alt='eventImage'/>
                     <h3>{event.name}</h3>
-                    <div>
+                    <div className="main">
+                      <div style={{display:"flex",flexDirection:"row"}}>
+                      <CalendarDaysIcon/>
                       <p>{formatDate(event.date)}</p>
+
+                      </div>
+                      <div style={{display:"flex",flexDirection:"row"}}>
+                        <ClockIcon/>
                       <p>{event.start_time}</p>
-                      <p>{event.location}</p>
+
+                        </div>
+                        <div style={{display:"flex",flexDirection:"row"}}>
+                          <MapPinIcon/>
+                        <p>{event.location}</p>
+
+                          </div>
+
+
+                        
+
+                  
 
 
                     </div>

@@ -10,8 +10,8 @@ export const Container = styled.div`
 `;
 
 export const Card = styled.button`
-  background-color: var(--primary);
-  border-radius: 20px;
+  background-color: white;
+  border-radius: 10px 0px 10px 0px;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
@@ -19,16 +19,17 @@ export const Card = styled.button`
   height: 300px;
   display: flex;
   font-family: "Khula", sans-serif;
+  border: 2px var(--primary) solid;
 
   
   display: flex;
   flex-direction: column;
   transition: all 0.5s ease;
 
-  color: white;
+  color: black;
   &:hover {
-    color: black;
-    background-color: #72A0C1;
+    color: white;
+    background-color: var(--primary);
     transform: scale(1.05);
   }
 
@@ -39,22 +40,30 @@ export const Card = styled.button`
     border-radius:inherit;
   }
   p{
-    margin: 3px;
+    /* margin: 3px; */
     font-size: small;
+    margin: 0;
+    margin-left: 5px;
   }
   h3{
-    margin: 2;
+    margin: 5px;
   white-space: nowrap; /* Prevents the text from wrapping to the next line */
   overflow: hidden;    /* Hides the overflow text */
   text-overflow: ellipsis; /* Adds "..." at the end of the truncated text */
   max-width: 100%;     /* Optional: Set a max width as needed */
+  font-size: larger;
 
   }
-  div{
+  .main{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 20px;
+    margin-top: 10px;
+    svg{
+      height: 20px;
+      width: 20px;
+    }
     
   }
 
@@ -70,6 +79,7 @@ export const LoadingCard = styled.div`
   width: 250px;
   height: 300px;
   animation: loading 1.5s infinite;
+  opacity: 0.2;
   
 
   @keyframes loading {

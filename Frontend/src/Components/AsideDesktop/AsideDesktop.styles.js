@@ -8,7 +8,7 @@ export const Aside = styled.div`
   right: 0;
   width: 15%;
   min-height: 900px;
-  background-color: var(--primaryGrey);
+  background-color: var(--primary);
   padding: 2rem;
   display: flex;
   flex-direction: column;

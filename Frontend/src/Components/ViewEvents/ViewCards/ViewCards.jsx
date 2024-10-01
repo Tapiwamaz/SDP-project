@@ -46,16 +46,22 @@ const ViewCards = ({ event, onCancel }) => {
           <p>{event.location}</p>
           <p>Capacity: {event.capacity}</p>
           <p>Ticket Count: {event.ticket_count}</p>
-          <p>Status: {event.status}</p>
+          <p style={{color:event.status==="approved"?"green":event.status==="pending"?"orange":"red"}}>Status: {event.status}</p>
         </div>
 
         <div className="event-actions">
-          {event.status !== 'rejected' && event.status !== 'cancelled' && (
+          {event.status !== 'rejected' && event.status !== 'cancelled' ? (
           <button className='reschedule-button' onClick={() => handleEdit(event)}>Edit Event</button>
-          )}
-          {event.status !== 'rejected' && event.status !== 'cancelled' && onCancel && (
+          ):
+          <button className='reschedule-button' style={{opacity:"0.3"}}>Edit Event</button>
+          
+          }
+          {event.status !== 'rejected' && event.status !== 'cancelled' && onCancel ? (
             <button className='cancel-button' onClick={() => onCancel(event.id)}>Cancel Event</button>
-          )}
+          ):
+          <button className='cancel-button' style={{opacity:"0.3"}}>Cancel Event</button>
+          
+          }
         </div>
       </div>
     </div>
