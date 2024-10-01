@@ -7,7 +7,7 @@ import {
   act,
 } from "@testing-library/react";
 import SecurityModal from "./SecurityModal";
-import "@testing-library/jest-dom/extend-expect";
+  
 
 describe("SecurityModal Component", () => {
   const mockEvent = {

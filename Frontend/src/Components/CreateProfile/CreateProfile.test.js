@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+//   
 import { CreateProfile } from "./CreateProfile"; // Import the component
 
 import { BrowserRouter } from "react-router-dom"; // To support useNavigate

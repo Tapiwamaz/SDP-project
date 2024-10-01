@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+// import '@testing-library/jest-dom/extend-expect';
 import AsideDesktop from './AsideDesktop'; // Import the component
 import { auth } from '../../firebase_config'; // Mocked Firebase auth
 import { BrowserRouter } from 'react-router-dom'; // If your component uses React Router

@@ -1,7 +1,7 @@
 import React from "react";
 import { act } from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+  
 import { useLocation, useNavigate } from "react-router-dom";
 import EventDisplay from "./EventDisplay";
 

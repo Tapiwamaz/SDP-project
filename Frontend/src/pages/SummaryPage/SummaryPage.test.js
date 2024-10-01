@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import SummaryPage from "./SummaryPage"; // Import the SummaryPage component
-import "@testing-library/jest-dom/extend-expect";
+  
 import { useLocation } from "react-router"; // Import useLocation
 
 // Mock useLocation to simulate route state

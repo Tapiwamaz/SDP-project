@@ -1,5 +1,5 @@
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
+  
 import React from "react";
 import Summary from "./Summary";
 import fetchMock from "jest-fetch-mock";

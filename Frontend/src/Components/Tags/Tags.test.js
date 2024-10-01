@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; // For additional matchers
+// import '@testing-library/jest-dom/extend-expect'; // For additional matchers
 import Tags from './Tags'; // Import the Tags component
 
 

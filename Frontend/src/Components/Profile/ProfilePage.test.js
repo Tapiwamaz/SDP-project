@@ -6,7 +6,7 @@ import {
   waitFor,
   act,
 } from "@testing-library/react";
-// import "@testing-library/jest-dom/extend-expect";
+//   
 import { Profile, updateSlidePercentage } from "./ProfilePage";
 import { BrowserRouter } from "react-router-dom";
 import { auth } from "../../firebase_config";

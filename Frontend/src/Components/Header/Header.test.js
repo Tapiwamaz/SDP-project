@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+// import '@testing-library/jest-dom/extend-expect';
 import Header from './Header'; // Import the Header component
 import { auth } from '../../firebase_config';
 import { BrowserRouter } from 'react-router-dom'; // If your component uses React Router
