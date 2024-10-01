@@ -339,7 +339,7 @@ export const Profile = () => {
           </Details>
           <NavigationSection>
             <ButtonGrp>
-              <ButtonWrapper>
+              <ButtonWrapper onClick={() => navigate("/notifications")}>
                 <LeftSection>
                   <BellIcon
                     style={{ height: "27px", width: " 22px", color: "black" }}

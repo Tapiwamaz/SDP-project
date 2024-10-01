@@ -12,7 +12,7 @@ import {
   AsideNavItem,
   Logo,
 } from "./Header.styles";
-import { auth } from "../../firebase_config";
+import { auth, signOut } from "../../firebase_config";
 import { useNavigate } from "react-router";
 import ProfilePage from "../Profile/ProfilePage";
 
@@ -70,15 +70,6 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem("userData");
-      navigate("/welcome");
-    } catch (err) {
-      console.error(err);
-    }
-  };
   const handleNavClick = (route) => {
     navigate(route);
     setIsOpen(!isOpen);

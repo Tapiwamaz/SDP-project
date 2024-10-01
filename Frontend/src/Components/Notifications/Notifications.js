@@ -32,7 +32,64 @@ export const eventsByUserID = async (userId, setEvents) => {
   }
 };
 
+export const notificationsByUserID = async (userId, setNotifications) => {
+  try {
+    const q = query(
+      collection(db, "Notifications"),
+      where("notification_type", "==", "admin"),
+      //where("organizer_id", "==", "AnRc51fxerhPzAdJkt8w5JhmFAN2")
+      where("organizer_id", "==", userId)
+    );
+    const querySnapshot = await getDocs(q);
+    const notifications = querySnapshot.docs.map((d) => d.data());
+    setNotifications(notifications);
+    // return querySnapshot.size;
+    console.log(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    return null;
+  }
+};
+
+export const getEventIdsFromTickets = async (userId) => {
+  try {
+    const q = query(
+      collection(db, "Tickets"),
+      where("user_id", "==", userId) // Match the current user's ID
+    );
+    const querySnapshot = await getDocs(q);
+
+    // Extract event_ids from the tickets
+    const eventIds = querySnapshot.docs.map((d) => d.data().event_id);
+    return eventIds;
+  } catch (error) {
+    console.error("Error fetching tickets:", error);
+    return [];
+  }
+};
+
+export const getNotificationsByEventIds = async (
+  eventIds,
+  setNotifications
+) => {
+  try {
+    // Query the Notifications table using event_ids from the tickets
+    const q = query(
+      collection(db, "Notifications"),
+      where("event_id", "in", eventIds) // Use "in" query to match multiple event_ids
+    );
+    const querySnapshot = await getDocs(q);
+
+    const notifications = querySnapshot.docs.map((d) => d.data());
+    setNotifications(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications by event IDs:", error);
+    return null;
+  }
+};
 const Notifications = () => {
+  const storedUserData = localStorage.getItem("userData");
+  const userData = storedUserData ? JSON.parse(storedUserData) : {};
   const navigate = useNavigate();
   const noNotification = [
     { Notifications: "no" },
@@ -43,7 +100,8 @@ const Notifications = () => {
   ];
 
   const [loaded, setLoaded] = useState(true);
-  const sortedNotifications = mockNotifications.sort(
+  const [myNotification, setMyNotification] = useState([]);
+  const sortedNotifications = myNotification.sort(
     (a, b) => new Date(b.time) - new Date(a.time)
   );
 
@@ -51,11 +109,45 @@ const Notifications = () => {
     useState(false);
   const [myEvents, setMyEvents] = useState(mockEventData);
 
+  useEffect(() => {
+    if (auth?.currentUser?.uid) {
+      notificationsByUserID(auth?.currentUser?.uid, setMyNotification);
+    }
+  }, []);
+
   // Fetch the count when the component mounts
   useEffect(() => {
     if (auth?.currentUser?.uid) {
       eventsByUserID(auth?.currentUser?.uid, setMyEvents);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchUserNotifications = async () => {
+      if (auth?.currentUser?.uid) {
+        // Fetch notifications from the admin for the current user
+        const adminNotifications = await notificationsByUserID(
+          auth.currentUser.uid,
+          setMyNotification
+        );
+
+        // If there are no admin notifications, check user tickets
+        if (adminNotifications.length === 0) {
+          //const eventIds = await getEventIdsFromTickets("AnRc51fxerhPzAdJkt8w5JhmFAN2");
+
+          const eventIds = await getEventIdsFromTickets(
+            "7XscsMEsKIg202Eb5dwHTDa4GAW2"
+          );
+          if (eventIds.length > 0) {
+            await getNotificationsByEventIds(eventIds, setMyNotification);
+          } else {
+            setMyNotification([]);
+          }
+        }
+      }
+    };
+
+    fetchUserNotifications();
   }, []);
 
   return (
@@ -79,28 +171,33 @@ const Notifications = () => {
         />
       )}
       {loaded ? (
-        mockNotifications.length > 0 ? (
-          sortedNotifications.map((noti) => (
-            <Card key={noti.notification_id}>
-              <div className="headerNoti">
-                <img
-                  src={
-                    "https://photographylife.com/wp-content/uploads/2018/11/Moeraki-Boulders-New-Zealand.jpg"
-                  }
-                  alt="profile"
-                />
-                <div className="leftNoti">
-                  <h5> {noti.name}</h5>
-                  <p>
-                    {formatDistanceToNow(new Date(noti.time), {
-                      addSuffix: true,
-                    })}
-                  </p>
+        myNotification.length > 0 ? (
+          sortedNotifications.map((noti) => {
+            const isAdmin = noti.notification_type === "admin";
+            return (
+              <Card key={noti.notification_id}>
+                <div className="headerNoti">
+                  <img
+                    src={
+                      isAdmin
+                        ? "https://firebasestorage.googleapis.com/v0/b/sdp-project-5cfef.appspot.com/o/profileImages%2FjBHOtJ2ddSQEDacYsLM0v2KPcOM2e4b5047c-285b-4d04-a50e-d6fcf888d6ff?alt=media&token=07c9ee99-99f7-4f92-8428-2628fef0b245"
+                        : noti.image_url
+                    }
+                    alt="profile"
+                  />
+                  <div className="leftNoti">
+                    <h5>{isAdmin ? "Admin" : noti.name}</h5>
+                    <p>
+                      {formatDistanceToNow(new Date(noti.time), {
+                        addSuffix: true,
+                      })}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <p>{noti.message}</p>
-            </Card>
-          ))
+                <p>{noti.message}</p>
+              </Card>
+            );
+          })
         ) : (
           <>
             <img src={noResultsImage} alt="No Results" />
