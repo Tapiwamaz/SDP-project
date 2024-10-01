@@ -81,9 +81,11 @@ const EventDisplay = ({
             setEventOrg(eventOrgData);
           }
           setLoad(false);
-          setLoading(false);
+          if(screen==="Desktop"){
+          setLoading(false);}
         }
       } catch (error) {
+        console.log(error);
         toast.error(
           "An unexpected error occurred while fetching event organizer details."
         );
