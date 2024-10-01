@@ -146,6 +146,7 @@ export const createEventDB = async (
   }
 };
 
+
 export const updateEventDB = async (
   updatedEvent,
   eventCollection,
