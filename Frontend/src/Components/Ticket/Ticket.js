@@ -5,7 +5,7 @@ import { db } from "../../firebase_config";
 import download from '../../Images/download.svg';
 import html2pdf from 'html2pdf.js';
 
-export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick })  => {
+export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick,type })  => {
 
   const cancel = async (event) => {
     event.stopPropagation();
@@ -79,7 +79,7 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
           <DownloadLink onClick={downloadOnClick} data-html2canvas-ignore>
             <img src={download}/>Download PDF 
           </DownloadLink>
-          <StyledButton onClick={cancel}>Cancel Booking</StyledButton>
+          {type==="Upcoming" && <StyledButton onClick={cancel}>Cancel Booking</StyledButton>}
         </RightContainer>
       </TicketContainer>
  
