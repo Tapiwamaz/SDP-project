@@ -187,7 +187,7 @@ export const handleNextButtonClick = async (
       console.log(eventDetailsT);
       try {
         bookingID = await getBookingID(
-          eventDetailsT.venue_id,
+          eventDetailsT.location,
           eventDetailsT.date,
           eventDetailsT.start_time,
           eventDetailsT.end_time
