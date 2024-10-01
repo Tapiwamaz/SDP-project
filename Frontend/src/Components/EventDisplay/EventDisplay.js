@@ -81,7 +81,7 @@ const EventDisplay = ({
             setEventOrg(eventOrgData);
           }
           setLoad(false);
-          if(screen==="Desktop"){
+          if(events){
           setLoading(false);}
         }
       } catch (error) {
