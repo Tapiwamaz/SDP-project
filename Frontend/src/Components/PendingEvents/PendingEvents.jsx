@@ -155,8 +155,10 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
   }
 
   return (
+    <>    
+    <ToastContainer />
     <div className="p-events-list">
-      <ToastContainer />
+  
       {sortedEvents.map(event => (
         <div key={event.id}>
           <EventCard 
@@ -176,6 +178,7 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
         </div>
       ))}
     </div>
+    </>
   );
 };
 
