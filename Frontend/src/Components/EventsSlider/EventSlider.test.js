@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+// import '@testing-library/jest-dom/extend-expect';
 import { useNavigate } from 'react-router-dom';
 import EventSlider from './EventSlider'; // Import the component
 import { auth } from '../../firebase_config';
