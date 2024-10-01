@@ -7,6 +7,9 @@ import AsideDesktop from '../../AsideDesktop/AsideDesktop';
 import { db, auth } from '../../../firebase_config';
 import { onAuthStateChanged } from 'firebase/auth';
 import noResults from "../../../Images/noResults.svg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const secretKey = process.env.REACT_APP_X_API_KEY;
 
@@ -172,22 +175,24 @@ const MyEvents = () => {
         // Delete event from Firestore if status is still pending
         await deleteDoc(doc(db, 'Events', event.id));
         setEvents(events.filter(e => e.id !== event.id));
-        console.log("deleted event");
+        //console.log("deleted event");
+        toast.success(`Event ${event.name} has been canceled successfully!`); // Display success toast
+
       } else if (event.status === 'approved') {
         // Get the bookingID for the event using venue details
         const bookingID = await getBookingID(event.location, event.date, event.start_time, event.end_time);
   
         if (!bookingID) {
-          console.log('Booking ID not found, cannot proceed with cancellation.');
+          //console.log('Booking ID not found, cannot proceed with cancellation.');
           return;
         }
   
-        // Step 1: Delete booking from Venue Management API using the bookingID
-        //await deleteBookingFromAPI(bookingID);
+        //Delete booking from Venue Management API using the bookingID
+        
         await deleteBooking(bookingID)
-        console.log('booking deleted')
+        //console.log('booking deleted')
   
-        // Step 2: Post notification in Notifications table
+        //Post notification in Notifications table
         await sendNotification(
           event.user_id, 
           event.event_id, 
@@ -196,24 +201,52 @@ const MyEvents = () => {
           organizerName, 
           event.image_url
         );
-        console.log("NOTIF SENT");
+        //console.log("NOTIF SENT");
   
         //Update 'active' field in the Events table to 'false'
-        const eventDoc = doc(db, 'Events', event.id);
-        await updateDoc(eventDoc, { active: false, status: 'cancelled' });
+        // const eventDoc = doc(db, 'Events', event.id);
+        // await updateDoc(eventDoc, { active: false, status: 'cancelled' });
   
-        //Update 'cancelled' field in Tickets table to 'true'
-        const ticketsCollection = collection(db, 'Tickets');
-        const q = query(ticketsCollection, where('event_id', '==', event.id));
-        const querySnapshot = await getDocs(q);
+        // //Update 'cancelled' field in Tickets table to 'true'
+        // const ticketsCollection = collection(db, 'Tickets');
+        // const q = query(ticketsCollection, where('event_id', '==', event.id));
+        // const querySnapshot = await getDocs(q);
+        // const ticketUpdates = querySnapshot.docs.map(docSnapshot => {
+        //   const ticketDoc = doc(db, 'Tickets', docSnapshot.id);
+        //   return updateDoc(ticketDoc, { cancelled: true });
+        // });
+        // //console.log("cancelled tickets");
+        // await Promise.all(ticketUpdates);
+
+
+        // Update 'active' field in the Events table to 'false'
+      const eventDoc = doc(db, 'Events', event.id);
+      await updateDoc(eventDoc, { active: false, status: 'cancelled', approved: false });
+
+      // Update 'cancelled' field in Tickets table to 'true'
+      const ticketsCollection = collection(db, 'Tickets');
+      const q = query(ticketsCollection, where('event_id', '==', event.event_id)); // Use event.event_id here
+      const querySnapshot = await getDocs(q);
+      
+      //console.log(`Found ${querySnapshot.docs.length} tickets for event ID: ${event.event_id}`); // Use event.event_id for logging
+
+      if (!querySnapshot.empty) {
         const ticketUpdates = querySnapshot.docs.map(docSnapshot => {
           const ticketDoc = doc(db, 'Tickets', docSnapshot.id);
           return updateDoc(ticketDoc, { cancelled: true });
         });
-        console.log("cancelled tickets");
+
         await Promise.all(ticketUpdates);
-  
+        //console.log("Cancelled tickets updated.");
+      } else {
+        //console.log("No tickets found to update.");
+      }
+
+
+        
+        toast.success(`Event ${event.name} has been canceled successfully!`);
         //setEvents(events.filter(e => e.id !== event.id)); // remove from UI
+
       }
     } catch (error) {
       console.error('Error cancelling event:', error);
@@ -235,16 +268,17 @@ const MyEvents = () => {
       <div className="my-events-page">
         <h1>My Events</h1>
         <div className="myevents-list">
-          {/* {events.length > 0 ? [...events].reverse().map(renderViewCards) : <p>No events found</p>} */}
-          {events.length > 0 ? (
-          [...events].reverse().map(renderViewCards)
-        ) : (
-          <div style={{ textAlign: 'center' }}>
-            <img src={noResults} alt="No events found" />
-            <p>No events found</p>
-          </div>
-        )}
+            {/* {events.length > 0 ? [...events].reverse().map(renderViewCards) : <p>No events found</p>} */}
+            {events.length > 0 ? (
+            [...events].map(renderViewCards)
+            ) : (
+            <div style={{ textAlign: 'center' }}>
+              <img src={noResults} alt="No events found" />
+              <p>No events found</p>
+            </div>
+          )}
         </div>
+        <ToastContainer />
       </div>
     </div>
   );
