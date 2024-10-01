@@ -22,7 +22,7 @@
     flex-direction: column;
     border: 1px solid black; 
     width: 310px; 
-    height: 400px; 
+    height: fit-content; 
     overflow: hidden; 
   }
   
