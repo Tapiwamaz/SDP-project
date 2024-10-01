@@ -258,7 +258,7 @@ const HomePage = () => {
             </>
           ) : (
             <EventSlider
-              events={filteredTrendingEvents?.sort((a, b) => (b.ticket_count / b.capacity) - (a.ticket_count / a.capacity))}
+              events={filteredTrendingEvents?.sort((a, b) => (a.ticket_count / a.capacity) - (b.ticket_count / b.capacity))}
               onDisplayEvent={displayEvent}
             ></EventSlider>
           )}

@@ -61,9 +61,9 @@ const Notifications = () => {
   return (
     <div>
       <ToastContainer />
-      <Header />
+      {window.innerWidth<768 && <Header />}
       <Top>
-        <ArrowLeftCircleIcon width={40} onClick={() => navigate(-1)} />
+      {window.innerWidth<768 &&<ArrowLeftCircleIcon width={40} onClick={() => navigate(-1)} />}
         <h3>Notifications</h3>
         {/* Only organizers can make notifications based on their events so if you don't any made events */}
         {myEvents.length > 0 && (

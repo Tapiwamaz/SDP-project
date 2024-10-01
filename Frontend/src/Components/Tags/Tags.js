@@ -29,6 +29,8 @@ const Button = styled.button`
   align-items: center;
   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
   transition: all 0.3s ease;
+  font-family: "Khula", sans-serif;
+
 
   &:hover {
     transform: ${({ isClickable }) => (isClickable ? 'scale(1.1)' : 'none')};

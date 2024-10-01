@@ -70,15 +70,7 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem("userData");
-      navigate("/welcome");
-    } catch (err) {
-      console.error(err);
-    }
-  };
+ 
   const handleNavClick = (route) => {
     navigate(route);
     setIsOpen(!isOpen);

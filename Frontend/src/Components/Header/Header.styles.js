@@ -12,6 +12,8 @@ export const HeaderContainer = styled.header`
   border-bottom: black 2px solid;
   color: black;
   overflow-y: hidden;
+  font-family: "Khula", sans-serif;
+
 
   @media (max-width: 768px) {
     font-size: smaller;

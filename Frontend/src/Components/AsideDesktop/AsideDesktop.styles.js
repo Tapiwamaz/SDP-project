@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 export const Aside = styled.div`
+  font-family: "Khula", sans-serif;
+
   z-index: 100;
   top: 0;
   right: 0;

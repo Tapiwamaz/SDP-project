@@ -17,6 +17,8 @@ import {
   Contents,
   NavigationSection,
 } from "./ProfilePage.styles";
+import { EventRight } from "../HomePage/HomePage.styles.js";
+import { Xicon } from "../Header/Header.styles.js";
 import profileimg from "../../Images/profileimg.jpg";
 import {
   StarIcon,
@@ -46,6 +48,7 @@ import { v4 } from "uuid";
 
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router";
+import Notifications from "../Notifications/Notifications.js";
 
 export const Profile = () => {
   const storedUserData = localStorage.getItem("userData");
@@ -59,6 +62,9 @@ export const Profile = () => {
   const [description, setDescription] = useState(userData.description);
   const [ticketCount, setTicketCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
+
+  const [displayRight,setDisplayRight]=useState(false);
+
   const [screen, setScreen] = useState(null);
   const navigate = useNavigate();
 
@@ -339,7 +345,7 @@ export const Profile = () => {
           </Details>
           <NavigationSection>
             <ButtonGrp>
-              <ButtonWrapper>
+              <ButtonWrapper onClick={()=>screen==="desktop"?setDisplayRight(true):navigate("/notifications")}>
                 <LeftSection>
                   <BellIcon
                     style={{ height: "27px", width: " 22px", color: "black" }}
@@ -385,6 +391,18 @@ export const Profile = () => {
           </NavigationSection>
         </Contents>
       </Page>
+      {displayRight && (
+        <>
+          <EventRight>
+            <Xicon
+              onClick={() => setDisplayRight(false)}
+              style={{ color: "black" }}
+            ></Xicon>
+            <Notifications></Notifications>
+         
+          </EventRight>
+        </>
+      )}
     </>
   );
 };

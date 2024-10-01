@@ -4,6 +4,8 @@ import { BookButton } from "../EventDisplay/EventDisplay.style";
 import { useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
 
+import womanHighFive from "../../Images/WomenHighFive.svg"
+
 const Modal = styled.div`
   position: fixed; /* Positioning fixed to cover the whole page */
   z-index: 100; /* High z-index to make it appear on top of other elements */
@@ -38,7 +40,7 @@ export default function SuccessModal({ showModal, setShowModal }) {
       <Confetti />
       <ModalContent>
         <ImageContainer>
-          <img src="" alt="Success" style={{ width: "100%", height: "100%" }} />
+          <img src={womanHighFive} alt="Success" style={{ width: "100%", height: "100%" }} />
         </ImageContainer> 
         <h2>Congratulations!</h2>
         <p>You have successfully completed your payment.</p>
