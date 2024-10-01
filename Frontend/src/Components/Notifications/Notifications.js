@@ -42,7 +42,7 @@ export const notificationsByUserID = async (userId, setNotifications) => {
     );
     const querySnapshot = await getDocs(q);
     const notifications = querySnapshot.docs.map((d) => d.data());
-    setNotifications(notifications);
+    setNotifications((prev) => [...prev, ...notifications]);
     // return querySnapshot.size;
     console.log(notifications);
   } catch (error) {
@@ -61,6 +61,7 @@ export const getEventIdsFromTickets = async (userId) => {
 
     // Extract event_ids from the tickets
     const eventIds = querySnapshot.docs.map((d) => d.data().event_id);
+    console.log(eventIds);
     return eventIds;
   } catch (error) {
     console.error("Error fetching tickets:", error);
@@ -76,12 +77,25 @@ export const getNotificationsByEventIds = async (
     // Query the Notifications table using event_ids from the tickets
     const q = query(
       collection(db, "Notifications"),
-      where("event_id", "in", eventIds) // Use "in" query to match multiple event_ids
+      where("event_id", "in", eventIds)
+      //where("organizer_id", "", auth?.currentUser.uid) // Use "in" query to match multiple event_ids
     );
     const querySnapshot = await getDocs(q);
 
     const notifications = querySnapshot.docs.map((d) => d.data());
-    setNotifications(notifications);
+    // setNotifications(
+    //   notifications.filter(
+    //     (noti) => noti.organizer_id !== auth?.currentUser?.uid
+    //   )
+
+    setNotifications((prev) => [
+      ...prev,
+      ...notifications.filter(
+        (noti) => noti.organizer_id !== auth?.currentUser?.uid
+      ),
+    ]);
+
+    // );
   } catch (error) {
     console.error("Error fetching notifications by event IDs:", error);
     return null;
@@ -126,25 +140,25 @@ const Notifications = () => {
     const fetchUserNotifications = async () => {
       if (auth?.currentUser?.uid) {
         // Fetch notifications from the admin for the current user
-        const adminNotifications = await notificationsByUserID(
-          auth.currentUser.uid,
-          setMyNotification
-        );
+        // const adminNotifications = await notificationsByUserID(
+        //   auth.currentUser.uid,
+        //   setMyNotification
+        // );
 
         // If there are no admin notifications, check user tickets
-        if (adminNotifications.length === 0) {
-          //const eventIds = await getEventIdsFromTickets("AnRc51fxerhPzAdJkt8w5JhmFAN2");
+        // if (adminNotifications.length === 0) {
+        const eventIds = await getEventIdsFromTickets(auth.currentUser.uid);
 
-          const eventIds = await getEventIdsFromTickets(
-            "7XscsMEsKIg202Eb5dwHTDa4GAW2"
-          );
-          if (eventIds.length > 0) {
-            await getNotificationsByEventIds(eventIds, setMyNotification);
-          } else {
-            setMyNotification([]);
-          }
+        // const eventIds = await getEventIdsFromTickets(
+        //   "7XscsMEsKIg202Eb5dwHTDa4GAW2"
+        // );
+        if (eventIds.length > 0) {
+          await getNotificationsByEventIds(eventIds, setMyNotification);
+        } else {
+          setMyNotification([]);
         }
       }
+      // }
     };
 
     fetchUserNotifications();

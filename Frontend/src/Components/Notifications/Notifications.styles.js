@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export const Top = styled.div`
+  font-family: "Khula";
   width: 100%;
   /* height: 300px; */
   display: flex;
@@ -29,13 +30,15 @@ export const Top = styled.div`
 
 export const Card = styled.div`
   width: 100%;
-  background-color: lightgrey;
+  background-color: rgba(54, 69, 79, 0.1);
   padding: 11px;
+  //border-radius: 20px;
   border-bottom: 2px solid black;
   display: flex;
   flex-direction: column;
   gap: 0;
   margin: 0;
+  font-family: "khula";
   /* border-radius: 0px 10px 0px 40px; */
 
   img {
@@ -89,5 +92,3 @@ export const LoadingCard = styled.div`
     }
   }
 `;
-
-
