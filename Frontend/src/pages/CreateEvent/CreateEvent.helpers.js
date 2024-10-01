@@ -172,8 +172,7 @@ export const handleNextButtonClick = async (
       updateEventDB(eventDetailsT, eventCollection, imageT, locations);
       const userData = fetchStorage("userData");
       let notification = {
-        message:
-          `${eventDetailsT.name} has been edited by the oganizer: It will need to be re-approved`,
+        message: `${eventDetailsT.name} has been edited by the oganizer: It will need to be re-approved`,
         time: formatDateToISO(new Date()),
         notification_id: v4(),
         name: userData.name,
@@ -184,6 +183,22 @@ export const handleNextButtonClick = async (
       };
 
       sendNotification(notification, db);
+      let bookingID = null;
+      console.log(eventDetailsT);
+      try {
+        bookingID = await getBookingID(
+          eventDetailsT.venue_id,
+          eventDetailsT.date,
+          eventDetailsT.start_time,
+          eventDetailsT.end_time
+        );
+      } catch (e) {
+        console.error("Error getting booking", e);
+      }
+      console.log(bookingID);
+      if (bookingID) {
+        deleteBooking(bookingID);
+      }
     } else {
       createEventDB(eventDetailsT, eventCollection, imageT, locations);
     }
@@ -194,6 +209,30 @@ export const handleNextButtonClick = async (
   } catch (e) {
     setLoader(false);
     toast.error("Something went wrong");
+  }
+};
+export const deleteBooking = async (bookingID) => {
+  const secretKey = process.env.REACT_APP_X_API_KEY;
+  try {
+    const response = await fetch(
+      `https://wits-infrastructure-management.web.app/api/bookings/${bookingID}`,
+      {
+        method: "DELETE",
+        headers: {
+          "X-API-KEY": secretKey,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error deleting booking");
+    }
+
+    return await response.json(); 
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    return null;
   }
 };
 
@@ -222,5 +261,42 @@ export const fetchVenues = async () => {
   } catch (error) {
     console.error("Error fetching data:", error);
     return;
+  }
+};
+
+export const getBookingID = async (
+  venueId,
+  bookingDate,
+  startTime,
+  endTime
+) => {
+  const secretKey = process.env.REACT_APP_X_API_KEY;
+  try {
+    const response = await fetch(
+      `https://wits-infrastructure-management.web.app/api/bookings/findByField?venueID=${venueId}&bookingDate=${bookingDate}&bookingStartTime=${startTime}&bookingEndTime=${endTime}`,
+      {
+        method: "GET",
+        headers: {
+          "X-API-KEY": secretKey,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error fetching booking details");
+    }
+
+    const data = await response.json();
+
+    if (data.length > 0) {
+      return data[0].id;
+    } else {
+      console.error("No booking found for the given details");
+      return null
+    }
+  } catch (error) {
+    console.error("Error retrieving booking ID:", error);
+    return null;
   }
 };
