@@ -19,7 +19,7 @@ export const Card = styled.button`
   height: 300px;
   display: flex;
   font-family: "Khula", sans-serif;
-  border: 2px var(--primary) solid;
+  border: 1px var(--primary) solid;
 
   
   display: flex;
@@ -29,8 +29,9 @@ export const Card = styled.button`
   color: black;
   &:hover {
     color: white;
-    background-color: var(--primary);
+    background-color: cornflowerblue;
     transform: scale(1.05);
+    opacity: 0.5;
   }
 
 

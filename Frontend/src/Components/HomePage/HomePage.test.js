@@ -58,7 +58,7 @@ describe('HomePage Component', () => {
         expect(eventSliders).toHaveLength(2); // Check if there are exactly 2 instances
         // Wait for the events to be rendered
         await waitFor(() =>{ expect(screen.getByText('Trending Events')).toBeInTheDocument()});
-        await waitFor(() =>{ expect(screen.getByText('Events happening Soon')).toBeInTheDocument()});
+        await waitFor(() =>{ expect(screen.getByText('Upcoming Events')).toBeInTheDocument()});
 
 
       });
