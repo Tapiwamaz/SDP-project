@@ -29,6 +29,8 @@ const Button = styled.button`
   align-items: center;
   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
   transition: all 0.3s ease;
+  font-family: "Khula", sans-serif;
+
 
   &:hover {
     transform: ${({ isClickable }) => (isClickable ? 'scale(1.1)' : 'none')};
@@ -71,8 +73,8 @@ const Tags = ({ name, filter, isActive }) => {
   const { icon: Icon, color: iconColor } = getIconAndColor(name);
 
   return (
-    <Button onClick={filter || null} isClickable={!!filter} isActive={isActive}>{/* so that there is different behaviour when i do not want a tag to be clickable */}
-      {Icon && <Icon style={{ color: iconColor, height: '20px' }} />} 
+    <Button onClick={filter || null} isClickable={!!filter} isActive={isActive} >{/* so that there is different behaviour when i do not want a tag to be clickable */}
+      {Icon && <Icon style={{ color: iconColor, height: '20px' }} data-testid="academic-cap-icon" />} 
       {name}
     </Button>
   );

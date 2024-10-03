@@ -8,14 +8,16 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 10px 10px 1rem 0px;
   border-bottom: black 2px solid;
   color: black;
   overflow-y: hidden;
+  font-family: "Khula", sans-serif;
+
 
   @media (max-width: 768px) {
     font-size: smaller;
-    flex-direction: row-reverse;
+    flex-direction: row;
   }
 `;
 
@@ -25,7 +27,7 @@ export const Logo = styled.img`
   margin: 0;
   height: 80px;
   @media (max-width: 768px) {
-    display: none;
+    margin-right: 40px;
   }
 `;
 
@@ -123,6 +125,16 @@ export const Profile = styled.div`
       /* border-radius: 50%; */
     }
   }
+  p{
+    @media (max-width: 768px) {
+    display: none; 
+   }
+
+  }  
+   
+  
+
+  
 `;
 
 export const ProfileIcon = styled(UserIcon)`

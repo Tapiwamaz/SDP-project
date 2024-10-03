@@ -1,23 +1,26 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { signOut } from "firebase/auth";
 
 import logo from "../../Images/Logo.svg.svg";
-import { HeaderContainer, Xicon, Profile, ProfileIcon, Burger, Aside, AsideNavItem, Logo } from './Header.styles';
-import { auth } from "../../firebase_config";
+import {
+  HeaderContainer,
+  Xicon,
+  Profile,
+  ProfileIcon,
+  Burger,
+  Aside,
+  AsideNavItem,
+  Logo,
+} from "./Header.styles";
+import { auth, signOut } from "../../firebase_config";
 import { useNavigate } from "react-router";
 import ProfilePage from "../Profile/ProfilePage";
-
-
-
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [screen, setScreen] = useState(null);
   const [profileCllicked, setProfileClicked] = useState(false);
   const [log, setLog] = useState(false);
-
-
 
   const [userData, setUserData] = useState(null); // State to store user data
   const navigate = useNavigate();
@@ -26,17 +29,17 @@ const Header = () => {
     const updateSlidePercentage = () => {
       const screenWidth = window.innerWidth; // Adjust slide percentage based on screen size
       if (screenWidth <= 768) {
-        setScreen('phone');
+        setScreen("phone");
       } else {
-        setScreen('desktop');
+        setScreen("desktop");
       }
     };
 
-    window.addEventListener('resize', updateSlidePercentage);
+    window.addEventListener("resize", updateSlidePercentage);
     updateSlidePercentage(); // Initial check
 
     return () => {
-      window.removeEventListener('resize', updateSlidePercentage);
+      window.removeEventListener("resize", updateSlidePercentage);
     };
   }, []);
 
@@ -56,10 +59,10 @@ const Header = () => {
   }, []);
 
   const openProfile = () => {
-    if (screen === 'desktop') {
+    if (screen === "desktop") {
       setProfileClicked(!profileCllicked);
     } else {
-      navigate('/profile');
+      navigate("/profile");
     }
   };
 
@@ -67,19 +70,10 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem('userData');
-      navigate('/welcome');
-    } catch (err) {
-      console.error(err);
-    }
-  };
+ 
   const handleNavClick = (route) => {
     navigate(route);
     setIsOpen(!isOpen);
-
   };
 
   useEffect(() => {
@@ -100,17 +94,13 @@ const Header = () => {
       <HeaderContainer>
         <Logo src={logo} />
 
-        <Burger onClick={toggleMenu} data-testid="burger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </Burger>
+      
         
         {(auth?.currentUser && userData) ? (
           <Profile>
             <img
               src={`${userData.imageURL}`}
-              style={{ height: '40px' }}
+              style={{ height: "40px" }}
               alt="profileImg"
               onClick={openProfile}
               data-testid="profileImg"
@@ -124,13 +114,18 @@ const Header = () => {
           </Profile>
         )}
 
-          {/* </Profile>
+        {/* </Profile>
         ) : (
           <Profile>
             <ProfileIcon></ProfileIcon>
             <p>Hello User</p>
           </Profile>
         )} */}
+          <Burger onClick={toggleMenu} data-testid="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </Burger>
 
         <Aside open={isOpen}>
           <Xicon onClick={toggleMenu} data-testid="close-icon"></Xicon>
@@ -146,50 +141,36 @@ const Header = () => {
           <AsideNavItem href="#contact" onClick={toggleMenu}>
             Contact
           </AsideNavItem> */}
-            {log ? (
-        <>
-          <AsideNavItem
-            onClick={() => handleNavClick('/')}
-          >
-            Home
-          </AsideNavItem>
-          <AsideNavItem
-            onClick={() => handleNavClick('/myEvents')}
-          >
-            My Events
-          </AsideNavItem>
-          <AsideNavItem
-            onClick={() => handleNavClick('/myBooking')}
-          >
-            My Bookings
-          </AsideNavItem>
-          <AsideNavItem
-            onClick={() => handleNavClick('/createEvent')}
-          >
-            Create Event
-          </AsideNavItem>
-          {auth?.currentUser?.uid===process.env.REACT_APP_ADMIN_ID &&
-                    <AsideNavItem onClick={() => handleNavClick('/adminDashboard')}>Approvals</AsideNavItem>
-
-
-          
-        }
-          {/* <AsideNavItem onClick={logout}>Logout</AsideNavItem> */}
-        </>
-      ) : (
-        <AsideNavItem onClick={() => handleNavClick('/welcome')}>
-          Login
-        </AsideNavItem>
-      )}
+          {log ? (
+            <>
+              <AsideNavItem onClick={() => handleNavClick("/")}>
+                Home
+              </AsideNavItem>
+              <AsideNavItem onClick={() => handleNavClick("/myEvents")}>
+                My Events
+              </AsideNavItem>
+              <AsideNavItem onClick={() => handleNavClick("/myBooking")}>
+                My Bookings
+              </AsideNavItem>
+              <AsideNavItem onClick={() => handleNavClick("/createEvent")}>
+                Create Event
+              </AsideNavItem>
+              {auth?.currentUser?.uid === process.env.REACT_APP_ADMIN_ID && (
+                <AsideNavItem onClick={() => handleNavClick("/adminDashboard")}>
+                  Approvals
+                </AsideNavItem>
+              )}
+              {/* <AsideNavItem onClick={logout}>Logout</AsideNavItem> */}
+            </>
+          ) : (
+            <AsideNavItem onClick={() => handleNavClick("/welcome")}>
+              Login
+            </AsideNavItem>
+          )}
         </Aside>
       </HeaderContainer>
       {profileCllicked? <ProfilePage/>:null}
-      {/* Profile Dropdown */}
-      {/* {screen === "desktop" && (
-        <ProfileDropdown isOpen={profileCllicked}>
-          <ProfilePage />
-        </ProfileDropdown>
-      )} */}
+    
     </>
   );
 };

@@ -4,22 +4,27 @@ import { BookButton } from "./Summary.style";
 import SuccessModal from "../../Components/SuccesfullPayment/SuccessModal";
 import React, { useState } from "react";
 import { auth } from "../../firebase_config";
+import { Loader } from "../SecurityModal/SecurityModal.styles";
 
 export default function Summary({ event }) {
-  console.log(event);
+  // console.log(event);
   const user_id = auth?.currentUser?.uid;
-  console.log(user_id);
+  // console.log(user_id);
   const [showmodal, setShowmodal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const amount = event.count;
-  console.log(amount);
+  // console.log(amount);
   const DisplayModal = () => {
     setShowmodal(true);
+    setIsLoading(false);
+  };
+  const DisplayLoad = () => {
+    setIsLoading(true);
   };
 
   const submitTicket = async (event, count, user_ID) => {
     setIsLoading(true);
-    console.log("submitting ticket");
+    // console.log("submitting ticket");
     fetch("api/BookTicket", {
       method: "POST",
       headers: {
@@ -33,15 +38,16 @@ export default function Summary({ event }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Success:", data);
+        // console.log("Success:", data);
         setShowmodal(true);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
-  console.log(formatDate(event.date));
+  // console.log(formatDate(event.date));
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.toLocaleString("en-US", { day: "numeric" });
@@ -49,7 +55,7 @@ export default function Summary({ event }) {
     const year = date.toLocaleString("en-US", { year: "numeric" });
     return `${day} ${month} ${year}`; // change this line to change the order
   }
-  console.log(event.price == 0);
+  // console.log(event.price == 0);
   return (
     <>
       <SummaryPages>
@@ -134,6 +140,7 @@ export default function Summary({ event }) {
             count={amount}
             user_ID={user_id}
             onDisplayModal={DisplayModal}
+            onLoading={DisplayLoad}
           ></PayPalButton>
         )}
       </SummaryPages>
@@ -149,9 +156,12 @@ export default function Summary({ event }) {
             backgroundColor: "rgba(128, 128, 128, 0.5)",
             zIndex: 100,
           }}
-        />
+        >
+          <Loader />
+        </div>
       )}
-      { showmodal && (
+
+      {showmodal && (
         <SuccessModal
           showModal={showmodal}
           setShowModal={setShowmodal}

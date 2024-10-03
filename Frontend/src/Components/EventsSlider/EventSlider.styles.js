@@ -18,6 +18,8 @@ export const Card = styled.button`
   width: 250px;
   height: 300px;
   display: flex;
+  font-family: "Khula", sans-serif;
+
   
   display: flex;
   flex-direction: column;

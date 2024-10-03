@@ -23,14 +23,14 @@
     flex-direction: column;
     border: 1px solid black; 
     width: 310px; 
-    height: 460px; 
+    height: 470px; 
     overflow: hidden; 
   }
   
   .event-image {
     width: 100%;
     /* height: auto; */
-    height: 190px; 
+    height: 180px; 
     object-fit: cover; 
     background-color: #ccc;
     border-radius: 8px;
@@ -132,4 +132,5 @@
     background-color: #003366;
     color: #fff;
     border-radius: 8px;
+    cursor: pointer;
   }

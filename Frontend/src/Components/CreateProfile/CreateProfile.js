@@ -30,7 +30,6 @@ export const CreateProfile = () => {
     const avatarURL=`https://avatar.iran.liara.run/public/${IDRandom}`;
     const userEmail=auth?.currentUser?.email;
     const userID=auth?.currentUser?.uid
-    console.log(userID);
     
     
   const [profileImage, setProfileImage] = useState(avatarURL); // State to store profile image, default is the logo
@@ -39,23 +38,9 @@ export const CreateProfile = () => {
   const[error,setError]=useState("");
 
 
-  const fileInputRef = useRef(null); // Ref to trigger file input
   const navigate=useNavigate();
 
-  // // Function to handle image upload
-  // const handleImageChange = (e) => {
-  //   const file = e.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => setProfileImage(reader.result); // Set profile image to the uploaded one
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
-  // Function to trigger file input
-  // const handleClick = () => {
-  //   fileInputRef.current.click();
-  // };
 
   const newAvatar=()=>{
     const IDRand=Math.random()*101;
@@ -75,7 +60,8 @@ export const CreateProfile = () => {
           imageURL: profileImage,
           email: userEmail,
           user_id: userID,
-          rating:0
+          rating:0,
+          Rates:0
         });
         setError(null)
         localStorage.setItem("userData", JSON.stringify({name:name,description:description,imageURL:profileImage,email:userEmail,rating:0}));
@@ -100,16 +86,12 @@ export const CreateProfile = () => {
   return (
     <ResponsiveBackground>
       <ResponsiveDiv>
-      {/* <backgroundCard> */}
 
         <ImageContainer>
           <StyledImage src={logo} alt="Logo" />
         </ImageContainer>
-        {/* <ImageContainer> */}
           <StyledBoldText>Create Profile!</StyledBoldText>
-        {/* </ImageContainer> */}
         
-        {/* Circular Image for Profile */}
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
           <StyledImage
             src={profileImage}
@@ -123,14 +105,7 @@ export const CreateProfile = () => {
             }}
             // onClick={handleClick}
           />
-          {/* Hidden File Input */}
-          {/* <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }} // Hide the input
-            accept="image/*" // Accept only image files
-            onChange={handleImageChange} // Handle file selection
-          /> */}
+        
         </div>
         <button onClick={newAvatar} style={{display:"flex", alignItems:"center",gap:"2px",height:"24px",borderRadius:'10px'}}>
           <ArrowPathIcon style={{
@@ -138,10 +113,8 @@ export const CreateProfile = () => {
           }}/>
           <p> Generate new avatar</p>
           </button>
-        {/* <p>Click profile image to change it</p> */}
 
 
-        {/* Input Fields */}
         <Field>
             <h4> Nickname</h4>
             <StyledInput type="text" placeholder="Name" onChange={(e)=>setName(e.target.value)} />
@@ -160,7 +133,6 @@ export const CreateProfile = () => {
         <StyledButton style={{marginBottom:"20px"}} onClick={postUser}>Go to events</StyledButton>
 
       </ResponsiveDiv>
-      {/* </backgroundCard> */}
 
     </ResponsiveBackground>
   );

@@ -1,8 +1,8 @@
 // import { auth, googleProvider } from "../../config/firebase.js"
 import { auth,googleProvider ,db} from "../../firebase_config.js";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import { useState } from "react";
-import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText, ResponsiveBackground, ResponsiveDiv } from "../Universal Styles/Universal.styles.js";
+import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText, ResponsiveBackground, ResponsiveDiv, ModalWrapper, Overlay, ModalContent } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
 
@@ -16,6 +16,7 @@ export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [modal, setModal] = useState(false);
     const navigate=useNavigate();
 
     var emailInput = document.getElementById("emailInput");
@@ -41,7 +42,7 @@ export const Login = () => {
                         
                         localStorage.setItem("userData", JSON.stringify(userData));
                         
-                        console.log("User data stored in local storage:", userData);
+                        //console.log("User data stored in local storage:", userData);
                       }); 
                     navigate('/')
 
@@ -52,7 +53,7 @@ export const Login = () => {
                 }
 
             }
-            console.log("Success");
+            //console.log("Success");
         }
         catch (error) {
             var errorCode = error.code;
@@ -94,7 +95,7 @@ export const Login = () => {
                         
                         localStorage.setItem("userData", JSON.stringify(userData));
                         
-                        console.log("User data stored in local storage:", userData);
+                        //console.log("User data stored in local storage:", userData);
                       }); 
                     navigate('/')
 
@@ -113,6 +114,23 @@ export const Login = () => {
         }
     };
 
+    const toggleModal = () => {
+        setModal(!modal);
+    }
+
+    const forgotPassword = () => {
+        setErrorMessage("");
+        if (email === "") {
+            alert("Please enter your email address to reset your password");
+            return;
+        }
+        sendPasswordResetEmail(auth, email).then(() => {
+            alert("Password reset has been sent to your email address");
+        }).catch((error) => {
+            alert(error.message);
+        });
+    }
+
     return (
         <ResponsiveBackground>
             <ResponsiveDiv>
@@ -124,7 +142,7 @@ export const Login = () => {
             </ImageContainer>
             <StyledInput id="emailInput" type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
             <StyledInput id="passwordInput" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-            <ClickableText><StyledLink href="www.google.com">Forgot password?</StyledLink></ClickableText>
+            <ClickableText><StyledLink onClick={toggleModal}>Forgot password?</StyledLink></ClickableText>
             <ErrorMessage>{errorMessage}</ErrorMessage>
             <StyledButton onClick={login}>Login</StyledButton>
             <ImageContainer>
@@ -139,8 +157,26 @@ export const Login = () => {
             </ImageButton>
             </ImageContainer>
             <ImageContainer>
-                <StyledText size="16px">Don't have an account? <StyledLink href="../SignIn/SignIn.js">Sign up</StyledLink></StyledText>
+                <StyledText size="16px">Don't have an account? <StyledLink href="../SignIn">Sign up</StyledLink></StyledText>
             </ImageContainer>
+
+            {modal && (
+                <ModalWrapper>
+                    <Overlay onClick={toggleModal} />
+                    <ModalContent>
+                        <h2 style={{textAlign: 'center'}}>Enter the email associated with your account and we'll send a reset link</h2>
+                        <ImageContainer>
+                            <StyledInput type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                        </ImageContainer>
+                        <ImageContainer>
+                            <StyledButton onClick={forgotPassword}>Reset Password</StyledButton>
+                        </ImageContainer>
+                        <ImageContainer>
+                            <StyledButton onClick={toggleModal}>Close</StyledButton>
+                        </ImageContainer>
+                    </ModalContent>
+                </ModalWrapper>
+            )}
             
         </ResponsiveDiv>
         </ResponsiveBackground>

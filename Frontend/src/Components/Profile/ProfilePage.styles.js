@@ -1,34 +1,46 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const Page = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 250px; /* Fixed height for desktop landscape */
+  height: 250px;
+  padding-bottom: 2vh;
+  font-family: "Khula", sans-serif;
+  overflow-x: hidden;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  /* Fixed height for desktop landscape */
+  @media (max-width: 480px) {
+    height: 100%;
+  }
+`;
+
+export const Contents = styled.div`
+  display: flex;
+  flex-direction: row;
   align-items: center;
   padding-top: 3px;
-  padding-left: 2vw;
   gap: 20px;
-  overflow-x: none;
-  overflow: hidden;
+  width: 100%;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    width: 100vw; /* Full width for tablets */
-    height: auto; /* Auto height for tablets */
+    width: 100%;
+    height: auto;
     padding-top: 2vh;
+    padding-bottom: 2vh;
   }
 
   @media (max-width: 480px) {
     flex-direction: column;
-    width: 100vw; /* Full width for mobile */
-    height: 100%; /* Full height for mobile */
-    padding-top: 3vh;
+    width: 100%;
+    height: 100%;
     font-size: 1.5rem;
   }
 `;
 
-export const Summary = styled.div`
+export const PictureWrapper = styled.div`
   padding-top: 0;
   display: flex;
   flex-direction: column;
@@ -36,8 +48,7 @@ export const Summary = styled.div`
   align-items: center;
   gap: 0px;
   height: fit-content;
-  width: 20%;
-  padding: 1vw;
+  width: 100%;
 
   h2 {
     font-size: 1.2rem; /* Smaller font size for landscape dropdown */
@@ -84,10 +95,11 @@ export const ProfileImage = styled.img`
   @media (min-width: 768px) {
     width: 170px; /* Adjust size for desktop landscape */
     height: 170px;
+    margin-top: 20px;
   }
 `;
 
-export const EventsGrp = styled.div`
+export const CountWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -95,7 +107,7 @@ export const EventsGrp = styled.div`
   color: black;
   border-radius: 10px;
   padding: 2px 8px;
-  width: 120px;
+  width: inherit;
   height: fit-content;
   justify-content: center;
 
@@ -120,7 +132,7 @@ export const Count = styled.div`
   display: flex;
   flex-direction: row;
   align-items: left;
-  width: 400px;
+  width: inherit;
   gap: 10px;
 
   @media (max-width: 480px) {
@@ -129,11 +141,11 @@ export const Count = styled.div`
   }
 `;
 
-export const Numbers = styled.div`
+export const Stats = styled.div`
   display: flex;
   flex-direction: column;
   height: 200px;
-  width: 300px;
+  width: inherit;
   align-items: left;
   justify-content: center;
 
@@ -172,17 +184,17 @@ export const Rating = styled.div`
 export const Details = styled.div`
   display: flex;
   flex-direction: column;
-  width: 1200px;
-  padding-left: 10px;
+  width: fit-content;
+  padding: 10px;
 
   @media (max-width: 768px) {
     width: 100%; /* Full width for tablets */
-    padding-left: 5vw;
+    padding: 5vw;
   }
 
   @media (max-width: 480px) {
     width: 90%;
-    padding-left: 3px;
+    padding: 3px;
   }
 `;
 
@@ -264,20 +276,20 @@ export const About = styled.div`
 export const ButtonGrp = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: inherit;
   justify-content: space-between;
-  padding: 10px;
 
   @media (max-width: 480px) {
-    width: 90vw;
+    width: inherit;
   }
 `;
 
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 20%;
   align-items: center;
-  width: 100%;
+  width: inherit;
   padding: 8px 0;
   border-radius: 8px;
   cursor: pointer;
@@ -287,7 +299,7 @@ export const ButtonWrapper = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 8px;
+    padding: 3%;
   }
 `;
 
@@ -297,7 +309,7 @@ export const LeftSection = styled.div`
   gap: 8px;
 
   @media (max-width: 480px) {
-    gap: 6px;
+    gap: 12px;
   }
 `;
 
@@ -325,10 +337,18 @@ export const Icon = styled.div`
   }
 `;
 
-export const Bottom = styled.div`
+export const NavigationSection = styled.div`
   display: flex;
   flex-direction: column;
+
   gap: 10px;
-  width: fit-content;
+  width: 100%;
   height: fit-content;
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+    width: 97%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 `;

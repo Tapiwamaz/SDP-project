@@ -2,10 +2,9 @@ import React from "react";
 import { useEffect, useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import  Tags from '../Tags/Tags'
-import EventPage from '../../pages/EventPage/EventPage';
 import { useNavigate } from 'react-router-dom';
 
-import {LoadingCard, Card ,CustomCarousel,Container,Aside} from './EventSlider.styles';
+import {LoadingCard, Card ,CustomCarousel,Container} from './EventSlider.styles';
 
 import { auth } from '../../firebase_config';
 
@@ -13,10 +12,7 @@ import { auth } from '../../firebase_config';
 const EventSlider = ({events,onDisplayEvent}) => {
     const [slidePercentage, setSlidePercentage] = useState(60);
     const[screen,setScreen]=useState(null);
-    const [isOpen, setIsOpen] = useState(true);
-    const toggleMenu = () => {
-      setIsOpen(!isOpen);
-    };
+
 
     const noEvents = [
       { events: "no" },
@@ -54,6 +50,7 @@ const EventSlider = ({events,onDisplayEvent}) => {
 
       
     }, []);
+    
     let formattedDate;
 const formatDate=(date)=>{
   const eventDate = new Date(date);
@@ -66,29 +63,14 @@ const formatDate=(date)=>{
 return formattedDate;
 
 }
-const formatTime=(time)=>{
-  // console.log(time);
-  
 
-  const eventStartTime = new Date(time);
-  // console.log(eventStartTime);
-  // console.log("hey");
-  
-  
-  const formattedTime = eventStartTime.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true      // Use 12-hour time (AM/PM)
-  });
-  return formattedTime
-}
 
 const goToEvent=(event)=>{
-  console.log(screen);
   event["booking"]=true;
   if(auth?.currentUser?.email){
     if(screen==="desktop"){
       onDisplayEvent(event);
+      
     }
     else{
       navigate('/event' , {state: {event}}); 
@@ -100,7 +82,6 @@ const goToEvent=(event)=>{
     navigate('/welcome')
   }
   
-// navigate('/event' , {state: {event,booked:true}}); 
 }
   
     return (
@@ -139,16 +120,14 @@ const goToEvent=(event)=>{
               ))
              :
              noEvents.map((events)=>(
-              <LoadingCard></LoadingCard>
+              <LoadingCard data-testid="loading"></LoadingCard>
 
              ))
 
              }
                 
           </CustomCarousel>
-          {/* {screen==="desktop"?
-          <EventPage></EventPage>
-          :<p>bruh</p>} */}
+         
 
 
         </Container>

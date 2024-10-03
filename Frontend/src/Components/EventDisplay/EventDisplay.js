@@ -1,6 +1,7 @@
 // Import necessary modules and components
 // rG4AF+FH
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/outline";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -35,7 +36,6 @@ const EventDisplay = ({
   onDisplaySummary,
   ticket,
 }) => {
-  console.log(!!loading);
   const navigate = useNavigate();
   const location = useLocation();
   let event = null;
@@ -43,18 +43,13 @@ const EventDisplay = ({
   const handleEvent = () => {
     if (events === undefined) {
       tick = location.state.ticket;
-      console.log(tick);
       event = location.state.event;
     } else {
       tick = ticket;
-      console.log(ticket);
       event = events;
     }
   };
   handleEvent();
-  // console.log(event);
-  // console.log(event.name);
-
   const book = event.booking;
   // State variables for the event organizer, loading status, full status, count, hover and rating
   const [EventOrg, setEventOrg] = useState({});
@@ -67,7 +62,6 @@ const EventDisplay = ({
   const [rated, setRated] = useState(false);
   const [Load, setLoad] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  // Log the event for debugging
   useEffect(() => {
     const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
     if (screenWidth <= 768) {
@@ -77,21 +71,24 @@ const EventDisplay = ({
     }
     if (!book) {
       setRated(tick.rated);
-      console.log(rated);
     }
-    if (event.ticket_count === 0) {
-      console.log("Event is full");
-      SetFull(true);
-    } else {
-      console.log("Event is not full");
-      SetFull(false);
-    }
+    SetFull(event.ticket_count === 0);
     const fetchData = async () => {
-      if (Object.keys(EventOrg).length === 0 || !!loading) {
-        const eventOrgData = await fetchEventOrganizer(event.user_id);
-        setEventOrg(eventOrgData);
-        setLoad(false);
-        setLoading(false);
+      try {
+        if (Object.keys(EventOrg).length === 0 || !!loading) {
+          const eventOrgData = await fetchEventOrganizer(event.user_id);
+          if (eventOrgData) {
+            setEventOrg(eventOrgData);
+          }
+          setLoad(false);
+          if(events){
+          setLoading(false);}
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error(
+          "An unexpected error occurred while fetching event organizer details."
+        );
       }
     };
     fetchData();
@@ -118,14 +115,12 @@ const EventDisplay = ({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       let data = await response.json();
-      console.log(data);
-      if (!data.Rates) {
-        data.Rates = 0;
-      }
-      console.log("Data received from Azure Function:", data);
       return data;
     } catch (error) {
       console.error("Error fetching data:", error);
+      if (loading || Load) {
+        toast.error("Failed to fetch event organizer details");
+      }
       return null;
     }
   };
@@ -176,11 +171,11 @@ const EventDisplay = ({
         return res.json();
       })
       .then((data) => {
-        console.log(data);
         setRated(true);
       })
       .catch((error) => {
         console.error("Error:", error);
+        toast.error("Failed to submit rating");
       });
 
   const openSecurityModal = () => {
@@ -190,6 +185,7 @@ const EventDisplay = ({
 
   return (
     <EventPages>
+      <ToastContainer />
       {!!loading || Load ? (
         <EventImagePlaceholder
           data-testid="ImagePLaceholder"
@@ -388,6 +384,7 @@ const EventDisplay = ({
                         width: "10%",
                         cursor: "pointer",
                       }}
+                      data-testid="DecrementButton"
                     />
                     <p>Current count: {count}</p>
                     <PlusCircleIcon
@@ -396,18 +393,30 @@ const EventDisplay = ({
                         width: "10%",
                         cursor: "pointer",
                       }}
+                      data-testid="IncrementButton"
                     />
                   </NumberofTickets>
                 </>
               ) : null}
-
-              <BookButton
-                onClick={() => !Full && goToSummary()}
-                full={Full}
-                disabled={Full}
-              >
-                {Full ? "Sold Out" : "Book Now"}
-              </BookButton>
+              {Full ? (
+                <BookButton
+                  onClick={() => !Full && goToSummary()}
+                  full={true}
+                  disabled={true}
+                  data-testid="SoldOutButton"
+                >
+                  Sold Out
+                </BookButton>
+              ) : (
+                <BookButton
+                  onClick={() => goToSummary()}
+                  full={false}
+                  disabled={false}
+                  data-testid="BookNowButton"
+                >
+                  Book Now
+                </BookButton>
+              )}
             </>
           ) : (
             <>
@@ -433,6 +442,7 @@ const EventDisplay = ({
                     <RatingStars>
                       {[...Array(5)].map((_, i) => (
                         <Star
+                          data-testid={`Star-${i}`}
                           key={i}
                           hover={i < hover}
                           selected={i < rating}
@@ -450,6 +460,7 @@ const EventDisplay = ({
                         fontSize: "0.8em",
                       }}
                       onClick={() => submitRating()}
+                      data-testid="SubmitButton"
                     >
                       Submit
                     </BookButton>
@@ -467,6 +478,7 @@ const EventDisplay = ({
                   background: "crimson",
                 }}
                 onClick={openSecurityModal}
+                data-testid="AlertButton"
               >
                 Alert
               </BookButton>

@@ -10,6 +10,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import EventDisplay from "../EventDisplay/EventDisplay";
 import { EventRight } from "../HomePage/HomePage.styles";
 import { Xicon } from "../Header/Header.styles";
+import noResultsImage from "../../Images/noResults.svg";
+
 import {
   collection,
   query,
@@ -22,6 +24,10 @@ import { onAuthStateChanged } from "firebase/auth";
 
 export const TicketContainer = () => {
   const [tickets, setTickets] = useState([]);
+  const [allTickets,setAllTickets]=useState([]);
+
+
+
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null); // New state for user ID
   const [screen, setScreen] = useState(null);
@@ -42,6 +48,24 @@ export const TicketContainer = () => {
     });
     return () => unsubscribe(); // Cleanup subscription on component unmount
   }, []);
+
+  useEffect(() => {
+
+    const handleNav=()=>{
+      
+      if (activeTab === 'Upcoming') {
+        setTickets(allTickets.filter((ticket) => new Date(ticket.date) >= new Date() && !ticket.cancelled === true));
+      }
+      if (activeTab === 'Completed') {
+        setTickets(allTickets.filter((ticket) => new Date(ticket.date) < new Date() && !ticket.cancelled === true));
+      }
+      if (activeTab === 'Canceled') {
+        setTickets(allTickets.filter((ticket) => ticket.cancelled === true));
+      }
+  
+    }
+    handleNav();
+   },[userId,activeTab]);
 
   useEffect(() => {
     const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
@@ -154,6 +178,7 @@ export const TicketContainer = () => {
           }
           return dateA - dateB;
         });
+        setAllTickets(data);
 
         if (activeTab === 'Upcoming') {
           setTickets(data.filter((ticket) => new Date(ticket.date) >= new Date() && !ticket.cancelled === true));
@@ -173,7 +198,7 @@ export const TicketContainer = () => {
     };
 
     fetchTickets(); // Fetch tickets on component mount
-  }, [userId, activeTab]); // Empty dependency array means this effect runs once on mount
+  }, [userId]); // Empty dependency array means this effect runs once on mount
 
   if (loading) {
     return <p>Loading...</p>;
@@ -197,6 +222,11 @@ export const TicketContainer = () => {
       });
     }
   };
+
+
+
+// }, [userId, activeTab]); // Empty dependency array means this effect runs once on mount
+
 
 
   return (
@@ -225,7 +255,7 @@ export const TicketContainer = () => {
             Canceled
           </NavItem>
         </NavbarContainer>
-        {tickets ? (
+        {tickets.length>0 ? (
           tickets.map((ticket) => (
             <Ticket
               key={ticket.id}
@@ -238,10 +268,17 @@ export const TicketContainer = () => {
               qrcode={ticket.qrcode}
               id={ticket.id}
               onClick={() => handleTicketClick(ticket)}
+              type={activeTab}
             />
           ))
         ) : (
-          <p> No Bookings made</p>
+          // <p> No Bookings made</p>
+          <>
+          <img src={noResultsImage} alt="No Results" style={{marginTop:"20px",marginLeft:"40px"}}/>
+          <p style={{marginLeft:"80px"}}>No Booking under "{activeTab}"</p>
+          </>
+
+
         )}
         {EventsDisplay && (
           <>
