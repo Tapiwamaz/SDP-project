@@ -1,23 +1,28 @@
 import { TicketContainer, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, StyledButton, DownloadLink, ModalContent, ModalWrapper, Overlay } from "./Ticket.styles";
 import { useState } from 'react';
-import { getFirestore, doc, updateDoc } from "firebase/firestore"; 
+import { getFirestore, doc, updateDoc, FieldValue } from "firebase/firestore"; 
 import { db } from "../../firebase_config";
 import download from '../../Images/download.svg';
 import html2pdf from 'html2pdf.js';
 import ReactDOM from "react-dom";
 import React from "react";
 
-export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick,type })  => {
+
+export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick, type, event_id })  => {
 
   const cancel = async (event) => {
     event.stopPropagation();
     const docRef = doc(db, "Tickets", id);
+    const eventDocRef = doc(db, "Events", event_id);
 
     const userResponse = window.confirm("Are you sure you want to cancel this booking? You will be refunded in full");
     if (userResponse) {
       try {
         await updateDoc(docRef, {
           cancelled: true
+        });
+        await updateDoc(eventDocRef, {
+          tickets_count: FieldValue.increment(1)
         });
         alert("Booking has been cancelled. You will receive a full refund");
         window.location.reload();
