@@ -43,13 +43,13 @@ export const NavItem = styled.button`
 
   /* Small screens (mobile) */
   @media (max-width: 768px) {
-    font-size: 12px;
+    font-size: 14px;
     padding: 6px 12px;
   }
 
   /* Extra small screens (very small mobile devices) */
   @media (max-width: 480px) {
-    font-size: 10px;
+    font-size: 14px;
     padding: 5px 8px;
   }
 `;
