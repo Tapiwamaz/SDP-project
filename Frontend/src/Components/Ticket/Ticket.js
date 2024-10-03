@@ -4,6 +4,8 @@ import { getFirestore, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase_config";
 import download from '../../Images/download.svg';
 import html2pdf from 'html2pdf.js';
+import ReactDOM from "react-dom";
+import React from "react";
 
 export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick,type })  => {
 
@@ -28,16 +30,20 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
     const downloadOnClick = (event) => {
       event.stopPropagation();
       const container = document.createElement('div');
-      const img = document.createElement('img');
-      container.innerHTML = `
-          <h1>${title}</h1>
-          <p>Date: ${date}</p> 
-          <p>Time: ${time}</p>
-          <p>Venue: ${venue}</p>
-          <p>Total: R${total}</p>
-          <img src=${qrcode} alt="QRcode" />
-          <p>${id}</p>
-        `;
+      ReactDOM.render(
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+          <h1 style={{ color: 'black' }}>{title}</h1>
+          <p>Date: {date}</p>
+          <p>Time: {time}</p>
+          <p>Venue: {venue}</p>
+          <p>Total: R{total}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', margin: '30px' }}>
+            {React.cloneElement(qrcode, { style: { margin: '0px' } })} {/* Adding margin for better spacing */}
+            <p style={{ margin: '10px 0'}}>{id}</p> {/* Adding margin for better spacing */}
+          </div>
+        </div>,
+        container
+      );
       
       html2pdf(container, {
         margin: 20,
