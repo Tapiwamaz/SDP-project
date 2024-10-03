@@ -20,7 +20,7 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
-    border: 1px solid black; 
+    border: 1px solid var(--primary); 
     width: 310px; 
     height: fit-content; 
     overflow: hidden; 
@@ -96,6 +96,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
+    gap:4px;
   }
   
 

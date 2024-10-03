@@ -289,7 +289,7 @@ export const Profile = () => {
                   color: "#eaaf41",
                 }}
               />
-              <h4 style={{ color: "#676363" }}>{userData.rating}</h4>
+              <h4 style={{ color: "#676363" }}>{Math.ceil(userData.rating)}</h4>
             </Rating>
             <Count>
               <CountWrapper>

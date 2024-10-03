@@ -98,8 +98,8 @@ const EventCard = ({ event, onApprove, onReject, rejectInput }) => {
         )}
         {onApprove && onReject && event.status === 'pending' && (
           <div className="actions">
-            <button onClick={() => onApprove(event.event_id)}>Approve</button>
-            <button onClick={() => onReject(event.event_id)}>Reject</button>
+            <button onClick={() => onApprove(event.event_id)} style={{backgroundColor:"green"}}>Approve</button>
+            <button onClick={() => onReject(event.event_id)} style={{backgroundColor:"red"}}>Reject</button>
           </div>
         )}
         <div className="spacer"></div>

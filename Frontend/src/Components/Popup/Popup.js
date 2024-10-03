@@ -16,6 +16,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import './Popup.css';
+import { Xicon } from '../Header/Header.styles';
+
 
 function Popup({ trigger, setTrigger, children }) {
     const popupRef = useRef();
@@ -40,8 +42,9 @@ function Popup({ trigger, setTrigger, children }) {
     return trigger ? (
         <div className="popup">
             <div className="popup-inner" ref={popupRef}>
-                <button className="close-btn" onClick={() => setTrigger(false)}>close</button>
-                {children}
+                <Xicon style={{color:"black"}} onClick={() => setTrigger(false)}>close</Xicon>
+                <h3>Description for Event:</h3>
+                <p>{children}</p>
             </div>
         </div>
     ) : null;

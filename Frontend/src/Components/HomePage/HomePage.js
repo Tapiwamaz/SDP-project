@@ -269,7 +269,7 @@ const HomePage = () => {
               width: "90%",
             }}
           >
-            <h3> Events happening Soon</h3>
+            <h3> Upcoming Events</h3>
           </div>
           {noEvents ? null : (
             <EventSlider

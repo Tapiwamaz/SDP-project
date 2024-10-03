@@ -1,14 +1,13 @@
+
 import React, { useEffect, useState } from 'react';
 import { AsideNavItem, Aside } from './AsideDesktop.styles';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { auth } from '../../firebase_config';
 
 const AsideDesktop = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Hook to get the current location
   const [log, setLog] = useState(false);
-  const [activeNavItem, setActiveNavItem] = useState(''); // Track active nav item
-
-  
 
   useEffect(() => {
     // Listener to check auth state change
@@ -25,7 +24,6 @@ const AsideDesktop = () => {
 
   // Handler to track the active nav item
   const handleNavClick = (route) => {
-    setActiveNavItem(route);
     navigate(route);
   };
 
@@ -34,40 +32,45 @@ const AsideDesktop = () => {
       {log ? (
         <>
           <AsideNavItem
-            isActive={activeNavItem === '/'}
+            isActive={location.pathname === '/'}
             onClick={() => handleNavClick('/')}
           >
             Home
           </AsideNavItem>
           <AsideNavItem
-            isActive={activeNavItem === '/myEvents'}
+            isActive={location.pathname === '/myEvents'}
             onClick={() => handleNavClick('/myEvents')}
           >
             My Events
           </AsideNavItem>
           <AsideNavItem
-            isActive={activeNavItem === '/myBooking'}
+            isActive={location.pathname === '/myBooking'}
             onClick={() => handleNavClick('/myBooking')}
           >
             My Bookings
           </AsideNavItem>
           <AsideNavItem
-            isActive={activeNavItem === '/createEvent'}
+            isActive={location.pathname === '/createEvent'}
             onClick={() => handleNavClick('/createEvent')}
           >
             Create Event
           </AsideNavItem>
-          {auth?.currentUser?.uid===process.env.REACT_APP_ADMIN_ID &&
-                    <AsideNavItem onClick={() => handleNavClick('/adminDashboard')}>Approvals</AsideNavItem>
-
-
-          
-        }
+          {auth?.currentUser?.uid === process.env.REACT_APP_ADMIN_ID && (
+            <AsideNavItem
+              isActive={location.pathname === '/adminDashboard'}
+              onClick={() => handleNavClick('/adminDashboard')}
+            >
+              Approvals
+            </AsideNavItem>
+          )}
 
           {/* <AsideNavItem onClick={logout}>Logout</AsideNavItem> */}
         </>
       ) : (
-        <AsideNavItem onClick={() => handleNavClick('/welcome')}>
+        <AsideNavItem
+          isActive={location.pathname === '/welcome'}
+          onClick={() => handleNavClick('/welcome')}
+        >
           Login
         </AsideNavItem>
       )}
