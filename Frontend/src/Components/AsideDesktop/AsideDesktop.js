@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { AsideNavItem, Aside } from './AsideDesktop.styles';
 import { useNavigate } from 'react-router';
 import { auth } from '../../firebase_config';
-import { signOut } from 'firebase/auth';
 
 const AsideDesktop = () => {
   const navigate = useNavigate();

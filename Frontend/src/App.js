@@ -20,6 +20,9 @@ import AdminDashboard from "./pages/AdminDashboard/AdminDashboard.js";
 // import MyEvents from "./Components/ViewEvents/MyEvents/MyEvents.jsx";
 import ViewMyEvents from "./pages/ViewMyEvents/ViewMyEvents.js";
 
+
+import Notifications from "./Components/Notifications/Notifications.js";
+
 function App() {
   return (
     <Router>
@@ -48,6 +51,9 @@ function App() {
         <Route path="/createEvent" element={<CreateEvent />} />
 
         <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route path="/notifications" element={<Notifications />} />
+
+        
 
 
 

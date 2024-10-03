@@ -50,7 +50,9 @@ app.http("GetUser", {
     }
   },
 });
+
 app.http("Rating", {
+  // when a rating happens we must update the ticket to rated
   methods: ["PUT"],
   authLevel: "anonymous",
   handler: async (request, context) => {
@@ -71,11 +73,13 @@ app.http("Rating", {
       let rating = parseInt(data.rating);
       let rates = parseInt(data.rates);
       let EventOrgRating = parseInt(data.EventOrgRating);
+      const ticketId = data.ticketID;
 
       context.log(`Received userID: ${userID}`);
       context.log(`Received rating: ${rating}`);
       context.log(`Received EventOrgRating: ${EventOrgRating}`);
       context.log(`Received rates: ${rates}`);
+      context.log(`Received ticketId: ${ticketId}`);
 
       const newRating = (EventOrgRating * rates + rating) / (rates + 1);
 
@@ -89,6 +93,10 @@ app.http("Rating", {
         await updateDoc(userRef, {
           rating: newRating,
           Rates: rates + 1, // assuming 'rates' is defined somewhere in your code
+        });
+        const ticketRef = doc(db, "Tickets", ticketId);
+        await updateDoc(ticketRef, {
+          rated: true,
         });
         const data = { rating: newRating };
         return {
@@ -151,6 +159,8 @@ app.post("BookTicket", {
           accessCode: accessCode,
           expired: false,
           ticket_id: ticketID, // Add the ticketID to the ticket data
+          rated: false,
+          cancelled: false,
         };
         try {
           const docRef = await addDoc(collection(db, "Tickets"), ticketData);
@@ -170,25 +180,26 @@ app.post("BookTicket", {
           const eventDoc = querySnapshot.docs[0];
 
           await updateDoc(eventDoc.ref, {
-            count: increment(ticketQuantity),
+            ticket_count: increment(-ticketQuantity),
           });
           console.log("Event count successfully updated!");
           return {
             status: 200,
-            body: "Ticket booked successfully",
+            body: JSON.stringify({
+              message: "Ticket booked successfully",
+            }),
           };
         } else {
           console.log("No such event!");
           return {
             status: 404,
-            body: "Event not found",
           };
         }
       } catch (error) {
         console.error("Error updating event count: ", error);
         return {
           status: 500,
-          body: "Internal Server Error",
+          message: "Internal Server Error",
         };
       }
     } catch (error) {

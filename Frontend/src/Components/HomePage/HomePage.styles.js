@@ -91,6 +91,7 @@ export const Page=styled.div`
 display: flex;
 flex-direction: row;
 overflow: hidden;
+font-family: "Khula";
 @media (max-width: 769px) {
     flex-direction: column;
   }

@@ -4,19 +4,27 @@ import { BookButton } from "./Summary.style";
 import SuccessModal from "../../Components/SuccesfullPayment/SuccessModal";
 import React, { useState } from "react";
 import { auth } from "../../firebase_config";
+import { Loader } from "../SecurityModal/SecurityModal.styles";
 
-export default function Summary({ event}) {
-    console.log(event);
+export default function Summary({ event }) {
+  // console.log(event);
   const user_id = auth?.currentUser?.uid;
+  // console.log(user_id);
   const [showmodal, setShowmodal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const amount = event.count;
+  // console.log(amount);
   const DisplayModal = () => {
     setShowmodal(true);
+    setIsLoading(false);
+  };
+  const DisplayLoad = () => {
+    setIsLoading(true);
   };
 
   const submitTicket = async (event, count, user_ID) => {
     setIsLoading(true);
+    // console.log("submitting ticket");
     fetch("api/BookTicket", {
       method: "POST",
       headers: {
@@ -28,28 +36,26 @@ export default function Summary({ event}) {
         ticketQuantity: count,
       }),
     })
-      .then((res) => {
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log("Success:", data);
         setShowmodal(true);
-        return res.json();
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
 
+  // console.log(formatDate(event.date));
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.toLocaleString("en-US", { day: "numeric" });
     const month = date.toLocaleString("en-US", { month: "long" });
     const year = date.toLocaleString("en-US", { year: "numeric" });
-    const time = date.toLocaleString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      hour12: false,
-    });
-
-    return `${day} ${month} ${year}, ${time}`; // change this line to change the order
+    return `${day} ${month} ${year}`; // change this line to change the order
   }
+  // console.log(event.price == 0);
   return (
     <>
       <SummaryPages>
@@ -123,7 +129,8 @@ export default function Summary({ event}) {
             style={{
               background: "#18336c",
             }}
-            full={false}
+            data-testid="book-button"
+            // full={false}
           >
             Book
           </BookButton>
@@ -133,11 +140,13 @@ export default function Summary({ event}) {
             count={amount}
             user_ID={user_id}
             onDisplayModal={DisplayModal}
+            onLoading={DisplayLoad}
           ></PayPalButton>
         )}
       </SummaryPages>
       {isLoading && (
         <div
+          data-testid="loading"
           style={{
             position: "fixed",
             top: 0,
@@ -147,10 +156,17 @@ export default function Summary({ event}) {
             backgroundColor: "rgba(128, 128, 128, 0.5)",
             zIndex: 100,
           }}
-        />
+        >
+          <Loader />
+        </div>
       )}
+
       {showmodal && (
-        <SuccessModal showModal={showmodal} setShowModal={setShowmodal} />
+        <SuccessModal
+          showModal={showmodal}
+          setShowModal={setShowmodal}
+          data-testid="success-modal"
+        />
       )}
     </>
   );

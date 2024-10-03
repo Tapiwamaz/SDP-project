@@ -4,35 +4,46 @@ import HistoryEvents from '../HistoryEvents/HistoryEvents';
 import './Tabs.css';
 import Header from '../Header/Header';
 import AsideDesktop from '../AsideDesktop/AsideDesktop';
-//import { Events } from "../Mocky/Mocky"; 
-// import { db } from "../../firebase_config.js";
-// import {collection, getDocs, updateDoc, doc} from "firebase/Firestore"
 import { db } from "../../firebase_config"; // Adjust the path based on your structure
-import { collection, query, where, getDocs, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, updateDoc, serverTimestamp, addDoc, doc, getDoc } from "firebase/firestore";
 
 
+// Function to send notification to Firestore
+const sendNotification = async (organizerId, eventId, notificationType, message, name, imageUrl) => {
+  try {
 
-// const fetchUsername = async (user_id) => {
-//   console.log(`Fetching username for user_id: ${user_id}`);
-//   try {
-//     const response = await fetch(`/api/getUserById/?user_id=${user_id}`, {
-//       method: 'GET',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
+    const formatDate = () => {
+      const now = new Date();
+      
+      const padZero = (num) => num.toString().padStart(2, '0'); // Helper to add leading zero
+      
+      const year = now.getFullYear();
+      const month = padZero(now.getMonth() + 1); // Months are 0-indexed
+      const day = padZero(now.getDate());
+      const hours = padZero(now.getHours());
+      const minutes = padZero(now.getMinutes());
+      const seconds = padZero(now.getSeconds());
 
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    };
 
-//     const data = await response.json();
-//     return data.name;
-//   } catch (error) {
-//     console.error('Error fetching username:', error);
-//     return null;
-//   }
-// };
+    const notificationData = {
+      notification_id: Date.now().toString(), // Use a timestamp as a mock ID or generate a UUID
+      time: formatDate(),  //serverTimestamp(), // Automatically sets the time when the notification is created
+      notification_type: notificationType, // 'approved' or 'rejected'
+      message,
+      event_id: eventId,
+      organizer_id: organizerId,
+      name, // Organizer's name
+      image_url: imageUrl, // Optionally include an image URL if needed
+    };
+
+    await addDoc(collection(db, 'Notifications'), notificationData);
+    //console.log("Notification sent successfully.");
+  } catch (error) {
+    console.error("Error sending notification:", error);
+  }
+};
 
 
 const fetchEvents = async (setEvents) =>{
@@ -67,7 +78,7 @@ const fetchEvents = async (setEvents) =>{
       );
 
       setEvents(updatedEvents);
-      console.log('Data received from Azure Function:', data);
+      //console.log('Data received from Azure Function:', data);
       //return data;
   } catch (error) {
       console.error('Error fetching data:', error);
@@ -76,24 +87,6 @@ const fetchEvents = async (setEvents) =>{
 };
 
 
-// Function to update event in Firestore
-// const updateEventDB = async (updatedEvent) => {
-//   try {
-//     const eventCollection = collection(db, 'Events'); // Reference to your Firestore collection
-//     const q = query(eventCollection, where("event_id", "==", updatedEvent.event_id));
-    
-//     const querySnapshot = await getDocs(q);
-//     querySnapshot.forEach(async (docSnapshot) => {
-//       const docRef = docSnapshot.ref;
-//       await updateDoc(docRef, updatedEvent);
-//     });
-
-//     console.log("Event updated successfully.");
-//   } catch (error) {
-//     console.error("Error updating event:", error);
-//     throw new Error("Failed to update event. Please try again.");
-//   }
-// };
 const updateEventDB = async (updatedEvent) => {
   try {
     const eventCollection = collection(db, 'Events'); 
@@ -110,57 +103,92 @@ const updateEventDB = async (updatedEvent) => {
       await updateDoc(docRef, eventWithoutIDs);
     });
 
-    console.log("Event updated successfully.");
+    //console.log("Event updated successfully.");
   } catch (error) {
     console.error("Error updating event:", error);
     throw new Error("Failed to update event. Please try again.");
   }
 };
 
+const fetchUserDetails = async (userId) => {
+  try {
+    const userCollection = collection(db, 'Users'); 
+    const q = query(userCollection, where("user_id", "==", userId)); 
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0]; // First match from the query
+      return { id: userDoc.id, ...userDoc.data() }; // Return the user details
+    } else {
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return null;
+  }
+};
 
 
 const Tabs = () => {
   const [events, setEvents] = useState([]);
 
-
   useEffect(() => {
     fetchEvents(setEvents);
   }, []);
 
-  
 
-  // const handleApprove = (id) => {
-  //   setEvents(events.map(event => event.event_id === id ? { ...event, status: 'approved' } : event));
-  // };
-
-  // const handleReject = (id) => {
-  //   setEvents(events.map(event => event.event_id === id ? { ...event, status: 'rejected' } : event));
-  // };
-
-  // Handle event approval
   const handleApprove = async (id) => {
     const updatedEvent = events.find(event => event.event_id === id);
     if (updatedEvent) {
-      updatedEvent.approved = true; // Set approved to true
+      const userDetails = await fetchUserDetails(updatedEvent.user_id);
+      if (!userDetails) {
+        alert('Failed to fetch user details');
+        return;
+      }
+
+      updatedEvent.approved = true;
       updatedEvent.status = 'approved';
 
-      await updateEventDB(updatedEvent); // Call the function to update Firestore
+      await updateEventDB(updatedEvent);
 
-      // Update UI after event approval
+      // Send notification to the organizer
+      await sendNotification(
+        updatedEvent.user_id, // Organizer's user ID
+        updatedEvent.event_id, // Event ID
+        'admin', // Notification type
+        'Your event has been approved!', // Message
+        userDetails.name, // Organizer's name
+        updatedEvent.image_url //the event image URL
+      );
+
       setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
     }
   };
 
-  // Handle event rejection
-  const handleReject = async (id) => {
+  const handleReject = async (id, rejectReason) => {
     const updatedEvent = events.find(event => event.event_id === id);
     if (updatedEvent) {
-      updatedEvent.approved = false; // Set approved to false
+      const userDetails = await fetchUserDetails(updatedEvent.user_id);
+      if (!userDetails) {
+        alert('Failed to fetch user details');
+        return;
+      }
+
+      updatedEvent.approved = false;
       updatedEvent.status = 'rejected';
 
-      await updateEventDB(updatedEvent); // Call the function to update Firestore
+      await updateEventDB(updatedEvent);
 
-      // Update UI after event rejection
+      // Send rejection notification to the organizer
+      await sendNotification(
+        updatedEvent.user_id, // Organizer's user ID
+        updatedEvent.event_id, // Event ID
+        'admin', // Notification type
+        `Your event was rejected. Reason: ${rejectReason}`, // Message with reason
+        userDetails.name, // Organizer's name
+        updatedEvent.image_url //the event image URL
+      );
+
       setEvents(events.map(event => event.event_id === id ? updatedEvent : event));
     }
   };
@@ -169,8 +197,6 @@ const Tabs = () => {
 
   return (
     <div className='Wrapper'>
-      {/* <Header />
-      <AsideDesktop /> */}
       <div className="tabs">
         <button onClick={() => setActiveTab('pending')} className={activeTab === 'pending' ? 'active' : ''}>
           Pending
@@ -180,13 +206,14 @@ const Tabs = () => {
         </button>
       </div>
       {activeTab === 'pending' ? (
-        <PendingEvents events={events.filter(event => event.status === 'pending')} onApprove={handleApprove} onReject={handleReject} />
+        <PendingEvents events={events.filter(event => event.status === 'pending')} handleApprove={handleApprove} handleReject={handleReject} />
       ) : (
-        // <HistoryEvents events={events.filter(event => event.status !== 'pending')} />
-        <HistoryEvents events={events.filter(event => event.status !== 'pending').reverse()} /> //so recently evaluated events are at ze top
+        <HistoryEvents events={events.filter(event => event.status !== 'pending').reverse()} />
       )}
     </div>
   );
+
+
 };
 
 export default Tabs;

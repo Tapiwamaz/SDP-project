@@ -13,7 +13,6 @@ import {
 import EventSlider from "../EventsSlider/EventSlider";
 import AsideDesktop from "../AsideDesktop/AsideDesktop";
 import Tags from "../Tags/Tags";
-import { Events } from "../MockData/EventsMock";
 
 import noResultsImage from "../../Images/noResults.svg";
 
@@ -22,11 +21,21 @@ import MyCalendar from "../EventsCalendar/EventsCalendar";
 import EventDisplay from "../EventDisplay/EventDisplay";
 import { Xicon } from "../Header/Header.styles";
 import Summary from "../Summary/Summary";
+
+
+
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [allEvents, setAllEvents] = useState(null);
 
   const [filteredEvents, SetFilteredEvents] = useState(null);
+  const [filteredTrendingEvents, SetFilteredTrendingEvents] = useState(null);
+  
+  const [searchValue, setSearchValue] = useState(null);
+
+  const [activeTag, setActiveTag] = useState("No-Filter"); // State to track the active tag
+  const [noEvents, setNoEvents] = useState(false);
+
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -44,11 +53,25 @@ const HomePage = () => {
         }
 
         const data = await response.json();
+
+        // const eventsRef = collection(db,"Events"); //this is to get a reference to the collection you want to work on 
+        // const data = await getDocs(eventsRef); //since this function is to get documents from events collection
+
+        // let events = data.docs.map((doc) => ({...doc.data(), eventID: doc.id})); // formatting the output to a usable format string
+        
+        setAllEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date()));
+        SetFilteredEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date()) );
+        SetFilteredTrendingEvents ( data.filter((e) => e.approved === true && new Date(e.date) >= new Date()) );
+        // console.log(data.length);
+        
+        if(data.length===1){
+          setNoEvents(true);
+        }
         // console.log('Data received from Azure Function:', data);
         // console.log(data);
 
-        setAllEvents(data.filter((e) => e.approved === true));
-        SetFilteredEvents(data.filter((e) => e.approved === true));
+        // setAllEvents(data.filter((e) => e.approved === true));
+        // SetFilteredEvents(data.filter((e) => e.approved === true));
         return data;
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -58,12 +81,6 @@ const HomePage = () => {
     fetchEvents();
   }, []);
 
-  const [searchValue, setSearchValue] = useState(null);
-  const filteredDateEvents = Events.sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
-  );
-  const [activeTag, setActiveTag] = useState("No-Filter"); // State to track the active tag
-  const [noEvents, setNoEvents] = useState(false);
   // const[clickedBooked,setClickedBooked]=useState(false);
 
   const search = (e) => {
@@ -89,6 +106,9 @@ const HomePage = () => {
     if (type === "No-Filter") {
       setActiveTag(type);
       SetFilteredEvents(allEvents.filter((e) => e.approved === true));
+      SetFilteredTrendingEvents(allEvents.filter((e) => e.approved === true));
+
+      
       setNoEvents(false);
     } else {
       setActiveTag(type);
@@ -102,10 +122,16 @@ const HomePage = () => {
             .filter((e) => e.type.match(type))
             .filter((e) => e.approved === true)
         );
+        SetFilteredTrendingEvents(
+          allEvents
+            .filter((e) => e.type.match(type))
+            .filter((e) => e.approved === true)
+        );
         setNoEvents(false);
       } else {
         setNoEvents(true);
         SetFilteredEvents(null);
+        SetFilteredTrendingEvents(null)
       }
     }
   };
@@ -136,10 +162,9 @@ const HomePage = () => {
           {searchValue && (
             <>
               <h3>Results for {`"${searchValue}"`}</h3>
-              {allEvents.filter((e) => e.name.includes(searchValue)).length >
-              0 ? ( //if the array is empty display no results svg
+              {allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase())).length >0 ? ( //if the array is empty display no results svg
                 <EventSlider
-                  events={allEvents.filter((e) => e.name.includes(searchValue))}
+                  events={allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase()))}
                   onDisplayEvent={displayEvent}
                 />
               ) : (
@@ -228,27 +253,29 @@ const HomePage = () => {
           </div>
           {noEvents ? (
             <>
-              {" "}
-              <img src={noResultsImage} alt="No Results" />
+\              <img src={noResultsImage} alt="No Results" />
               <h3>{`No Results found, Try Another Tag :)`}</h3>
             </>
           ) : (
             <EventSlider
-              events={filteredEvents}
+              events={filteredTrendingEvents?.sort((a, b) => (a.ticket_count / a.capacity) - (b.ticket_count / b.capacity))}
               onDisplayEvent={displayEvent}
             ></EventSlider>
           )}
+          {/* {console.log(filteredTrendingEvents)} */}
 
           <div
             style={{
               width: "90%",
             }}
           >
-            <h3>Latest Events</h3>
+            <h3> Events happening Soon</h3>
           </div>
           {noEvents ? null : (
             <EventSlider
-              events={filteredEvents}
+              events={filteredEvents?.sort(
+                (a, b) => new Date(a.date) - new Date(b.date)
+              )}
               onDisplayEvent={displayEvent}
             ></EventSlider>
           )}
@@ -268,7 +295,6 @@ const HomePage = () => {
             <p>No Events to display</p>
           )}
         </Body>
-        {console.log(`${EventsDisplay} from home page`)}
       </Page>
       {EventsDisplay && (
         <>

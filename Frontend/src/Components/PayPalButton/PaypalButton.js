@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const PayPalButton = ({ event, count, user_ID , onDisplayModal}) => {
+const PayPalButton = ({ event, count, user_ID, onDisplayModal, onLoading }) => {
   const navigate = useNavigate();
   const paypal = useRef();
   const submitTicket = async () => {
@@ -20,7 +20,7 @@ const PayPalButton = ({ event, count, user_ID , onDisplayModal}) => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
+        onDisplayModal();
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -94,12 +94,12 @@ const PayPalButton = ({ event, count, user_ID , onDisplayModal}) => {
                 .then((response) => response.json())
                 .then((order_details) => {
                   // console.log(order_details);
+                  onLoading();
                   submitTicket();
-                  onDisplayModal();
-                  return{
+                  return {
                     status: 200,
-                    body: "Complete"
-                  }
+                    body: "Complete",
+                  };
                   // Request server to create payout to seller
                   // return fetch("/api/create_payout", {
                   //   method: "POST",
