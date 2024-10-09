@@ -311,7 +311,7 @@ const HomePage = () => {
                 onDisplaySummary={displaySummary}
               ></EventDisplay>
             ) : (
-              <Summary event={summary}/>
+              <Summary event={summary} setEventsDisplay={setEventsDisplay}/>
             )}
           </EventRight>
         </>

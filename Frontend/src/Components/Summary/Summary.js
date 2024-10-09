@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase_config";
 import { Loader } from "../SecurityModal/SecurityModal.styles";
 
-export default function Summary({ event }) {
+export default function Summary({ event ,setEventsDisplay}) {
   // console.log(event);
   const user_id = auth?.currentUser?.uid;
   // console.log(user_id);
@@ -166,6 +166,7 @@ export default function Summary({ event }) {
           showModal={showmodal}
           setShowModal={setShowmodal}
           data-testid="success-modal"
+          setEventsDisplay={setEventsDisplay}
         />
       )}
     </>

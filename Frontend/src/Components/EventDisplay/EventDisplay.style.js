@@ -62,7 +62,7 @@ export const TimeIcon = styled(ClockIcon)`
 `;
 
 export const EventPages = styled.div`
-  border: 1px solid #d9d9d9;
+  /* border: 1px solid #d9d9d9; */
   font-family: "Khula";
   display: flex;
   width: 91%;
@@ -76,10 +76,10 @@ export const EventPages = styled.div`
     /* padding-right: 1rem; */
   }
 
-  @media (min-width: 768px) {
+  /* @media (min-width: 768px) {
     width: 450px;
     font-size: 1.25em;
-  }
+  } */
 `;
 export const BookButton = styled.button`
   color: #fff;

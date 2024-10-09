@@ -3,8 +3,7 @@ import styled from "styled-components";
 export const SummaryPages = styled.div`
   display: flex;
   flex-direction: column;
-  width: 387px;
-  padding: 1em;
+  width: 100%;
   /* padding-bottom: 5em; */
   /* border: 3px solid #d9d9d9; */
   /* margin-top: -20px; */

@@ -22,10 +22,12 @@ jest.mock("react-confetti", () => {
 describe("SuccessModal", () => {
   let mockShowModal;
   let mockSetShowModal;
+  let mockSetEventsDisplay;
 
   beforeEach(() => {
     mockShowModal = true;
     mockSetShowModal = jest.fn();
+    mockSetEventsDisplay = jest.fn();
   });
 
   afterEach(() => {
@@ -59,7 +61,7 @@ describe("SuccessModal", () => {
   test("does not render modal when showModal is false", () => {
     render(
       <Router>
-        <SuccessModal showModal={false} setShowModal={mockSetShowModal} />
+        <SuccessModal showModal={false} setShowModal={mockSetShowModal} setEventsDisplay={mockSetEventsDisplay} />
       </Router>
     );
 
@@ -79,6 +81,7 @@ describe("SuccessModal", () => {
         <SuccessModal
           showModal={mockShowModal}
           setShowModal={mockSetShowModal}
+          setEventsDisplay={mockSetEventsDisplay}
         />
       </Router>
     );
@@ -93,6 +96,7 @@ describe("SuccessModal", () => {
         <SuccessModal
           showModal={mockShowModal}
           setShowModal={mockSetShowModal}
+          setEventsDisplay={mockSetEventsDisplay}
         />
       </Router>
     );
