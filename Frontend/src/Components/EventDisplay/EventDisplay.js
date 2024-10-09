@@ -34,6 +34,7 @@ const EventDisplay = ({
   loading,
   setLoading,
   onDisplaySummary,
+  setEventDisplay,
   ticket,
 }) => {
   const navigate = useNavigate();
