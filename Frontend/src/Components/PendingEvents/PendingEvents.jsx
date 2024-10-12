@@ -27,6 +27,7 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
         throw new Error('Error fetching venue availability');
       }
 
+      console.log("hello");
       const data = await response.json();
       return data.length === 0; // If no booking exists, venue is available
     } catch (error) {
