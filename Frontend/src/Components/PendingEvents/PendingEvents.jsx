@@ -10,7 +10,7 @@ import noResults from "../../Images/noResults.svg"
 const secretKey = process.env.REACT_APP_X_API_KEY;
 
   // Check venue availability
-  const checkVenueAvailability = async (venueId, bookingDate, startTime, endTime) => {
+  export const checkVenueAvailability = async (venueId, bookingDate, startTime, endTime) => {
     try {
       const response = await fetch(
         `https://wits-infrastructure-management.web.app/api/bookings/findByField?venueID=${venueId}&bookingDate=${bookingDate}&bookingStartTime=${startTime}&bookingEndTime=${endTime}`, 
@@ -27,7 +27,6 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
         throw new Error('Error fetching venue availability');
       }
 
-      console.log("hello");
       const data = await response.json();
       return data.length === 0; // If no booking exists, venue is available
     } catch (error) {
@@ -37,7 +36,7 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
   };
 
   // Create booking after approval
-  const createBooking = async (venueBooker, venueID, bookingDate, startTime, endTime, bookingDescription) => {
+  export const createBooking = async (venueBooker, venueID, bookingDate, startTime, endTime, bookingDescription) => {
     const bookingData = {
       venueBooker,
       venueID,
@@ -71,7 +70,7 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
     }
   };
 
-  const fetchUserDetails = async (userId) => {
+  export const fetchUserDetails = async (userId) => {
     try {
       const userCollection = collection(db, 'Users'); 
       const q = query(userCollection, where("user_id", "==", userId)); 
