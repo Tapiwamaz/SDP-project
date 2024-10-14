@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import PendingEvents from '../PendingEvents/PendingEvents';
 import HistoryEvents from '../HistoryEvents/HistoryEvents';
 import './Tabs.css';
-import Header from '../Header/Header';
-import AsideDesktop from '../AsideDesktop/AsideDesktop';
 import { db } from "../../firebase_config"; // Adjust the path based on your structure
 import { collection, query, where, getDocs, updateDoc, serverTimestamp, addDoc, doc, getDoc } from "firebase/firestore";
 
 
 // Function to send notification to Firestore
-const sendNotification = async (organizerId, eventId, notificationType, message, name, imageUrl) => {
+export const sendNotification = async (organizerId, eventId, notificationType, message, name, imageUrl) => {
   try {
 
     const formatDate = () => {
@@ -46,7 +44,7 @@ const sendNotification = async (organizerId, eventId, notificationType, message,
 };
 
 
-const fetchEvents = async (setEvents) =>{
+export const fetchEvents = async (setEvents) =>{
   try {
       // Using relative URL
       const response = await fetch('/api/events', {
@@ -87,7 +85,7 @@ const fetchEvents = async (setEvents) =>{
 };
 
 
-const updateEventDB = async (updatedEvent) => {
+export const updateEventDB = async (updatedEvent) => {
   try {
     const eventCollection = collection(db, 'Events'); 
     const q = query(eventCollection, where("event_id", "==", updatedEvent.event_id));
@@ -110,7 +108,7 @@ const updateEventDB = async (updatedEvent) => {
   }
 };
 
-const fetchUserDetails = async (userId) => {
+export const fetchUserDetails = async (userId) => {
   try {
     const userCollection = collection(db, 'Users'); 
     const q = query(userCollection, where("user_id", "==", userId)); 
