@@ -12,10 +12,10 @@ jest.mock('../../firebase_config', () => ({
 }));
 jest.mock('firebase/firestore', () => ({
   collection: jest.fn(),
-  // query: jest.fn(),
-  // where: jest.fn(),
-  query: jest.fn().mockImplementation((...args) => args), // mock query to return the arguments it is called with
-  where: jest.fn().mockImplementation(() => 'mockWhereClause'), // mock where to return a string for simplicity
+  query: jest.fn(),
+  where: jest.fn(),
+  //query: jest.fn().mockImplementation((...args) => args), // mock query to return the arguments it is called with
+  //where: jest.fn().mockImplementation(() => 'mockWhereClause'), // mock where to return a string for simplicity
   getDocs: jest.fn(),
   updateDoc: jest.fn(),
   addDoc: jest.fn(),
@@ -29,6 +29,8 @@ jest.mock('../HistoryEvents/HistoryEvents', () => (props) => (
   <div data-testid="HistoryEvents">{props.events.length} History Events</div>
 ));
 
+
+
 // Mock fetch API
 global.fetch = jest.fn(() =>
   Promise.resolve({
@@ -38,6 +40,11 @@ global.fetch = jest.fn(() =>
 );
 
 describe('Tabs Component', () => {
+  const mockEvents = [
+    { event_id: 'event1', name: 'Event 1', status: 'pending', user_id: 'user1', image_url: 'image1.jpg' },
+    { event_id: 'event2', name: 'Event 2', status: 'pending', user_id: 'user2', image_url: 'image2.jpg' }
+  ];
+
   beforeEach(() => {
     fetch.mockClear();
     collection.mockClear();
@@ -46,6 +53,11 @@ describe('Tabs Component', () => {
     getDocs.mockClear();
     updateDoc.mockClear();
     addDoc.mockClear();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks(); // Clears mock data
+    jest.resetAllMocks(); // Resets all mock implementations
   });
 
   it('renders Pending and History tabs', () => {
@@ -75,7 +87,59 @@ describe('Tabs Component', () => {
   });
 
 
-  
+ 
+
+  // it('should approve an event when handleApprove is called', async () => {
+  //   render(<Tabs />);
+
+  //   // Approve the first event
+  //   fireEvent.click(screen.getByText('Approve', { selector: 'button' }));
+
+  //   await waitFor(() => {
+  //     expect(updateEventDB).toHaveBeenCalledWith({
+  //       event_id: 'event1',
+  //       name: 'Event 1',
+  //       status: 'approved',
+  //       user_id: 'user1',
+  //       image_url: 'image1.jpg',
+  //       approved: true,
+  //     });
+  //     expect(sendNotification).toHaveBeenCalledWith(
+  //       'user1',
+  //       'event1',
+  //       'admin',
+  //       'Your event has been approved!',
+  //       'John Doe',
+  //       'image1.jpg'
+  //     );
+  //   });
+  // });
+
+  // it('should reject an event when handleReject is called', async () => {
+  //   render(<Tabs />);
+
+  //   // Reject the first event
+  //   fireEvent.click(screen.getByText('Reject', { selector: 'button' }));
+
+  //   await waitFor(() => {
+  //     expect(updateEventDB).toHaveBeenCalledWith({
+  //       event_id: 'event1',
+  //       name: 'Event 1',
+  //       status: 'rejected',
+  //       user_id: 'user1',
+  //       image_url: 'image1.jpg',
+  //       approved: false,
+  //     });
+  //     expect(sendNotification).toHaveBeenCalledWith(
+  //       'user1',
+  //       'event1',
+  //       'admin',
+  //       'Your event was rejected. Reason: ',
+  //       'John Doe',
+  //       'image1.jpg'
+  //     );
+  //   });
+  // });
 
   
 });
@@ -218,49 +282,6 @@ describe('sendNotification', () => {
 });
 
 
-// describe('updateEventDB', () => {
-//   const mockEvent = {
-//     event_id: 'event123',
-//     name: 'Sample Event',
-//     date: '2024-10-15',
-//   };
-
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   });
-
-//   test('should update event successfully', async () => {
-//     // Mocking Firestore responses
-//     const mockDocRef = { ref: 'mockRef' }; 
-//     const mockQuerySnapshot = {
-//       forEach: jest.fn().mockImplementation((callback) => callback(mockDocRef)),
-//     };
-//     getDocs.mockResolvedValueOnce(mockQuerySnapshot);
-
-//     // Call the function
-//     await updateEventDB(mockEvent);
-
-//     // Check if Firestore was called correctly
-//     expect(collection).toHaveBeenCalledWith(db, 'Events');
-//     expect(query).toHaveBeenCalledWith(expect.anything(), where('event_id', '==', mockEvent.event_id));
-//     expect(where).toHaveBeenCalledWith('event_id', '==', mockEvent.event_id);
-//     expect(getDocs).toHaveBeenCalledWith(expect.anything());
-//     expect(updateDoc).toHaveBeenCalledWith('mockRef', {
-//       name: mockEvent.name,
-//       date: mockEvent.date,
-//     });
-//   });
-
-//   test('should handle Firestore error and throw custom error', async () => {
-//     // Mock Firestore error
-//     getDocs.mockRejectedValueOnce(new Error('Firestore error'));
-
-//     await expect(updateEventDB(mockEvent)).rejects.toThrow('Failed to update event. Please try again.');
-
-//     // Ensure error handling works
-//     expect(console.error).toHaveBeenCalledWith('Error updating event:', expect.any(Error));
-//   });
-// });
 
 
 describe('updateEventDB', () => {
@@ -274,27 +295,34 @@ describe('updateEventDB', () => {
     jest.clearAllMocks();
   });
 
-  // test('should update event successfully', async () => {
-  //   const mockDocRef = { ref: 'mockRef' };
-  //   const mockQuerySnapshot = {
-  //     forEach: jest.fn().mockImplementation((callback) => callback(mockDocRef)),
-  //   };
-    
-  //   // Mock successful getDocs
-  //   getDocs.mockResolvedValueOnce(mockQuerySnapshot);
 
-  //   // Call the function to update the event
-  //   await updateEventDB(mockEvent);
-
-  //   // Check if Firestore methods were called correctly
-  //   expect(collection).toHaveBeenCalledWith(db, 'Events');
-  //   expect(query).toHaveBeenCalledWith(expect.anything(), 'mockWhereClause'); // The mocked return value of 'where'
-  //   expect(getDocs).toHaveBeenCalledWith(expect.anything());
-  //   expect(updateDoc).toHaveBeenCalledWith('mockRef', {
-  //     name: mockEvent.name,
-  //     date: mockEvent.date,
-  //   });
-  // });
+  test('should update event successfully', async () => {
+    const mockDocRef = { ref: 'mockRef' };
+    const mockCollectionRef = { id: 'mockCollection' }; // Mock collection reference
+    const mockQuerySnapshot = {
+      forEach: jest.fn().mockImplementation((callback) => callback({ ref: mockDocRef })),
+    };
+  
+    // Mock Firestore methods
+    collection.mockReturnValueOnce(mockCollectionRef); // Return mock collection reference
+    getDocs.mockResolvedValueOnce(mockQuerySnapshot);
+    where.mockReturnValueOnce('mockWhereClause'); // Return something valid for the where condition
+    query.mockReturnValueOnce('mockQuery'); // Return mock query for the query function
+  
+    // Call the function to update the event
+    await updateEventDB(mockEvent);
+  
+    // Assertions
+    expect(collection).toHaveBeenCalledWith(db, 'Events'); // Ensure the collection is 'Events'
+    expect(where).toHaveBeenCalledWith('event_id', '==', mockEvent.event_id); // Ensure where is called with correct arguments
+    expect(query).toHaveBeenCalledWith(mockCollectionRef, 'mockWhereClause'); // Ensure query is called with the collection reference and where clause
+    expect(getDocs).toHaveBeenCalledWith('mockQuery'); // Ensure getDocs is called with the query
+    expect(updateDoc).toHaveBeenCalledWith(mockDocRef, {
+      name: mockEvent.name,
+      date: mockEvent.date,
+      event_id: mockEvent.event_id, // Add event_id to the expected object
+    }); // Ensure updateDoc is called with the correct reference and data
+  });
 
 
   test('should handle Firestore error and throw custom error', async () => {
@@ -314,3 +342,251 @@ describe('updateEventDB', () => {
     consoleErrorMock.mockRestore();
   });
 });
+
+describe('fetchEvents', () => {
+  const mockSetEvents = jest.fn();
+
+  it('should fetch events successfully and update the state', async () => {
+      // Mock response data
+      const mockData = [
+          { event_id: 'event1', user_id: 'user1', name: 'Event 1', price: 0 },
+          { event_id: 'event2', user_id: 'user2', name: 'Event 2', price: 50 },
+      ];
+
+      // Mock the fetch call
+      global.fetch = jest.fn(() =>
+          Promise.resolve({
+              ok: true,
+              json: () => Promise.resolve(mockData),
+          })
+      );
+
+      await fetchEvents(mockSetEvents);
+
+      // Expect fetch to have been called with the correct URL
+      expect(fetch).toHaveBeenCalledWith('/api/events', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+
+      // Check if setEvents is called with the updated events
+      expect(mockSetEvents).toHaveBeenCalledWith(mockData);
+  });
+
+  it('should handle fetch error and not update the state', async () => {
+      // Mock the fetch call to simulate an error response
+      global.fetch = jest.fn(() =>
+          Promise.resolve({
+              ok: false,
+              status: 404,
+          })
+      );
+
+      const result = await fetchEvents(mockSetEvents);
+
+      // Expect fetch to have been called
+      expect(fetch).toHaveBeenCalledWith('/api/events', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+
+      // Check that setEvents is not called due to error
+      expect(mockSetEvents).not.toHaveBeenCalled();
+
+      // Expect the function to return null in case of an error
+      expect(result).toBeNull();
+  });
+
+  it('should handle network errors', async () => {
+      // Mock the fetch call to throw an error
+      global.fetch = jest.fn(() => Promise.reject(new Error('Network Error')));
+
+      const result = await fetchEvents(mockSetEvents);
+
+      // Expect fetch to have been called
+      expect(fetch).toHaveBeenCalledWith('/api/events', {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+      });
+
+      // Check that setEvents is not called due to error
+      expect(mockSetEvents).not.toHaveBeenCalled();
+
+      // Expect the function to return null in case of an error
+      expect(result).toBeNull();
+  });
+});
+
+
+
+
+
+// describe('handleApprove', () => {
+//   const mockSetEvents = jest.fn();
+//   const mockEvents = [
+//       { event_id: 'event1', user_id: 'user1', name: 'Event 1', approved: false, status: 'pending', image_url: 'image1.jpg' },
+//       { event_id: 'event2', user_id: 'user2', name: 'Event 2', approved: false, status: 'pending', image_url: 'image2.jpg' },
+//   ];
+
+//   beforeEach(() => {
+//       jest.clearAllMocks(); // Clear previous mock calls
+//   });
+
+//   it('should approve an event successfully', async () => {
+//       const updatedEvent = mockEvents[0];
+//       fetchUserDetails.mockResolvedValueOnce({ name: 'Organizer 1' });
+//       updateEventDB.mockResolvedValueOnce(undefined); // Assume this does not return anything
+//       sendNotification.mockResolvedValueOnce(undefined); // Assume this does not return anything
+
+//       await handleApprove(updatedEvent.event_id);
+
+//       // Check that fetchUserDetails was called with the correct user ID
+//       expect(fetchUserDetails).toHaveBeenCalledWith(updatedEvent.user_id);
+
+//       // Check that the event is updated correctly
+//       expect(updatedEvent.approved).toBe(true);
+//       expect(updatedEvent.status).toBe('approved');
+
+//       // Ensure updateEventDB was called with the updated event
+//       expect(updateEventDB).toHaveBeenCalledWith(updatedEvent);
+
+//       // Ensure sendNotification was called with the correct parameters
+//       expect(sendNotification).toHaveBeenCalledWith(
+//           updatedEvent.user_id,
+//           updatedEvent.event_id,
+//           'admin',
+//           'Your event has been approved!',
+//           'Organizer 1',
+//           updatedEvent.image_url
+//       );
+
+//       // Ensure setEvents is called with the updated events
+//       expect(mockSetEvents).toHaveBeenCalledWith([
+//           updatedEvent,
+//           mockEvents[1],
+//       ]);
+//   });
+
+//   it('should alert if user details are not fetched', async () => {
+//       const updatedEvent = mockEvents[0];
+//       fetchUserDetails.mockResolvedValueOnce(null); // Simulate fetch failure
+
+//       global.alert = jest.fn(); // Mock the alert function
+
+//       await handleApprove(updatedEvent.event_id);
+
+//       // Check that alert was called
+//       expect(global.alert).toHaveBeenCalledWith('Failed to fetch user details');
+
+//       // Ensure that updateEventDB and sendNotification were not called
+//       expect(updateEventDB).not.toHaveBeenCalled();
+//       expect(sendNotification).not.toHaveBeenCalled();
+
+//       // Ensure setEvents is not called
+//       expect(mockSetEvents).not.toHaveBeenCalled();
+//   });
+
+//   it('should not approve an event if it is not found', async () => {
+//       const nonExistentId = 'non-existent-id';
+      
+//       await handleApprove(nonExistentId);
+
+//       // Ensure that no functions are called if the event is not found
+//       expect(fetchUserDetails).not.toHaveBeenCalled();
+//       expect(updateEventDB).not.toHaveBeenCalled();
+//       expect(sendNotification).not.toHaveBeenCalled();
+//       expect(mockSetEvents).not.toHaveBeenCalled();
+//   });
+// });
+
+
+
+
+
+// describe('handleReject', () => {
+//   const mockSetEvents = jest.fn();
+//   const mockEvents = [
+//       { event_id: 'event1', user_id: 'user1', name: 'Event 1', approved: true, status: 'pending', image_url: 'image1.jpg' },
+//       { event_id: 'event2', user_id: 'user2', name: 'Event 2', approved: true, status: 'pending', image_url: 'image2.jpg' },
+//   ];
+
+//   beforeEach(() => {
+//       jest.clearAllMocks(); // Clear previous mock calls
+//   });
+
+//   it('should reject an event successfully', async () => {
+//       const rejectReason = 'Insufficient information provided';
+//       const updatedEvent = mockEvents[0];
+
+//       fetchUserDetails.mockResolvedValueOnce({ name: 'Organizer 1' });
+//       updateEventDB.mockResolvedValueOnce(undefined); // Assume this does not return anything
+//       sendNotification.mockResolvedValueOnce(undefined); // Assume this does not return anything
+
+//       await handleReject(updatedEvent.event_id, rejectReason);
+
+//       // Check that fetchUserDetails was called with the correct user ID
+//       expect(fetchUserDetails).toHaveBeenCalledWith(updatedEvent.user_id);
+
+//       // Check that the event is updated correctly
+//       expect(updatedEvent.approved).toBe(false);
+//       expect(updatedEvent.status).toBe('rejected');
+
+//       // Ensure updateEventDB was called with the updated event
+//       expect(updateEventDB).toHaveBeenCalledWith(updatedEvent);
+
+//       // Ensure sendNotification was called with the correct parameters
+//       expect(sendNotification).toHaveBeenCalledWith(
+//           updatedEvent.user_id,
+//           updatedEvent.event_id,
+//           'admin',
+//           `Your event was rejected. Reason: ${rejectReason}`,
+//           'Organizer 1',
+//           updatedEvent.image_url
+//       );
+
+//       // Ensure setEvents is called with the updated events
+//       expect(mockSetEvents).toHaveBeenCalledWith([
+//           updatedEvent,
+//           mockEvents[1],
+//       ]);
+//   });
+
+//   it('should alert if user details are not fetched', async () => {
+//       const updatedEvent = mockEvents[0];
+//       const rejectReason = 'Insufficient information provided';
+//       fetchUserDetails.mockResolvedValueOnce(null); // Simulate fetch failure
+
+//       global.alert = jest.fn(); // Mock the alert function
+
+//       await handleReject(updatedEvent.event_id, rejectReason);
+
+//       // Check that alert was called
+//       expect(global.alert).toHaveBeenCalledWith('Failed to fetch user details');
+
+//       // Ensure that updateEventDB and sendNotification were not called
+//       expect(updateEventDB).not.toHaveBeenCalled();
+//       expect(sendNotification).not.toHaveBeenCalled();
+
+//       // Ensure setEvents is not called
+//       expect(mockSetEvents).not.toHaveBeenCalled();
+//   });
+
+//   it('should not reject an event if it is not found', async () => {
+//       const nonExistentId = 'non-existent-id';
+//       const rejectReason = 'Insufficient information provided';
+
+//       await handleReject(nonExistentId, rejectReason);
+
+//       // Ensure that no functions are called if the event is not found
+//       expect(fetchUserDetails).not.toHaveBeenCalled();
+//       expect(updateEventDB).not.toHaveBeenCalled();
+//       expect(sendNotification).not.toHaveBeenCalled();
+//       expect(mockSetEvents).not.toHaveBeenCalled();
+//   });
+// });
