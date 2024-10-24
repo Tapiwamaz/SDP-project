@@ -31,6 +31,7 @@ export const AsideNavItem = styled.a`
   /* width: 195.2px; */
   height: 50px;
   display: flex;
+  gap:5px;
   /* padding-right: 20px; */
   align-items: center;
   justify-content: center;
@@ -50,5 +51,9 @@ export const AsideNavItem = styled.a`
   &:hover {
     transition: all 2s ease-in-out;
     text-decoration: underline;
+  }
+
+  p{
+    padding-top: 2px;
   }
 `;

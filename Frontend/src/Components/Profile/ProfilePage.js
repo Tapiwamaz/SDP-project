@@ -233,6 +233,27 @@ export const Profile = () => {
     }
   };
 
+
+  const eventRightRef = useRef(null);
+
+  // Function to handle closing when clicking outside
+  const handleClickOutside = (e) => {
+    if (eventRightRef.current && !eventRightRef.current.contains(e.target)) {
+      setDisplayRight(false)
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener for clicks
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      // Remove event listener on cleanup
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
   return (
     <>
       {screen === "phone" && <Header />}
@@ -393,11 +414,8 @@ export const Profile = () => {
       </Page>
       {displayRight && (
         <>
-          <EventRight>
-            <Xicon
-              onClick={() => setDisplayRight(false)}
-              style={{ color: "black" }}
-            ></Xicon>
+          <EventRight ref={eventRightRef}>
+            
             <Notifications></Notifications>
          
           </EventRight>

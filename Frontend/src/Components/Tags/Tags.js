@@ -20,10 +20,12 @@ const Button = styled.button`
   border: ${({ isActive }) => (!isActive ? 'var(--primary) 2px solid' : 'black 2px solid')};
   border-radius: 20px;
   margin: 2px;
-  padding: 10px;
+  padding: 11px;
   min-width: 100px;
   height: 10px;
   display: flex;
+  gap: 5px;
+  font-size: small;
   flex-direction: row;
   justify-content: center;
   align-items: center;

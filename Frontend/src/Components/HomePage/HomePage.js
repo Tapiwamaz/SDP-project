@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef} from "react";
 import Header from "../Header/Header";
 import {
   Page,
@@ -88,9 +88,7 @@ const HomePage = () => {
     setSearchValue(e.target.value);
   };
 
-  // useEffect(()=>{
-
-  // },[filteredEvents])
+  
   const [EventsDisplay, setEventsDisplay] = useState(null);
   const displayEvent = (event) => {
     setEventsDisplay(event);
@@ -135,6 +133,26 @@ const HomePage = () => {
       }
     }
   };
+
+
+  const eventRightRef = useRef(null);
+
+  // Function to handle closing when clicking outside
+  const handleClickOutside = (e) => {
+    if (eventRightRef.current && !eventRightRef.current.contains(e.target)) {
+      setEventsDisplay(null)
+    }
+  };
+
+  useEffect(() => {
+    // Add event listener for clicks
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      // Remove event listener on cleanup
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -298,11 +316,8 @@ const HomePage = () => {
       </Page>
       {EventsDisplay && (
         <>
-          <EventRight>
-            <Xicon
-              onClick={() => setEventsDisplay(null)}
-              style={{ color: "black" }}
-            ></Xicon>
+          <EventRight ref={eventRightRef}>
+         
             {!summary ? (
               <EventDisplay
                 events={EventsDisplay}

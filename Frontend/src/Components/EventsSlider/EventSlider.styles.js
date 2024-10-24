@@ -15,8 +15,8 @@ export const Card = styled.button`
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
-  width: 250px;
-  height: 300px;
+  width: 225px;
+  height: 290px;
   display: flex;
   font-family: "Khula", sans-serif;
   border: 1px var(--primary) solid;
@@ -31,7 +31,6 @@ export const Card = styled.button`
     color: white;
     background-color: cornflowerblue;
     transform: scale(1.05);
-    opacity: 0.5;
   }
 
 
@@ -100,8 +99,10 @@ export const CustomCarousel = styled(Carousel)`
   }
 
   .carousel .control-arrow {
-    background: rgba(0, 0, 0, 0.5); /* Customize arrow background */
-    border-radius: 50%;
+    background: var(--primary);
+    @media (max-width: 769px) {
+    display: none;
+      }
   }
 
   .carousel .slide {

@@ -95,9 +95,16 @@ export const AsideNavItem = styled.a`
   font-size: 1.25rem;
   /* height: 50px; */
   margin: 10px;
+  gap: 5px;
+  display: flex;
+  align-items: center;
 
   &:hover {
     text-decoration: underline;
+  }
+  p{
+    padding-top: 2px;
+    margin: 0;
   }
 `;
 
