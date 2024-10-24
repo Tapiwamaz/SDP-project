@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
 export const Top = styled.div`
@@ -76,12 +76,13 @@ export const StyledPlus = styled(PlusCircleIcon)`
 export const LoadingCard = styled.div`
   background: linear-gradient(90deg, grey 25%, lightgrey 50%, grey 75%);
   background-size: 200% 100%;
+  border-radius: 20px;
+  padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  height: 100px;
+  margin: 0 auto;
+  // width: 250px;
+  height: 300px;
   animation: loading 1.5s infinite;
-  padding: 11px;
-  border-bottom: 2px solid black;
 
   @keyframes loading {
     0% {

@@ -352,8 +352,8 @@ export const Profile = () => {
                 />
               </ButtonWrapper>
 
-              <ButtonWrapper>
-                <LeftSection onClick={handleEditClick}>
+              <ButtonWrapper onClick={handleEditClick}>
+                <LeftSection>
                   <PencilIcon
                     style={{ height: "27px", width: "22px", color: "black" }}
                   >
