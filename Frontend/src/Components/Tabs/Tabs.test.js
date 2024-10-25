@@ -39,11 +39,10 @@ global.fetch = jest.fn(() =>
   })
 );
 
+
+
+
 describe('Tabs Component', () => {
-  const mockEvents = [
-    { event_id: 'event1', name: 'Event 1', status: 'pending', user_id: 'user1', image_url: 'image1.jpg' },
-    { event_id: 'event2', name: 'Event 2', status: 'pending', user_id: 'user2', image_url: 'image2.jpg' }
-  ];
 
   beforeEach(() => {
     fetch.mockClear();
@@ -85,64 +84,9 @@ describe('Tabs Component', () => {
       expect(fetch).toHaveBeenCalledWith('/api/events', expect.anything());
     });
   });
-
-
- 
-
-  // it('should approve an event when handleApprove is called', async () => {
-  //   render(<Tabs />);
-
-  //   // Approve the first event
-  //   fireEvent.click(screen.getByText('Approve', { selector: 'button' }));
-
-  //   await waitFor(() => {
-  //     expect(updateEventDB).toHaveBeenCalledWith({
-  //       event_id: 'event1',
-  //       name: 'Event 1',
-  //       status: 'approved',
-  //       user_id: 'user1',
-  //       image_url: 'image1.jpg',
-  //       approved: true,
-  //     });
-  //     expect(sendNotification).toHaveBeenCalledWith(
-  //       'user1',
-  //       'event1',
-  //       'admin',
-  //       'Your event has been approved!',
-  //       'John Doe',
-  //       'image1.jpg'
-  //     );
-  //   });
-  // });
-
-  // it('should reject an event when handleReject is called', async () => {
-  //   render(<Tabs />);
-
-  //   // Reject the first event
-  //   fireEvent.click(screen.getByText('Reject', { selector: 'button' }));
-
-  //   await waitFor(() => {
-  //     expect(updateEventDB).toHaveBeenCalledWith({
-  //       event_id: 'event1',
-  //       name: 'Event 1',
-  //       status: 'rejected',
-  //       user_id: 'user1',
-  //       image_url: 'image1.jpg',
-  //       approved: false,
-  //     });
-  //     expect(sendNotification).toHaveBeenCalledWith(
-  //       'user1',
-  //       'event1',
-  //       'admin',
-  //       'Your event was rejected. Reason: ',
-  //       'John Doe',
-  //       'image1.jpg'
-  //     );
-  //   });
-  // });
-
   
 });
+
 
 
 describe('fetchUserDetails', () => {
