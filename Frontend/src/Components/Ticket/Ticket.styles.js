@@ -159,6 +159,21 @@ export const DownloadLink = styled.a`
   }
 `;
 
+export const Link = styled.a`
+  display: flex;
+  align-items: center; /* Align icon and text vertically */
+  padding: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: ${(props) => props.color};
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 
 export const StyledButton = styled.button`
   width: 80%;              /* 75% of the viewport width */
