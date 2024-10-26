@@ -58,6 +58,35 @@ export const StyledInput = styled.input`
   width: 75%;              /* 75% of the viewport width */
   height: auto;              /* Auto-adjust height */
   padding: 10px;             /* Add some padding inside the input */
+  padding-right: 40px; 
+  margin: 15px 0;
+  border-radius: 15px;       /* Rounded edges */
+  border: 1px solid #ccc;    /* Border for better visibility */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  font-size: 16px;           /* Set a comfortable font size */
+  outline: none;             /* Remove default outline */
+  transition: box-shadow 0.3s ease; /* Transition for a smooth effect */
+
+  /* Add a hover effect */
+  &:hover {
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+  }
+
+  /* Add a focus effect */
+  &:focus {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Further increase shadow on focus */
+    border-color: #007bff;  /* Change border color on focus */
+  }
+`;
+
+export const StyledP = styled.div`
+  display: flex;
+  justifyContent: space-between;
+  align-items: center; 
+  width: 81%;              /* 75% of the viewport width */
+  height: auto;              /* Auto-adjust height */
+  padding: 10px;             /* Add some padding inside the input */
+  padding-right: 10px; 
   margin: 15px 0;
   border-radius: 15px;       /* Rounded edges */
   border: 1px solid #ccc;    /* Border for better visibility */
@@ -233,3 +262,19 @@ export const ModalContent = styled.div`
   overflow-y: auto;
   
 `;
+
+export const EyeIcon = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 15px;  /* Position inside the input */
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #888;
+`;
+
+export const InputWrapper = styled.div`
+  position: relative;
+  width: 75%;
+`;
+
