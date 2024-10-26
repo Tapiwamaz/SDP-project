@@ -146,7 +146,7 @@ export const Login = () => {
                 <input style={{width: '100%', height: '100%', border: 'none', outline: 'none'}} id="emailInput" type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
             </StyledP>
             <StyledP>
-                <input style={{width: '100%', height: '100%', border: 'none', outline: 'none'}} id="passwordInput" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                <input style={{width: '100%', height: '100%', border: 'none', outline: 'none'}} id="passwordInput" type={visible? "text":"password"} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                 <div onClick={() => setVisible(!visible)}>
                     {visible ? <FaEyeSlash /> : <FaEye />}
                 </div>
