@@ -11,6 +11,8 @@ export const TicketContainer = styled.div`
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   justify-content: space-between;
+  cursor: pointer;
+  
 
   @media (min-width: 868px) {
     flex-direction: row;
