@@ -2,13 +2,13 @@
 .tabs {
     display: flex; 
     justify-content: space-around; 
-    background-color: #e0e0e0;
+    background-color: none;
     padding: 10px; 
   }
   
 
   /* made buttons wider */
-  .tabs button {
+  /* .tabs button {
     padding: 15px 20px;
     border: none;
     background-color: transparent; 
@@ -31,13 +31,91 @@
   .tabs .active {
     background-color: #003366; 
     color: #fff; 
+  } */
+
+  .tabs button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    padding: 15px 20px;
+    cursor: pointer;
+    color: gray;  /* Default color */
+    font-weight: bold;
+    border-bottom: none;
+    transition: color 0.3s, border-bottom 0.3s;
+    /* flex: 1; */
+    text-align: center;
   }
+  
+  .tabs button.active {
+    color: black;
+    border-bottom: 2px solid black;
+    padding-bottom: 8px;
+    padding: 15px 20px;
+  }
+  
+
+
+  .tabs button:hover {
+    color: black;  /* Darker color on hover */
+  }
+  
+  .tabs button:focus {
+    outline: none;  /* Remove default focus outline */
+  }
+
+  .my-tabs {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #003366;
+  }
+
 
   .Wrapper{
     width: 85%;
+    height: calc(100vh - 20px); /* Full view height with a little margin */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  
+    /* Apply a different style for mobile screens */
     @media (max-width: 769px) {
       width: 100%;
+      height: auto; /* Allow the height to adjust based on content */
+      overflow-y: visible; /* Disable scrolling for mobile */
     }
+  }
 
+  .loader {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(230, 230, 230, 0.7);
+    backdrop-filter: blur(2px);
+    display: flex;
+    flex-direction: column;
   }
   
+  .centerLoader {
+    width: 60px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    aspect-ratio: 2;
+    --_g: no-repeat
+      radial-gradient(circle closest-side, var(--primary) 90%, #0000);
+    background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+    background-size: calc(100% / 3) 50%;
+    animation: l3 1s infinite linear;
+  }
+

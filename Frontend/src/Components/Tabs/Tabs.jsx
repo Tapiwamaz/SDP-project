@@ -4,6 +4,8 @@ import HistoryEvents from '../HistoryEvents/HistoryEvents';
 import './Tabs.css';
 import { db } from "../../firebase_config"; // Adjust the path based on your structure
 import { collection, query, where, getDocs, updateDoc, serverTimestamp, addDoc, doc, getDoc } from "firebase/firestore";
+import noResults from "../../Images/noResults.svg";
+
 
 
 // Function to send notification to Firestore
@@ -192,21 +194,75 @@ const Tabs = () => {
   };
 
   const [activeTab, setActiveTab] = useState('pending');
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(false);    // Error state
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        setLoading(true);  // Set loading to true before fetching events
+        await fetchEvents(setEvents);  // Pass setEvents to the fetchEvents function
+        setError(false);
+      } catch (error) {
+        setError(true);    // Handle error if fetch fails
+      } finally {
+        setLoading(false); // Set loading to false after fetch completes
+      }
+    };
+  
+    loadEvents();
+  }, []);
 
   return (
     <div className='Wrapper'>
-      <div className="tabs">
-        <button onClick={() => setActiveTab('pending')} className={activeTab === 'pending' ? 'active' : ''}>
-          Pending
-        </button>
-        <button onClick={() => setActiveTab('history')} className={activeTab === 'history' ? 'active' : ''}>
-          History
-        </button>
+      <div className='my-tabs'>
+        <h1>Approvals</h1>
+        <div className="tabs">
+          <button onClick={() => setActiveTab('pending')} className={activeTab === 'pending' ? 'active' : ''}>
+            Pending
+          </button>
+          <button onClick={() => setActiveTab('history')} className={activeTab === 'history' ? 'active' : ''}>
+            History
+          </button>
+        </div>
       </div>
-      {activeTab === 'pending' ? (
-        <PendingEvents events={events.filter(event => event.status === 'pending')} handleApprove={handleApprove} handleReject={handleReject} />
-      ) : (
-        <HistoryEvents events={events.filter(event => event.status !== 'pending').reverse()} />
+        {/* {activeTab === 'pending' ? (
+          <PendingEvents events={events.filter(event => event.status === 'pending')} handleApprove={handleApprove} handleReject={handleReject} />
+        ) : (
+          <HistoryEvents events={events.filter(event => event.status !== 'pending').reverse()} />
+        )} */}
+
+      {/* Loader */}
+      {loading && (
+        <div className="loader">
+          <div className="centerLoader"></div>
+        </div>
+      )}
+
+
+      {/* Conditional Content Based on Loading, Error, and Events */}
+      {!loading && error && (
+        <div style={{ textAlign: 'center' }}>
+          <img src={noResults} alt="Error loading events" />
+          <p>An error occurred while loading events.</p>
+        </div>
+      )}
+
+
+      {!loading && !error && events.length > 0 && (
+        activeTab === 'pending' ? (
+          <PendingEvents 
+            events={events.filter(event => event.status === 'pending')} 
+            handleApprove={handleApprove} 
+            handleReject={handleReject} 
+            data-testid="PendingEvents"
+          />
+        ) : (
+          <HistoryEvents 
+            events={events.filter(event => event.status !== 'pending').reverse()}
+            data-testid="HistoryEvents"
+          />
+        )
       )}
     </div>
   );

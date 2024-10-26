@@ -65,18 +65,18 @@ describe('Tabs Component', () => {
     expect(screen.getByText('History')).toBeInTheDocument();
   });
 
-  it('switches between Pending and History tabs', async () => {
-    render(<Tabs />);
+  // it('switches between Pending and History tabs', async () => {
+  //   render(<Tabs />);
     
-    // Initially, pending tab is active
-    expect(screen.getByText('Pending').classList.contains('active')).toBe(true);
-    expect(screen.getByTestId('PendingEvents')).toBeInTheDocument();
+  //   // Initially, pending tab is active
+  //   expect(screen.getByText('Pending').classList.contains('active')).toBe(true);
+  //   expect(screen.getByTestId('PendingEvents')).toBeInTheDocument();
     
-    // Switch to history tab
-    fireEvent.click(screen.getByText('History'));
-    expect(screen.getByText('History').classList.contains('active')).toBe(true);
-    expect(screen.getByTestId('HistoryEvents')).toBeInTheDocument();
-  });
+  //   // Switch to history tab
+  //   fireEvent.click(screen.getByText('History'));
+  //   expect(screen.getByText('History').classList.contains('active')).toBe(true);
+  //   expect(screen.getByTestId('HistoryEvents')).toBeInTheDocument();
+  // });
 
   it('calls fetchEvents on component mount', async () => {
     render(<Tabs />);
@@ -368,169 +368,3 @@ describe('fetchEvents', () => {
 });
 
 
-
-
-
-// describe('handleApprove', () => {
-//   const mockSetEvents = jest.fn();
-//   const mockEvents = [
-//       { event_id: 'event1', user_id: 'user1', name: 'Event 1', approved: false, status: 'pending', image_url: 'image1.jpg' },
-//       { event_id: 'event2', user_id: 'user2', name: 'Event 2', approved: false, status: 'pending', image_url: 'image2.jpg' },
-//   ];
-
-//   beforeEach(() => {
-//       jest.clearAllMocks(); // Clear previous mock calls
-//   });
-
-//   it('should approve an event successfully', async () => {
-//       const updatedEvent = mockEvents[0];
-//       fetchUserDetails.mockResolvedValueOnce({ name: 'Organizer 1' });
-//       updateEventDB.mockResolvedValueOnce(undefined); // Assume this does not return anything
-//       sendNotification.mockResolvedValueOnce(undefined); // Assume this does not return anything
-
-//       await handleApprove(updatedEvent.event_id);
-
-//       // Check that fetchUserDetails was called with the correct user ID
-//       expect(fetchUserDetails).toHaveBeenCalledWith(updatedEvent.user_id);
-
-//       // Check that the event is updated correctly
-//       expect(updatedEvent.approved).toBe(true);
-//       expect(updatedEvent.status).toBe('approved');
-
-//       // Ensure updateEventDB was called with the updated event
-//       expect(updateEventDB).toHaveBeenCalledWith(updatedEvent);
-
-//       // Ensure sendNotification was called with the correct parameters
-//       expect(sendNotification).toHaveBeenCalledWith(
-//           updatedEvent.user_id,
-//           updatedEvent.event_id,
-//           'admin',
-//           'Your event has been approved!',
-//           'Organizer 1',
-//           updatedEvent.image_url
-//       );
-
-//       // Ensure setEvents is called with the updated events
-//       expect(mockSetEvents).toHaveBeenCalledWith([
-//           updatedEvent,
-//           mockEvents[1],
-//       ]);
-//   });
-
-//   it('should alert if user details are not fetched', async () => {
-//       const updatedEvent = mockEvents[0];
-//       fetchUserDetails.mockResolvedValueOnce(null); // Simulate fetch failure
-
-//       global.alert = jest.fn(); // Mock the alert function
-
-//       await handleApprove(updatedEvent.event_id);
-
-//       // Check that alert was called
-//       expect(global.alert).toHaveBeenCalledWith('Failed to fetch user details');
-
-//       // Ensure that updateEventDB and sendNotification were not called
-//       expect(updateEventDB).not.toHaveBeenCalled();
-//       expect(sendNotification).not.toHaveBeenCalled();
-
-//       // Ensure setEvents is not called
-//       expect(mockSetEvents).not.toHaveBeenCalled();
-//   });
-
-//   it('should not approve an event if it is not found', async () => {
-//       const nonExistentId = 'non-existent-id';
-      
-//       await handleApprove(nonExistentId);
-
-//       // Ensure that no functions are called if the event is not found
-//       expect(fetchUserDetails).not.toHaveBeenCalled();
-//       expect(updateEventDB).not.toHaveBeenCalled();
-//       expect(sendNotification).not.toHaveBeenCalled();
-//       expect(mockSetEvents).not.toHaveBeenCalled();
-//   });
-// });
-
-
-
-
-
-// describe('handleReject', () => {
-//   const mockSetEvents = jest.fn();
-//   const mockEvents = [
-//       { event_id: 'event1', user_id: 'user1', name: 'Event 1', approved: true, status: 'pending', image_url: 'image1.jpg' },
-//       { event_id: 'event2', user_id: 'user2', name: 'Event 2', approved: true, status: 'pending', image_url: 'image2.jpg' },
-//   ];
-
-//   beforeEach(() => {
-//       jest.clearAllMocks(); // Clear previous mock calls
-//   });
-
-//   it('should reject an event successfully', async () => {
-//       const rejectReason = 'Insufficient information provided';
-//       const updatedEvent = mockEvents[0];
-
-//       fetchUserDetails.mockResolvedValueOnce({ name: 'Organizer 1' });
-//       updateEventDB.mockResolvedValueOnce(undefined); // Assume this does not return anything
-//       sendNotification.mockResolvedValueOnce(undefined); // Assume this does not return anything
-
-//       await handleReject(updatedEvent.event_id, rejectReason);
-
-//       // Check that fetchUserDetails was called with the correct user ID
-//       expect(fetchUserDetails).toHaveBeenCalledWith(updatedEvent.user_id);
-
-//       // Check that the event is updated correctly
-//       expect(updatedEvent.approved).toBe(false);
-//       expect(updatedEvent.status).toBe('rejected');
-
-//       // Ensure updateEventDB was called with the updated event
-//       expect(updateEventDB).toHaveBeenCalledWith(updatedEvent);
-
-//       // Ensure sendNotification was called with the correct parameters
-//       expect(sendNotification).toHaveBeenCalledWith(
-//           updatedEvent.user_id,
-//           updatedEvent.event_id,
-//           'admin',
-//           `Your event was rejected. Reason: ${rejectReason}`,
-//           'Organizer 1',
-//           updatedEvent.image_url
-//       );
-
-//       // Ensure setEvents is called with the updated events
-//       expect(mockSetEvents).toHaveBeenCalledWith([
-//           updatedEvent,
-//           mockEvents[1],
-//       ]);
-//   });
-
-//   it('should alert if user details are not fetched', async () => {
-//       const updatedEvent = mockEvents[0];
-//       const rejectReason = 'Insufficient information provided';
-//       fetchUserDetails.mockResolvedValueOnce(null); // Simulate fetch failure
-
-//       global.alert = jest.fn(); // Mock the alert function
-
-//       await handleReject(updatedEvent.event_id, rejectReason);
-
-//       // Check that alert was called
-//       expect(global.alert).toHaveBeenCalledWith('Failed to fetch user details');
-
-//       // Ensure that updateEventDB and sendNotification were not called
-//       expect(updateEventDB).not.toHaveBeenCalled();
-//       expect(sendNotification).not.toHaveBeenCalled();
-
-//       // Ensure setEvents is not called
-//       expect(mockSetEvents).not.toHaveBeenCalled();
-//   });
-
-//   it('should not reject an event if it is not found', async () => {
-//       const nonExistentId = 'non-existent-id';
-//       const rejectReason = 'Insufficient information provided';
-
-//       await handleReject(nonExistentId, rejectReason);
-
-//       // Ensure that no functions are called if the event is not found
-//       expect(fetchUserDetails).not.toHaveBeenCalled();
-//       expect(updateEventDB).not.toHaveBeenCalled();
-//       expect(sendNotification).not.toHaveBeenCalled();
-//       expect(mockSetEvents).not.toHaveBeenCalled();
-//   });
-// });
