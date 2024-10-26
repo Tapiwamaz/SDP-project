@@ -75,7 +75,7 @@ export const Aside = styled.aside`
   right: 0;
   height: 100vh;
   width: 190px;
-  background-color: var(--primaryGrey);
+  background-color: var(--primary);
 
   padding: 2rem;
   display: flex;
