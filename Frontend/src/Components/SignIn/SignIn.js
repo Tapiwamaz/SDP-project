@@ -106,7 +106,6 @@ export const SignIn = () => {
 
         }
         catch (error) {
-            setErrorMessage(error.message);
             console.error(error);
         }
     };

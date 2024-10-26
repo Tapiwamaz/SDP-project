@@ -166,6 +166,7 @@ export const ClickableText = styled.div`
 export const StyledLink = styled.a`
   color: #18336C;               /* Default text color */
   text-decoration: none;    /* Remove underline */
+  cursor: pointer;          /* Pointer cursor on hover */
 `;
 
 export const ErrorMessage = styled.div`
