@@ -93,21 +93,21 @@ describe("EventDisplay Component", () => {
     expect(screen.getByText("Sample Event")).toBeInTheDocument();
     expect(screen.getByText("Date")).toBeInTheDocument();
     expect(screen.getByText("30 September 2023")).toBeInTheDocument();
-    expect(screen.getByText("Time:")).toBeInTheDocument();
+    expect(screen.getByText("Time")).toBeInTheDocument();
     expect(
       screen.getByText("Start: 10:00 AM - End: 12:00 PM")
     ).toBeInTheDocument();
-    expect(screen.getByText("Location:")).toBeInTheDocument();
+    expect(screen.getByText("Location")).toBeInTheDocument();
     expect(screen.getByText("Sample Location")).toBeInTheDocument();
-    expect(screen.getByText("Price Per Ticket:")).toBeInTheDocument();
+    expect(screen.getByText("Ticket Price")).toBeInTheDocument();
     expect(screen.getByText("R100")).toBeInTheDocument();
-    expect(screen.getByText("About Event :")).toBeInTheDocument();
+    expect(screen.getByText("About Event")).toBeInTheDocument();
     expect(screen.getByText("Sample Event Description")).toBeInTheDocument();
     expect(screen.getByText("Organizer Name")).toBeInTheDocument();
     expect(screen.getByText("organizer@example.com")).toBeInTheDocument();
     expect(screen.getByText("Organizer Description")).toBeInTheDocument();
     expect(screen.getByText("Number of Tickets")).toBeInTheDocument();
-    expect(screen.getByText("Current count: 1")).toBeInTheDocument();
+    expect(screen.getByText("Ticket count 1")).toBeInTheDocument();
   });
 
   test("Book now button is disabled when ticket count is 0", async () => {
@@ -143,11 +143,11 @@ describe("EventDisplay Component", () => {
     await act(async () => {
       fireEvent.click(screen.getByTestId("IncrementButton"));
     });
-    expect(screen.getByText("Current count: 2")).toBeInTheDocument();
+    expect(screen.getByText("Ticket count: 2")).toBeInTheDocument();
     await act(async () => {
       fireEvent.click(screen.getByTestId("DecrementButton"));
     });
-    expect(screen.getByText("Current count: 1")).toBeInTheDocument();
+    expect(screen.getByText("Ticket count: 1")).toBeInTheDocument();
   });
 
   test("Rate button is enabled when ticket is rated false and Calls the Rating api", async () => {

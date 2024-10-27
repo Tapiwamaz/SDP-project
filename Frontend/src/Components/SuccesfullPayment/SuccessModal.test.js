@@ -22,10 +22,12 @@ jest.mock("react-confetti", () => {
 describe("SuccessModal", () => {
   let mockShowModal;
   let mockSetShowModal;
+  let mockSetEventsDisplay;
 
   beforeEach(() => {
     mockShowModal = true;
     mockSetShowModal = jest.fn();
+    mockSetEventsDisplay = jest.fn();
   });
 
   afterEach(() => {
@@ -59,7 +61,7 @@ describe("SuccessModal", () => {
   test("does not render modal when showModal is false", () => {
     render(
       <Router>
-        <SuccessModal showModal={false} setShowModal={mockSetShowModal} />
+        <SuccessModal showModal={false} setShowModal={mockSetShowModal} setEventsDisplay={mockSetEventsDisplay} />
       </Router>
     );
 
@@ -69,7 +71,7 @@ describe("SuccessModal", () => {
       screen.queryByText("You have successfully completed your payment.")
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Go to Homepage")).not.toBeInTheDocument();
-    expect(screen.queryByText("Go to My Tickets")).not.toBeInTheDocument();
+    expect(screen.queryByText("Go to My Bookings")).not.toBeInTheDocument();
     expect(screen.queryByTestId("confetti")).not.toBeInTheDocument();
   });
 
@@ -79,6 +81,7 @@ describe("SuccessModal", () => {
         <SuccessModal
           showModal={mockShowModal}
           setShowModal={mockSetShowModal}
+          setEventsDisplay={mockSetEventsDisplay}
         />
       </Router>
     );
@@ -93,12 +96,13 @@ describe("SuccessModal", () => {
         <SuccessModal
           showModal={mockShowModal}
           setShowModal={mockSetShowModal}
+          setEventsDisplay={mockSetEventsDisplay}
         />
       </Router>
     );
 
     // Simulate clicking the "Go to My Tickets" button
-    fireEvent.click(screen.getByText("Go to My Tickets"));
+    fireEvent.click(screen.getByText("Go to My Bookings"));
 
     // Check if navigate was called with the correct route
     expect(mockNavigate).toHaveBeenCalledWith("/myBooking");
