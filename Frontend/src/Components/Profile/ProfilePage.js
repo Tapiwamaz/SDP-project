@@ -202,7 +202,11 @@ export const Profile = () => {
 
   const countEventsByUser = async (userId) => {
     try {
-      const q = query(collection(db, "Events"), where("user_id", "==", userId));
+      const q = query(
+        collection(db, "Events"),
+        where("user_id", "==", userId),
+        where("status", "==", "approved")
+      );
       const querySnapshot = await getDocs(q);
       return querySnapshot.size; // Return the count of user entries
     } catch (error) {
@@ -345,6 +349,8 @@ export const Profile = () => {
                     onClick={() => onSaveProfile(auth?.currentUser?.uid)}
                     style={{
                       marginTop: "10px",
+                      borderRadius: "1.35rem",
+                      width: "auto",
                       height: screen === "phone" ? "40px" : "30px", // Larger height on phones
                     }}
                   >
@@ -379,8 +385,8 @@ export const Profile = () => {
                 />
               </ButtonWrapper>
 
-              <ButtonWrapper>
-                <LeftSection onClick={handleEditClick}>
+              <ButtonWrapper onClick={handleEditClick}>
+                <LeftSection>
                   <PencilIcon
                     style={{ height: "27px", width: "22px", color: "black" }}
                   >

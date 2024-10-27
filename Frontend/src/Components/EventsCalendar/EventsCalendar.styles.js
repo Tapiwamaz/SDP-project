@@ -18,7 +18,12 @@ export const CalendarWrapper = styled.div`
     .rbc-row-bg {
       .rbc-day-bg {
         border: none;
-        cursor: pointer;
+
+        &:hover {
+          background-color: var(--hoverColor);
+          opacity: 0.8;
+          cursor: pointer;
+        }
       }
     }
   }
