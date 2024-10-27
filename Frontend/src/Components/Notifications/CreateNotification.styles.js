@@ -6,6 +6,7 @@ export const CreateNotificationWrapper = styled.section`
   flex-direction: column;
   padding: 0.5rem 0;
   transition: all 300ms ease-in-out;
+  font-family: "Khula";
 `;
 export const SelectEventsInput = styled.select`
   border-radius: 0.25rem;
@@ -17,7 +18,7 @@ export const SelectEventsInput = styled.select`
   border-width: 2px;
 
   &:hover {
-    border-color:var(--primary);
+    border-color: var(--primary);
   }
 `;
 export const MessageInput = styled.textarea`
@@ -49,14 +50,13 @@ export const SendButton = styled.button`
   border: none;
   color: white;
   padding: 0.6rem;
-  border-radius: 0.5rem;
+  border-radius: 1.35rem;
   width: 40%;
   align-self: center;
   cursor: pointer;
   transition: all 100ms ease-in-out;
 
   &:hover {
-    /* background: aliceblue; */
-    filter: brightness(150%);
+    background-color: #647eb4;
   }
 `;

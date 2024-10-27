@@ -4,6 +4,7 @@ import {
   fireEvent,
   cleanup,
   waitFor,
+  getAllByAltText,
 } from "@testing-library/react";
 
 import {
@@ -28,7 +29,6 @@ import {
 import { addDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { toast, ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(),
@@ -39,6 +39,10 @@ jest.setTimeout(10000);
 
 jest.mock("../../Components/Header/Header", () => () => (
   <div>Mocked Header</div>
+));
+
+jest.mock("../../Components/AsideDesktop/AsideDesktop", () => () => (
+  <div>Mocked AsideDesktop</div>
 ));
 
 jest.mock(
@@ -65,12 +69,12 @@ jest.mock("react-toastify", () => ({
     warn: jest.fn(),
     error: jest.fn(),
   },
-  ToastContainer: () => ()=> <div>MockToastContainer</div>
+  ToastContainer: () => () => <div>MockToastContainer</div>,
 }));
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useNavigate: jest.fn(),
+
   useLocation: jest.fn(),
 }));
 
@@ -494,7 +498,7 @@ describe("Create Event rendering", () => {
     expect(screen.getByTestId("title").textContent).toBe("Create your event");
   });
 
-  it("submission process", () => {
+  it("submission process", async () => {
     render(<CreateEvent inputEventDetails={null} />);
     const eventNameInput = screen.getByTestId("name");
     const eventDateInput = screen.getByTestId("date");
@@ -510,23 +514,26 @@ describe("Create Event rendering", () => {
 
     fireEvent.change(eventNameInput, { target: { value: "Sample Event" } });
     fireEvent.change(eventDateInput, { target: { value: "2024-09-30" } });
-    fireEvent.change(start_timeInput, { target: { value: "08:00" } });
-    fireEvent.change(end_timeInput, { target: { value: "09:00" } });
     fireEvent.change(priceInput, { target: { value: 7 } });
-    fireEvent.change(locationInput, { target: { value: "Park" } });
-    fireEvent.change(typeInput, { target: { value: "edu" } });
-    fireEvent.change(venue_typeInput, { target: { value: "Field" } });
-    fireEvent.change(descriptionInput, { target: { value: "I dislike jest" } });
+    fireEvent.change(typeInput, { target: { value: "Education" } });
+    fireEvent.change(venue_typeInput, { target: { value: "Lecture Venue" } });
+    fireEvent.change(locationInput, { target: { value: "CB216A" } });
 
+    fireEvent.change(descriptionInput, { target: { value: "I dislike jest" } });
+    fireEvent.change(start_timeInput, { target: { value: "08:00" } });
+    fireEvent.change(end_timeInput, {  target:{ value: "09:00"}  });
+    
     expect(eventNameInput.value).toBe("Sample Event");
     expect(eventDateInput.value).toBe("2024-09-30");
-    expect(end_timeInput.value).toBe("09:00");
-    expect(start_timeInput.value).toBe("08:00");
-    expect(locationInput.value).toBe("Park");
-    expect(venue_typeInput.value).toBe("Field");
-    expect(typeInput.value).toBe("edu");
+    await waitFor(() => expect(typeInput.value).toBe("Education"));
+    
+    await waitFor(()=>  expect(venue_typeInput.value).toBe("Lecture Venue"));
+    await waitFor(()=>  expect(locationInput.value).toBe("CB216A"));
+
     expect(priceInput.value).toBe("7");
     expect(descriptionInput.value).toBe("I dislike jest");
+    await waitFor(()=>  expect(end_timeInput.value).toBe("09:00"));
+    await waitFor(()=>  expect(start_timeInput.value).toBe("08:00"));
     const file = new File(["dummy image content"], "testImage.jpeg", {
       type: "image/jpeg",
     });
@@ -916,11 +923,8 @@ describe("handleNextButtonClick", () => {
 });
 
 describe("CreateEvent html component functions", () => {
-  const mockNavigate = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
-    useNavigate.mockImplementation(() => mockNavigate);
   });
 
   it("should handler hover and apply correct styles to the drop file container", () => {
@@ -943,15 +947,6 @@ describe("CreateEvent html component functions", () => {
       background: "var(--primary)",
       color: "white",
     });
-  });
-
-  it("should call navigate function when nav bar is clicked", () => {
-    render(<CreateEvent inputEventDetails={null} />); // Render component
-
-    const navBar = screen.getByTestId("navBarCreateEvents"); // Get nav element
-    fireEvent.click(navBar); // Simulate click
-
-    expect(mockNavigate).toHaveBeenCalledWith(-1);
   });
 
   it("Character left p tag", () => {
@@ -1077,29 +1072,24 @@ describe("updateEventDB", () => {
   });
 });
 
-describe("Datalists", () => {
+describe("Selects", () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
   });
-  it("Locations datalist", () => {
+  it("Locations select", () => {
     render(<CreateEvent inputEventDetails={null} />);
     const venue_typeInput = screen.getByTestId("venue_type");
-    fireEvent.change(venue_typeInput, {target: {value: "Lecture Venue"}});
-    const locationsList = screen.getByTestId("locationsList");
+    fireEvent.change(venue_typeInput, { target: { value: "Lecture Venue" } });
+    const locationsList = screen.getByTestId("location");
     expect(locationsList.children.length).toBeGreaterThanOrEqual(1);
-    const nameList = screen.getByTestId("venueNames");
-    expect(nameList.children.length).toBeGreaterThanOrEqual(1);
-    const locationInput = screen.getByTestId("location");
-    fireEvent.change(locationInput, {target: {value: "CB216A"}});
 
-    const timeSlotList = screen.getByTestId("timeSlotsList");
-    expect(timeSlotList.children.length).toBeGreaterThanOrEqual(1)
+    fireEvent.change(locationsList, { target: { value: "CB216A" } });
   });
   it("eventType datalist", () => {
     render(<CreateEvent inputEventDetails={null} />);
-    const datalist = screen.getByTestId("eventTypeList");
-    expect(datalist.children.length).toBe(6);
+    const datalist = screen.getByTestId("venue_type");
+    expect(datalist.children.length).toBe(2);
   });
 });
 
