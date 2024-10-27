@@ -1,11 +1,12 @@
 .separationContainer {
   display: flex;
+  font-family: "Khula";
 }
 
 .btn {
   background-color: var(--primary);
   color: white;
-  border-radius: 2.5rem;
+  border-radius: 1.35rem;
   font-family: inherit;
   font-size: inherit;
   height: 48px;
@@ -15,8 +16,7 @@
 }
 
 .btn:hover {
-  filter: brightness(150%);
-  color: white;
+ background-color: #647eb4;
 }
 
 .wrapperCreateEvent {
