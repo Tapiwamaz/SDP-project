@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, addDoc, updateDoc } from 'firebase/firestore';
 import './MyEvents.css';
 import ViewCards from '../ViewCards/ViewCards';
-import Header from '../../Header/Header';
-import AsideDesktop from '../../AsideDesktop/AsideDesktop';
 import { db, auth } from '../../../firebase_config';
 import { onAuthStateChanged } from 'firebase/auth';
 import noResults from "../../../Images/noResults.svg";
