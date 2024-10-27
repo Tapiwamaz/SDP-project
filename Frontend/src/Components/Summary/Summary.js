@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase_config";
 import { Loader } from "../SecurityModal/SecurityModal.styles";
 
-export default function Summary({ event }) {
+export default function Summary({ event ,setEventsDisplay}) {
   // console.log(event);
   const user_id = auth?.currentUser?.uid;
   // console.log(user_id);
@@ -65,9 +65,9 @@ export default function Summary({ event }) {
           </div>
           <div className="textContainer">
             <h3>{event.name}</h3>
-            <p>{formatDate(event.date)}</p>
-            <p>{amount}</p>
-            <p>{event.location}</p>
+            <p>Date: {formatDate(event.date)}</p>
+            <p>Number of tickets : {amount}</p>
+            <p>Location: {event.location}</p>
           </div>
         </CardSummary>
         <CostSummary>
@@ -112,7 +112,7 @@ export default function Summary({ event }) {
               width: "75%",
             }}
           >
-            <strong>Total Amount Payable </strong>
+            <strong>Total Amount </strong>
           </p>
           <p
             style={{
@@ -132,7 +132,7 @@ export default function Summary({ event }) {
             data-testid="book-button"
             // full={false}
           >
-            Book
+            Proceed to payment
           </BookButton>
         ) : (
           <PayPalButton
@@ -166,6 +166,7 @@ export default function Summary({ event }) {
           showModal={showmodal}
           setShowModal={setShowmodal}
           data-testid="success-modal"
+          setEventsDisplay={setEventsDisplay}
         />
       )}
     </>

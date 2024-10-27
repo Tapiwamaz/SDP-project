@@ -298,7 +298,7 @@ const HomePage = () => {
       </Page>
       {EventsDisplay && (
         <>
-          <EventRight>
+          <EventRight >
             <Xicon
               onClick={() => setEventsDisplay(null)}
               style={{ color: "black" }}
@@ -311,7 +311,7 @@ const HomePage = () => {
                 onDisplaySummary={displaySummary}
               ></EventDisplay>
             ) : (
-              <Summary event={summary}/>
+              <Summary event={summary} setEventsDisplay={setEventsDisplay}/>
             )}
           </EventRight>
         </>
