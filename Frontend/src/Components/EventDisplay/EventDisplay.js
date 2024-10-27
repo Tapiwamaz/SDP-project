@@ -82,8 +82,9 @@ const EventDisplay = ({
             setEventOrg(eventOrgData);
           }
           setLoad(false);
-          if(events){
-          setLoading(false);}
+          if (events) {
+            setLoading(false);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -314,7 +315,7 @@ const EventDisplay = ({
                 lineHeight: "1",
               }}
             >
-             Ticket Price
+              Ticket Price
             </h4>
             <p
               style={{
@@ -338,7 +339,7 @@ const EventDisplay = ({
               marginBottom: "0",
             }}
           >
-            About Event 
+            About Event
           </h2>
           <p
             style={{
@@ -358,6 +359,7 @@ const EventDisplay = ({
                 gridColumn: "span 1",
                 justifySelf: "center",
                 alignSelf: "center",
+                objectFit: "cover", // Add this line to prevent image stretching
               }}
               alt=""
             ></img>
