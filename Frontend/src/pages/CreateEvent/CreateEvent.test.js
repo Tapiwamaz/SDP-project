@@ -4,6 +4,7 @@ import {
   fireEvent,
   cleanup,
   waitFor,
+  getAllByAltText,
 } from "@testing-library/react";
 
 import {
@@ -497,7 +498,7 @@ describe("Create Event rendering", () => {
     expect(screen.getByTestId("title").textContent).toBe("Create your event");
   });
 
-  it("submission process", () => {
+  it("submission process", async () => {
     render(<CreateEvent inputEventDetails={null} />);
     const eventNameInput = screen.getByTestId("name");
     const eventDateInput = screen.getByTestId("date");
@@ -514,23 +515,25 @@ describe("Create Event rendering", () => {
     fireEvent.change(eventNameInput, { target: { value: "Sample Event" } });
     fireEvent.change(eventDateInput, { target: { value: "2024-09-30" } });
     fireEvent.change(priceInput, { target: { value: 7 } });
-    fireEvent.change(locationInput, { target: { value: "Park" } });
-    fireEvent.change(typeInput, { target: { value: "edu" } });
-    fireEvent.change(venue_typeInput, { target: { value: "Field" } });
+    fireEvent.change(typeInput, { target: { value: "Education" } });
+    fireEvent.change(venue_typeInput, { target: { value: "Lecture Venue" } });
+    fireEvent.change(locationInput, { target: { value: "CB216A" } });
+
     fireEvent.change(descriptionInput, { target: { value: "I dislike jest" } });
     fireEvent.change(start_timeInput, { target: { value: "08:00" } });
-    fireEvent.change(end_timeInput, { target: { value: "09:00" } });
+    fireEvent.change(end_timeInput, {  target:{ value: "09:00"}  });
     
     expect(eventNameInput.value).toBe("Sample Event");
     expect(eventDateInput.value).toBe("2024-09-30");
-    console.log(end_timeInput)
-    expect(end_timeInput).toBe("09:00");
-    expect(start_timeInput.value).toBe("08:00");
-    expect(locationInput.value).toBe("Park");
-    expect(venue_typeInput.value).toBe("Field");
-    expect(typeInput.value).toBe("edu");
+    await waitFor(() => expect(typeInput.value).toBe("Education"));
+    
+    await waitFor(()=>  expect(venue_typeInput.value).toBe("Lecture Venue"));
+    await waitFor(()=>  expect(locationInput.value).toBe("CB216A"));
+
     expect(priceInput.value).toBe("7");
     expect(descriptionInput.value).toBe("I dislike jest");
+    await waitFor(()=>  expect(end_timeInput.value).toBe("09:00"));
+    await waitFor(()=>  expect(start_timeInput.value).toBe("08:00"));
     const file = new File(["dummy image content"], "testImage.jpeg", {
       type: "image/jpeg",
     });
