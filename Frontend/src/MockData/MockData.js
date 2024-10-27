@@ -63,6 +63,7 @@ const mockEventData = [
 
 const mockEventTypes = [
   "Education",
+  "Social",
   "Sports",
   "Political",
   "Entertainment",
