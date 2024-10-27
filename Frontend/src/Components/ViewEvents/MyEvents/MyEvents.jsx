@@ -262,7 +262,7 @@ const MyEvents = () => {
             {loading ? ( // Show loader while fetching events
             <div className="loader">
               <div className="centerLoader"></div>
-              <p>Loading events...</p>
+              {/* <p>Loading events...</p> */}
             </div>
             ) : events.length > 0 ? (
             [...events].map(renderViewCards)

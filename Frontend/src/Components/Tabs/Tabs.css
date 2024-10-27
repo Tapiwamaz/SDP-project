@@ -78,7 +78,7 @@
 
   .Wrapper{
     width: 85%;
-    height: calc(100vh - 20px); /* Full view height with a little margin */
+    height: calc(150vh); /* Full view height with a little margin */
     overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden;
     margin: 0 auto;
