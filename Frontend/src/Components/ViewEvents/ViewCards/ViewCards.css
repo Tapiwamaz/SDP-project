@@ -96,7 +96,7 @@
     display: flex;
     justify-content: space-between;
     margin-top: 15px;
-    gap:4px;
+    /* gap:4px; */
   }
   
 
@@ -124,7 +124,8 @@
    .button-container {
     display: flex;
     gap: 10px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
+    width: 100%;
   }
   
   .button-container button {
@@ -134,6 +135,7 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+    /* margin: 0 5px; */
   }
   
   .cancel-button {

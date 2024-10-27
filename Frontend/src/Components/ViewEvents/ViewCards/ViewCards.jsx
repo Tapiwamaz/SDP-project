@@ -49,7 +49,7 @@ const ViewCards = ({ event, onCancel }) => {
           <p style={{color:event.status==="approved"?"green":event.status==="pending"?"orange":"red"}}>Status: {event.status}</p>
         </div>
 
-        <div className="event-actions">
+        <div className="event-actions button-container">
           {event.status !== 'rejected' && event.status !== 'cancelled' ? (
           <button className='reschedule-button' onClick={() => handleEdit(event)}>Edit Event</button>
           ):
