@@ -22,8 +22,8 @@ const eventColors = {
 const CustomToolbar = (props) => {
   const { label, view } = props;
 
-  const handleNavigate = (event) => {
-    const action = event.target.value;
+  const handleNavigate = (action) => {
+   
 
     switch (action) {
       case "prev":

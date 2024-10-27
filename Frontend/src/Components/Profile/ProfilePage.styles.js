@@ -5,7 +5,7 @@ export const Page = styled.div`
   flex-direction: row;
   width: 100%;
   height: 250px;
-  padding-bottom: 2vh;
+  padding-bottom: 5vh;
   font-family: "Khula", sans-serif;
   overflow-x: hidden;
   box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
@@ -175,6 +175,7 @@ export const Rating = styled.div`
   h4 {
     font-size: 0.9rem; /* Smaller font size */
     font-weight: 400;
+    padding-top: 5px;
   }
 
   @media (max-width: 480px) {
