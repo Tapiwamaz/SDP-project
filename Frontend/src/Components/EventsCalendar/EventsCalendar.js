@@ -26,9 +26,6 @@ const CustomToolbar = (props) => {
     const action = event.target.value;
 
     switch (action) {
-      case "today":
-        props.onNavigate("TODAY");
-        break;
       case "prev":
         props.onNavigate("PREV");
         break;
@@ -40,31 +37,47 @@ const CustomToolbar = (props) => {
     }
   };
 
-  const handleViewChange = (event) => {
-    const newView = event.target.value;
+  const handleViewChange = (newView) => {
     props.onView(newView);
   };
 
-  return (
-    <div className="rbc-toolbar">
-      {/* Label for the current date */}
+    
 
-      {/* Dropdown for navigation */}
-      <select onChange={handleNavigate} defaultValue="">
-        <option value="" disabled>
-          Navigate
-        </option>
-        <option value="today">Today</option>
-        <option value="prev">Previous</option>
-        <option value="next">Next</option>
-      </select>
-      <span className="rbc-toolbar-label">{label}</span>
-      {/* Dropdown for changing views */}
-      <select onChange={handleViewChange} value={view}>
-        <option value="month">Month</option>
-        <option value="week">Week</option>
-        <option value="day">Day</option>
-      </select>
+  return (
+    <div className="rbc-toolbar custom-toolbar">
+      <div className="rbc-toolbar-label">{label}</div>
+
+      <div className="toolbar-buttons">
+        <div className="rbc-btn-group navigation-group">
+          <button onClick={() => handleNavigate("prev")} aria-label="Previous">
+            ←
+          </button>
+          <button onClick={() => handleNavigate("next")} aria-label="Next">
+            →
+          </button>
+        </div>
+
+        <div className="rbc-btn-group view-change-group">
+          <button
+            onClick={() => handleViewChange("day")}
+            disabled={view === "day"}
+          >
+            Day
+          </button>
+          <button
+            onClick={() => handleViewChange("week")}
+            disabled={view === "week"}
+          >
+            Week
+          </button>
+          <button
+            onClick={() => handleViewChange("month")}
+            disabled={view === "month"}
+          >
+            Month
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -98,37 +111,36 @@ const MyCalendar = ({ filter }) => {
   };
 
   return (
-    <>
-      <Body>
-        <CalendarWrapper>
-          <div style={{ height: 600 }}>
-            <Calendar
-              localizer={localizer}
-              events={filter}
-              titleAccessor="name"
-              views={["month", "week", "day"]}
-              style={{ height: 600 }}
-              startAccessor={(event) =>
-                new Date(`${event.date}T${event.start_time}:00`)
-              }
-              endAccessor={(event) =>
-                new Date(`${event.date}T${event.end_time}:00`)
-              }
-              eventPropGetter={eventStyleGetter}
-              date={currentDate}
-              view={view}
-              components={{
-                toolbar: CustomToolbar, // Use custom toolbar
-              }}
-              onNavigate={(date) => setCurrentDate(date)}
-              onView={(view) => setView(view)}
-              onSelectSlot={handleSelectSlot}
-              selectable
-            />
-          </div>
-        </CalendarWrapper>
-      </Body>
-    </>
+    <Body>
+      <CalendarWrapper>
+        <div style={{ height: 600 }}>
+          <Calendar
+            localizer={localizer}
+            events={filter}
+            titleAccessor="name"
+            views={["month", "week", "day"]}
+            style={{ height: 600 }}
+            startAccessor={(event) =>
+              new Date(`${event.date}T${event.start_time}:00`)
+            }
+            endAccessor={(event) =>
+              new Date(`${event.date}T${event.end_time}:00`)
+            }
+            eventPropGetter={eventStyleGetter}
+            date={currentDate}
+            view={view}
+            components={{
+              toolbar: CustomToolbar,
+            }}
+            onNavigate={(date) => setCurrentDate(date)}
+            onView={(view) => setView(view)}
+            onSelectSlot={handleSelectSlot}
+            selectable
+            longPressThreshold={50} //Reduce this threshold to make it more responsive to quick taps
+          />
+        </div>
+      </CalendarWrapper>
+    </Body>
   );
 };
 

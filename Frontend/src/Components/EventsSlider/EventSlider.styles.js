@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from "react-responsive-carousel";
 
 export const Container = styled.div`
   width: 100%;
   min-width: 100%; /* Ensure it doesn't exceed the screen width */
-  margin: 0 auto; 
-  padding: 0 10px; 
+  margin: 0 auto;
+  padding: 0 10px;
   /* z-index: -1; */
 `;
 
@@ -21,7 +21,6 @@ export const Card = styled.button`
   font-family: "Khula", sans-serif;
   border: 1px var(--primary) solid;
 
-  
   display: flex;
   flex-direction: column;
   transition: all 0.5s ease;
@@ -29,44 +28,40 @@ export const Card = styled.button`
   color: black;
   &:hover {
     color: white;
-    background-color: cornflowerblue;
+    background-color: #647eb4;
     transform: scale(1.05);
   }
 
-
-  img{
+  img {
     height: 100px;
     width: 180px;
-    border-radius:inherit;
+    border-radius: inherit;
   }
-  p{
+  p {
     /* margin: 3px; */
     font-size: small;
     margin: 0;
     margin-left: 5px;
   }
-  h3{
+  h3 {
     margin: 5px;
-  white-space: nowrap; /* Prevents the text from wrapping to the next line */
-  overflow: hidden;    /* Hides the overflow text */
-  text-overflow: ellipsis; /* Adds "..." at the end of the truncated text */
-  max-width: 100%;     /* Optional: Set a max width as needed */
-  font-size: larger;
-
+    white-space: nowrap; /* Prevents the text from wrapping to the next line */
+    overflow: hidden; /* Hides the overflow text */
+    text-overflow: ellipsis; /* Adds "..." at the end of the truncated text */
+    max-width: 100%; /* Optional: Set a max width as needed */
+    font-size: larger;
   }
-  .main{
+  .main {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 20px;
     margin-top: 10px;
-    svg{
+    svg {
       height: 20px;
       width: 20px;
     }
-    
   }
-
 `;
 
 export const LoadingCard = styled.div`
@@ -80,7 +75,6 @@ export const LoadingCard = styled.div`
   height: 300px;
   animation: loading 1.5s infinite;
   opacity: 0.2;
-  
 
   @keyframes loading {
     0% {
@@ -92,7 +86,6 @@ export const LoadingCard = styled.div`
   }
 `;
 
-
 export const CustomCarousel = styled(Carousel)`
   .carousel .control-dots {
     display: none; /* Hide the dots for cleaner look */
@@ -101,8 +94,8 @@ export const CustomCarousel = styled(Carousel)`
   .carousel .control-arrow {
     background: var(--primary);
     @media (max-width: 769px) {
-    display: none;
-      }
+      display: none;
+    }
   }
 
   .carousel .slide {
@@ -113,7 +106,6 @@ export const CustomCarousel = styled(Carousel)`
     margin: 0;
   }
 `;
-
 
 export const Aside = styled.aside`
   position: fixed;

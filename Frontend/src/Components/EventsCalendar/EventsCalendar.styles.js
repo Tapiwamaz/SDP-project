@@ -18,18 +18,20 @@ export const CalendarWrapper = styled.div`
     .rbc-row-bg {
       .rbc-day-bg {
         border: none;
+        cursor: pointer;
       }
     }
   }
+
   .rbc-toolbar {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-
     justify-content: space-between;
     align-items: center;
 
     @media (max-width: 480px) {
+      flex-direction: column;
     }
   }
 
@@ -45,26 +47,50 @@ export const CalendarWrapper = styled.div`
     font-size: 2rem;
     font-weight: 700;
   }
-
-  .rbc-btn-group {
+  .toolbar-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .navigation-group,
+  .view-change-group {
+    display: flex;
+  }
+  .rbc-btn-group button {
     background-color: var(--primary);
     color: white;
-    border-radius: 10px;
-    //make it flex coloumn for mobile
-    button {
-      color: white;
-      border-color: transparent;
+    border-color: transparent;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    min-width: 30px; /* Ensure buttons don't get too small */
+    height: 30px;
 
-      .rbc-active {
-        background-color: var(--primaryGrey);
-      }
+    &:hover {
+      background-color: #eaeef5;
+      color: var(--primaryDark);
+      transform: scale(1.1);
+    }
+    @media (max-width: 480px) {
+      width: 100%;
+      padding: 8px;
+      font-size: 12px;
+    }
+
+    .rbc-active {
+      background-color: var(--primaryGrey);
     }
   }
 
   .rbc-month-row {
     border: none;
     &:hover {
-      background-color: "#36454F";
+      //background-color: #36454f;
     }
   }
 
@@ -81,9 +107,18 @@ export const CalendarWrapper = styled.div`
   .rbc-row-segment {
     padding-top: 0.2vh;
   }
+
   .rbc-row-button-link {
     width: 100%;
     height: 100%;
+  }
+
+  .custom-toolbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
   }
 `;
 

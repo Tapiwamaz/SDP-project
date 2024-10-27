@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useRef } from "react";
-import logo from "../../Images/Logo.svg.svg";
+import logo from "../../Images/NewLogo.svg.svg";
 import {
   HeaderContainer,
   Xicon,
@@ -15,8 +14,15 @@ import { auth } from "../../firebase_config";
 import { useNavigate } from "react-router";
 import ProfilePage from "../Profile/ProfilePage";
 import { signOut } from "firebase/auth";
-import { HomeIcon,ArrowLeftStartOnRectangleIcon,TicketIcon,PlusCircleIcon,UserGroupIcon,CheckBadgeIcon,ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
-
+import {
+  HomeIcon,
+  ArrowLeftStartOnRectangleIcon,
+  TicketIcon,
+  PlusCircleIcon,
+  UserGroupIcon,
+  CheckBadgeIcon,
+  ArrowRightEndOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +33,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const asideRef = useRef(); // Create a ref for the Aside component
-  const profileRef=useRef();
+  const profileRef = useRef();
 
   useEffect(() => {
     const updateSlidePercentage = () => {
@@ -98,12 +104,15 @@ const Header = () => {
       if (asideRef.current && !asideRef.current.contains(event.target)) {
         setIsOpen(false);
       }
-      if (profileRef.current && !profileCllicked.current.contains(event.target)) {
+      if (
+        profileRef.current &&
+        !profileCllicked.current.contains(event.target)
+      ) {
         setProfileClicked(false);
       }
     };
 
-    if (isOpen ||profileCllicked) {
+    if (isOpen || profileCllicked) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -112,7 +121,7 @@ const Header = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside); // Cleanup
     };
-  }, [isOpen,profileCllicked]);
+  }, [isOpen, profileCllicked]);
 
   const logout = async () => {
     try {
@@ -129,7 +138,7 @@ const Header = () => {
       <HeaderContainer>
         <Logo src={logo} onClick={() => handleNavClick("/")} />
 
-        {(auth?.currentUser && userData) ? (
+        {auth?.currentUser && userData ? (
           <Profile>
             <img
               src={`${userData.imageURL}`}
@@ -158,37 +167,40 @@ const Header = () => {
           {log ? (
             <>
               <AsideNavItem onClick={() => handleNavClick("/")}>
-                <HomeIcon style={{height:"20px",width:"20px"}}/>
+                <HomeIcon style={{ height: "20px", width: "20px" }} />
                 <p>Home</p>
               </AsideNavItem>
               <AsideNavItem onClick={() => handleNavClick("/myEvents")}>
-                <UserGroupIcon style={{height:"20px",width:"20px"}}/>
+                <UserGroupIcon style={{ height: "20px", width: "20px" }} />
                 <p>My Events</p>
               </AsideNavItem>
               <AsideNavItem onClick={() => handleNavClick("/myBooking")}>
-                <TicketIcon style={{height:"20px",width:"20px"}}/>
-                <p>My Bookings</p> 
+                <TicketIcon style={{ height: "20px", width: "20px" }} />
+                <p>My Bookings</p>
               </AsideNavItem>
               <AsideNavItem onClick={() => handleNavClick("/createEvent")}>
-                <PlusCircleIcon style={{height:"20px",width:"20px"}}/>
-                <p>Create Event</p> 
+                <PlusCircleIcon style={{ height: "20px", width: "20px" }} />
+                <p>Create Event</p>
               </AsideNavItem>
               {auth?.currentUser?.uid === process.env.REACT_APP_ADMIN_ID && (
                 <AsideNavItem onClick={() => handleNavClick("/adminDashboard")}>
-                  <CheckBadgeIcon style={{height:"20px",width:"20px"}}/>
+                  <CheckBadgeIcon style={{ height: "20px", width: "20px" }} />
                   <p>Approvals</p>
                 </AsideNavItem>
               )}
               <AsideNavItem onClick={logout}>
-                  <ArrowLeftStartOnRectangleIcon style={{height:"20px",width:"20px"}}/>
-                
-                <p>Logout</p> 
-              </AsideNavItem>
+                <ArrowLeftStartOnRectangleIcon
+                  style={{ height: "20px", width: "20px" }}
+                />
 
+                <p>Logout</p>
+              </AsideNavItem>
             </>
           ) : (
             <AsideNavItem onClick={() => handleNavClick("/welcome")}>
-              <ArrowRightEndOnRectangleIcon style={{height:"20px",width:"20px"}}/>
+              <ArrowRightEndOnRectangleIcon
+                style={{ height: "20px", width: "20px" }}
+              />
               <p>Login</p>
             </AsideNavItem>
           )}

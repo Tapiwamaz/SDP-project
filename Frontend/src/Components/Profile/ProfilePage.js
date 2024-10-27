@@ -63,7 +63,7 @@ export const Profile = () => {
   const [ticketCount, setTicketCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
 
-  const [displayRight,setDisplayRight]=useState(false);
+  const [displayRight, setDisplayRight] = useState(false);
 
   const [screen, setScreen] = useState(null);
   const navigate = useNavigate();
@@ -233,26 +233,24 @@ export const Profile = () => {
     }
   };
 
-
   const eventRightRef = useRef(null);
 
   // Function to handle closing when clicking outside
   const handleClickOutside = (e) => {
     if (eventRightRef.current && !eventRightRef.current.contains(e.target)) {
-      setDisplayRight(false)
+      setDisplayRight(false);
     }
   };
 
   useEffect(() => {
     // Add event listener for clicks
-    document.addEventListener('mousedown', handleClickOutside);
-    
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       // Remove event listener on cleanup
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   return (
     <>
@@ -314,27 +312,23 @@ export const Profile = () => {
             </Rating>
             <Count>
               <CountWrapper>
-                <h3 style={{ fontWeight: "800" }}>{eventCount}</h3>
-                <h3 style={{ fontWeight: "600", color: "#18336C" }}>
-                  Events Done
-                </h3>
+                <h3>{eventCount}</h3>
+                <h3 style={{ color: "#18336C" }}>Events Done</h3>
               </CountWrapper>
 
               <CountWrapper>
-                <h3 style={{ fontWeight: "800" }}>{ticketCount}</h3>
-                <h3 style={{ fontWeight: "600", color: "#18336C" }}>
-                  Events Attended
-                </h3>
+                <h3>{ticketCount}</h3>
+                <h3 style={{ color: "#18336C" }}>Events Attended</h3>
               </CountWrapper>
             </Count>
           </Stats>
           <Details>
             <Email>
-              <h4 style={{ fontWeight: "600", color: "#18336C" }}>Email</h4>
+              <h4 style={{ color: "#18336C" }}>Email</h4>
               <h4 style={{ color: "#676363" }}>{userData.email}</h4>
             </Email>
             <About>
-              <h4 style={{ fontWeight: "600", color: "#18336C" }}>About</h4>
+              <h4 style={{ color: "#18336C" }}>About</h4>
               {isEditing ? (
                 <div>
                   <textarea
@@ -343,7 +337,7 @@ export const Profile = () => {
                     rows="5"
                     style={{
                       width: "95%",
-                      fontSize: "12px",
+                      fontFamily: "Khula",
                       marginBottom: "10px",
                     }}
                   />
@@ -366,7 +360,13 @@ export const Profile = () => {
           </Details>
           <NavigationSection>
             <ButtonGrp>
-              <ButtonWrapper onClick={()=>screen==="desktop"?setDisplayRight(true):navigate("/notifications")}>
+              <ButtonWrapper
+                onClick={() =>
+                  screen === "desktop"
+                    ? setDisplayRight(true)
+                    : navigate("/notifications")
+                }
+              >
                 <LeftSection>
                   <BellIcon
                     style={{ height: "27px", width: " 22px", color: "black" }}
@@ -415,9 +415,7 @@ export const Profile = () => {
       {displayRight && (
         <>
           <EventRight ref={eventRightRef}>
-            
             <Notifications></Notifications>
-         
           </EventRight>
         </>
       )}
