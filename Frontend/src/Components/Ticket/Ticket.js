@@ -1,6 +1,6 @@
 import { TicketContainer, Link, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, StyledButton, DownloadLink, ModalContent, ModalWrapper, Overlay } from "./Ticket.styles";
 import { useState } from 'react';
-import { getFirestore, doc, updateDoc, FieldValue } from "firebase/firestore"; 
+import { getFirestore, doc, updateDoc, increment, query, collection, where, getDocs } from "firebase/firestore"; 
 import { db } from "../../firebase_config";
 import download from '../../Images/download.svg';
 import html2pdf from 'html2pdf.js';
@@ -14,6 +14,7 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
     event.stopPropagation();
     const docRef = doc(db, "Tickets", id);
     const eventDocRef = doc(db, "Events", event_id);
+  
 
     const userResponse = window.confirm("Are you sure you want to cancel this booking? You will be refunded in full");
     if (userResponse) {
@@ -21,13 +22,28 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
         await updateDoc(docRef, {
           cancelled: true
         });
-        await updateDoc(eventDocRef, {
-          tickets_count: FieldValue.increment(1)
-        });
+        const eventsQuery = query(
+          collection(db, "Events"),
+          where("event_id", "==", event_id)
+        );
+        const querySnapshot = await getDocs(eventsQuery);
+
+        if (!querySnapshot.empty) {
+          const eventDocRef = querySnapshot.docs[0].ref; // Get the first matching document
+
+          // Update the tickets_count in the event document
+          await updateDoc(eventDocRef, {
+            ticket_count: increment(1)
+          });
+        } else {
+          console.log("No matching event found.");
+        }
+
         alert("Booking has been cancelled. You will receive a full refund");
         window.location.reload();
       } catch (e) {
         alert("An error occurred. Please try again later");
+        console.error(e);
       }
     }
   }
