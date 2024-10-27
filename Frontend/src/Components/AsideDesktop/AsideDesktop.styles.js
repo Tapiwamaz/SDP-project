@@ -69,7 +69,7 @@ export const Aside = styled.div`
   z-index: 100;
   top: 0;
   right: 0;
-  width: 15%;
+  width: 10%;
   min-height: 900px;
   background-color: var(--primary);
   padding: 2rem;
