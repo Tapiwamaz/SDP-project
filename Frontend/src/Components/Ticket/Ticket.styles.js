@@ -11,6 +11,8 @@ export const TicketContainer = styled.div`
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   justify-content: space-between;
+  cursor: pointer;
+  
 
   @media (min-width: 868px) {
     flex-direction: row;
@@ -154,6 +156,21 @@ export const DownloadLink = styled.a`
 
   @media (max-width: 450px) {
     font-size: 0.6rem; /* Further reduce font size */
+  }
+`;
+
+export const Link = styled.a`
+  display: flex;
+  align-items: center; /* Align icon and text vertically */
+  padding: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: ${(props) => props.color};
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
 

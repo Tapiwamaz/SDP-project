@@ -1,23 +1,28 @@
-import { TicketContainer, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, StyledButton, DownloadLink, ModalContent, ModalWrapper, Overlay } from "./Ticket.styles";
+import { TicketContainer, Link, TicketImage, TextContainer, TicketTitle, DetailItem, Total, RightContainer, StyledButton, DownloadLink, ModalContent, ModalWrapper, Overlay } from "./Ticket.styles";
 import { useState } from 'react';
-import { getFirestore, doc, updateDoc } from "firebase/firestore"; 
+import { getFirestore, doc, updateDoc, FieldValue } from "firebase/firestore"; 
 import { db } from "../../firebase_config";
 import download from '../../Images/download.svg';
 import html2pdf from 'html2pdf.js';
 import ReactDOM from "react-dom";
 import React from "react";
 
-export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick,type })  => {
+
+export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onClick, type, event_id })  => {
 
   const cancel = async (event) => {
     event.stopPropagation();
     const docRef = doc(db, "Tickets", id);
+    const eventDocRef = doc(db, "Events", event_id);
 
     const userResponse = window.confirm("Are you sure you want to cancel this booking? You will be refunded in full");
     if (userResponse) {
       try {
         await updateDoc(docRef, {
           cancelled: true
+        });
+        await updateDoc(eventDocRef, {
+          tickets_count: FieldValue.increment(1)
         });
         alert("Booking has been cancelled. You will receive a full refund");
         window.location.reload();
@@ -54,7 +59,7 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
     
 
     return (
-      <TicketContainer onClick={onClick} id="ticket">
+      <TicketContainer id="ticket">
         {/* Mobile: Image on the left, Larger screens: Image below title */}
         <TicketImage src={url} alt="Event Image" data-html2canvas-ignore/>
   
@@ -85,7 +90,8 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
           <DownloadLink onClick={downloadOnClick} data-html2canvas-ignore>
             <img src={download}/>Download PDF 
           </DownloadLink>
-          {type==="Upcoming" && <StyledButton onClick={cancel}>Cancel Booking</StyledButton>}
+          <Link color="black" onClick={onClick}>View Details</Link>
+          {type==="Upcoming" && <Link color="red" onClick={cancel}>Cancel Booking</Link>}
         </RightContainer>
       </TicketContainer>
  
