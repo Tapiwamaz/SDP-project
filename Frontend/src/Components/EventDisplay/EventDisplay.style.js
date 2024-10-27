@@ -87,9 +87,10 @@ export const BookButton = styled.button`
   font-weight: 600;
   height: 3.25em;
   gap: 0.625em;
-  border-radius: 0.625em;
-  background: ${props => { 
-    return props.full ? 'gray' : '#18336c'}};
+  border-radius: 1.35rem;
+  background: ${(props) => {
+    return props.full ? "gray" : "#18336c";
+  }};
   border: none;
   margin-top: 1em;
   padding: 1em;
@@ -105,7 +106,7 @@ export const EventImage = styled.img`
   width: 100%;
   height: 50%;
   background: url(<path-to-image>) lightgray 50% / cover no-repeat, #d9d9d9;
-  border-radius: 50px;
+  border-radius: 1.35rem;
 `;
 
 export const NumberofTickets = styled.div`
@@ -138,7 +139,7 @@ export const EveOCard = styled.div`
   grid-gap: 1em;
   padding: 1em;
   border: 1px solid #d9d9d9;
-  border-radius: 25px;
+  border-radius: 1.35rem;
   background-color: #fff;
   .top-right {
     display: grid;
@@ -184,7 +185,7 @@ export const TitlePlaceHolder = styled.h1`
   animation: ${loading} 0.8s ease-in-out infinite;
   height: 40px;
   width: 100%;
-  border-radius: 50px;
+  border-radius: 1.35rem;
 `;
 
 export const EventImagePlaceholder = styled.img`
@@ -193,7 +194,7 @@ export const EventImagePlaceholder = styled.img`
   animation: ${loading} 0.8s ease-in-out infinite;
   width: 100%;
   height: 300px;
-  border-radius: 50px;
+  border-radius: 1.35rem;
 `;
 
 export const PlaceHolderText = styled.p`
@@ -202,7 +203,7 @@ export const PlaceHolderText = styled.p`
   animation: ${loading} 0.8s ease-in-out infinite;
   height: 20px;
   width: 50%;
-  border-radius: 50px;
+  border-radius: 1.35rem;
   margin: 10px 0;
 `;
 

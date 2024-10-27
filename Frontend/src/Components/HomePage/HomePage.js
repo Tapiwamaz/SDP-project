@@ -298,7 +298,7 @@ const HomePage = () => {
       </Page>
       {EventsDisplay && (
         <>
-          <EventRight>
+          <EventRight className={EventDisplay?"":"hidden"}>
             <Xicon
               onClick={() => setEventsDisplay(null)}
               style={{ color: "black" }}

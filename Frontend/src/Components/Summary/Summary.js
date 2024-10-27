@@ -65,9 +65,9 @@ export default function Summary({ event ,setEventsDisplay}) {
           </div>
           <div className="textContainer">
             <h3>{event.name}</h3>
-            <p>{formatDate(event.date)}</p>
-            <p>{amount}</p>
-            <p>{event.location}</p>
+            <p>Date: {formatDate(event.date)}</p>
+            <p>Number of tickets : {amount}</p>
+            <p>Location: {event.location}</p>
           </div>
         </CardSummary>
         <CostSummary>
@@ -112,7 +112,7 @@ export default function Summary({ event ,setEventsDisplay}) {
               width: "75%",
             }}
           >
-            <strong>Total Amount Payable </strong>
+            <strong>Total Amount </strong>
           </p>
           <p
             style={{
@@ -132,7 +132,7 @@ export default function Summary({ event ,setEventsDisplay}) {
             data-testid="book-button"
             // full={false}
           >
-            Book
+            Proceed to payment
           </BookButton>
         ) : (
           <PayPalButton

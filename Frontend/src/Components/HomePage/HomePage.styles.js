@@ -99,9 +99,8 @@ font-family: "Khula";
 
 
 `
-
-export const EventRight=styled.div`
-position: fixed; /* Keeps the element fixed to the right */
+export const EventRight = styled.div`
+  position: fixed; /* Keeps the element fixed to the right */
   right: 0; /* Aligns it to the right edge */
   top: 0; /* Aligns it to the top */
   /* width: 30%; You can adjust this width based on your preference */
@@ -110,7 +109,13 @@ position: fixed; /* Keeps the element fixed to the right */
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
   z-index: 1000; /* Ensures it appears above other elements */
   padding: 1em; /* Adds some padding inside the element */
-  width:450px;
+  width: 350px;
   overflow-y: auto; /* Allows scrolling if the content overflows */
-`
+  transition: transform 0.3s ease-in-out; /* Adds a transition effect */
+  transform: translateX(0); /* Initial transform state */
+  
+  &.hidden {
+    transform: translateX(100%); /* Moves the element out of view */
+  }
+`;
 

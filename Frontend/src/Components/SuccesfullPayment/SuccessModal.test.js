@@ -71,7 +71,7 @@ describe("SuccessModal", () => {
       screen.queryByText("You have successfully completed your payment.")
     ).not.toBeInTheDocument();
     expect(screen.queryByText("Go to Homepage")).not.toBeInTheDocument();
-    expect(screen.queryByText("Go to My Tickets")).not.toBeInTheDocument();
+    expect(screen.queryByText("Go to My Bookings")).not.toBeInTheDocument();
     expect(screen.queryByTestId("confetti")).not.toBeInTheDocument();
   });
 
@@ -102,7 +102,7 @@ describe("SuccessModal", () => {
     );
 
     // Simulate clicking the "Go to My Tickets" button
-    fireEvent.click(screen.getByText("Go to My Tickets"));
+    fireEvent.click(screen.getByText("Go to My Bookings"));
 
     // Check if navigate was called with the correct route
     expect(mockNavigate).toHaveBeenCalledWith("/myBooking");

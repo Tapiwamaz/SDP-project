@@ -150,8 +150,12 @@ export const Xicon = styled(XMarkIcon)`
   color: white;
   width: 40px;
   height: 30px;
-`;
+  transition: color 0.3s ease-in-out;
 
+  &:hover {
+    color: red; /* Change this to the color you want on hover */
+  }
+`;
 export const ProfileDropdown = styled.div`
   position: absolute;
   top: 121px; /* Just below the header */

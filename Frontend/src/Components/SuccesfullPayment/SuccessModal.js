@@ -23,7 +23,7 @@ const Modal = styled.div`
 const ModalContent = styled.div`
   background-color: #fff;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 1.35rem;
   width: 80%;
   max-width: 500px;
 `;
@@ -87,7 +87,7 @@ export default function SuccessModal({
           }}
           onClick={() => navigate("/myBooking")}
         >
-          Go to My Tickets
+          Go to My Bookings
         </BookButton>
       </ModalContent>
       {/* <Button onClick={() => setShowModal(false)}>Close</Button> */}

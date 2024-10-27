@@ -255,7 +255,7 @@ const EventDisplay = ({
                 lineHeight: "1",
               }}
             >
-              Time:
+              Time
             </h4>
             <p
               style={{
@@ -285,7 +285,7 @@ const EventDisplay = ({
                 lineHeight: "1",
               }}
             >
-              Location:
+              Location
             </h4>
             <p
               style={{
@@ -314,7 +314,7 @@ const EventDisplay = ({
                 lineHeight: "1",
               }}
             >
-              Price Per Ticket:
+             Ticket Price
             </h4>
             <p
               style={{
@@ -338,7 +338,7 @@ const EventDisplay = ({
               marginBottom: "0",
             }}
           >
-            About Event :
+            About Event 
           </h2>
           <p
             style={{
@@ -387,7 +387,7 @@ const EventDisplay = ({
                       }}
                       data-testid="DecrementButton"
                     />
-                    <p>Current count: {count}</p>
+                    <p>Ticket count: {count}</p>
                     <PlusCircleIcon
                       onClick={incrementCount}
                       style={{
@@ -437,7 +437,7 @@ const EventDisplay = ({
                         marginBottom: "-.5em",
                       }}
                     >
-                      Are you enjoying The event:
+                      Are you enjoying The event
                     </h3>
                     <p>Please consider leaving us a Rating</p>
                     <RatingStars>
