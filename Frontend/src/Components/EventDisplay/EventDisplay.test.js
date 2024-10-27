@@ -107,7 +107,7 @@ describe("EventDisplay Component", () => {
     expect(screen.getByText("organizer@example.com")).toBeInTheDocument();
     expect(screen.getByText("Organizer Description")).toBeInTheDocument();
     expect(screen.getByText("Number of Tickets")).toBeInTheDocument();
-    expect(screen.getByText("Ticket count 1")).toBeInTheDocument();
+    expect(screen.getByText("Ticket count: 1")).toBeInTheDocument();
   });
 
   test("Book now button is disabled when ticket count is 0", async () => {

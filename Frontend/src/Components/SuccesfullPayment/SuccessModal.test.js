@@ -52,7 +52,7 @@ describe("SuccessModal", () => {
 
     // Check if buttons are rendered
     expect(screen.getByText("Go to Homepage")).toBeInTheDocument();
-    expect(screen.getByText("Go to My Tickets")).toBeInTheDocument();
+    expect(screen.getByText("Go to My Bookings")).toBeInTheDocument();
 
     // Check if Confetti is rendered
     expect(screen.getByTestId("confetti")).toBeInTheDocument();
