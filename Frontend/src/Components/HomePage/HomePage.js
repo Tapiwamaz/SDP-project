@@ -254,6 +254,11 @@ const HomePage = () => {
                 filter={activeTag === "Online" ? null : () => filter("Online")}
                 isActive={activeTag === "Online"}
               ></Tags>
+                <Tags
+                name={"Social"}
+                filter={activeTag === "Social" ? null : () => filter("Social")}
+                isActive={activeTag === "Social"}
+              ></Tags>
               <Tags
                 name={"Other"}
                 filter={activeTag === "Other" ? null : () => filter("Other")}
