@@ -9,6 +9,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 1.35rem;
+    
 }
 
 .popup-inner{
@@ -17,7 +19,8 @@
     width: 100%;
     max-width: 640px;
     background-color: white;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-radius: 1.35rem;
 }
 
 .popup-inner .close-btn {

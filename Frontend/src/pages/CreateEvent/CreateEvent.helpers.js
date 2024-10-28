@@ -22,6 +22,7 @@ export const handleNextButtonClick = async (
   db,
   auth
 ) => {
+
   if (!eventDetailsT.name || eventDetailsT.name == "") {
     // Handle missing event name
     eventRefsT.eventName.current.classList.add("unfilled-input");
@@ -184,7 +185,6 @@ export const handleNextButtonClick = async (
 
       sendNotification(notification, db);
       let bookingID = null;
-      console.log(eventDetailsT);
       try {
         bookingID = await getBookingID(
           eventDetailsT.location,
@@ -229,7 +229,7 @@ export const deleteBooking = async (bookingID) => {
       throw new Error("Error deleting booking");
     }
 
-    return await response.json(); 
+    return await response.json();
   } catch (error) {
     console.error("Error deleting booking:", error);
     return null;
@@ -293,10 +293,16 @@ export const getBookingID = async (
       return data[0].id;
     } else {
       console.error("No booking found for the given details");
-      return null
+      return null;
     }
   } catch (error) {
     console.error("Error retrieving booking ID:", error);
     return null;
   }
+};
+
+export const filterVenues = (arr, attribute) => {
+  // get an array of object and returns an array of uniques values of the attribute in each object 
+  let output = [...new Set(arr.map((element) => element[attribute]))];
+  return output
 };

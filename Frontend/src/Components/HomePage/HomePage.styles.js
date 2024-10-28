@@ -109,7 +109,11 @@ position: fixed; /* Keeps the element fixed to the right */
   background-color: white; /* You can set the background color as needed */
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow for depth */
   z-index: 1000; /* Ensures it appears above other elements */
-  padding: 20px;
+  padding: 1em; /* Adds some padding inside the element */
+  width:400px;
   overflow-y: auto; /* Allows scrolling if the content overflows */
+  font-family: "Khula", sans-serif;
+
+  
 `
 

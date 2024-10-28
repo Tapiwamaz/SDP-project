@@ -9,7 +9,8 @@ import {
   CpuChipIcon,
   BookOpenIcon,
   PlusCircleIcon,
-  DevicePhoneMobileIcon
+  DevicePhoneMobileIcon,
+  UsersIcon
 } from '@heroicons/react/24/outline';
 import styled from 'styled-components';
 
@@ -20,10 +21,12 @@ const Button = styled.button`
   border: ${({ isActive }) => (!isActive ? 'var(--primary) 2px solid' : 'black 2px solid')};
   border-radius: 20px;
   margin: 2px;
-  padding: 10px;
+  padding: 11px;
   min-width: 100px;
   height: 10px;
   display: flex;
+  gap: 5px;
+  font-size: small;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -63,6 +66,8 @@ const Tags = ({ name, filter, isActive }) => {
         return { icon: CpuChipIcon, color: '#b25da6' };
       case 'Online':
           return { icon: DevicePhoneMobileIcon, color: 'lime' };
+      case 'Social':
+            return { icon: UsersIcon, color: '#BFECFF' };
       case 'Other':
         return { icon: PlusCircleIcon, color: 'grey' };
       default:

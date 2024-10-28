@@ -2,9 +2,10 @@
 import { auth,googleProvider ,db} from "../../firebase_config.js";
 import { signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import { useState } from "react";
-import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText, ResponsiveBackground, ResponsiveDiv, ModalWrapper, Overlay, ModalContent } from "../Universal Styles/Universal.styles.js";
+import { ImageContainer, StyledButton, StyledP, StyledImage, StyledInput, ImageButton, StyledBoldText, ClickableText, StyledLink, ErrorMessage , StyledText, ResponsiveBackground, ResponsiveDiv, ModalWrapper, Overlay, ModalContent } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 import { query,where,getDocs,collection } from "firebase/firestore";
 
@@ -17,6 +18,7 @@ export const Login = () => {
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [modal, setModal] = useState(false);
+    const [visible, setVisible] = useState(false);
     const navigate=useNavigate();
 
     var emailInput = document.getElementById("emailInput");
@@ -140,8 +142,15 @@ export const Login = () => {
             <ImageContainer>
                 <StyledBoldText>Welcome Back!</StyledBoldText>
             </ImageContainer>
-            <StyledInput id="emailInput" type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-            <StyledInput id="passwordInput" type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+            <StyledP>
+                <input style={{width: '100%', height: '100%', border: 'none', outline: 'none'}} id="emailInput" type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+            </StyledP>
+            <StyledP>
+                <input style={{width: '100%', height: '100%', border: 'none', outline: 'none'}} id="passwordInput" type={visible? "text":"password"} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                <div onClick={() => setVisible(!visible)}>
+                    {visible ? <FaEyeSlash /> : <FaEye />}
+                </div>
+            </StyledP>
             <ClickableText><StyledLink onClick={toggleModal}>Forgot password?</StyledLink></ClickableText>
             <ErrorMessage>{errorMessage}</ErrorMessage>
             <StyledButton onClick={login}>Login</StyledButton>

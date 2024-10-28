@@ -10,7 +10,7 @@ import noResults from "../../Images/noResults.svg"
 const secretKey = process.env.REACT_APP_X_API_KEY;
 
   // Check venue availability
-  const checkVenueAvailability = async (venueId, bookingDate, startTime, endTime) => {
+  export const checkVenueAvailability = async (venueId, bookingDate, startTime, endTime) => {
     try {
       const response = await fetch(
         `https://wits-infrastructure-management.web.app/api/bookings/findByField?venueID=${venueId}&bookingDate=${bookingDate}&bookingStartTime=${startTime}&bookingEndTime=${endTime}`, 
@@ -36,7 +36,7 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
   };
 
   // Create booking after approval
-  const createBooking = async (venueBooker, venueID, bookingDate, startTime, endTime, bookingDescription) => {
+  export const createBooking = async (venueBooker, venueID, bookingDate, startTime, endTime, bookingDescription) => {
     const bookingData = {
       venueBooker,
       venueID,
@@ -70,7 +70,7 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
     }
   };
 
-  const fetchUserDetails = async (userId) => {
+  export const fetchUserDetails = async (userId) => {
     try {
       const userCollection = collection(db, 'Users'); 
       const q = query(userCollection, where("user_id", "==", userId)); 
@@ -103,7 +103,11 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
     const userDetails = await fetchUserDetails(event.user_id);
     const isAvailable = await checkVenueAvailability(event.location, event.date, event.start_time, event.end_time);
     
-    if (!isAvailable) {
+    if (event.type === "Online"){
+      handleApprove(event.event_id);
+      toast.success('Event successfully approved!');
+    }
+    else if (!isAvailable) {
       alert('Venue is already booked. Please reject the event.');
     } else {
       const bookingResponse = await createBooking(userDetails.email, event.location, event.date, event.start_time, event.end_time, event.description);
@@ -172,7 +176,7 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
                 value={rejectReasons[event.event_id] || ''}
                 onChange={(e) => handleRejectReasonChange(event.event_id, e.target.value)}
                 placeholder="Enter reject reason"
-                style={{borderRadius:"10px",padding:"3px"}}
+                style={{borderRadius:"1.35rem",padding:"3px"}}
               />
             )}
           />

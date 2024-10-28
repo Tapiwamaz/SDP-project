@@ -5,6 +5,14 @@ import AsideDesktop from './AsideDesktop'; // Import the component
 import { auth } from '../../firebase_config'; // Mocked Firebase auth
 import { BrowserRouter } from 'react-router-dom'; // If your component uses React Router
 import { useNavigate } from 'react-router';
+import { signOut } from 'firebase/auth';
+
+jest.mock("firebase/auth",()=>({
+  signOut: jest.fn(),
+
+
+
+}))
 
 // Mock Firebase auth
 jest.mock('../../firebase_config', () => ({

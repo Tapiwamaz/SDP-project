@@ -2,9 +2,10 @@ import { auth, googleProvider, db } from "../../firebase_config.js"
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { docRef, doc, collection, setDoc,query,where,getDocs } from "firebase/firestore";
 import { useState } from "react";
-import { ImageContainer, StyledButton, StyledImage, StyledInput, ImageButton, StyledBoldText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
+import { ImageContainer, StyledButton, StyledImage, StyledP, InputWrapper, StyledInput, ImageButton, EyeIcon, StyledBoldText, StyledLink, ErrorMessage, CheckboxContainer, StyledCheckbox, CheckboxText, StyledText, ResponsiveDiv, ResponsiveBackground } from "../Universal Styles/Universal.styles.js";
 import logo from '../../Images/Logo.svg.svg';
 import googleLogo from '../../Images/google.svg';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 import { useNavigate } from "react-router";
 
@@ -13,6 +14,7 @@ export const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [visible, setVisible] = useState(false);
     var checkbox = document.getElementById("checkbox");
     const navigate=useNavigate();
 
@@ -106,7 +108,6 @@ export const SignIn = () => {
 
         }
         catch (error) {
-            setErrorMessage(error.message);
             console.error(error);
         }
     };
@@ -121,12 +122,21 @@ export const SignIn = () => {
                 <ImageContainer>
                     <StyledBoldText>Let's get you started!</StyledBoldText>
                 </ImageContainer>
-                <StyledInput type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} />
-                <StyledInput type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-                <StyledInput type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                <StyledP>
+                    <input style={{width: '100%', height: '100%', border: 'none', outline: 'none'}} type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} />
+                </StyledP>
+                <StyledP>
+                    <input style={{width: '100%', height: '100%', border: 'none', outline: 'none'}} type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                </StyledP>
+                <StyledP>
+                <input style={{width: '100%', height: '100%', border: 'none', outline: 'none', marginRight: '40px'}} type={visible?"text":"password"} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                <div onClick={() => setVisible(!visible)}>
+                    {visible ? <FaEyeSlash /> : <FaEye />}
+                </div>
+                </StyledP>
                 <CheckboxContainer>
                     <StyledCheckbox id="checkbox"/>
-                    <CheckboxText>I agree to the <StyledLink href="https://www.lipsum.com/feed/html" target="_blank">Terms and Conditions</StyledLink></CheckboxText>
+                    <CheckboxText>I agree to the <StyledLink href='./TandC.html' target="_blank">Terms and Conditions</StyledLink></CheckboxText>
                 </CheckboxContainer>
                 <ErrorMessage>{errorMessage}</ErrorMessage>
                 <StyledButton onClick={signin}>Sign Up</StyledButton>

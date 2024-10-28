@@ -4,7 +4,13 @@ import Header from "../Header/Header";
 import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router";
 import { formatDistanceToNow } from "date-fns";
-import { Top, Card, StyledPlus, LoadingCard } from "./Notifications.styles";
+import {
+  Top,
+  Card,
+  StyledPlus,
+  LoadingCard,
+  Message,
+} from "./Notifications.styles";
 
 import noResultsImage from "../../Images/noResults.svg";
 import CreateNotifications from "./CreateNotifications";
@@ -113,7 +119,7 @@ const Notifications = () => {
     { Notifications: "no" },
   ];
 
-  const [loaded, setLoaded] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   const [myNotification, setMyNotification] = useState([]);
   const sortedNotifications = myNotification.sort(
     (a, b) => new Date(b.time) - new Date(a.time)
@@ -154,6 +160,7 @@ const Notifications = () => {
         // );
         if (eventIds.length > 0) {
           await getNotificationsByEventIds(eventIds, setMyNotification);
+          setLoaded(true);
         } else {
           setMyNotification([]);
         }
@@ -167,9 +174,8 @@ const Notifications = () => {
   return (
     <div>
       <ToastContainer />
-      {window.innerWidth<768 && <Header />}
+      {window.innerWidth < 768 && <Header />}
       <Top>
-      {window.innerWidth<768 &&<ArrowLeftCircleIcon width={40} onClick={() => navigate(-1)} />}
         <h3>Notifications</h3>
         {/* Only organizers can make notifications based on their events so if you don't any made events */}
         {myEvents.length > 0 && (
@@ -208,7 +214,17 @@ const Notifications = () => {
                     </p>
                   </div>
                 </div>
-                <p>{noti.message}</p>
+                <Message>
+                  <p
+                    style={{
+                      wordWrap: "break-word",
+                      whiteSpace: "normal",
+                      maxWidth: "100%",
+                    }}
+                  >
+                    {noti.message}
+                  </p>
+                </Message>
               </Card>
             );
           })

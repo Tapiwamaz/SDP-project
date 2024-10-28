@@ -34,6 +34,7 @@ const EventDisplay = ({
   loading,
   setLoading,
   onDisplaySummary,
+  setEventDisplay,
   ticket,
 }) => {
   const navigate = useNavigate();
@@ -81,8 +82,9 @@ const EventDisplay = ({
             setEventOrg(eventOrgData);
           }
           setLoad(false);
-          if(events){
-          setLoading(false);}
+          if (events) {
+            setLoading(false);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -254,7 +256,7 @@ const EventDisplay = ({
                 lineHeight: "1",
               }}
             >
-              Time:
+              Time
             </h4>
             <p
               style={{
@@ -284,7 +286,7 @@ const EventDisplay = ({
                 lineHeight: "1",
               }}
             >
-              Location:
+              Location
             </h4>
             <p
               style={{
@@ -313,7 +315,7 @@ const EventDisplay = ({
                 lineHeight: "1",
               }}
             >
-              Price Per Ticket:
+              Ticket Price
             </h4>
             <p
               style={{
@@ -337,7 +339,7 @@ const EventDisplay = ({
               marginBottom: "0",
             }}
           >
-            About Event :
+            About Event
           </h2>
           <p
             style={{
@@ -357,6 +359,7 @@ const EventDisplay = ({
                 gridColumn: "span 1",
                 justifySelf: "center",
                 alignSelf: "center",
+                objectFit: "cover", // Add this line to prevent image stretching
               }}
               alt=""
             ></img>
@@ -386,7 +389,7 @@ const EventDisplay = ({
                       }}
                       data-testid="DecrementButton"
                     />
-                    <p>Current count: {count}</p>
+                    <p>Ticket count: {count}</p>
                     <PlusCircleIcon
                       onClick={incrementCount}
                       style={{
@@ -436,7 +439,7 @@ const EventDisplay = ({
                         marginBottom: "-.5em",
                       }}
                     >
-                      Are you enjoying The event:
+                      Are you enjoying The event
                     </h3>
                     <p>Please consider leaving us a Rating</p>
                     <RatingStars>

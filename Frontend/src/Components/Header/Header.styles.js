@@ -14,7 +14,6 @@ export const HeaderContainer = styled.header`
   overflow-y: hidden;
   font-family: "Khula", sans-serif;
 
-
   @media (max-width: 768px) {
     font-size: smaller;
     flex-direction: row;
@@ -22,12 +21,14 @@ export const HeaderContainer = styled.header`
 `;
 
 export const Logo = styled.img`
-
   font-size: 1.5rem;
   margin: 0;
   height: 80px;
   @media (max-width: 768px) {
-    margin-right: 40px;
+    //margin-right: 40px;
+  }
+  &:hover {
+    cursor: pointer;
   }
 `;
 
@@ -95,9 +96,16 @@ export const AsideNavItem = styled.a`
   font-size: 1.25rem;
   /* height: 50px; */
   margin: 10px;
+  gap: 5px;
+  display: flex;
+  align-items: center;
 
   &:hover {
     text-decoration: underline;
+  }
+  p {
+    padding-top: 2px;
+    margin: 0;
   }
 `;
 
@@ -112,29 +120,26 @@ export const Profile = styled.div`
   flex-direction: row;
   justify-content: space-between;
   gap: 1.5rem;
-  align-items: center; 
+  align-items: center;
+
   /* object-fit: cover; */
 
   img {
     border-radius: 50%;
     /* width: fit-content; */
     width: 40px;
+    border: 2px solid var(--primary);
     &:hover {
       transform: scale(1.2);
       border: 2px solid var(--primary);
       /* border-radius: 50%; */
     }
   }
-  p{
+  p {
     @media (max-width: 768px) {
-    display: none; 
-   }
-
-  }  
-   
-  
-
-  
+      display: none;
+    }
+  }
 `;
 
 export const ProfileIcon = styled(UserIcon)`

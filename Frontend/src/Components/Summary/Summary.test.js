@@ -81,7 +81,7 @@ describe("Summary component", () => {
 
   test("renders Book button when event price is 0", () => {
     render(<Summary event={freeEvent} />);
-    expect(screen.getByText("Book")).toBeInTheDocument();
+    expect(screen.getByText("Proceed to payment")).toBeInTheDocument();
   });
   test("displays Success Modal after successful booking", async () => {
     fetch.mockImplementationOnce(() =>
@@ -95,7 +95,7 @@ describe("Summary component", () => {
       screen.debug();
 
     // Click the "Book" button for free event
-    fireEvent.click(screen.getByText("Book"));
+    fireEvent.click(screen.getByText("Proceed to payment"));
       screen.debug();
     // console.log("This is after button is clicked");
 
@@ -123,7 +123,7 @@ describe("Summary component", () => {
 
     // Click the "Book" button
     await act(async () => {
-      fireEvent.click(screen.getByText("Book"));
+      fireEvent.click(screen.getByText("Proceed to payment"));
     });
 
     // Expect loading overlay to be present
@@ -140,7 +140,7 @@ describe("Summary component", () => {
     render(<Summary event={freeEvent} />);
 
     // Click the "Book" button
-    fireEvent.click(screen.getByText("Book"));
+    fireEvent.click(screen.getByText("Proceed to payment"));
 
     // Wait for fetch call to complete
     await waitFor(() => {

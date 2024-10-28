@@ -5,8 +5,10 @@ import SuccessModal from "../../Components/SuccesfullPayment/SuccessModal";
 import React, { useState } from "react";
 import { auth } from "../../firebase_config";
 import { Loader } from "../SecurityModal/SecurityModal.styles";
+// import { Location,  } from "../EventDisplay/EventDisplay.style";
+import { LocationIcon, DateIcon, TicketI, EventDate } from "./Summary.style";
 
-export default function Summary({ event }) {
+export default function Summary({ event, setEventsDisplay }) {
   // console.log(event);
   const user_id = auth?.currentUser?.uid;
   // console.log(user_id);
@@ -65,9 +67,45 @@ export default function Summary({ event }) {
           </div>
           <div className="textContainer">
             <h3>{event.name}</h3>
-            <p>{formatDate(event.date)}</p>
-            <p>{amount}</p>
-            <p>{event.location}</p>
+            <EventDate>
+              <DateIcon />
+              <p
+                style={{
+                  margin: "0",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  lineHeight: "1",
+                }}
+              >
+                {formatDate(event.date)}
+              </p>
+            </EventDate>
+            <EventDate>
+              <TicketI />
+              <p
+                style={{
+                  margin: "0",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  lineHeight: "1",
+                }}
+              >
+                {amount}
+              </p>
+            </EventDate>
+            <EventDate>
+              <LocationIcon />
+              <p
+                style={{
+                  margin: "0",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  lineHeight: "1",
+                }}
+              >
+                {event.location}
+              </p>
+            </EventDate>
           </div>
         </CardSummary>
         <CostSummary>
@@ -109,14 +147,14 @@ export default function Summary({ event }) {
           </p>
           <p
             style={{
-              width: "75%",
+              width: "50%",
             }}
           >
-            <strong>Total Amount Payable </strong>
+            <strong>Total Amount </strong>
           </p>
           <p
             style={{
-              width: "25%",
+              width: "50%",
             }}
           >
             <strong>R{event.price * amount}</strong>
@@ -132,7 +170,7 @@ export default function Summary({ event }) {
             data-testid="book-button"
             // full={false}
           >
-            Book
+            Proceed to payment
           </BookButton>
         ) : (
           <PayPalButton
@@ -166,6 +204,7 @@ export default function Summary({ event }) {
           showModal={showmodal}
           setShowModal={setShowmodal}
           data-testid="success-modal"
+          setEventsDisplay={setEventsDisplay}
         />
       )}
     </>

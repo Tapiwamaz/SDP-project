@@ -33,7 +33,7 @@ export const Card = styled.div`
   background-color: rgba(54, 69, 79, 0.1);
   padding: 11px;
   //border-radius: 20px;
-  border-bottom: 2px solid black;
+  border-bottom: 0.5px solid grey;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -67,6 +67,10 @@ export const Card = styled.div`
     }
   }
 `;
+export const Message = styled.div`
+  display: flex;
+  width: 100%;
+`;
 
 export const StyledPlus = styled(PlusCircleIcon)`
   width: 40px;
@@ -81,7 +85,8 @@ export const LoadingCard = styled.div`
   height: 100px;
   animation: loading 1.5s infinite;
   padding: 11px;
-  border-bottom: 2px solid black;
+  opacity: 0.2;
+  border-bottom: 0.5px solid grey;
 
   @keyframes loading {
     0% {
