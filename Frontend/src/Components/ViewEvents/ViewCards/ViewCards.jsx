@@ -45,7 +45,7 @@ const ViewCards = ({ event, onCancel }) => {
           <p>{event.start_time} - {event.end_time}</p>
           <p>{event.location}</p>
           <p>Capacity: {event.capacity}</p>
-          <p>Ticket Count: {event.ticket_count}</p>
+          <p>Tickets Available: {event.ticket_count}</p>
           <p style={{color:event.status==="approved"?"green":event.status==="pending"?"orange":"red"}}>Status: {event.status}</p>
         </div>
 

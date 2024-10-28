@@ -43,7 +43,7 @@ describe('ViewCards Component', () => {
     expect(screen.getByText(/10:00 AM - 02:00 PM/i)).toBeInTheDocument();
     expect(screen.getByText(/Sample Location/i)).toBeInTheDocument();
     expect(screen.getByText(/Capacity: 100/i)).toBeInTheDocument();
-    expect(screen.getByText(/Ticket Count: 50/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tickets Available: 50/i)).toBeInTheDocument();
     expect(screen.getByText(/Status: approved/i)).toHaveStyle('color: green');
   });
 

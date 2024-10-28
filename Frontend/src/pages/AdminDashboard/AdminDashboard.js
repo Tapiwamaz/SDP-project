@@ -4,6 +4,7 @@ import { Page } from '../../Components/HomePage/HomePage.styles'
 import Tabs from '../../Components/Tabs/Tabs'
 import AsideDesktop from '../../Components/AsideDesktop/AsideDesktop'
 import { auth } from '../../firebase_config'
+import ScrollToTopButton from '../../Components/ScrollToTop/ScrollToTopButton'
 
 const AdminDashboard = () => {
 
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
         >
           <AsideDesktop />
           <Tabs></Tabs>
+          <ScrollToTopButton></ScrollToTopButton>
           </Page>
       </>
       :
