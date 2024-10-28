@@ -27,6 +27,9 @@ export const Logo = styled.img`
   @media (max-width: 768px) {
     //margin-right: 40px;
   }
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const Nav = styled.nav`
