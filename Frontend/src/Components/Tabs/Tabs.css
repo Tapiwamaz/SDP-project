@@ -78,7 +78,7 @@
 
   .Wrapper{
     width: 85%;
-    height: calc(150vh); /* Full view height with a little margin */
+    height: auto; /* Full view height with a little margin */
     overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden;
     margin: 0 auto;
@@ -87,7 +87,7 @@
   
     /* Apply a different style for mobile screens */
     @media (max-width: 769px) {
-      width: 100%;
+      width: 85%;
       height: auto; /* Allow the height to adjust based on content */
       overflow-y: visible; /* Disable scrolling for mobile */
     }

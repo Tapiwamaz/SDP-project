@@ -24,7 +24,7 @@
     flex-direction: column;
     border: 1px solid black; 
     width: 310px; 
-    height: 500px; 
+    height: 520px; 
     overflow: hidden; 
   }
   
@@ -42,6 +42,9 @@
   .event-card h2 {
     font-size: 18px;
     margin: 0 0 5px;
+    white-space: nowrap; /* Prevents the text from wrapping to the next line */
+    overflow: hidden; /* Hides the overflow text */
+    text-overflow: ellipsis; /* Adds "..." at the end of the truncated text */
   }
   
   .event-card p {

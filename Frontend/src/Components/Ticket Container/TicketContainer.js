@@ -153,8 +153,9 @@ export const TicketContainer = () => {
                   endTime: eventsData.end_time,
                   venue: eventsData.location,
                   total: eventsData.price,
+                  eventid: events[i],
+                  eventData: eventsData, 
                   qrcode: <QRCodeSVG value={ids[i]} size={50} />, // QR code with ticket id
-                  eventData: eventsData,
                 });
               });
             } else {
@@ -269,6 +270,7 @@ export const TicketContainer = () => {
               id={ticket.id}
               onClick={() => handleTicketClick(ticket)}
               type={activeTab}
+              event_id = {ticket.eventid}
             />
           ))
         ) : (
