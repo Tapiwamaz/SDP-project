@@ -30,7 +30,44 @@
   "jest": {
     "collectCoverageFrom": [
       "**/*.{js,jsx,ts,tsx}",
-      "!**/node_modules/**"
+      "!**/node_modules/**",
+      "!src/Components/MockData/**",
+      "!src/Components/Mocky/**",
+      "!src/Components/ViewEvents/ViewCards/MyPopup.js",
+      "!src/Components/Login/**",
+      "!src/Components/SignIn/**",
+      "!src/Components/Navbar/**",
+      "!src/App.js",
+      "!src/firebase_config.js",
+      "!src/index.js",
+      "!src/reportWebVitals.js",
+      "!src/Components/EventsCalendar/**",
+      "!src/Components/Ticket/**",
+      "!src/pages/AdminDashboard/**",
+      "!src/Components/Welcome/**",
+      "!src/pages/ViewMyEvents/**",
+      "!src/pages/MyBookings/**",
+      "!src/Components/Ticket Container/**",
+      "!src/Components/Notifications/Notifications.js",
+      "!src/Components/BookTicket/**"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ]
   },
   "scripts": {
