@@ -154,6 +154,7 @@ export const TicketContainer = () => {
                   venue: eventsData.location,
                   total: eventsData.price,
                   eventid: events[i],
+                  eventData: eventsData, 
                   qrcode: <QRCodeSVG value={ids[i]} size={50} />, // QR code with ticket id
                 });
               });
