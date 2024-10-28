@@ -147,14 +147,14 @@ export default function Summary({ event, setEventsDisplay }) {
           </p>
           <p
             style={{
-              width: "75%",
+              width: "50%",
             }}
           >
             <strong>Total Amount </strong>
           </p>
           <p
             style={{
-              width: "25%",
+              width: "50%",
             }}
           >
             <strong>R{event.price * amount}</strong>
