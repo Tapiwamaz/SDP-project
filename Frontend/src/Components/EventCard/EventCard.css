@@ -15,7 +15,8 @@
 
   .event-card {
     background-color: #fff;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-radius: 1.35rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 10px;
     padding: 15px;
@@ -33,7 +34,8 @@
     height: 180px; 
     object-fit: cover; 
     background-color: #ccc;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-radius: 1.35rem;
     margin-bottom: 10px;
   }
   
@@ -61,7 +63,8 @@
   .actions button {
     padding: 10px;
     border: none;
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    border-radius: 1.35rem;
     cursor: pointer;
     flex: 1;
     margin-right: 5px;
@@ -136,7 +139,8 @@
     border: none;
     background-color: #003366;
     color: #fff;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-radius: 1.35rem;
     cursor: pointer;
     &:hover {
       opacity: 0.7;

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, query, where, getDocs, doc, deleteDoc, addDoc, updateDoc } from 'firebase/firestore';
 import './MyEvents.css';
 import ViewCards from '../ViewCards/ViewCards';
-import Header from '../../Header/Header';
-import AsideDesktop from '../../AsideDesktop/AsideDesktop';
 import { db, auth } from '../../../firebase_config';
 import { onAuthStateChanged } from 'firebase/auth';
 import noResults from "../../../Images/noResults.svg";
@@ -14,10 +12,118 @@ import 'react-toastify/dist/ReactToastify.css';
 const secretKey = process.env.REACT_APP_X_API_KEY;
 
 
+export const fetchUserDetails = async (userId) => {
+  try {
+    const userCollection = collection(db, 'Users'); 
+    const q = query(userCollection, where("user_id", "==", userId)); 
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const userDoc = querySnapshot.docs[0]; // First match from the query
+      return { id: userDoc.id, ...userDoc.data() }; // Return the user details
+    } else {
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    return null;
+  }
+};
+
+export const getBookingID = async (venueId, bookingDate, startTime, endTime) => {
+  try {
+    const response = await fetch(
+      `https://wits-infrastructure-management.web.app/api/bookings/findByField?venueID=${venueId}&bookingDate=${bookingDate}&bookingStartTime=${startTime}&bookingEndTime=${endTime}`,
+      {
+        method: 'GET',
+        headers: {
+          'X-API-KEY': secretKey,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Error fetching booking details');
+    }
+
+    const data = await response.json();
+
+    if (data.length > 0) {
+      // Assuming bookingID is available in the API response.
+      return data[0].id;
+    } else {
+      throw new Error('No booking found for the given details');
+    }
+  } catch (error) {
+    console.error('Error retrieving booking ID:', error);
+    return null;
+  }
+};
+
+
+// Function to delete the booking from Venue Management API
+export const deleteBooking = async (bookingID) => {
+  try {
+    const response = await fetch(
+      `https://wits-infrastructure-management.web.app/api/bookings/${bookingID}`, 
+      {
+        method: 'DELETE',
+        headers: {
+          'X-API-KEY': secretKey,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Error deleting booking');
+    }
+
+    return await response.json(); // Return response or handle it accordingly
+  } catch (error) {
+    console.error('Error deleting booking:', error);
+    return null; // Handle error accordingly
+  }
+};
+
+// Function to send notification to Firestore
+export const sendNotification = async (organizerId, eventId, notificationType, message, name, imageUrl) => {
+  try {
+    const formatDate = () => {
+      const now = new Date();
+      const padZero = (num) => num.toString().padStart(2, '0'); // Helper to add leading zero
+      const year = now.getFullYear();
+      const month = padZero(now.getMonth() + 1); // Months are 0-indexed
+      const day = padZero(now.getDate());
+      const hours = padZero(now.getHours());
+      const minutes = padZero(now.getMinutes());
+      const seconds = padZero(now.getSeconds());
+      return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    };
+
+    const notificationData = {
+      notification_id: Date.now().toString(), // Use a timestamp as a mock ID or generate a UUID
+      time: formatDate(), 
+      notification_type: notificationType, // 'cancelled' in this case
+      message,
+      event_id: eventId,
+      organizer_id: organizerId,
+      name, // Organizer's name
+      image_url: imageUrl, // Optionally include an image URL if needed
+    };
+
+    await addDoc(collection(db, 'Notifications'), notificationData);
+  } catch (error) {
+    console.error('Error sending notification:', error);
+  }
+};
+
 
 const MyEvents = () => {
   const [events, setEvents] = useState([]);
   const [userId, setUserId] = useState(null); // New state for user ID
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -31,9 +137,17 @@ const MyEvents = () => {
     return () => unsubscribe(); // Cleanup subscription on component unmount
   }, []);
 
+  const statusOrder = {
+    pending: 1,
+    approved: 2,
+    cancelled: 3,
+    rejected: 4
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       if (!userId) return; // Only fetch events if userId is available
+      setLoading(true);
 
       try {
         const eventsCollection = collection(db, 'Events');
@@ -45,9 +159,19 @@ const MyEvents = () => {
           ...doc.data()
         }));
 
-        setEvents(fetchedEvents);
+        // setEvents(fetchedEvents);
+        const sortedEvents = fetchedEvents.sort((a, b) => {
+          if (a.status === b.status) {
+            return new Date(b.created_at) - new Date(a.created_at);
+          }
+          return (statusOrder[a.status] || 5) - (statusOrder[b.status] || 5);
+        });
+    
+        setEvents(sortedEvents);
       } catch (error) {
         console.error('Error fetching events:', error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching events
       }
     };
 
@@ -55,112 +179,7 @@ const MyEvents = () => {
   }, [userId]); // Fetch events whenever the userId changes
 
 
-  const fetchUserDetails = async (userId) => {
-    try {
-      const userCollection = collection(db, 'Users'); 
-      const q = query(userCollection, where("user_id", "==", userId)); 
-      const querySnapshot = await getDocs(q);
-      
-      if (!querySnapshot.empty) {
-        const userDoc = querySnapshot.docs[0]; // First match from the query
-        return { id: userDoc.id, ...userDoc.data() }; // Return the user details
-      } else {
-        throw new Error("User not found");
-      }
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-      return null;
-    }
-  };
-
-  const getBookingID = async (venueId, bookingDate, startTime, endTime) => {
-    try {
-      const response = await fetch(
-        `https://wits-infrastructure-management.web.app/api/bookings/findByField?venueID=${venueId}&bookingDate=${bookingDate}&bookingStartTime=${startTime}&bookingEndTime=${endTime}`,
-        {
-          method: 'GET',
-          headers: {
-            'X-API-KEY': secretKey,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
   
-      if (!response.ok) {
-        throw new Error('Error fetching booking details');
-      }
-  
-      const data = await response.json();
-  
-      if (data.length > 0) {
-        // Assuming bookingID is available in the API response.
-        return data[0].id;
-      } else {
-        throw new Error('No booking found for the given details');
-      }
-    } catch (error) {
-      console.error('Error retrieving booking ID:', error);
-      return null;
-    }
-  };
-  
-
-  // Function to delete the booking from Venue Management API
-  const deleteBooking = async (bookingID) => {
-    try {
-      const response = await fetch(
-        `https://wits-infrastructure-management.web.app/api/bookings/${bookingID}`, 
-        {
-          method: 'DELETE',
-          headers: {
-            'X-API-KEY': secretKey,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Error deleting booking');
-      }
-
-      return await response.json(); // Return response or handle it accordingly
-    } catch (error) {
-      console.error('Error deleting booking:', error);
-      return null; // Handle error accordingly
-    }
-  };
-
-  // Function to send notification to Firestore
-  const sendNotification = async (organizerId, eventId, notificationType, message, name, imageUrl) => {
-    try {
-      const formatDate = () => {
-        const now = new Date();
-        const padZero = (num) => num.toString().padStart(2, '0'); // Helper to add leading zero
-        const year = now.getFullYear();
-        const month = padZero(now.getMonth() + 1); // Months are 0-indexed
-        const day = padZero(now.getDate());
-        const hours = padZero(now.getHours());
-        const minutes = padZero(now.getMinutes());
-        const seconds = padZero(now.getSeconds());
-        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-      };
-
-      const notificationData = {
-        notification_id: Date.now().toString(), // Use a timestamp as a mock ID or generate a UUID
-        time: formatDate(), 
-        notification_type: notificationType, // 'cancelled' in this case
-        message,
-        event_id: eventId,
-        organizer_id: organizerId,
-        name, // Organizer's name
-        image_url: imageUrl, // Optionally include an image URL if needed
-      };
-
-      await addDoc(collection(db, 'Notifications'), notificationData);
-    } catch (error) {
-      console.error('Error sending notification:', error);
-    }
-  };
 
 
   const handleCancel = async (event) => {
@@ -201,22 +220,6 @@ const MyEvents = () => {
           organizerName, 
           event.image_url
         );
-        //console.log("NOTIF SENT");
-  
-        //Update 'active' field in the Events table to 'false'
-        // const eventDoc = doc(db, 'Events', event.id);
-        // await updateDoc(eventDoc, { active: false, status: 'cancelled' });
-  
-        // //Update 'cancelled' field in Tickets table to 'true'
-        // const ticketsCollection = collection(db, 'Tickets');
-        // const q = query(ticketsCollection, where('event_id', '==', event.id));
-        // const querySnapshot = await getDocs(q);
-        // const ticketUpdates = querySnapshot.docs.map(docSnapshot => {
-        //   const ticketDoc = doc(db, 'Tickets', docSnapshot.id);
-        //   return updateDoc(ticketDoc, { cancelled: true });
-        // });
-        // //console.log("cancelled tickets");
-        // await Promise.all(ticketUpdates);
 
 
         // Update 'active' field in the Events table to 'false'
@@ -269,7 +272,12 @@ const MyEvents = () => {
         <h1>My Events</h1>
         <div className="myevents-list">
             {/* {events.length > 0 ? [...events].reverse().map(renderViewCards) : <p>No events found</p>} */}
-            {events.length > 0 ? (
+            {loading ? ( // Show loader while fetching events
+            <div className="loader">
+              <div className="centerLoader"></div>
+              <p>Loading events...</p>
+            </div>
+            ) : events.length > 0 ? (
             [...events].map(renderViewCards)
             ) : (
             <div style={{ textAlign: 'center' }}>

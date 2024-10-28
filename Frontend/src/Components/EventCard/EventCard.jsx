@@ -85,7 +85,7 @@ const EventCard = ({ event, onApprove, onReject, rejectInput }) => {
             <p>{event.start_time} - {event.end_time}</p>
             <p>{event.location}</p>
             <div className="spacer"></div>
-            <p>Organizer: {username}</p>
+            <p data-testid="organizer-name">Organizer: {username}</p>
           </div>
         </div>
         <button className='description' onClick={() => setButtonPopup(true)}>Description</button>
