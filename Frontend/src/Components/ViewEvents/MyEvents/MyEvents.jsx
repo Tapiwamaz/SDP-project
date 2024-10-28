@@ -137,6 +137,13 @@ const MyEvents = () => {
     return () => unsubscribe(); // Cleanup subscription on component unmount
   }, []);
 
+  const statusOrder = {
+    pending: 1,
+    approved: 2,
+    cancelled: 3,
+    rejected: 4
+  };
+
   useEffect(() => {
     const fetchEvents = async () => {
       if (!userId) return; // Only fetch events if userId is available
@@ -152,7 +159,15 @@ const MyEvents = () => {
           ...doc.data()
         }));
 
-        setEvents(fetchedEvents);
+        // setEvents(fetchedEvents);
+        const sortedEvents = fetchedEvents.sort((a, b) => {
+          if (a.status === b.status) {
+            return new Date(b.created_at) - new Date(a.created_at);
+          }
+          return (statusOrder[a.status] || 5) - (statusOrder[b.status] || 5);
+        });
+    
+        setEvents(sortedEvents);
       } catch (error) {
         console.error('Error fetching events:', error);
       } finally {
@@ -260,7 +275,7 @@ const MyEvents = () => {
             {loading ? ( // Show loader while fetching events
             <div className="loader">
               <div className="centerLoader"></div>
-              {/* <p>Loading events...</p> */}
+              <p>Loading events...</p>
             </div>
             ) : events.length > 0 ? (
             [...events].map(renderViewCards)

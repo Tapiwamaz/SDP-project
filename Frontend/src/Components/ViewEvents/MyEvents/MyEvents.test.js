@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import MyEvents, { fetchUserDetails, getBookingID, deleteBooking, sendNotification } from './MyEvents';
+import { fetchUserDetails, getBookingID, deleteBooking, sendNotification } from './MyEvents';
+import MyEvents from './MyEvents'
 import { collection, query, where, getDocs, doc, deleteDoc, addDoc, updateDoc} from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db } from '../../../firebase_config';
@@ -20,6 +21,7 @@ jest.mock('../../../firebase_config', () => ({
 jest.mock('react-toastify', () => ({
   toast: {
     success: jest.fn(),
+    error: jest.fn(),
   },
 }));
 
@@ -40,7 +42,7 @@ jest.mock('firebase/firestore', () => ({
 jest.mock("firebase/auth", () => ({
     getAuth: jest.fn(),
     GoogleAuthProvider: jest.fn(),
-    onAuthStateChanged: jest.fn(),
+    //onAuthStateChanged: jest.fn(),
 }));
 
 
@@ -341,5 +343,4 @@ describe('getBookingID', () => {
       consoleSpy.mockRestore();
   });
 });
-
 

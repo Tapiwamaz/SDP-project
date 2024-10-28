@@ -213,6 +213,27 @@ const Tabs = () => {
     loadEvents();
   }, []);
 
+  const sortedPendingEvents = events
+    .filter(event => event.status === 'pending')
+    .sort((a, b) => {
+      const dateComparison = new Date(a.date) - new Date(b.date);
+      if (dateComparison === 0) {
+        return new Date(a.created_at) - new Date(b.created_at);
+      }
+      return dateComparison;
+    });
+
+    const sortedHistoryEvents = events
+    .filter(event => event.status === 'rejected')
+    .sort((a, b) => {
+      const scheduledComparison = new Date(a.date) - new Date(b.date); // Sort by scheduled date first
+      if (scheduledComparison === 0) {
+        return new Date(b.created_at) - new Date(a.created_at); // If scheduled dates are the same, sort by creation date (most recent first)
+      }
+      return scheduledComparison; // Return the primary sort result
+    });
+  
+
   return (
     <div className='Wrapper'>
       <div className='my-tabs'>
@@ -252,14 +273,14 @@ const Tabs = () => {
       {!loading && !error && events.length > 0 && (
         activeTab === 'pending' ? (
           <PendingEvents 
-            events={events.filter(event => event.status === 'pending')} 
+            events={sortedPendingEvents} 
             handleApprove={handleApprove} 
             handleReject={handleReject} 
             data-testid="PendingEvents"
           />
         ) : (
           <HistoryEvents 
-            events={events.filter(event => event.status !== 'pending').reverse()}
+            events={sortedHistoryEvents}
             data-testid="HistoryEvents"
           />
         )

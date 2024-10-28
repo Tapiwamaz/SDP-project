@@ -172,7 +172,7 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
                 value={rejectReasons[event.event_id] || ''}
                 onChange={(e) => handleRejectReasonChange(event.event_id, e.target.value)}
                 placeholder="Enter reject reason"
-                style={{borderRadius:"10px",padding:"3px"}}
+                style={{borderRadius:"1.35rem",padding:"3px"}}
               />
             )}
           />
