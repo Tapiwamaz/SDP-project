@@ -5,8 +5,10 @@ import SuccessModal from "../../Components/SuccesfullPayment/SuccessModal";
 import React, { useState } from "react";
 import { auth } from "../../firebase_config";
 import { Loader } from "../SecurityModal/SecurityModal.styles";
+// import { Location,  } from "../EventDisplay/EventDisplay.style";
+import { LocationIcon, DateIcon, TicketI, EventDate } from "./Summary.style";
 
-export default function Summary({ event ,setEventsDisplay}) {
+export default function Summary({ event, setEventsDisplay }) {
   // console.log(event);
   const user_id = auth?.currentUser?.uid;
   // console.log(user_id);
@@ -65,9 +67,45 @@ export default function Summary({ event ,setEventsDisplay}) {
           </div>
           <div className="textContainer">
             <h3>{event.name}</h3>
-            <p>Date: {formatDate(event.date)}</p>
-            <p>Number of tickets : {amount}</p>
-            <p>Location: {event.location}</p>
+            <EventDate>
+              <DateIcon />
+              <p
+                style={{
+                  margin: "0",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  lineHeight: "1",
+                }}
+              >
+                {formatDate(event.date)}
+              </p>
+            </EventDate>
+            <EventDate>
+              <TicketI />
+              <p
+                style={{
+                  margin: "0",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  lineHeight: "1",
+                }}
+              >
+                {amount}
+              </p>
+            </EventDate>
+            <EventDate>
+              <LocationIcon />
+              <p
+                style={{
+                  margin: "0",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  lineHeight: "1",
+                }}
+              >
+                {event.location}
+              </p>
+            </EventDate>
           </div>
         </CardSummary>
         <CostSummary>
