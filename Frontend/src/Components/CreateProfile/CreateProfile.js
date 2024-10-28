@@ -117,7 +117,7 @@ export const CreateProfile = () => {
 
         <Field>
             <h4> Nickname</h4>
-            <StyledInput type="text" placeholder="Name" onChange={(e)=>setName(e.target.value)} />
+            <StyledInput type="text" placeholder="Name" onChange={(e)=>setName(e.target.value)} style={{width:"90%"}} />
 
         </Field>
 
@@ -126,7 +126,7 @@ export const CreateProfile = () => {
        
         <h4> Description</h4>
 
-        <StyledInput type="text" placeholder="Tell us about yourself!" className="bottom" onChange={(e)=>setDescription(e.target.value)}/>
+        <StyledInput type="text" placeholder="Tell us about yourself!" className="bottom" onChange={(e)=>setDescription(e.target.value)} style={{width:"90%"}}/>
         </Field>
         <ErrorMessage>{error}</ErrorMessage>
 
