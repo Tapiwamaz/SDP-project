@@ -213,6 +213,7 @@ const Tabs = () => {
     loadEvents();
   }, []);
 
+  //sorting
   const sortedPendingEvents = events
     .filter(event => event.status === 'pending')
     .sort((a, b) => {
