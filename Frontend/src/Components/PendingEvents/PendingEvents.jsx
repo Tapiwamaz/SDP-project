@@ -103,7 +103,11 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
     const userDetails = await fetchUserDetails(event.user_id);
     const isAvailable = await checkVenueAvailability(event.location, event.date, event.start_time, event.end_time);
     
-    if (!isAvailable) {
+    if (event.type === "Online"){
+      handleApprove(event.event_id);
+      toast.success('Event successfully approved!');
+    }
+    else if (!isAvailable) {
       alert('Venue is already booked. Please reject the event.');
     } else {
       const bookingResponse = await createBooking(userDetails.email, event.location, event.date, event.start_time, event.end_time, event.description);
