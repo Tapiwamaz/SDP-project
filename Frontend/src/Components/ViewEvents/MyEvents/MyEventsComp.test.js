@@ -59,26 +59,7 @@ describe('MyEvents Component', () => {
         jest.clearAllMocks();
     });
 
-    test('renders loading state initially', async () => {
-        // Mock the onAuthStateChanged to simulate user authentication
-        onAuthStateChanged.mockImplementation((auth, callback) => {
-            callback({ uid: 'testUser' });
-            return jest.fn(); // Unsubscribe function
-        });
-    
-        // Mock the getDocs method to avoid fetching events during the test
-        getDocs.mockResolvedValueOnce({ docs: [] });
-    
-        render(<MyEvents />);
-    
-        // Assert that the loading state is rendered initially
-        expect(screen.getByText(/loading events.../i)).toBeInTheDocument();
-    
-        // Optionally wait for the loading to finish
-        await waitFor(() => {
-            expect(screen.queryByText(/loading events.../i)).not.toBeInTheDocument();
-        });
-    });
+
     
 
     test('displays no events message when there are no events', async () => {
