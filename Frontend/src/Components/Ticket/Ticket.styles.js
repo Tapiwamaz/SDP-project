@@ -172,6 +172,10 @@ export const Link = styled.a`
   &:hover {
     text-decoration: underline;
   }
+  @media (max-width: 600px) {
+    font-size: 11px;
+    text-decoration: underline;
+  }
 `;
 
 

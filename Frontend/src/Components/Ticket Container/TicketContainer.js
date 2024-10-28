@@ -1,7 +1,7 @@
 import { Ticket } from "../Ticket/Ticket";
 import { NavbarContainer, NavItem } from "../Navbar/Navbar.styles.js";
 import { ModalWrapper, Overlay, ModalContent } from "../Ticket/Ticket.styles.js";
-import { ImageContainer } from "../Universal Styles/Universal.styles.js";
+import { ImageContainer, StyledText } from "../Universal Styles/Universal.styles.js";
 import { StyledButton } from "../Ticket/Ticket.styles";
 import { auth, db } from "../../firebase_config";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import EventDisplay from "../EventDisplay/EventDisplay";
 import { EventRight } from "../HomePage/HomePage.styles";
 import { Xicon } from "../Header/Header.styles";
 import noResultsImage from "../../Images/noResults.svg";
+import spinner from "../../Images/Spinner.svg";
 
 import {
   collection,
@@ -202,7 +203,12 @@ export const TicketContainer = () => {
   }, [userId]); // Empty dependency array means this effect runs once on mount
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+        <img style={{width: '15%'}} src={spinner} />
+        <StyledText>Loading...</StyledText>
+      </div>
+    );
   }
 
   const handleTicketClick = (ticket) => {
@@ -234,7 +240,7 @@ export const TicketContainer = () => {
     <>
       {/* <Navbar></Navbar> */}
 
-      <div>
+      <div style={{display: 'flex', flexDirection: 'column', width: '100%', alignItems: 'center'}}>
         <h1>Tickets</h1>
         <NavbarContainer>
           <NavItem
@@ -276,10 +282,9 @@ export const TicketContainer = () => {
         ) : (
           // <p> No Bookings made</p>
           <>
-          <img src={noResultsImage} alt="No Results" style={{marginTop:"20px",marginLeft:"40px"}}/>
-          <p style={{marginLeft:"80px"}}>No Booking under "{activeTab}"</p>
+          <img src={noResultsImage} alt="No Results" style={{width: '30%'}}/>
+          <p>No Booking under "{activeTab}"</p>
           </>
-
 
         )}
         {EventsDisplay && (
