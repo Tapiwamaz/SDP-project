@@ -290,7 +290,7 @@ export const TicketContainer = () => {
   
   if (loading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width:  screen==="desktop"?'85%':"100%" }}>
         <img style={{width: '15%'}} src={spinner} />
         <StyledText>Loading...</StyledText>
       </div>
