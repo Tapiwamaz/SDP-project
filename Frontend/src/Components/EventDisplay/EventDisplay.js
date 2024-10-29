@@ -148,7 +148,7 @@ const EventDisplay = ({
 
   // Function to decrement the count
   const decrementCount = () => {
-    if (count > 0) {
+    if (count > 1) {
       setCount(count - 1);
     }
   };

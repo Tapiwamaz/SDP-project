@@ -653,7 +653,7 @@ const CreateEvent = ({ inputEventDetails }) => {
                   ref={eventTicketPriceRef}
                   data-testid="price"
                   value={eventDetails.price || null}
-                  placeholder="e.g R 50"
+                  placeholder="e.g 50"
                   step={10}
                   onFocus={() =>
                     eventTicketPriceRef.current.classList.remove(
