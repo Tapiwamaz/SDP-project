@@ -215,7 +215,7 @@ const Tabs = () => {
 
   //sorting
   const sortedPendingEvents = events
-    .filter(event => event.status !== 'pending')
+    .filter(event => event.status === 'pending')
     .sort((a, b) => {
       const dateComparison = new Date(a.date) - new Date(b.date);
       if (dateComparison === 0) {
@@ -225,7 +225,7 @@ const Tabs = () => {
     });
 
     const sortedHistoryEvents = events
-    .filter(event => event.status === 'rejected')
+    .filter(event => event.status !== 'pending')
     .sort((a, b) => {
       const scheduledComparison = new Date(a.date) - new Date(b.date); // Sort by scheduled date first
       if (scheduledComparison === 0) {
