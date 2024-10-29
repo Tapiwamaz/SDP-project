@@ -127,7 +127,7 @@ const Notifications = () => {
 
   const [createNotificationClicked, setCreateNotificationClicked] =
     useState(false);
-  const [myEvents, setMyEvents] = useState(mockEventData);
+  const [myEvents, setMyEvents] = useState([]);
 
   useEffect(() => {
     if (auth?.currentUser?.uid) {
@@ -162,15 +162,18 @@ const Notifications = () => {
           await getNotificationsByEventIds(eventIds, setMyNotification);
           setLoaded(true);
         } else {
-          setMyNotification([]);
+          // setMyNotification([]);
         }
+        setLoaded(true);
+
       }
       // }
     };
 
     fetchUserNotifications();
+    setLoaded(true)
   }, []);
-
+  
   return (
     <div>
       <ToastContainer />
