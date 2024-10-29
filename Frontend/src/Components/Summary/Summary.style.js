@@ -29,15 +29,15 @@ export const CostSummary = styled.section`
 `;
 
 export const LocationIcon = styled(MapPinIcon)`
-  height: 45%;
+  height: 55%;
   /* height: 20%;/ */
 `;
 
 export const DateIcon = styled(CalendarIcon)`
-  height: 45%;
+  height: 55%;
 `;
 export const TicketI = styled(TicketIcon)`
-  height: 45%;
+  height: 55%;
 `;
 
 export const CardSummary = styled.section`
