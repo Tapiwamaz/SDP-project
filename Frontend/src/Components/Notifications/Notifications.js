@@ -171,7 +171,7 @@ const Notifications = () => {
     };
 
     fetchUserNotifications();
-    setLoaded(true)
+    // setLoaded(true)
   }, []);
   
   return (
