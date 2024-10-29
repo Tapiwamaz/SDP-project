@@ -15,7 +15,8 @@
 
   .event-card {
     background-color: #fff;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-radius: 1.35rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 10px;
     padding: 15px;
@@ -23,7 +24,7 @@
     flex-direction: column;
     border: 1px solid black; 
     width: 310px; 
-    height: 500px; 
+    height: 520px; 
     overflow: hidden; 
   }
   
@@ -33,13 +34,17 @@
     height: 180px; 
     object-fit: cover; 
     background-color: #ccc;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-radius: 1.35rem;
     margin-bottom: 10px;
   }
   
   .event-card h2 {
     font-size: 18px;
     margin: 0 0 5px;
+    white-space: nowrap; /* Prevents the text from wrapping to the next line */
+    overflow: hidden; /* Hides the overflow text */
+    text-overflow: ellipsis; /* Adds "..." at the end of the truncated text */
   }
   
   .event-card p {
@@ -61,7 +66,8 @@
   .actions button {
     padding: 10px;
     border: none;
-    border-radius: 5px;
+    /* border-radius: 5px; */
+    border-radius: 1.35rem;
     cursor: pointer;
     flex: 1;
     margin-right: 5px;
@@ -136,7 +142,8 @@
     border: none;
     background-color: #003366;
     color: #fff;
-    border-radius: 8px;
+    /* border-radius: 8px; */
+    border-radius: 1.35rem;
     cursor: pointer;
     &:hover {
       opacity: 0.7;

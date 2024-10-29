@@ -1,7 +1,12 @@
+.separationContainer {
+  display: flex;
+  font-family: "Khula";
+}
+
 .btn {
   background-color: var(--primary);
   color: white;
-  border-radius: 2.5rem;
+  border-radius: 1.35rem;
   font-family: inherit;
   font-size: inherit;
   height: 48px;
@@ -11,8 +16,7 @@
 }
 
 .btn:hover {
-  filter: brightness(150%);
-  color: white;
+ background-color: #647eb4;
 }
 
 .wrapperCreateEvent {
@@ -47,16 +51,13 @@
 }
 
 .createEventsSvg {
-  width: 35vw;
+  width: 90%;
 }
 
 .formInfoContainer {
-  width: 100%;
-  height: 300px;
   display: flex;
   flex-direction: column;
-  padding: 1rem 0 0 5.5rem;
-  /* border: 1px solid rgba(0, 0, 0, 1); */
+  height: 300px;
 
 }
 .formInfoContainer h4 {
@@ -109,7 +110,6 @@
   display: flex;
   flex: 1;
   border-radius: 1rem;
-  margin: 0 2rem;
   padding: 1rem;
   animation: fade-in 300ms forwards;
 }
@@ -117,17 +117,15 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  align-items: center;
-
 }
 
 .inputs {
   display: flex;
   flex-direction: column;
-  /* gap: 0.65rem; */
   flex: 1;
 }
 .inputs > * {
+  font-family: inherit;
   margin-bottom: 0.65rem;
 }
 
@@ -198,7 +196,7 @@
   display: flex;
   flex-direction: column;
   height: 500px;
-  width: 45.5vw;
+  width: 38vw;
   align-items: center;
   justify-content: center;
   background-color: var(--primary);
@@ -230,12 +228,12 @@
 }
 
 #file-upload {
-  width: 45.4vw;
+  width: 38vw;
   height: 500px;
   position: absolute;
   z-index: 1;
   opacity: 0;
-  /* border: 1px solid black; */
+  padding: 0;
 }
 
 .iconsMediaUpload {

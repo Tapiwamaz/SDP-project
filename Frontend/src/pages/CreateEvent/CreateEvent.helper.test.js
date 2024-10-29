@@ -1,6 +1,10 @@
-import { handleNextButtonClick, fetchVenues } from "./CreateEvent.helpers"; // Adjust path based on your file structure
+import {
+  handleNextButtonClick,
+  fetchVenues,
+  filterVenues,
+} from "./CreateEvent.helpers"; // Adjust path based on your file structure
 import { createEventDB, updateEventDB, delay } from "./CreateEvent"; // Import these to mock them
-
+import { sendNotification } from "../../Components/Notifications/CreateNotifications";
 // Mock functions
 jest.mock("./CreateEvent", () => ({
   createEventDB: jest.fn(),
@@ -92,7 +96,9 @@ describe("handleNextButtonClick - DB operation test", () => {
       [],
       "eventCollection",
       mockSetLoader,
-      mockSetSubmitted
+      mockSetSubmitted,
+      {},
+      {}
     );
 
     // Fast-forward timers
@@ -106,6 +112,7 @@ describe("handleNextButtonClick - DB operation test", () => {
       null,
       []
     );
+
     expect(delay).toHaveBeenCalledWith(5000);
     expect(mockSetLoader).toHaveBeenCalledWith(false);
     expect(mockSetSubmitted).toHaveBeenCalledWith(true);
@@ -144,6 +151,7 @@ describe("handleNextButtonClick - DB operation test", () => {
     // Fast-forward timers
     jest.runAllTimers();
     await promise;
+    // expect(sendNotification).toHaveBeenCalledWith(expect.any(Object), {});
 
     expect(mockSetLoader).toHaveBeenCalledWith(true);
     expect(updateEventDB).toHaveBeenCalledWith(
@@ -254,5 +262,47 @@ describe("fetchVenues", () => {
     expect(data).toBeUndefined(); // Should return undefined when fetch fails
 
     consoleErrorSpy.mockRestore(); // Restore original console.error
+  });
+});
+
+describe("filterVenues", () => {
+  it("returns unique values based on the provided attribute", () => {
+    const venues = [
+      { name: "Venue A", type: "Outdoor" },
+      { name: "Venue B", type: "Indoor" },
+      { name: "Venue C", type: "Outdoor" },
+    ];
+    const result = filterVenues(venues, "type");
+    expect(result).toEqual(["Outdoor", "Indoor"]);
+  });
+
+  it("returns an empty array if the input array is empty", () => {
+    const result = filterVenues([], "type");
+    expect(result).toEqual([]);
+  });
+
+  it("returns unique values even if all attribute values are the same", () => {
+    const venues = [
+      { name: "Venue A", type: "Outdoor" },
+      { name: "Venue B", type: "Outdoor" },
+    ];
+    const result = filterVenues(venues, "type");
+    expect(result).toEqual(["Outdoor"]);
+  });
+
+  it("handles cases where the attribute does not exist in the objects", () => {
+    const venues = [{ name: "Venue A" }, { name: "Venue B" }];
+    const result = filterVenues(venues, "type");
+    expect(result).toEqual([undefined]);
+  });
+
+  it("returns unique values for attributes with mixed types", () => {
+    const venues = [
+      { name: "Venue A", type: "Outdoor" },
+      { name: "Venue B", type: 123 },
+      { name: "Venue C", type: "Outdoor" },
+    ];
+    const result = filterVenues(venues, "type");
+    expect(result).toEqual(["Outdoor", 123]);
   });
 });

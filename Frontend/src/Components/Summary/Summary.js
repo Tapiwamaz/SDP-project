@@ -75,6 +75,8 @@ export default function Summary({ event, setEventsDisplay }) {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   lineHeight: "1",
+                  paddingTop:"6px"
+
                 }}
               >
                 {formatDate(event.date)}
@@ -88,6 +90,7 @@ export default function Summary({ event, setEventsDisplay }) {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   lineHeight: "1",
+                  paddingTop:"6px"
                 }}
               >
                 {amount}
@@ -101,6 +104,8 @@ export default function Summary({ event, setEventsDisplay }) {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   lineHeight: "1",
+                  paddingTop:"6px"
+
                 }}
               >
                 {event.location}
@@ -147,14 +152,14 @@ export default function Summary({ event, setEventsDisplay }) {
           </p>
           <p
             style={{
-              width: "75%",
+              width: "50%",
             }}
           >
             <strong>Total Amount </strong>
           </p>
           <p
             style={{
-              width: "25%",
+              width: "50%",
             }}
           >
             <strong>R{event.price * amount}</strong>

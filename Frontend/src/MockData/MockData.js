@@ -63,6 +63,7 @@ const mockEventData = [
 
 const mockEventTypes = [
   "Education",
+  "Social",
   "Sports",
   "Political",
   "Entertainment",
@@ -70,6 +71,7 @@ const mockEventTypes = [
   "IT",
   "Religious",
   "Online",
+  "Other"
 ];
 
 const mockLocations = [

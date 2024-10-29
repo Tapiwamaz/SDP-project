@@ -5,7 +5,7 @@ export const Page = styled.div`
   flex-direction: row;
   width: 100%;
   height: 250px;
-  padding-bottom: 2vh;
+  padding-bottom: 5vh;
   font-family: "Khula", sans-serif;
   overflow-x: hidden;
   box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
@@ -22,7 +22,9 @@ export const Contents = styled.div`
   align-items: center;
   padding-top: 3px;
   gap: 20px;
+  padding: 10px;
   width: 100%;
+  //font-weight: 400;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -52,7 +54,7 @@ export const PictureWrapper = styled.div`
 
   h2 {
     font-size: 1.2rem; /* Smaller font size for landscape dropdown */
-    font-weight: 300; /* Lighter font weight */
+    // font-weight: 300; /* Lighter font weight */
   }
 
   @media (max-width: 768px) {
@@ -105,7 +107,7 @@ export const CountWrapper = styled.div`
   align-items: left;
   gap: 5px;
   color: black;
-  border-radius: 10px;
+  // border-radius: 10px;
   padding: 2px 8px;
   width: inherit;
   height: fit-content;
@@ -115,7 +117,7 @@ export const CountWrapper = styled.div`
     margin: 0;
     line-height: 1.2;
     font-size: 0.9rem; /* Smaller font for desktop dropdown */
-    font-weight: 300;
+    font-weight: 400;
   }
 
   @media (max-width: 480px) {
@@ -124,6 +126,7 @@ export const CountWrapper = styled.div`
     gap: 8px;
     h3 {
       font-size: 1.2rem;
+      font-weight: 400;
     }
   }
 `;
@@ -151,7 +154,7 @@ export const Stats = styled.div`
 
   input {
     width: 90%;
-    border-radius: 12px;
+    border-radius: 1.35rem;
     padding: 2%;
   }
   @media (max-width: 480px) {
@@ -165,18 +168,21 @@ export const Rating = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 0;
+  gap: 8px;
   height: 30px;
   padding-bottom: 30px;
 
   h4 {
     font-size: 0.9rem; /* Smaller font size */
-    font-weight: 300;
+    font-weight: 400;
+    padding-top: 5px;
   }
 
   @media (max-width: 480px) {
     gap: 10px;
     h4 {
       font-size: 1rem;
+      font-weight: 400;
     }
   }
 `;
@@ -211,7 +217,8 @@ export const Email = styled.div`
     margin: 0;
     padding-top: 1vh;
     line-height: 1.2;
-    font-weight: 300; /* Lighter font */
+    font-weight: 400;
+    // font-weight: 300; /* Lighter font */
     font-size: 1rem; /* Default size for desktop */
 
     @media (max-width: 480px) {
@@ -231,7 +238,7 @@ export const About = styled.div`
   padding-top: 2vh;
   textarea {
     width: 90%;
-    border-radius: 12px;
+    border-radius: 1.35rem;
     border: 2px solid;
     padding: 2%;
   }
@@ -240,14 +247,15 @@ export const About = styled.div`
     background-color: var(--primary);
     color: white;
     width: fit-content;
-    border-radius: 5px;
+    border-radius: 1.35rem;
     font-size: 0.85rem;
   }
   h4 {
     margin: 0;
     padding-top: 1vh;
     line-height: 1.2;
-    font-weight: 300;
+    font-weight: 400;
+    //font-weight: 300;
     font-size: 1rem; /* Default size for desktop */
 
     @media (max-width: 480px) {
@@ -263,7 +271,7 @@ export const About = styled.div`
     font-size: 1.2rem; /* Smaller font for mobile */
     textarea {
       width: 90%;
-      border-radius: 20px;
+      border-radius: 1.35rem;
     }
     button {
       background-color: var(--primary);
@@ -290,12 +298,12 @@ export const ButtonWrapper = styled.div`
   gap: 20%;
   align-items: center;
   width: inherit;
-  padding: 8px 0;
-  border-radius: 8px;
+  padding: 8px;
+  border-radius: 0.8rem;
   cursor: pointer;
 
   &:hover {
-    background-color: #8b99b5;
+    background-color: #647eb4;
   }
 
   @media (max-width: 480px) {
@@ -316,7 +324,7 @@ export const LeftSection = styled.div`
 export const Text = styled.span`
   font-size: 16px;
   color: black;
-  font-weight: 300;
+  //font-weight: 300;
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
@@ -340,7 +348,7 @@ export const Icon = styled.div`
 export const NavigationSection = styled.div`
   display: flex;
   flex-direction: column;
-
+  padding: 12px;
   gap: 10px;
   width: 100%;
   height: fit-content;

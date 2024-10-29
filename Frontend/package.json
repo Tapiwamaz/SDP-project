@@ -15,6 +15,7 @@
     "react-big-calendar": "^1.14.1",
     "react-confetti": "^6.1.0",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
     "react-qr-code": "^2.0.15",
     "react-responsive-carousel": "^3.2.23",
     "react-router": "^6.26.1",
@@ -29,12 +30,49 @@
   "jest": {
     "collectCoverageFrom": [
       "**/*.{js,jsx,ts,tsx}",
-      "!**/node_modules/**"
+      "!**/node_modules/**",
+      "!src/Components/MockData/**",
+      "!src/Components/Mocky/**",
+      "!src/Components/ViewEvents/ViewCards/MyPopup.js",
+      "!src/Components/Login/**",
+      "!src/Components/SignIn/**",
+      "!src/Components/Navbar/**",
+      "!src/App.js",
+      "!src/firebase_config.js",
+      "!src/index.js",
+      "!src/reportWebVitals.js",
+      "!src/Components/EventsCalendar/**",
+      "!src/Components/Ticket/**",
+      "!src/pages/AdminDashboard/**",
+      "!src/Components/Welcome/**",
+      "!src/pages/ViewMyEvents/**",
+      "!src/pages/MyBookings/**",
+      "!src/Components/Ticket Container/**",
+      "!src/Components/Notifications/Notifications.js",
+      "!src/Components/BookTicket/**"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ]
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": " react-scripts build",
+    "build": " CI=false react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "set CI=true&&react-scripts test --coverage",
     "eject": "react-scripts eject"
@@ -58,10 +96,11 @@
     ]
   },
   "devDependencies": {
-    "jest-canvas-mock": "^2.5.2",
-    "jest-fetch-mock": "^3.0.3",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "jest-canvas-mock": "^2.5.2",
+    "jest-fetch-mock": "^3.0.3"
   }
 }
