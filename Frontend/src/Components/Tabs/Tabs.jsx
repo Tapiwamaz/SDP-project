@@ -215,7 +215,7 @@ const Tabs = () => {
 
   //sorting
   const sortedPendingEvents = events
-    .filter(event => event.status === 'pending')
+    .filter(event => event.status !== 'pending')
     .sort((a, b) => {
       const dateComparison = new Date(a.date) - new Date(b.date);
       if (dateComparison === 0) {
