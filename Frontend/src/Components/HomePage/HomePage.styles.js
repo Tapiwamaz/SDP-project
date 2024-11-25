@@ -63,14 +63,6 @@ export const TagsStyle=styled.div`
     height: fit;
     margin: 2px;
   }
-  @media (max-width: 769px) {
-      div {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-      
-    }
-
 
 `;
 

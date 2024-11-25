@@ -67,6 +67,16 @@ export const handleNextButtonClick = async (
     toast.warn("Please a vaild date");
     return;
   }
+  if ((new Date(eventDetailsT.date) - new Date()) < 0) {
+    eventRefsT.eventDate.current.classList.add("unfilled-input");
+    eventRefsT.eventDate.current.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+
+    toast.warn("You can not book for a past date (or today)");
+    return;
+  }
 
   if (!eventDetailsT.venue_type || eventDetailsT.venue_type == "") {
     // Handle missing event venue type
@@ -140,7 +150,7 @@ export const handleNextButtonClick = async (
       behavior: "smooth",
       block: "center",
     });
-    toast.warn("Please enter your events ticket price");
+    toast.warn("Please enter a valid ticket price fro your event");
     return;
   }
   let price = parseFloat(eventDetailsT.price);

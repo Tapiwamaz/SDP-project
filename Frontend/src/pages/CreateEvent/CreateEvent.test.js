@@ -676,7 +676,7 @@ describe("handleNextButtonClick", () => {
   it("should show warning for no event venue type", async () => {
     const mockEventDetails = {
       name: "Test Event",
-      date: "2024-09-24",
+      date: "2100-09-24",
       type: "danso",
     };
 
@@ -704,7 +704,7 @@ describe("handleNextButtonClick", () => {
   it("should show warning for no event location", async () => {
     const mockEventDetails = {
       name: "Test Event",
-      date: "2024-09-24",
+      date: "2100-09-24",
       type: "danso",
       venue_type: "case closed",
     };
@@ -733,7 +733,7 @@ describe("handleNextButtonClick", () => {
   it("should show warning for no start time", async () => {
     const mockEventDetails = {
       name: "Test Event",
-      date: "2024-09-24",
+      date: "2100-09-24",
       type: "fff",
       location: "http://localhost",
       venue_type: "un.py",
@@ -763,7 +763,7 @@ describe("handleNextButtonClick", () => {
   it("should show warning for no end time", async () => {
     const mockEventDetails = {
       name: "Test Event",
-      date: "2024-09-24",
+      date: "2100-09-24",
       type: "fff",
       location: "http://localhost",
       start_time: "07:00",
@@ -794,7 +794,7 @@ describe("handleNextButtonClick", () => {
   it("End time before start time error", async () => {
     const mockEventDetails = {
       name: "Test Event",
-      date: "2024-09-24",
+      date: "2100-09-24",
       type: "error",
       location: "http://localhost",
       venue_type: "venue",
@@ -829,7 +829,7 @@ describe("handleNextButtonClick", () => {
   it("should show warning for no event price", async () => {
     const mockEventDetails = {
       name: "Test Event",
-      date: "2024-09-24",
+      date: "2100-09-24",
       start_time: "07:00",
       end_time: "08:00",
       type: "danso",
@@ -854,7 +854,7 @@ describe("handleNextButtonClick", () => {
       mockEventRefs.eventTicketPrice.current.scrollIntoView
     ).toHaveBeenCalled();
     expect(toast.warn).toHaveBeenCalledWith(
-      "Please enter your events ticket price"
+      "Please enter a valid ticket price fro your event"
     );
   });
 
@@ -863,7 +863,7 @@ describe("handleNextButtonClick", () => {
       name: "Test Event",
       name: "Test Event",
       price: 2,
-      date: "2024-09-24",
+      date: "2100-09-24",
       start_time: "07:00",
       end_time: "08:00",
       type: "danso",
@@ -895,7 +895,7 @@ describe("handleNextButtonClick", () => {
   it("should show warning for no picture", async () => {
     const mockEventDetails = {
       name: "Test Event",
-      date: "2024-09-24",
+      date: "2100-09-24",
       start_time: "07:00",
       end_time: "08:00",
       type: "danso",

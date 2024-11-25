@@ -59,9 +59,9 @@ const HomePage = () => {
 
         // let events = data.docs.map((doc) => ({...doc.data(), eventID: doc.id})); // formatting the output to a usable format string
         
-        setAllEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date()));
-        SetFilteredEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date()) );
-        SetFilteredTrendingEvents ( data.filter((e) => e.approved === true && new Date(e.date) >= new Date()) );
+        setAllEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())));
+        SetFilteredEvents(  data.filter((e) => e.approved === true && new Date(e.date) >=new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())) );
+        SetFilteredTrendingEvents ( data.filter((e) => e.approved === true && new Date(e.date) >= new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())) );
         // console.log(data.length);
         
         if(data.length===1){
