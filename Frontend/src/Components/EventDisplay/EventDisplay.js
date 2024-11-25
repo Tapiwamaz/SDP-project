@@ -479,7 +479,7 @@ const EventDisplay = ({
                 )}
               </div>
               {/* {Only render if today is thwe events date } */}
-              {eventDate.getDate() === new Date().getDate() &&
+               {eventDate !== null && eventDate.getDate() === new Date().getDate() &&
                 eventDate.getMonth() === new Date().getMonth() &&
                 eventDate.getFullYear() === new Date().getFullYear() && (
                   <BookButton

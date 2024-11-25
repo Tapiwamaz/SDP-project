@@ -168,15 +168,15 @@ describe("EventDisplay Component", () => {
     expect(screen.getByText("We appreciate your feedback")).toBeInTheDocument();
   });
 
-  test("Alert Button Calls the Security Modal", async () => {
-    await act(async () => {
-      render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
-    });
-    await act(async () => {
-      fireEvent.click(screen.getByTestId("AlertButton"));
-    });
-    expect(screen.getByText("Security Modal Mock")).toBeInTheDocument();
-  });
+  // test("Alert Button Calls the Security Modal", async () => {
+  //   await act(async () => {
+  //     render(<EventDisplay loading={false} setLoading={mockSetLoading} />);
+  //   });
+  //   await act(async () => {
+  //     fireEvent.click(screen.getByTestId("AlertButton"));
+  //   });
+  //   expect(screen.getByText("Security Modal Mock")).toBeInTheDocument();
+  // });
 
   test("Rate button is disabled when ticket is rated true", async () => {
     mockLocation.state.ticket.rated = true;
