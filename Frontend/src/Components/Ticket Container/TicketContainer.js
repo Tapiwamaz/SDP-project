@@ -55,10 +55,10 @@ export const TicketContainer = () => {
     const handleNav=()=>{
       
       if (activeTab === 'Upcoming') {
-        setTickets(allTickets.filter((ticket) => new Date(ticket.date) >= new Date() && !ticket.cancelled === true));
+        setTickets(allTickets.filter((ticket) => new Date(ticket.date) >= new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate()) && !ticket.cancelled === true));
       }
       if (activeTab === 'Completed') {
-        setTickets(allTickets.filter((ticket) => new Date(ticket.date) < new Date() && !ticket.cancelled === true));
+        setTickets(allTickets.filter((ticket) => new Date(ticket.date) < new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate()) && !ticket.cancelled === true));
       }
       if (activeTab === 'Canceled') {
         setTickets(allTickets.filter((ticket) => ticket.cancelled === true));

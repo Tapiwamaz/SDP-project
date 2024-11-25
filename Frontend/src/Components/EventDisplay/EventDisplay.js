@@ -41,6 +41,7 @@ const EventDisplay = ({
   const location = useLocation();
   let event = null;
   let tick = null;
+  let eventDate = null;
   const handleEvent = () => {
     if (events === undefined) {
       tick = location.state.ticket;
@@ -48,6 +49,7 @@ const EventDisplay = ({
     } else {
       tick = ticket;
       event = events;
+      eventDate = new Date(event.date);
     }
   };
   handleEvent();
@@ -476,15 +478,20 @@ const EventDisplay = ({
                   </SubmitedRating>
                 )}
               </div>
-              <BookButton
-                style={{
-                  background: "crimson",
-                }}
-                onClick={openSecurityModal}
-                data-testid="AlertButton"
-              >
-                Alert
-              </BookButton>
+              {/* {Only render if today is thwe events date } */}
+              {eventDate.getDate() === new Date().getDate() &&
+                eventDate.getMonth() === new Date().getMonth() &&
+                eventDate.getFullYear() === new Date().getFullYear() && (
+                  <BookButton
+                    style={{
+                      background: "crimson",
+                    }}
+                    onClick={openSecurityModal}
+                    data-testid="AlertButton"
+                  >
+                    Alert
+                  </BookButton>
+                )}
               {openModal && (
                 <SecurityModal
                   event={event}

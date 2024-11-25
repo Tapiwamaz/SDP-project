@@ -150,7 +150,7 @@ export const handleNextButtonClick = async (
       behavior: "smooth",
       block: "center",
     });
-    toast.warn("Please enter your events ticket price");
+    toast.warn("Please enter a valid ticket price fro your event");
     return;
   }
   let price = parseFloat(eventDetailsT.price);
