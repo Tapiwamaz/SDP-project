@@ -58,6 +58,7 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
           body: JSON.stringify(bookingData),
         }
       );
+      console.log("Booking Data:", bookingData);
 
       if (!response.ok) {
         throw new Error('Error creating booking');
