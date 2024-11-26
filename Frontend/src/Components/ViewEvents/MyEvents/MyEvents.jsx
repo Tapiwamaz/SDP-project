@@ -7,6 +7,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import noResults from "../../../Images/noResults.svg";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ConfirmationModal from './ConfirmationModal/ConfirmationModal';
 
 
 const secretKey = process.env.REACT_APP_X_API_KEY;
@@ -124,6 +125,9 @@ const MyEvents = () => {
   const [events, setEvents] = useState([]);
   const [userId, setUserId] = useState(null); // New state for user ID
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null); // Track the event being canceled
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -183,8 +187,8 @@ const MyEvents = () => {
 
 
   const handleCancel = async (event) => {
-    const userConfirmed = window.confirm("Are you sure you want to cancel this event?");
-    if (!userConfirmed) return;
+    // const userConfirmed = window.confirm("Are you sure you want to cancel this event?");
+    // if (!userConfirmed) return;
   
     try {
       const organizerDetails = await fetchUserDetails(event.user_id);
@@ -198,6 +202,26 @@ const MyEvents = () => {
         toast.success(`Event ${event.name} has been canceled successfully!`); // Display success toast
 
       } else if (event.status === 'approved') {
+        if (event.type === 'Online') {
+          // Directly delete online approved events
+          // await deleteDoc(doc(db, 'Events', event.id));
+          setEvents(events.filter(e => e.id !== event.id));
+          const eventDoc = doc(db, 'Events', event.id);
+          await updateDoc(eventDoc, { active: false, status: 'cancelled', approved: false });
+          // Post notification to Firestore
+          await sendNotification(
+            event.user_id,
+            event.event_id,
+            'organizer',
+            `The event ${event.name} has been cancelled.`,
+            organizerName,
+            event.image_url
+          );
+  
+          toast.success(`Online event ${event.name} has been canceled successfully!`);
+          return; // Skip further processing for online events
+        }
+
         // Get the bookingID for the event using venue details
         const bookingID = await getBookingID(event.location, event.date, event.start_time, event.end_time);
   
@@ -223,30 +247,30 @@ const MyEvents = () => {
 
 
         // Update 'active' field in the Events table to 'false'
-      const eventDoc = doc(db, 'Events', event.id);
-      await updateDoc(eventDoc, { active: false, status: 'cancelled', approved: false });
+        const eventDoc = doc(db, 'Events', event.id);
+        await updateDoc(eventDoc, { active: false, status: 'cancelled', approved: false });
 
-      // Update 'cancelled' field in Tickets table to 'true'
-      const ticketsCollection = collection(db, 'Tickets');
-      const q = query(ticketsCollection, where('event_id', '==', event.event_id)); // Use event.event_id here
-      const querySnapshot = await getDocs(q);
-      
-      //console.log(`Found ${querySnapshot.docs.length} tickets for event ID: ${event.event_id}`); // Use event.event_id for logging
-
-      if (!querySnapshot.empty) {
-        const ticketUpdates = querySnapshot.docs.map(docSnapshot => {
-          const ticketDoc = doc(db, 'Tickets', docSnapshot.id);
-          return updateDoc(ticketDoc, { cancelled: true });
-        });
-
-        await Promise.all(ticketUpdates);
-        //console.log("Cancelled tickets updated.");
-      } else {
-        //console.log("No tickets found to update.");
-      }
-
-
+        // Update 'cancelled' field in Tickets table to 'true'
+        const ticketsCollection = collection(db, 'Tickets');
+        const q = query(ticketsCollection, where('event_id', '==', event.event_id)); // Use event.event_id here
+        const querySnapshot = await getDocs(q);
         
+        //console.log(`Found ${querySnapshot.docs.length} tickets for event ID: ${event.event_id}`); // Use event.event_id for logging
+
+        if (!querySnapshot.empty) {
+          const ticketUpdates = querySnapshot.docs.map(docSnapshot => {
+            const ticketDoc = doc(db, 'Tickets', docSnapshot.id);
+            return updateDoc(ticketDoc, { cancelled: true });
+          });
+
+          await Promise.all(ticketUpdates);
+          //console.log("Cancelled tickets updated.");
+        } else {
+          //console.log("No tickets found to update.");
+        }
+
+
+        setEvents(events.filter(e => e.id !== event.id));
         toast.success(`Event ${event.name} has been canceled successfully!`);
         //setEvents(events.filter(e => e.id !== event.id)); // remove from UI
 
@@ -256,13 +280,30 @@ const MyEvents = () => {
     }
   };
   
+  const handleOpenModal = (event) => {
+    setSelectedEvent(event); // Store the event to cancel
+    setIsModalOpen(true);   // Open the modal
+  };
+
+  const handleConfirmCancel = () => {
+    if (selectedEvent) {
+      handleCancel(selectedEvent);
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedEvent(null);
+  };
 
 
   const renderViewCards = (event) => (
     <ViewCards
       key={event.id}
       event={event}
-      onCancel={() => handleCancel(event)}
+      // onCancel={() => handleCancel(event)}
+      onCancel={() => handleOpenModal(event)}
     />
   );
 
@@ -286,6 +327,13 @@ const MyEvents = () => {
             </div>
           )}
         </div>
+        {/* Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onConfirm={handleConfirmCancel}
+          message="Are you sure you want to cancel this event?"
+        />
         <ToastContainer />
       </div>
     </div>

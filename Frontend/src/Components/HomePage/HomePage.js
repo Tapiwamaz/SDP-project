@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState ,useRef} from "react";
 import Header from "../Header/Header";
 import {
@@ -40,49 +41,105 @@ const HomePage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        // Using relative URL
         const response = await fetch("/api/Basic", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         });
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+  
         const data = await response.json();
-
-        // const eventsRef = collection(db,"Events"); //this is to get a reference to the collection you want to work on 
-        // const data = await getDocs(eventsRef); //since this function is to get documents from events collection
-
-        // let events = data.docs.map((doc) => ({...doc.data(), eventID: doc.id})); // formatting the output to a usable format string
         
-        setAllEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())));
-        SetFilteredEvents(  data.filter((e) => e.approved === true && new Date(e.date) >=new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())) );
-        SetFilteredTrendingEvents ( data.filter((e) => e.approved === true && new Date(e.date) >= new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())) );
-        // console.log(data.length);
+        // Get current time
+        const currentDateTime = new Date();
+        const currentTimeInMinutes = currentDateTime.getHours() * 60 + currentDateTime.getMinutes(); // Convert current time to minutes for comparison
         
-        if(data.length===1){
+         data.filter((e) => {
+          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
+  
+          // Parse event date and time
+          const eventDate = new Date(e.date);
+          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
+          eventDate.setHours(eventHours, eventMinutes, 0, 0);
+  
+          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
+  
+          return (
+            e.approved === true &&
+            eventDate >= currentDateTime && // Check event date is not in the past
+            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
+          );
+        });
+  
+        console.log("Filtered events based on current time:", filteredEvents);
+  
+        // setAllEvents(filteredEvents);
+        // SetFilteredEvents(filteredEvents);
+        // SetFilteredTrendingEvents(filteredEvents);
+        setAllEvents(          data.filter((e) => {
+          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
+  
+          // Parse event date and time
+          const eventDate = new Date(e.date);
+          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
+          eventDate.setHours(eventHours, eventMinutes, 0, 0);
+  
+          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
+  
+          return (
+            e.approved === true &&
+            eventDate >= currentDateTime && // Check event date is not in the past
+            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
+          );
+        }));
+        SetFilteredEvents(          data.filter((e) => {
+          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
+  
+          // Parse event date and time
+          const eventDate = new Date(e.date);
+          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
+          eventDate.setHours(eventHours, eventMinutes, 0, 0);
+  
+          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
+  
+          return (
+            e.approved === true &&
+            eventDate >= currentDateTime && // Check event date is not in the past
+            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
+          );
+        }) );
+        SetFilteredTrendingEvents (          data.filter((e) => {
+          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
+  
+          // Parse event date and time
+          const eventDate = new Date(e.date);
+          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
+          eventDate.setHours(eventHours, eventMinutes, 0, 0);
+  
+          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
+  
+          return (
+            e.approved === true &&
+            eventDate >= currentDateTime && // Check event date is not in the past
+            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
+          );
+        }) );
+  
+        if (filteredEvents.length === 0) {
           setNoEvents(true);
         }
-        // console.log('Data received from Azure Function:', data);
-        // console.log(data);
-
-        // setAllEvents(data.filter((e) => e.approved === true));
-        // SetFilteredEvents(data.filter((e) => e.approved === true));
-        return data;
       } catch (error) {
         console.error("Error fetching data:", error);
-        return null;
       }
     };
+  
     fetchEvents();
   }, []);
-
-  // const[clickedBooked,setClickedBooked]=useState(false);
-
+   
   const search = (e) => {
     //function for searching for event name
     setSearchValue(e.target.value);

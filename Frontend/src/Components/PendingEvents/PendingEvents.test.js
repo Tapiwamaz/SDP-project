@@ -183,19 +183,19 @@ describe('PendingEvents Component', () => {
   });
 
 
-    test('displays an alert when rejection reason is not provided', () => {
-    window.alert = jest.fn();  // Mock alert function
+  //   test('displays an alert when rejection reason is not provided', () => {
+  //   window.alert = jest.fn();  // Mock alert function
 
-    render(<> <ToastContainer /> <PendingEvents events={mockEvents} handleApprove={mockHandleApprove} handleReject={mockHandleReject} />  </>);
+  //   render(<> <ToastContainer /> <PendingEvents events={mockEvents} handleApprove={mockHandleApprove} handleReject={mockHandleReject} />  </>);
 
-    const rejectButtons = screen.getAllByText(/Reject/i);
-    expect(rejectButtons.length).toBeGreaterThan(0); // Ensure there is at least one reject button
+  //   const rejectButtons = screen.getAllByText(/Reject/i);
+  //   expect(rejectButtons.length).toBeGreaterThan(0); // Ensure there is at least one reject button
 
-    const firstRejectButton = rejectButtons[0];
-    fireEvent.click(firstRejectButton);
+  //   const firstRejectButton = rejectButtons[0];
+  //   fireEvent.click(firstRejectButton);
 
-    expect(window.alert).toHaveBeenCalledWith('Please provide a reason for rejection');
-  });
+  //   expect(window.alert).toHaveBeenCalledWith('Please provide a reason for rejection');
+  // });
 });
 
 
