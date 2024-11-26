@@ -136,7 +136,7 @@ export const SignIn = () => {
                 </StyledP>
                 <CheckboxContainer>
                     <StyledCheckbox id="checkbox"/>
-                    <CheckboxText>I agree to the <StyledLink href="https://www.lipsum.com/feed/html" target="_blank">Terms and Conditions</StyledLink></CheckboxText>
+                    <CheckboxText>I agree to the <StyledLink href='./TandC.html' target="_blank">Terms and Conditions</StyledLink></CheckboxText>
                 </CheckboxContainer>
                 <ErrorMessage>{errorMessage}</ErrorMessage>
                 <StyledButton onClick={signin}>Sign Up</StyledButton>

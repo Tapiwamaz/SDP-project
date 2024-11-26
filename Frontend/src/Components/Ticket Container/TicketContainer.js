@@ -1,7 +1,7 @@
 import { Ticket } from "../Ticket/Ticket";
 import { NavbarContainer, NavItem } from "../Navbar/Navbar.styles.js";
 import { ModalWrapper, Overlay, ModalContent } from "../Ticket/Ticket.styles.js";
-import { ImageContainer } from "../Universal Styles/Universal.styles.js";
+import { ImageContainer, StyledText } from "../Universal Styles/Universal.styles.js";
 import { StyledButton } from "../Ticket/Ticket.styles";
 import { auth, db } from "../../firebase_config";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import EventDisplay from "../EventDisplay/EventDisplay";
 import { EventRight } from "../HomePage/HomePage.styles";
 import { Xicon } from "../Header/Header.styles";
 import noResultsImage from "../../Images/noResults.svg";
+import spinner from "../../Images/Spinner.svg";
 
 import {
   collection,
@@ -67,120 +68,203 @@ export const TicketContainer = () => {
     handleNav();
    },[userId,activeTab]);
 
+  // useEffect(() => {
+  //   const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
+  //   if (screenWidth <= 768) {
+  //     // Closer to full width on small screens
+  //     setScreen("phone");
+  //   } else {
+  //     // Default for larger screens
+  //     setScreen("desktop");
+  //   }
+  //   const fetchTickets = async () => {
+  //     setLoading(true);
+  //     try {
+  //       // const user = auth.currentUser;
+  //       // if (!user) {
+  //       //     // Handle case where user is not authenticated
+  //       //     console.error("No user is logged in");
+  //       //     //return;
+  //       // }
+  //       //console.log(userId);
+
+  //       const collectionRef = collection(db, "Tickets");
+  //       const q = query(collectionRef, where("user_id", "==", userId));
+
+  //       const querySnapshot = await getDocs(q);
+  //       const events = [];
+  //       const ids = [];
+  //       const ratings = [];
+  //       const cancelled = [];
+
+  //       querySnapshot.forEach((doc) => {
+  //         //console.log(doc);
+  //         ids.push(doc.id);
+  //         events.push(doc.data().event_id);
+  //         ratings.push(doc.data().rated);
+  //         cancelled.push(doc.data().cancelled);
+  //       });
+  //       const data = [];
+  //       for (let i = 0; i < events.length; i++) {
+  //         try {
+  //           // Create a query to fetch the event where the "event_id" field matches the events[i]
+  //           const q = query(
+  //             collection(db, "Events"),
+  //             where("event_id", "==", events[i])
+  //           );
+
+  //           // Execute the query
+  //           const querySnapshot = await getDocs(q);
+
+  //           if (!querySnapshot.empty) {
+  //             querySnapshot.forEach((doc) => {
+  //               const eventsData = doc.data();
+                
+
+  //               // Push the event data into the array
+  //               data.push({
+  //                 id: ids[i], // ticket id
+  //                 rated: ratings[i], // ticket rating
+  //                 cancelled: cancelled[i], // ticket cancelled status
+  //                 capacity: eventsData.capacity,
+  //                 description: eventsData.description,
+  //                 type: eventsData.type,
+  //                 title: eventsData.name,
+  //                 url: eventsData.image_url, // event image
+  //                 date: eventsData.date,
+  //                 time: eventsData.start_time,
+  //                 endTime: eventsData.end_time,
+  //                 venue: eventsData.location,
+  //                 total: eventsData.price,
+  //                 eventid: events[i],
+  //                 eventData: eventsData, 
+  //                 qrcode: <QRCodeSVG value={ids[i]} size={50} />, // QR code with ticket id
+  //               });
+  //             });
+  //           } else {
+  //             //console.log(`No event found with event_id: ${events[i]}`);
+  //           }
+  //         } catch (error) {
+  //           console.error(
+  //             `Error fetching event with event_id ${events[i]}:`,
+  //             error
+  //           );
+  //         }
+  //       }
+
+
+  //       setTickets(data);
+  //       data.sort((a, b) => {
+  //         const dateA = new Date(a.date);
+  //         const dateB = new Date(b.date);
+
+  //         if (dateA === dateB) {
+  //           return a.time.localeCompare(b.time);
+  //         }
+  //         return dateA - dateB;
+  //       });
+  //       setAllTickets(data);
+
+  //       if (activeTab === 'Upcoming') {
+  //         setTickets(data.filter((ticket) => new Date(ticket.date) >= new Date() && !ticket.cancelled === true));
+  //       }
+  //       if (activeTab === 'Completed') {
+  //         setTickets(data.filter((ticket) => new Date(ticket.date) < new Date() && !ticket.cancelled === true));
+  //       }
+  //       if (activeTab === 'Canceled') {
+  //         setTickets(data.filter((ticket) => ticket.cancelled === true));
+  //       }
+
+  //     } catch (error) {
+  //       console.error("Error fetching tickets:", error);
+  //       // setLoading(false);
+  //     }
+  //   };
+
+  //   fetchTickets(); // Fetch tickets on component mount
+  //   setLoading(false);
+
+  // }, [userId]); // Empty dependency array means this effect runs once on mount
+  
+  
   useEffect(() => {
-    const screenWidth = window.innerWidth; // need to adjust the slide percentage based on screen size
+    const screenWidth = window.innerWidth;
     if (screenWidth <= 768) {
-      // Closer to full width on small screens
       setScreen("phone");
     } else {
-      // Default for larger screens
       setScreen("desktop");
     }
+  
     const fetchTickets = async () => {
+      setLoading(true); // Start loading
       try {
-        // const user = auth.currentUser;
-        // if (!user) {
-        //     // Handle case where user is not authenticated
-        //     console.error("No user is logged in");
-        //     //return;
-        // }
-        //console.log(userId);
-
         const collectionRef = collection(db, "Tickets");
         const q = query(collectionRef, where("user_id", "==", userId));
-
+  
         const querySnapshot = await getDocs(q);
         const events = [];
         const ids = [];
         const ratings = [];
         const cancelled = [];
-
+  
         querySnapshot.forEach((doc) => {
-          //console.log(doc);
           ids.push(doc.id);
           events.push(doc.data().event_id);
           ratings.push(doc.data().rated);
           cancelled.push(doc.data().cancelled);
         });
-        
-
+  
         const data = [];
-        // for (let i = 0; i < events.length; i++) {
-        //     const eventRef = doc(db, "Events", events[i]);
-        //     const eventDoc = await getDoc(eventRef);
-        //     const eventsData = eventDoc.data();
-        //     console.log(eventsData);
-
-        //     data.push({
-        //         id: ids[i],
-        //         title: eventsData.name,
-        //         url: eventsData.image_url,
-        //         date: eventsData.date,
-        //         time: eventsData.start_time,
-        //         venue: eventsData.location,
-        //         total: eventsData.price,
-        //         qrcode: <QRCodeSVG value={ids[i]} size={50} />
-        //     });
-        // }
         for (let i = 0; i < events.length; i++) {
           try {
-            // Create a query to fetch the event where the "event_id" field matches the events[i]
             const q = query(
               collection(db, "Events"),
               where("event_id", "==", events[i])
             );
-
-            // Execute the query
+  
             const querySnapshot = await getDocs(q);
-
+  
             if (!querySnapshot.empty) {
               querySnapshot.forEach((doc) => {
                 const eventsData = doc.data();
-                
-
-                // Push the event data into the array
+  
                 data.push({
-                  id: ids[i], // ticket id
-                  rated: ratings[i], // ticket rating
-                  cancelled: cancelled[i], // ticket cancelled status
+                  id: ids[i],
+                  rated: ratings[i],
+                  cancelled: cancelled[i],
                   capacity: eventsData.capacity,
                   description: eventsData.description,
                   type: eventsData.type,
                   title: eventsData.name,
-                  url: eventsData.image_url, // event image
+                  url: eventsData.image_url,
                   date: eventsData.date,
                   time: eventsData.start_time,
                   endTime: eventsData.end_time,
                   venue: eventsData.location,
                   total: eventsData.price,
                   eventid: events[i],
-                  eventData: eventsData, 
-                  qrcode: <QRCodeSVG value={ids[i]} size={50} />, // QR code with ticket id
+                  eventData: eventsData,
+                  qrcode: <QRCodeSVG value={ids[i]} size={50} />,
                 });
               });
-            } else {
-              //console.log(`No event found with event_id: ${events[i]}`);
             }
           } catch (error) {
-            console.error(
-              `Error fetching event with event_id ${events[i]}:`,
-              error
-            );
+            console.error(`Error fetching event with event_id ${events[i]}:`, error);
           }
         }
-
-        setTickets(data);
+  
         data.sort((a, b) => {
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
-
+  
           if (dateA === dateB) {
             return a.time.localeCompare(b.time);
           }
           return dateA - dateB;
         });
+  
         setAllTickets(data);
-
+  
         if (activeTab === 'Upcoming') {
           setTickets(data.filter((ticket) => new Date(ticket.date) >= new Date() && !ticket.cancelled === true));
         }
@@ -190,19 +274,27 @@ export const TicketContainer = () => {
         if (activeTab === 'Canceled') {
           setTickets(data.filter((ticket) => ticket.cancelled === true));
         }
-
-        setLoading(false);
+  
       } catch (error) {
         console.error("Error fetching tickets:", error);
-        setLoading(false);
+      } finally {
+        setLoading(false); // Stop loading after data fetch completes
       }
     };
-
-    fetchTickets(); // Fetch tickets on component mount
-  }, [userId]); // Empty dependency array means this effect runs once on mount
-
+  
+    if (userId) {
+      fetchTickets();
+    }
+  
+  }, [userId]);
+  
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width:  screen==="desktop"?'85%':"100%" }}>
+        <img style={{width: '15%'}} src={spinner} />
+        <StyledText>Loading...</StyledText>
+      </div>
+    );
   }
 
   const handleTicketClick = (ticket) => {
@@ -234,7 +326,7 @@ export const TicketContainer = () => {
     <>
       {/* <Navbar></Navbar> */}
 
-      <div>
+      <div style={{display: 'flex', flexDirection: 'column', width: screen==="desktop"?'85%':"100%", alignItems: 'center'}}>
         <h1>Tickets</h1>
         <NavbarContainer>
           <NavItem
@@ -276,10 +368,9 @@ export const TicketContainer = () => {
         ) : (
           // <p> No Bookings made</p>
           <>
-          <img src={noResultsImage} alt="No Results" style={{marginTop:"20px",marginLeft:"40px"}}/>
-          <p style={{marginLeft:"80px"}}>No Booking under "{activeTab}"</p>
+          <img src={noResultsImage} alt="No Results" style={{width: '30%'}}/>
+          <p>No Booking under "{activeTab}"</p>
           </>
-
 
         )}
         {EventsDisplay && (

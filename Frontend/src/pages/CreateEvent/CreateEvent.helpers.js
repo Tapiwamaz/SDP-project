@@ -134,7 +134,7 @@ export const handleNextButtonClick = async (
   }
 
   // check  price
-  if (!eventDetailsT.price || eventDetailsT.price == "") {
+  if (!eventDetailsT.price || eventDetailsT.price == "" || parseFloat(eventDetailsT.price) < 0) {
     eventRefsT.eventTicketPrice.current.classList.add("unfilled-input");
     eventRefsT.eventTicketPrice.current.scrollIntoView({
       behavior: "smooth",

@@ -1,5 +1,9 @@
 import styled from "styled-components";
-
+import {
+  MapPinIcon,
+  CalendarIcon,
+  TicketIcon,
+} from "@heroicons/react/24/outline";
 export const SummaryPages = styled.div`
   display: flex;
   flex-direction: column;
@@ -23,6 +27,19 @@ export const CostSummary = styled.section`
   color: #fff;
   margin-bottom: 1em;
 `;
+
+export const LocationIcon = styled(MapPinIcon)`
+  height: 55%;
+  /* height: 20%;/ */
+`;
+
+export const DateIcon = styled(CalendarIcon)`
+  height: 55%;
+`;
+export const TicketI = styled(TicketIcon)`
+  height: 55%;
+`;
+
 export const CardSummary = styled.section`
   display: grid;
   border: 2px solid #d9d9d9;
@@ -59,7 +76,7 @@ export const CardSummary = styled.section`
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 0.5em; /* Adjust as needed */
+    /* gap: 0.5em; Adjust as needed */
   }
 
   > div.textContainer > p,
@@ -68,6 +85,15 @@ export const CardSummary = styled.section`
     padding: 0; /* Remove default padding */
     line-height: 1; /* Adjust as needed */
   }
+`;
+
+export const EventDate = styled.section`
+  display: flex;
+  width: 100%;
+  height: 2.25rem;
+  align-items: center;
+  /* padding-bottom: 1em; */
+  gap: .5em;
 `;
 
 export const BookButton = styled.button`

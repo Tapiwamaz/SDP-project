@@ -197,7 +197,11 @@ const CreateEvent = ({ inputEventDetails }) => {
     inputEventDetails = location.state.inputEventDetails;
   }
   // todays date to start date picker
-  const todayDate = new Date().toISOString().split("T")[0];
+  const todayDate = new Date()
+  const tomorrow = new Date(todayDate)
+  tomorrow.setDate(todayDate.getDate()+1)
+  const tomorrowDate = new Date(tomorrow).toISOString().split("T")[0];
+
   //preview image
   const [imgSrc, setImgSrc] = useState(null);
   const [imageError, setImageError] = useState(null);
@@ -443,7 +447,7 @@ const CreateEvent = ({ inputEventDetails }) => {
                     data-testid="date"
                     name="eventDate"
                     ref={eventDateRef}
-                    min={todayDate}
+                    min={tomorrowDate}
                     value={eventDetails.date || ""}
                     onFocus={(e) => {
                       eventDateRef.current.classList.remove("unfilled-input");
@@ -653,7 +657,7 @@ const CreateEvent = ({ inputEventDetails }) => {
                   ref={eventTicketPriceRef}
                   data-testid="price"
                   value={eventDetails.price || null}
-                  placeholder="e.g R 50"
+                  placeholder="e.g 50"
                   step={10}
                   onFocus={() =>
                     eventTicketPriceRef.current.classList.remove(

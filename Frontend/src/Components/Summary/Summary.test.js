@@ -54,12 +54,12 @@ describe("Summary component", () => {
   test("renders event details correctly", () => {
     render(<Summary event={event} />);
     expect(screen.getByText(event.name)).toBeInTheDocument();
-    expect(screen.getByText("Date: 1 January 2022")).toBeInTheDocument();
+    expect(screen.getByText("1 January 2022")).toBeInTheDocument();
     const countElements = screen.getAllByText(event.count.toString());
     countElements.forEach((element) => {
       expect(element).toBeInTheDocument();
     });
-    expect(screen.getByText("Location: "+event.location)).toBeInTheDocument();
+    expect(screen.getByText(event.location)).toBeInTheDocument();
     const priceElements = screen.getAllByText(`R${event.price}`);
     priceElements.forEach((element) => {
       expect(element).toBeInTheDocument();

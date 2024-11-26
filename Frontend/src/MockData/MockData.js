@@ -71,6 +71,7 @@ const mockEventTypes = [
   "IT",
   "Religious",
   "Online",
+  "Other"
 ];
 
 const mockLocations = [

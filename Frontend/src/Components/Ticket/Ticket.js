@@ -16,7 +16,7 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
     const eventDocRef = doc(db, "Events", event_id);
   
 
-    const userResponse = window.confirm("Are you sure you want to cancel this booking? You will be refunded in full");
+    const userResponse = window.confirm("Are you sure you want to cancel this booking?");
     if (userResponse) {
       try {
         await updateDoc(docRef, {
@@ -39,7 +39,7 @@ export const Ticket = ({ title, date, time, venue, total, url, qrcode, id, onCli
           console.log("No matching event found.");
         }
 
-        alert("Booking has been cancelled. You will receive a full refund");
+        alert("Booking has been cancelled");
         window.location.reload();
       } catch (e) {
         alert("An error occurred. Please try again later");
