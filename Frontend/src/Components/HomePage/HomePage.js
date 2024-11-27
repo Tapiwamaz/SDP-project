@@ -36,6 +36,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        // Using relative URL
         const response = await fetch("/api/Basic", {
           method: "GET",
           headers: {
