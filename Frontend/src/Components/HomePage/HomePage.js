@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
 import {
   Page,
@@ -23,21 +22,17 @@ import EventDisplay from "../EventDisplay/EventDisplay";
 import { Xicon } from "../Header/Header.styles";
 import Summary from "../Summary/Summary";
 
-
-
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [allEvents, setAllEvents] = useState(null);
 
   const [filteredEvents, SetFilteredEvents] = useState(null);
   const [filteredTrendingEvents, SetFilteredTrendingEvents] = useState(null);
-  
+
   const [searchValue, setSearchValue] = useState(null);
 
   const [activeTag, setActiveTag] = useState("No-Filter"); // State to track the active tag
   const [noEvents, setNoEvents] = useState(false);
-
-
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -47,105 +42,59 @@ const HomePage = () => {
             "Content-Type": "application/json",
           },
         });
-  
-        if (!response.ok) {
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
-  
         const data = await response.json();
-        
-        // Get current time
+
         const currentDateTime = new Date();
-        const currentTimeInMinutes = currentDateTime.getHours() * 60 + currentDateTime.getMinutes(); // Convert current time to minutes for comparison
-        
-         data.filter((e) => {
-          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
-  
-          // Parse event date and time
+
+        // Filter for upcoming and approved events only
+        const upcomingEvents = data.filter((e) => {
+          if (!e.start_time || !e.date || !e.approved) return false; // Ensure start_time, date, and approval exist and are valid
+
           const eventDate = new Date(e.date);
-          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
-          eventDate.setHours(eventHours, eventMinutes, 0, 0);
-  
-          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
-  
+          const [eventHours, eventMinutes] = e.start_time
+            .split(":")
+            .map(Number);
+          eventDate.setHours(eventHours, eventMinutes, 0, 0); // Set the correct time for the event
+
           return (
-            e.approved === true &&
-            eventDate >= currentDateTime && // Check event date is not in the past
-            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
+            e.approved === true && // Event must be approved
+            eventDate >= currentDateTime // Event date and time must be in the future
           );
         });
-  
-        console.log("Filtered events based on current time:", filteredEvents);
-  
-        // setAllEvents(filteredEvents);
-        // SetFilteredEvents(filteredEvents);
-        // SetFilteredTrendingEvents(filteredEvents);
-        setAllEvents(          data.filter((e) => {
-          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
-  
-          // Parse event date and time
-          const eventDate = new Date(e.date);
-          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
-          eventDate.setHours(eventHours, eventMinutes, 0, 0);
-  
-          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
-  
-          return (
-            e.approved === true &&
-            eventDate >= currentDateTime && // Check event date is not in the past
-            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
-          );
-        }));
-        SetFilteredEvents(          data.filter((e) => {
-          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
-  
-          // Parse event date and time
-          const eventDate = new Date(e.date);
-          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
-          eventDate.setHours(eventHours, eventMinutes, 0, 0);
-  
-          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
-  
-          return (
-            e.approved === true &&
-            eventDate >= currentDateTime && // Check event date is not in the past
-            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
-          );
-        }) );
-        SetFilteredTrendingEvents (          data.filter((e) => {
-          if (!e.start_time || !e.date) return false; // Ensure start_time and date exist
-  
-          // Parse event date and time
-          const eventDate = new Date(e.date);
-          const [eventHours, eventMinutes] = e.start_time.split(":").map(Number); // Split and parse time
-          eventDate.setHours(eventHours, eventMinutes, 0, 0);
-  
-          const eventTimeInMinutes = eventDate.getHours() * 60 + eventDate.getMinutes(); // Convert event time to minutes
-  
-          return (
-            e.approved === true &&
-            eventDate >= currentDateTime && // Check event date is not in the past
-            eventTimeInMinutes >= currentTimeInMinutes // Check event start_time is not in the past
-          );
-        }) );
-  
-        if (filteredEvents.length === 0) {
-          setNoEvents(true);
-        }
+
+        console.log("Filtered upcoming and approved events:", upcomingEvents);
+
+        // Update states
+        setAllEvents(upcomingEvents);
+        SetFilteredEvents(upcomingEvents);
+        SetFilteredTrendingEvents(
+          data.filter(
+            (e) =>
+              e.approved === true &&
+              new Date(e.date) >=
+                new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  new Date().getDate()
+                )
+          )
+        );
+        setNoEvents(upcomingEvents.length === 0);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching events:", error);
       }
     };
-  
+
     fetchEvents();
   }, []);
-   
+
   const search = (e) => {
     //function for searching for event name
     setSearchValue(e.target.value);
   };
 
-  
   const [EventsDisplay, setEventsDisplay] = useState(null);
   const displayEvent = (event) => {
     setEventsDisplay(event);
@@ -155,7 +104,7 @@ const HomePage = () => {
   const [summary, setSummary] = useState(null);
   const displaySummary = (event) => {
     setSummary(event);
-  }
+  };
 
   const filter = (type) => {
     if (type === "No-Filter") {
@@ -163,7 +112,6 @@ const HomePage = () => {
       SetFilteredEvents(allEvents.filter((e) => e.approved === true));
       SetFilteredTrendingEvents(allEvents.filter((e) => e.approved === true));
 
-      
       setNoEvents(false);
     } else {
       setActiveTag(type);
@@ -186,28 +134,27 @@ const HomePage = () => {
       } else {
         setNoEvents(true);
         SetFilteredEvents(null);
-        SetFilteredTrendingEvents(null)
+        SetFilteredTrendingEvents(null);
       }
     }
   };
-
 
   const eventRightRef = useRef(null);
 
   // Function to handle closing when clicking outside
   const handleClickOutside = (e) => {
     if (eventRightRef.current && !eventRightRef.current.contains(e.target)) {
-      setEventsDisplay(null)
+      setEventsDisplay(null);
     }
   };
 
   useEffect(() => {
     // Add event listener for clicks
-    document.addEventListener('mousedown', handleClickOutside);
-    
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       // Remove event listener on cleanup
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -237,9 +184,13 @@ const HomePage = () => {
           {searchValue && (
             <>
               <h3>Results for {`"${searchValue}"`}</h3>
-              {allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase())).length >0 ? ( //if the array is empty display no results svg
+              {allEvents.filter((e) =>
+                e.name.toLowerCase().includes(searchValue.toLowerCase())
+              ).length > 0 ? ( //if the array is empty display no results svg
                 <EventSlider
-                  events={allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase()))}
+                  events={allEvents.filter((e) =>
+                    e.name.toLowerCase().includes(searchValue.toLowerCase())
+                  )}
                   onDisplayEvent={displayEvent}
                 />
               ) : (
@@ -311,7 +262,7 @@ const HomePage = () => {
                 filter={activeTag === "Online" ? null : () => filter("Online")}
                 isActive={activeTag === "Online"}
               ></Tags>
-                <Tags
+              <Tags
                 name={"Social"}
                 filter={activeTag === "Social" ? null : () => filter("Social")}
                 isActive={activeTag === "Social"}
@@ -333,12 +284,15 @@ const HomePage = () => {
           </div>
           {noEvents ? (
             <>
-\              <img src={noResultsImage} alt="No Results" />
+              \ <img src={noResultsImage} alt="No Results" />
               <h3>{`No Results found, Try Another Tag :)`}</h3>
             </>
           ) : (
             <EventSlider
-              events={filteredTrendingEvents?.sort((a, b) => (a.ticket_count / a.capacity) - (b.ticket_count / b.capacity))}
+              events={filteredTrendingEvents?.sort(
+                (a, b) =>
+                  a.ticket_count / a.capacity - b.ticket_count / b.capacity
+              )}
               onDisplayEvent={displayEvent}
             ></EventSlider>
           )}
@@ -379,7 +333,6 @@ const HomePage = () => {
       {EventsDisplay && (
         <>
           <EventRight ref={eventRightRef}>
-         
             {!summary ? (
               <EventDisplay
                 events={EventsDisplay}
@@ -388,7 +341,7 @@ const HomePage = () => {
                 onDisplaySummary={displaySummary}
               ></EventDisplay>
             ) : (
-              <Summary event={summary} setEventsDisplay={setEventsDisplay}/>
+              <Summary event={summary} setEventsDisplay={setEventsDisplay} />
             )}
           </EventRight>
         </>
