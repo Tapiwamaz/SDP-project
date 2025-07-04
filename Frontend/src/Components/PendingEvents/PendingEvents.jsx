@@ -48,30 +48,30 @@ const secretKey = process.env.REACT_APP_X_API_KEY;
       bookingDescription
     };
 
-    // try {
-    //   const response = await fetch(
-    //     'https://wits-infrastructure-management.web.app/api/bookings/create',
-    //     {
-    //       method: 'POST',
-    //       headers: {
-    //         'X-API-KEY': secretKey,
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify(bookingData),
-    //     }
-    //   );
-    //   console.log("Booking Data:", bookingData);
+    try {
+      const response = await fetch(
+        'https://wits-infrastructure-management.web.app/api/bookings/create',
+        {
+          method: 'POST',
+          headers: {
+            'X-API-KEY': secretKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bookingData),
+        }
+      );
+      console.log("Booking Data:", bookingData);
 
-    //   if (!response.ok) {
-    //     throw new Error('Error creating booking');
-    //   }
+      if (!response.ok) {
+        throw new Error('Error creating booking');
+      }
 
-    //   return await response.json();
-    // } catch (error) {
-    //   console.error('Error creating booking:', error);
-    //   return null;
-    // }
-    return v4()
+      return await response.json();
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      return null;
+    }
+    // return v4()
   };
 
   export const fetchUserDetails = async (userId) => {
@@ -216,12 +216,12 @@ const PendingEvents = ({ events, handleApprove, handleReject }) => {
       } 
       else {
           const bookingResponse = await createBooking(userDetails.email, event.location, event.date, event.start_time, event.end_time, event.description);
-          if (bookingResponse) {
+          // if (bookingResponse) {
               handleApprove(event.event_id);
               toast.success('Event successfully approved!');
-          } else {
-              toast.error('Error occurred while approving the event.');
-          }
+          // } else {
+          //     toast.error('Error occurred while approving the event.');
+          // }
       }
   };
 
