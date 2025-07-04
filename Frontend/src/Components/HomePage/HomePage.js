@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
 import {
   Page,
@@ -22,21 +22,17 @@ import EventDisplay from "../EventDisplay/EventDisplay";
 import { Xicon } from "../Header/Header.styles";
 import Summary from "../Summary/Summary";
 
-
-
 const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [allEvents, setAllEvents] = useState(null);
 
   const [filteredEvents, SetFilteredEvents] = useState(null);
   const [filteredTrendingEvents, SetFilteredTrendingEvents] = useState(null);
-  
+
   const [searchValue, setSearchValue] = useState(null);
 
   const [activeTag, setActiveTag] = useState("No-Filter"); // State to track the active tag
   const [noEvents, setNoEvents] = useState(false);
-
-
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -47,48 +43,59 @@ const HomePage = () => {
             "Content-Type": "application/json",
           },
         });
-
-        if (!response.ok) {
+        if (!response.ok)
           throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const data = await response.json();
 
-        // const eventsRef = collection(db,"Events"); //this is to get a reference to the collection you want to work on 
-        // const data = await getDocs(eventsRef); //since this function is to get documents from events collection
+        const currentDateTime = new Date();
 
-        // let events = data.docs.map((doc) => ({...doc.data(), eventID: doc.id})); // formatting the output to a usable format string
-        
-        setAllEvents(  data.filter((e) => e.approved === true && new Date(e.date) >= new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())));
-        SetFilteredEvents(  data.filter((e) => e.approved === true && new Date(e.date) >=new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())) );
-        SetFilteredTrendingEvents ( data.filter((e) => e.approved === true && new Date(e.date) >= new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate())) );
-        // console.log(data.length);
-        
-        if(data.length===1){
-          setNoEvents(true);
-        }
-        // console.log('Data received from Azure Function:', data);
-        // console.log(data);
+        // Filter for upcoming and approved events only
+        const upcomingEvents = data.filter((e) => {
+          if (!e.start_time || !e.date || !e.approved) return false; // Ensure start_time, date, and approval exist and are valid
 
-        // setAllEvents(data.filter((e) => e.approved === true));
-        // SetFilteredEvents(data.filter((e) => e.approved === true));
-        return data;
+          const eventDate = new Date(e.date);
+          const [eventHours, eventMinutes] = e.start_time
+            .split(":")
+            .map(Number);
+          eventDate.setHours(eventHours, eventMinutes, 0, 0); // Set the correct time for the event
+
+          return (
+            e.approved === true && // Event must be approved
+            eventDate >= currentDateTime // Event date and time must be in the future
+          );
+        });
+
+        console.log("Filtered upcoming and approved events:", upcomingEvents);
+
+        // Update states
+        setAllEvents(upcomingEvents);
+        SetFilteredEvents(upcomingEvents);
+        SetFilteredTrendingEvents(
+          data.filter(
+            (e) =>
+              e.approved === true &&
+              new Date(e.date) >=
+                new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  new Date().getDate()
+                )
+          )
+        );
+        setNoEvents(upcomingEvents.length === 0);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        return null;
+        console.error("Error fetching events:", error);
       }
     };
+
     fetchEvents();
   }, []);
-
-  // const[clickedBooked,setClickedBooked]=useState(false);
 
   const search = (e) => {
     //function for searching for event name
     setSearchValue(e.target.value);
   };
 
-  
   const [EventsDisplay, setEventsDisplay] = useState(null);
   const displayEvent = (event) => {
     setEventsDisplay(event);
@@ -98,7 +105,7 @@ const HomePage = () => {
   const [summary, setSummary] = useState(null);
   const displaySummary = (event) => {
     setSummary(event);
-  }
+  };
 
   const filter = (type) => {
     if (type === "No-Filter") {
@@ -106,7 +113,6 @@ const HomePage = () => {
       SetFilteredEvents(allEvents.filter((e) => e.approved === true));
       SetFilteredTrendingEvents(allEvents.filter((e) => e.approved === true));
 
-      
       setNoEvents(false);
     } else {
       setActiveTag(type);
@@ -129,28 +135,27 @@ const HomePage = () => {
       } else {
         setNoEvents(true);
         SetFilteredEvents(null);
-        SetFilteredTrendingEvents(null)
+        SetFilteredTrendingEvents(null);
       }
     }
   };
-
 
   const eventRightRef = useRef(null);
 
   // Function to handle closing when clicking outside
   const handleClickOutside = (e) => {
     if (eventRightRef.current && !eventRightRef.current.contains(e.target)) {
-      setEventsDisplay(null)
+      setEventsDisplay(null);
     }
   };
 
   useEffect(() => {
     // Add event listener for clicks
-    document.addEventListener('mousedown', handleClickOutside);
-    
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
       // Remove event listener on cleanup
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -180,9 +185,13 @@ const HomePage = () => {
           {searchValue && (
             <>
               <h3>Results for {`"${searchValue}"`}</h3>
-              {allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase())).length >0 ? ( //if the array is empty display no results svg
+              {allEvents.filter((e) =>
+                e.name.toLowerCase().includes(searchValue.toLowerCase())
+              ).length > 0 ? ( //if the array is empty display no results svg
                 <EventSlider
-                  events={allEvents.filter((e) => e.name.toLowerCase().includes(searchValue.toLowerCase()))}
+                  events={allEvents.filter((e) =>
+                    e.name.toLowerCase().includes(searchValue.toLowerCase())
+                  )}
                   onDisplayEvent={displayEvent}
                 />
               ) : (
@@ -254,7 +263,7 @@ const HomePage = () => {
                 filter={activeTag === "Online" ? null : () => filter("Online")}
                 isActive={activeTag === "Online"}
               ></Tags>
-                <Tags
+              <Tags
                 name={"Social"}
                 filter={activeTag === "Social" ? null : () => filter("Social")}
                 isActive={activeTag === "Social"}
@@ -276,12 +285,15 @@ const HomePage = () => {
           </div>
           {noEvents ? (
             <>
-\              <img src={noResultsImage} alt="No Results" />
+              \ <img src={noResultsImage} alt="No Results" />
               <h3>{`No Results found, Try Another Tag :)`}</h3>
             </>
           ) : (
             <EventSlider
-              events={filteredTrendingEvents?.sort((a, b) => (a.ticket_count / a.capacity) - (b.ticket_count / b.capacity))}
+              events={filteredTrendingEvents?.sort(
+                (a, b) =>
+                  a.ticket_count / a.capacity - b.ticket_count / b.capacity
+              )}
               onDisplayEvent={displayEvent}
             ></EventSlider>
           )}
@@ -322,7 +334,6 @@ const HomePage = () => {
       {EventsDisplay && (
         <>
           <EventRight ref={eventRightRef}>
-         
             {!summary ? (
               <EventDisplay
                 events={EventsDisplay}
@@ -331,7 +342,7 @@ const HomePage = () => {
                 onDisplaySummary={displaySummary}
               ></EventDisplay>
             ) : (
-              <Summary event={summary} setEventsDisplay={setEventsDisplay}/>
+              <Summary event={summary} setEventsDisplay={setEventsDisplay} />
             )}
           </EventRight>
         </>

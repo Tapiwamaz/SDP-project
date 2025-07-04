@@ -50,24 +50,6 @@
       "!src/Components/Ticket Container/**",
       "!src/Components/Notifications/Notifications.js",
       "!src/Components/BookTicket/**"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     ]
   },
   "scripts": {
